@@ -68,15 +68,8 @@ D <- function(x, i, j, p)
   else if (d[[1]] == d2) {
     d[[2]] <- c(i-1, j)
   } else {
-    d[[3]] <- c(i, j-1)
+    d[[2]] <- c(i, j-1)
   }
   
-  if(0) {
-    d <- max(
-      x[i-1, j-1] + s(i, j),
-      x[i-1, j] + p,
-      x[i, j-1] + p
-    )
-  }
   return(d)
 }
