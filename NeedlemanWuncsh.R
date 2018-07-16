@@ -16,8 +16,10 @@ makeMatrix <- function(seq1, seq2)
 {
   len1 <- length(seq1)
   len2 <- length(seq2)
-  x <- matrix(nrow = len1, ncol = len2, 
-              dimnames = list(seq1, seq2))
+  x <- array(dim=c(len1, len2, 2),
+             dimnames = list(seq1, seq2))
+  #x <- matrix(nrow = len1, ncol = len2, 
+  #              dimnames = list(seq1, seq2))
   return(x)
 }
 
@@ -29,13 +31,13 @@ initializeMat <- function(x, p)
   
   g <- 0
   for (i in 1:len1) {
-    x[i, 1] <- g
+    x[i, 1, 1] <- g
     g <- g + p
   }
   
   g <- 0
   for (i in 1:len2) {
-    x[1, i] <- g
+    x[1, i, 1] <- g
     g = g + p
   }
   
@@ -55,20 +57,19 @@ s <- function(i,j)
 # this function's aruments range are greater than equal 2
 D <- function(x, i, j, p)
 {
-  d1 <- x[i-1, j-1] + s(i, j)
-  d2 <- x[i-1, j] + p
-  d3 <- x[i, j-1] + p
+  d1 <- x[i-1, j-1, 1] + s(i, j)
+  d2 <- x[i-1, j, 1] + p
+  d3 <- x[i, j-1, 1] + p
   
   d <- list()
   d[[1]] <- max(d1, d2, d3)
   
   if (d[[1]] == d1) {
-    d[[2]] <- c(i-1, j-1)
-  }
-  else if (d[[1]] == d2) {
-    d[[2]] <- c(i-1, j)
+    d[[2]] <- 2
+  } else if (d[[1]] == d2) {
+    d[[2]] <- 1
   } else {
-    d[[2]] <- c(i, j-1)
+    d[[2]] <- -1
   }
   
   return(d)
