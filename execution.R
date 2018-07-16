@@ -13,13 +13,14 @@ for (i in 2:rowLen) {
   i = i + 1
 }
 
-alignmentScore <- array()
+alignment <- list(NA, NA)
 i <- rowLen
 j <- colLen
 n <- 1
 while (TRUE) {
   if (i == 1 && j == 1) break
-  alignmentScore[n] <- mat[i, j, 1]
+  alignment[[1]][n] <- mat[i, j, 1]
+  alignment[[2]][n] <- mat[i, j, 2]
   n <- n + 1
 
     trace <- mat[i, j, 2]
@@ -32,4 +33,5 @@ while (TRUE) {
     j <- j - 1
   }
 }
-alignmentScore <- rev(alignmentScore)
+score <- rev(alignment[[1]])
+gap <<- rev(alignment[[2]])
