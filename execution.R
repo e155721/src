@@ -34,4 +34,20 @@ while (TRUE) {
   }
 }
 score <- rev(alignment[[1]])
-gap <<- rev(alignment[[2]])
+gap <- rev(alignment[[2]])
+
+s1 <- seq1[2:length(seq1)]
+s2 <- seq2[2:length(seq2)]
+
+ss1 <- c()
+ss2 <- c()
+for (i in 1:length(gap)) {
+  if(gap[i] == 0) {
+    ss1[i] <- s1[i]
+    ss2[i] <- s2[i]
+  } else if(gap[i] == 1) {
+    ss1[i] <- s1[i]
+    ss2[i] <- "_"
+  }
+}
+
