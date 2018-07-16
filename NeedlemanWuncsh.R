@@ -20,7 +20,6 @@ makeMatrix <- function(seq1, seq2)
               dimnames = list(seq1, seq2))
   return(x)
 }
-mat <- makeMatrix(seq1, seq2)
 
 # this function initialises matrix
 initializeMat <- function(x, p)
@@ -42,7 +41,6 @@ initializeMat <- function(x, p)
   
   return(x)
 }
-mat <- initializeMat(mat, p)
 
 # this function's aruguments range are greater than equal 2
 s <- function(i,j)
@@ -57,21 +55,28 @@ s <- function(i,j)
 # this function's aruments range are greater than equal 2
 D <- function(x, i, j, p)
 {
-  d <- max(
-    x[i-1, j-1] + s(i, j),
-    x[i-1, j] + p,
-    x[i, j-1] + p
-  )
-  return(d)
-}
-
-rowLen <- length(seq1)
-colLen <- length(seq2)
-
-for (i in 2:rowLen) {
-  for (j in 2: colLen) {
-    mat[i,j] <- D(mat,i,j,p)
-    j = j + 1
+  d1 <- x[i-1, j-1] + s(i, j)
+  d2 <- x[i-1, j] + p
+  d3 <- x[i, j-1] + p
+  
+  d <- list()
+  d[[1]] <- max(d1, d2, d3)
+  
+  if (d[[1]] == d1) {
+    d[[2]] <- c(i-1, j-1)
   }
-  i = i + 1
+  else if (d[[1]] == d2) {
+    d[[2]] <- c(i-1, j)
+  } else {
+    d[[3]] <- c(i, j-1)
+  }
+  
+  if(0) {
+    d <- max(
+      x[i-1, j-1] + s(i, j),
+      x[i-1, j] + p,
+      x[i, j-1] + p
+    )
+  }
+  return(d)
 }
