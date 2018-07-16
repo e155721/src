@@ -41,13 +41,21 @@ s2 <- seq2[2:length(seq2)]
 
 ss1 <- c()
 ss2 <- c()
-for (i in 1:length(gap)) {
-  if(gap[i] == 0) {
-    ss1[i] <- s1[i]
-    ss2[i] <- s2[i]
-  } else if(gap[i] == 1) {
-    ss1[i] <- s1[i]
-    ss2[i] <- "_"
+i = j = 1
+
+for (t in 1:length(gap)) {
+  if(gap[t] == 0) {
+    ss1 <- append(ss1, s1[i])
+    ss2 <- append(ss2, s2[j])
+    i <- i + 1
+    j <- j + 1
+  } else if(gap[t] == 1) {
+    ss1 <- append(ss1, s1[i])
+    ss2<- append(ss2, "_")
+    i <- i + 1
+  } else {
+    ss1 <- append(ss1, "_")
+    ss2 <- append(ss2, s2[j])
+    j <- j + 1
   }
 }
-
