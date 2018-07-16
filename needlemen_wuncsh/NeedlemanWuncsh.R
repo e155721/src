@@ -1,3 +1,5 @@
+library(R6)
+
 # this function makes matrix for sequence alignment
 makeMatrix <- function(seq1, seq2)
 {
@@ -29,20 +31,33 @@ initializeMat <- function(x, p)
   return(x)
 }
 
-# this function's aruguments range are greater than equal 2
-s <- function(i,j)
-{
-  x <- seq1[i]
-  y <- seq2[j]
-  score <- scoringMatrix[x,y]
-  
-  return(score)
-}
+s <- 
+  R6Class("s",
+          public = list(
+            seq1 = NA,
+            seq2 = NA,
+            scoringMatrix = NA,
+            initialize = function(seq1, seq2, scoringMatrix)
+            {
+              self$seq1 <- seq1
+              self$seq2 <- seq2
+              self$scoringMatrix <- scoringMatrix
+            },
+            get_score = function(i,j)
+            {
+              x <- y <- score <-  NA
+              x <- self$seq1[i]
+              y <- self$seq2[j]
+              score <- self$scoringMatrix[x,y]
+              return(score)
+            }
+          )
+  )
 
 # this function's aruments range are greater than equal 2
-D <- function(x, i, j, p)
+D <- function(x, i, j, p, s)
 {
-  d1 <- x[i-1, j-1, 1] + s(i, j)
+  d1 <- x[i-1, j-1, 1] + s$get_score(i, j)
   d2 <- x[i-1, j, 1] + p
   d3 <- x[i, j-1, 1] + p
   
