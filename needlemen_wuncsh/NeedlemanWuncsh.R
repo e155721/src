@@ -5,8 +5,6 @@ makeMatrix <- function(seq1, seq2)
   len2 <- length(seq2)
   x <- array(dim=c(len1, len2, 2),
              dimnames = list(seq1, seq2))
-  #x <- matrix(nrow = len1, ncol = len2, 
-  #              dimnames = list(seq1, seq2))
   return(x)
 }
 
