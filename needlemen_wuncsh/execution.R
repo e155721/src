@@ -1,20 +1,14 @@
 source("needlemen_wuncsh/NeedlemanWuncsh.R")
 
-test <- function(a,b)
+needlemanWuncsh <- function(seq1, seq2)
 {
-  # these codes receive input sequences
-  seq1 <- c("A", "G", "C", "G")
-  seq2 <- c("A", "G", "A", "C")
-  
-  # load scoring matrix
-  scoringMatrix <- read.table("scoring_matrix_for_alphabets.txt")
-  
   # this code defines gap penalty
   p <- -2
   
+  # initialize variable
   seq1 <- append(seq1, NA, after = 0)
   seq2 <- append(seq2, NA, after = 0)
-  
+  scoringMatrix <- read.table("scoring_matrix_for_alphabets.txt")  
   s <- s$new(seq1, seq2, scoringMatrix)
   
   # calculate matrix for sequence alignment
@@ -80,6 +74,7 @@ test <- function(a,b)
     }
   }
   
-  print(align1)
-  print(align2)
+  print(c("seq1: ", align1))
+  print(c("seq2: ", align2))
+  print(c("score: ", sum(score)))
 }
