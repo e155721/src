@@ -1,6 +1,6 @@
-source("needlemen_wuncsh/NeedlemanWuncsh.R")
+source("needleman_wunsch/Functions.R")
 
-needlemanWuncsh <- function(seq1, seq2)
+needlemanWunsch <- function(seq1, seq2)
 {
   # this code defines gap penalty
   p <- -2
