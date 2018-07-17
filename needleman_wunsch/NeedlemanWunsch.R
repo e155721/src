@@ -3,7 +3,7 @@ source("needleman_wunsch/Functions.R")
 needlemanWunsch <- function(seq1, seq2)
 {
   # this code defines gap penalty
-  p <- -2
+  p <- -1
   
   # initialize variable
   seq1 <- append(seq1, NA, after = 0)
@@ -76,7 +76,6 @@ needlemanWunsch <- function(seq1, seq2)
     }
   }
   
-  print(c("seq1: ", align1))
-  print(c("seq2: ", align2))
-  print(c("score: ", sum(score)))
+  print(c("seq1: ", align1), quote = F)
+  print(c("seq2: ", align2), quote = F)
 }
