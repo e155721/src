@@ -10,6 +10,7 @@ needlemanWuncsh <- function(seq1, seq2)
   seq2 <- append(seq2, NA, after = 0)
   # scoringMatrix <- read.table("scoring_matrix_for_alphabets.txt")
   scoringMatrix <- read.table("scoring_matrix_for_phonetic_sign.txt")
+  scoringMatrix <- as.matrix(scoringMatrix)
   s <- s$new(seq1, seq2, scoringMatrix)
   
   # calculate matrix for sequence alignment
