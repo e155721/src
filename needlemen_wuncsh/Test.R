@@ -1,12 +1,12 @@
+source("needlemen_wuncsh/execution.R")
+
 test <- function()
 {
-  source("needlemen_wuncsh/execution.R")
+  a <- as.vector("A", "G", "C", "G")
+  b <- as.vector("A", "G", "A", "C")
   
-  a <- c("A", "G", "C", "G")
-  b <- c("A", "G", "A", "C")
-  
-  a <- c("kx", "u", "b", "i")
-  b <- c("kx", "u", "p")
+  a <- as.vector("kx", "u", "b", "i")
+  b <- as.vector("kx", "u", "p")
   
   needlemanWuncsh(a,b) 
 }

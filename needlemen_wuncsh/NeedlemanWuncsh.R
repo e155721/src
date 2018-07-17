@@ -1,76 +1,82 @@
-library(R6)
+source("needlemen_wuncsh/NeedlemanWuncsh.R")
 
-# this function makes matrix for sequence alignment
-makeMatrix <- function(seq1, seq2)
+needlemanWuncsh <- function(seq1, seq2)
 {
-  len1 <- length(seq1)
-  len2 <- length(seq2)
-  x <- array(dim=c(len1, len2, 2),
-             dimnames = list(seq1, seq2))
-  return(x)
-}
-
-# this function initialises matrix
-initializeMat <- function(x, p)
-{
-  len1 <- dim(x)[1]
-  len2 <- dim(x)[2]
+  # this code defines gap penalty
+  p <- -2
   
-  g <- 0
-  for (i in 1:len1) {
-    x[i, 1, 1] <- g
-    g <- g + p
+  # initialize variable
+  seq1 <- append(seq1, NA, after = 0)
+  seq2 <- append(seq2, NA, after = 0)
+  # scoringMatrix <- read.table("scoring_matrix_for_alphabets.txt")
+  scoringMatrix <- read.table("scoring_matrix_for_phonetic_sign.txt")
+  scoringMatrix <- as.matrix(scoringMatrix)
+  s <- s$new(seq1, seq2, scoringMatrix)
+  
+  # calculate matrix for sequence alignment
+  mat <- makeMatrix(seq1, seq2)
+  mat <- initializeMat(mat, p)
+  
+  rowLen <- length(seq1)
+  colLen <- length(seq2)
+  
+  for (i in 2:rowLen) {
+    for (j in 2: colLen) {
+      mat[i,j, 1] <- D(mat,i,j,p,s)[[1]]
+      mat[i,j, 2] <- D(mat,i,j,p,s)[[2]]
+      j = j + 1
+    }
+    i = i + 1
   }
   
-  g <- 0
-  for (i in 1:len2) {
-    x[1, i, 1] <- g
-    g = g + p
+  # trace back
+  score <- gap <- c() 
+  i <- rowLen
+  j <- colLen
+  n <- 1
+  while (TRUE) {
+    if (i == 1 && j == 1) break
+    score[n] <- mat[i, j, 1]
+    gap[n] <- mat[i, j, 2]
+    n <- n + 1
+    
+    trace <- mat[i, j, 2]
+    if (trace == 0) {
+      i <- i - 1
+      j <- j - 1
+    } else if (trace == 1) {
+      i <- i - 1
+    } else if (trace == -1){
+      j <- j - 1
+    }
+  }
+  score <- rev(score)
+  gap <- rev(gap)
+  
+  # output alignment
+  s1 <- seq1[2:length(seq1)]
+  s2 <- seq2[2:length(seq2)]
+  
+  align1 <- align2 <- c()
+  i <- j <- 1
+  for (t in 1:length(gap)) {
+    if(gap[t] == 0) {
+      align1 <- append(align1, s1[i])
+      align2 <- append(align2, s2[j])
+      i <- i + 1
+      j <- j + 1
+    } else if(gap[t] == 1) {
+      align1 <- append(align1, s1[i])
+      align2<- append(align2, "_")
+      i <- i + 1
+    } else {
+      align1 <- append(align1, "_")
+      align2 <- append(align2, s2[j])
+      j <- j + 1
+    }
   }
   
-  return(x)
-}
-
-s <- 
-  R6Class("s",
-          public = list(
-            seq1 = NA,
-            seq2 = NA,
-            scoringMatrix = NA,
-            initialize = function(seq1, seq2, scoringMatrix)
-            {
-              self$seq1 <- seq1
-              self$seq2 <- seq2
-              self$scoringMatrix <- scoringMatrix
-            },
-            get_score = function(i,j)
-            {
-              x <- y <- score <-  NA
-              x <- self$seq1[i]
-              y <- self$seq2[j]
-              score <- self$scoringMatrix[x,y]
-              return(score)
-            }
-          )
-  )
-
-# this function's aruments range are greater than equal 2
-D <- function(x, i, j, p, s)
-{
-  d1 <- x[i-1, j-1, 1] + s$get_score(i, j)
-  d2 <- x[i-1, j, 1] + p
-  d3 <- x[i, j-1, 1] + p
-  
-  d <- list()
-  d[[1]] <- max(d1, d2, d3)
-  
-  if (d[[1]] == d1) {
-    d[[2]] <- 0 # (0,0)
-  } else if (d[[1]] == d2) {
-    d[[2]] <- 1 # (0,1)
-  } else {
-    d[[2]] <- -1 # (-1,0)
-  }
-  
-  return(d)
+  print(c("seq1: ", align1))
+  print(c("seq2: ", align2))
+  print(c("score: ", sum(score)))
 }
