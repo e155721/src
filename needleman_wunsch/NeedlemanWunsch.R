@@ -34,9 +34,9 @@ needlemanWunsch <- function(seq1, seq2)
   i <- rowLen
   j <- colLen
   n <- 1
+  score <- mat[i, j, 1]
   while (TRUE) {
     if (i == 1 && j == 1) break
-    score[n] <- mat[i, j, 1]
     gap[n] <- mat[i, j, 2]
     n <- n + 1
     
@@ -50,7 +50,6 @@ needlemanWunsch <- function(seq1, seq2)
       j <- j - 1
     }
   }
-  score <- rev(score)
   gap <- rev(gap)
   
   # output alignment
@@ -78,4 +77,5 @@ needlemanWunsch <- function(seq1, seq2)
   
   print(c("seq1: ", align1), quote = F)
   print(c("seq2: ", align2), quote = F)
+  print(c("score: ", score), quote = F)
 }
