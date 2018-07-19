@@ -1,16 +1,16 @@
 source("needleman_wunsch/Functions.R")
 
-needlemanWunsch <- function(seq1, seq2)
+needlemanWunsch <- function(seq1, seq2, p = -1)
 {
   # this code defines gap penalty
-  p <- -1
+  #p <- -1
   
   # initialize variable
   seq1 <- append(seq1, NA, after = 0)
   seq2 <- append(seq2, NA, after = 0)
   # scoringMatrix <- read.table("scoring_matrix_for_alphabets.txt")
-  scoringMatrix <- read.table("scoring_matrix_for_phonetic_sign.txt")
-  scoringMatrix <- as.matrix(scoringMatrix)
+  #s <- s$new(seq1, seq2, 
+  #as.matrix(read.table(scoringMatrix)))
   s <- s$new(seq1, seq2, scoringMatrix)
   
   # calculate matrix for sequence alignment
@@ -75,7 +75,18 @@ needlemanWunsch <- function(seq1, seq2)
     }
   }
   
-  print(c("seq1: ", align1), quote = F)
-  print(c("seq2: ", align2), quote = F)
-  print(c("score: ", score), quote = F)
+  if(0) {
+    align <- list()
+    align[[1]] <- c("seq1: ", align1)
+    align[[2]] <- c("seq2: ", align2)
+    align[[3]] <- c("score: ", score)
+    
+    return(align)
+  }
+  
+  if(1) {
+    print(c("seq1: ", align1), quote = F)
+    print(c("seq2: ", align2), quote = F)
+    print(c("score: ", score), quote = F)
+  }
 }

@@ -1,0 +1,400 @@
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 2
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 3
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 4
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 5
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] 6
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 7
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -1     
+[1] 8
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -1     
+[1] 9
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -1     
+[1] 10
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -1     
+[1] 11
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 12
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 13
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 14
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      i     
+[1] score:  3      
+[1] 15
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 16
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 17
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] 18
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 19
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 20
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 21
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      _      i     
+[1] score:  7      
+[1] 22
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      d      i     
+[1] score:  4      
+[1] 23
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 24
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 25
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 26
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 2
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 3
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 4
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 5
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] 6
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 7
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -1     
+[1] 8
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -1     
+[1] 9
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -1     
+[1] 10
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -1     
+[1] 11
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 12
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 13
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 14
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      i     
+[1] score:  3      
+[1] 15
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 16
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 17
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] 18
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 19
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 20
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 21
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      _      i     
+[1] score:  7      
+[1] 22
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      d      i     
+[1] score:  4      
+[1] 23
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] 24
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 25
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] 26
+[1] "score: " "12"     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -1     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -1     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -1     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -1     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      i     
+[1] score:  3      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      _      i     
+[1] score:  7      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      d      i     
+[1] score:  4      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -3     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -3     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      p     
+[1] score:  -3     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      _      p     
+[1] score:  -3     
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      _      i     
+[1] score:  1      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      _      i     
+[1] score:  5      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kh     u      d      i     
+[1] score:  4      
+[1] seq1:  k      u      b      i     
+[1] seq2:  kx     u      b      i     
+[1] score:  8      
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
+[1] seq1:  k      u      b      i     
+[1] seq2:  k      u      b      i     
+[1] score:  12     
