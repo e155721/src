@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# make origin data
+# main
 
 inFile=$1
 outFile=$2

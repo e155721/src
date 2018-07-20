@@ -19,12 +19,14 @@ initializeMat <- function(x, p)
   g <- 0
   for (i in 1:len1) {
     x[i, 1, 1] <- g
+    x[i, 1, 2] <- 1
     g <- g + p
   }
   
   g <- 0
-  for (i in 1:len2) {
-    x[1, i, 1] <- g
+  for (j in 1:len2) {
+    x[1, j, 1] <- g
+    x[1, j, 2] <- -1
     g = g + p
   }
   

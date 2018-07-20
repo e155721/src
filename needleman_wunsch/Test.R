@@ -1,12 +1,9 @@
-source("needleman_wunsch/NeedlemanWunsch.R")
-
 test <- function()
 {
-  a <- c("A", "G", "C", "G")
-  b <- c("A", "G", "A", "C")
+  source("needleman_wunsch/NeedlemanWunsch.R")
   
   a <- c("kx", "u", "b", "i")
   b <- c("kx", "u", "p")
   
-  needlemanWunsch(a,b) 
+  needlemanWunsch(a,b, scoringMatrix)
 }
