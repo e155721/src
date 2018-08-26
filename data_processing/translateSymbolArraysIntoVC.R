@@ -7,12 +7,14 @@ translateSymbolArraysIntoVC <- function(data_file, output_path)
   vowel <- read.table("/Users/e155721/OkazakiLab/src/symbols/vowel.txt")
   vowel <- vowel$V1
   
+  # get the number of word_list
   list_length <- length(word_list)
   array_length <- length(word_list[[1]])
+  
+  # make a list that it has length of array_length
   l <- list()
-  for (i in list_length) {
+  for (i in list_length)
     l[[i]] <- array(array_length)
-  }
   
   for (i in 1:list_length) {
     j = 1
@@ -26,11 +28,9 @@ translateSymbolArraysIntoVC <- function(data_file, output_path)
       
       if (sym == TRUE) {
         l[[i]][j] <- "V"
-      }
-      else if (sym == "-1") {
+      } else if (sym == "-1") {
         l[[i]][j] <- "-1"
-      }
-      else {
+      } else {
         l[[i]][j] <- "C"
       }
       j <- j+1
@@ -38,9 +38,8 @@ translateSymbolArraysIntoVC <- function(data_file, output_path)
   }
   
   rlt <- matrix(NA, nrow = list_length, ncol = array_length)
-  for (i in 1:list_length) {
+  for (i in 1:list_length)
     rlt[i,] <- l[[i]]
-  }
   
   path_length <- length(strsplit(data_file, "/")[[1]])
   output_file <- paste(output_path, strsplit(data_file, "/")[[1]][path_length], sep = "/")    
