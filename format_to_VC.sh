@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# main
+# This code output data format to use into abstraction of array pattern of vowel, consonant and elision.
 
 inFile=$1
 outFile=$2
