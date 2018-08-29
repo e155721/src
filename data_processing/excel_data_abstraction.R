@@ -1,18 +1,14 @@
 # load openxlsx
 library(openxlsx)
 
+input_path <- "/Users/e155721/OkazakiLab/Data/test_data.xlsm"
+output_path <- "/Users/e155721/OkazakiLab/src/org-data/"
+
+# get the all sheet names
+sheet_names <- getSheetNames(input_path)
+
 # output sheets
 for (i in 6:135) {
-  sheet_num <- i
-  sheet <- read.xlsx("test.xlsm", sheet = sheet_num)[,12:27]
-  write.table(sheet, paste("sheet-", sheet_num, sep = ""))
-}
-
-read.xlsx("テスト用数値一覧・配点表RK_琉球全体72語20180314.xlsm",sheet="01-003首(1-2)")
-
-
-for (i in 6:135) {
-  sheet_num <- i
-  sheet <- read.xlsx("テスト用数値一覧・配点表RK_琉球全体72語20180314.xlsm", sheet = sheet_num)[,1:27]
-  write.table(sheet, paste("sheet-", sheet_num, sep = ""))
+  sheet <- read.xlsx(input_path, sheet = i)[,12:27]
+  write.table(sheet, paste(output_path, sheet_names[i], sep = "/"))
 }
