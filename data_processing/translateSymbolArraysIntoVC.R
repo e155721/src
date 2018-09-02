@@ -1,5 +1,7 @@
 # load makeWordList
-source("/Users/e155721/OkazakiLab/src/data_processing/makeWordList.R")
+.myfunc.env = new.env()
+sys.source("/Users/e155721/OkazakiLab/src/data_processing/makeWordList.R", envir = .myfunc.env)
+attach(.myfunc.env)
 
 translateSymbolArraysIntoVC <- function(data_file, output_path)
 {
