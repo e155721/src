@@ -24,17 +24,14 @@ for (i in 1:numbers_of_words) {
   
   assumed_form <- toCorV(word_list[[1]])
   rlt_list <- list()
-  #sink(write_path_list[[i]], append = T)
-  for (i in 1:word_list_length) {
+  for (k in 1:word_list_length) {
     #print(i)
-    seq2 <- toCorV(word_list[[i]])
+    seq2 <- toCorV(word_list[[k]])
     rlt <- needlemanWunsch(assumed_form[["sym"]], seq2[["sym"]], p = -1, scoring_matrix)
-    #print(toOrg(rlt[["seq1"]], assumed_form[["org"]]))
     r <- toOrg(rlt[["seq2"]], seq2[["org"]])
     
-    #print(r)
     r <- paste(r, collapse = "")
-    c <- paste(check_word_list[[i]], collapse = "")
+    c <- paste(check_word_list[[k]], collapse = "")
     print(paste("align: ",r))
     print(paste("org:   ", c))
     if (r != c) {
