@@ -10,8 +10,10 @@ makeWordList <- function(file)
   
   word_list <- list()
   for (i in 1:nrow) {
-    tmp_list <- as.vector(sheet[i,])
-    word_list[[i]] <- tmp_list[!is.na(tmp_list)]
+    tmp_vector <- as.vector(sheet[i,])
+    tmp_vector <- tmp_vector[!is.na(tmp_vector)]
+    if (length(tmp_vector) != 0)
+      word_list[[i]] <- tmp_vector
   }
   
   return(word_list)
