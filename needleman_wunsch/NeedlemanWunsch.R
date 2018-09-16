@@ -1,4 +1,6 @@
-source("needleman_wunsch/Functions.R")
+.myfunc.env = new.env()
+sys.source("needleman_wunsch/Functions.R", envir = .myfunc.env)
+attach(.myfunc.env)
 
 needlemanWunsch <- function(seq1, seq2, p = -1, scoringMatrix)
 {
@@ -69,7 +71,15 @@ needlemanWunsch <- function(seq1, seq2, p = -1, scoringMatrix)
     }
   }
   
-  print(c("seq1: ", align1), quote = F)
-  print(c("seq2: ", align2), quote = F)
-  print(c("score: ", score), quote = F)
+  if (0) {
+    print(c("seq1: ", align1), quote = F)
+    print(c("seq2: ", align2), quote = F)
+    print(c("score: ", score), quote = F)
+  }
+  rlt <- list(NA, NA)
+  names(rlt) <- c("seq1", "seq2")
+  rlt[["seq1"]] <- align1
+  rlt[["seq2"]] <- align2
+  
+  return(rlt)
 }
