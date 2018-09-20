@@ -1,9 +1,13 @@
 # load openxlsx
 library(openxlsx)
 
-base_path <- getwd()
 input_path <- paste("../Data/test_data.xlsm")
 output_path <- "../Alignment/org_data/"
+
+output_path <- "../Alignment/org_data"
+if (!dir.exists(output_path)) {
+  dir.create(output_path)
+}
 
 # get the all sheet names
 sheet_names <- getSheetNames(input_path)
