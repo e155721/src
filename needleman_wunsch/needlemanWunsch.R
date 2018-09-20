@@ -1,9 +1,9 @@
-.myfunc.env = new.env()
-sys.source("needleman_wunsch/Functions.R", envir = .myfunc.env)
-attach(.myfunc.env)
-
 needlemanWunsch <- function(seq1, seq2, p = -1, scoringMatrix)
 {
+  .myfunc.env = new.env()
+  sys.source("needleman_wunsch/Functions.R", envir = .myfunc.env)
+  attach(.myfunc.env)
+  
   # initialize variable
   seq1 <- append(seq1, NA, after = 0)
   seq2 <- append(seq2, NA, after = 0)
