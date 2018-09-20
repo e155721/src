@@ -1,6 +1,5 @@
 .myfunc.env <- new.env()
 sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
-#sys.source("data_processing/excel_data_abstraction.R", envir = .myfunc.env)
 sys.source("data_processing/functions_to_convert_symbol.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/needlemanWunsch.R", envir = .myfunc.env)
 attach(.myfunc.env)
