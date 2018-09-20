@@ -9,17 +9,31 @@ vowel_length <- length(vowel)
 new_vowel <- array("C", dim = vowel_length)
 
 # get the sum of length of consonant and vowel
-array_length <- vowel_length + consonant_length
+#array_length <- vowel_length + consonant_length
+array_length <- vowel_length + consonant_length + 1
 
 # make new_symbols_array
+#new_symbols_array <- array(NA, dim = array_length,
+#                           dimnames = list(c(consonant, vowel)))
+#new_symbols_array[1:array_length] <- c(new_consonant, new_vowel)
 new_symbols_array <- array(NA, dim = array_length,
-                           dimnames = list(c(consonant, vowel)))
-new_symbols_array[1:array_length] <- c(new_consonant, new_vowel)
+                           dimnames = list(c(consonant, vowel, "_")))
+new_symbols_array[1:array_length] <- c(new_consonant, new_vowel, "_")
 
 # make new scoring matrix
 scoring_matrix <- matrix(-3, 2, 2, 
                          dimnames = list(c("C", "V"), c("C", "V")))
 diag(scoring_matrix) <- 1
+
+if (0) {
+  # make new scoring matrix
+  scoring_matrix <- matrix(-3, 3, 3, 
+                           dimnames = list(c("C", "V", "_"), c("C", "V", "_")))
+  diag(scoring_matrix) <- 2
+  scoring_matrix["_", ] <- -1
+  scoring_matrix[, "_"] <- -1
+  scoring_matrix["_", "_"] <- 2
+}
 
 # convert original symbols to consonant or vowel symbols
 toCorV <- function(seq)

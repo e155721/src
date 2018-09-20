@@ -22,20 +22,17 @@ translateSymbolArraysIntoVC <- function(data_file, output_path)
     j = 1
     while (j<array_length+1) {
       sym <- word_list[[i]][j]
-      if (sym != "-1") {
+      if (sym != "_")
         sym <- is.element(word_list[[i]][j], vowel)
-      } else {
-        sym <- "-1"
-      }
       
       if (sym == TRUE) {
         l[[i]][j] <- "V"
-      } else if (sym == "-1") {
+      } else if (sym == "_") {
         l[[i]][j] <- "#"
       } else {
         l[[i]][j] <- "C"
       }
-      j <- j+1
+      j <- j + 1
     }
   }
   
