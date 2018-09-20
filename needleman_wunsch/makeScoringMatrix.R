@@ -1,4 +1,11 @@
-makeScoringMatrix <- function(s1, s2, s3, s4, s5)
+# define score
+# s1 match between consonant to consonant
+# s2 match between vowel to vowel
+# s3 mismatch between consonant to consonant
+# s4 mismatch between vowel to vowel
+# s5 mismatch between consonant to vowel
+
+makeScoringMatrix <- function(s1 = 1, s2 = 1, s3 = -1, s4 = -1, s5 = -3)
 {
   # make consonant array
   consonant <- as.matrix(read.table("symbols/consonant.txt"))
@@ -13,8 +20,8 @@ makeScoringMatrix <- function(s1, s2, s3, s4, s5)
   
   symbols <- c(consonant, vowel)
   
-  scoring_matrix <- matrix(s5, nrow = score_row, ncol = score_col, dimnames = list(symbols, symbols))
-  
+  scoring_matrix <- matrix(s5, nrow = score_row, ncol = score_col, 
+                           dimnames = list(symbols, symbols))
   
   # mismatch between consonant to consonant
   for (i in 1:81) {
@@ -37,11 +44,3 @@ makeScoringMatrix <- function(s1, s2, s3, s4, s5)
   
   return(scoring_matrix)
 }
-
-# define score
-s1 <- 1 # match between consonant to consonant
-s2 <- 1 # match between vowel to vowel
-s3 <- -1 # mismatch between consonant to consonant
-s4 <- -1 # mismatch between vowel to vowel
-s5 <- -3 # mismatch between consonant to vowel
-scoring_matrix <- makeScoringMatrix(s1, s2, s3, s4, s5)
