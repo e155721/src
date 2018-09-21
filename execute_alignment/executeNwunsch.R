@@ -1,12 +1,12 @@
+.myfunc.env <- new.env()
+sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
+sys.source("needleman_wunsch/needlemanWunsch.R", envir = .myfunc.env)
+sys.source("needleman_wunsch/makeScoringMatrix.R", envir = .myfunc.env)
+attach(.myfunc.env)
+
 executeNwunsch <- function(input_path = "../Alignment/ex_data/", 
                            output_path = "../Alignment/align_data/")
 {
-  .myfunc.env <- new.env()
-  sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
-  sys.source("needleman_wunsch/needlemanWunsch.R", envir = .myfunc.env)
-  sys.source("needleman_wunsch/makeScoringMatrix.R", envir = .myfunc.env)
-  attach(.myfunc.env)
-  
   # make scoring matrix
   scoring_matrix <- makeScoringMatrix()
   
@@ -28,16 +28,16 @@ executeNwunsch <- function(input_path = "../Alignment/ex_data/",
     word_list_length <- length(word_list)
     
     assumed_form <- word_list[[1]]
-    rlt_list <- list()
     sink(write_path_list[[i]], append = T)
     for (i in 1:word_list_length) {
-      print(i)
+      #print(i)
       seq2 <- word_list[[i]]
-      rlt <- needlemanWunsch(assumed_form, seq2, p = -1, scoring_matrix)
+      align <- needlemanWunsch(assumed_form, seq2, p = -1, scoring_matrix)
       #print(toOrg(rlt[["seq1"]], assumed_form[["org"]]))
-      print(rlt[["seq2"]])
+      #print(paste(align[["seq2"]], collapse = ""))
+      print(align[["seq2"]])
     }
     sink()
   }
 }
-executeNwunsch(output_path = "../Alignment/hoge/")
+executeNwunsch(output_path = "../Alignment/align_data/")
