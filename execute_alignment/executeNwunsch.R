@@ -30,11 +30,8 @@ executeNwunsch <- function(input_path = "../Alignment/ex_data/",
     assumed_form <- word_list[[1]]
     sink(write_path_list[[i]], append = T)
     for (i in 1:word_list_length) {
-      #print(i)
       seq2 <- word_list[[i]]
       align <- needlemanWunsch(assumed_form, seq2, p = -1, scoring_matrix)
-      #print(toOrg(rlt[["seq1"]], assumed_form[["org"]]))
-      #print(paste(align[["seq2"]], collapse = ""))
       print(align[["seq2"]])
     }
     sink()
