@@ -5,10 +5,16 @@ sys.source("needleman_wunsch/makeScoringMatrix.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 executeNwunsch <- function(input_path = "../Alignment/ex_data/", 
-                           output_path = "../Alignment/align_data/")
+                           output_path = "../Alignment/align_data/",
+                           s1 = 1, 
+                           s2 = 1,
+                           s3 = -1,
+                           s4 = -1, 
+                           s5 = -3,
+                           gap = -1)
 {
   # make scoring matrix
-  scoring_matrix <- makeScoringMatrix()
+  scoring_matrix <- makeScoringMatrix(s1, s2, s3, s4, s5)
   
   # input files list
   name_list <- list.files(input_path)
@@ -31,10 +37,13 @@ executeNwunsch <- function(input_path = "../Alignment/ex_data/",
     sink(write_path_list[[i]], append = T)
     for (i in 1:word_list_length) {
       seq2 <- word_list[[i]]
-      align <- needlemanWunsch(assumed_form, seq2, p = -1, scoring_matrix)
-      print(align[["seq2"]])
+      align <- needlemanWunsch(assumed_form, seq2, p = gap, scoring_matrix)
+      if (i != 1) {
+        print(align[["seq1"]])
+        print(align[["seq2"]])
+        cat("\n")
+      }
     }
     sink()
   }
 }
-executeNwunsch(output_path = "../Alignment/align_data/")
