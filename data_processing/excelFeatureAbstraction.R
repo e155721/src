@@ -1,5 +1,5 @@
 excelFeatureAbstraction <- function(input_path = "../Data/test_data.xlsm",
-                                    output_path = "../Alignment/feature/")
+                                    output_path = "../Feature_Data/feature/")
 {
   if (!dir.exists(output_path)) {
     dir.create(output_path)
@@ -13,11 +13,17 @@ excelFeatureAbstraction <- function(input_path = "../Data/test_data.xlsm",
   }
   
   # output sheets
-  for (i in 6:135) {
-    sheet <- read.xlsx(input_path, sheet = i)[,28:107]
-    write.table(sheet[-1, ], 
-                paste(output_path, sheet_names[i], sep = "/"),
-                row.names = F,
-                col.names = F)
-  }
+  i <- 2
+  sheet <- read.xlsx(input_path, sheet = i)[ 1:37, 3:7]
+  write.table(sheet, 
+              paste(output_path, sheet_names[i], sep = "/"),
+              row.names = F,
+              col.names = F)
+  
+  i <- 4
+  sheet <- read.xlsx(input_path, sheet = i)[1:81, 3:7]
+  write.table(sheet, 
+              paste(output_path, sheet_names[i], sep = "/"),
+              row.names = F,
+              col.names = F)
 }
