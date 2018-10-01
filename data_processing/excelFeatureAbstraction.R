@@ -1,3 +1,7 @@
+.myfunc.env <- new.env()
+sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
+attach(.myfunc.env)
+
 excelFeatureAbstraction <- function(input_path = "../Data/test_data.xlsm",
                                     output_path = "../Feature_Data/feature/")
 {
@@ -12,7 +16,7 @@ excelFeatureAbstraction <- function(input_path = "../Data/test_data.xlsm",
     sheet_names[i] <- gsub(" ", "", sheet_names[i])
   }
   
-  # output sheets
+  # output vowel sheet
   i <- 2
   sheet <- read.xlsx(input_path, sheet = i)[ 1:37, 3:7]
   write.table(sheet, 
@@ -20,6 +24,7 @@ excelFeatureAbstraction <- function(input_path = "../Data/test_data.xlsm",
               row.names = F,
               col.names = F)
   
+  # output consonant sheet
   i <- 4
   sheet <- read.xlsx(input_path, sheet = i)[1:81, 3:7]
   write.table(sheet, 
