@@ -16,7 +16,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
                                   gap = -1)
 {
   # make scoring matrix
-  scoring_matrix <- makeScoringMatrix(s1, s2, s3, s4, s5)
+  #scoring_matrix <- makeScoringMatrix(s1, s2, s3, s4, s5)
   
   # input files list
   name_list <- list.files(input_path)
@@ -39,7 +39,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
   print(paste("gap: ", gap))
   cat("\n")
   sink()
-  
+
   for (i in 1:number_of_words) {
     word_list <- makeWordList(read_path_list[[i]])
     check_word_list <- makeWordList(read_correct_path_list[[i]])
