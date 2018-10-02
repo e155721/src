@@ -1,6 +1,6 @@
 .myfunc.env <- new.env()
 sys.source("execute_alignment/executeNwunsch.R", envir = .myfunc.env)
-sys.source("execute_alignment/check_correct_alignment.R", envir = .myfunc.env)
+sys.source("execute_alignment/checkCorrectAlignment.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 checkCorrectAlignment(input_path = "../Alignment/ex_data/",
