@@ -3,19 +3,51 @@ sys.source("execute_alignment/executeNwunsch.R", envir = .myfunc.env)
 sys.source("execute_alignment/checkCorrectAlignment.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-checkCorrectAlignment(input_path = "../Alignment/ex_data/",
-                      input_correct_path = "../Alignment/check_data/",
-                      s1 = 1, 
-                      s2 = 1,
-                      s3 = -1,
-                      s4 = -1, 
-                      s5 = -4,
-                      gap = -2)
 
-executeNwunsch(output_path = "../Alignment/align_data/",
-               s1 = 1, 
-               s2 = 1,
-               s3 = -1,
-               s4 = -1, 
-               s5 = -5,
-               gap = -2)
+makeGapComb <- function()
+{
+  num_list <- list()
+  tmp <- list()
+  
+  num1 <- c(-1:-100)
+  num2 <- c(-1:-100)
+  
+  k <- 1
+  for (i in 1:100) {
+    for (j in 1:100) {
+      tmp[[1]] <- num1[i]
+      tmp[[2]] <- num2[j]
+      num_list[[k]] <- tmp
+      k <- k + 1
+    }
+  }
+  return(num_list)
+}
+
+num_list <- makeGapComb()
+
+n <- 1
+for (i in num_list) {
+  dir_path <- "../Alignment/"
+  output_compare_path <- paste(dir_path, "compare", n, ".txt")
+  output_ansrate_path <- paste(dir_path, "ansrate", n, ".txt")
+  checkCorrectAlignment(input_path = "../Alignment/ex_data/",
+                        input_correct_path = "../Alignment/check_data/",
+                        output_compare_path,
+                        output_ansrate_path,
+                        s5 = i[[1]],
+                        gap = i[[2]])
+  n <- n + 1
+}
+
+
+if (0) {
+  checkCorrectAlignment(input_path = "../Alignment/ex_data/",
+                        input_correct_path = "../Alignment/check_data/",
+                        s1 = 1, 
+                        s2 = 1,
+                        s3 = -1,
+                        s4 = -1, 
+                        s5 = -4,
+                        gap = -2)
+}
