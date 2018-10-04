@@ -3,7 +3,6 @@ sys.source("execute_alignment/executeNwunsch.R", envir = .myfunc.env)
 sys.source("execute_alignment/checkCorrectAlignment.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-
 makeGapComb <- function()
 {
   num_list <- list()
@@ -29,8 +28,8 @@ num_list <- makeGapComb()
 n <- 1
 for (i in num_list) {
   dir_path <- "../Alignment/"
-  output_compare_path <- paste(dir_path, "compare", n, ".txt")
-  output_ansrate_path <- paste(dir_path, "ansrate", n, ".txt")
+  output_compare_path <- paste(dir_path, "compare", n, ".txt", sep = "")
+  output_ansrate_path <- paste(dir_path, "ansrate", n, ".txt", sep = "")
   checkCorrectAlignment(input_path = "../Alignment/ex_data/",
                         input_correct_path = "../Alignment/check_data/",
                         output_compare_path,
