@@ -28,8 +28,8 @@ num_list <- makeGapComb()
 n <- 1
 for (i in num_list) {
   dir_path <- "../Alignment/"
-  output_compare_path <- paste(dir_path, "compare", n, ".txt", sep = "")
-  output_ansrate_path <- paste(dir_path, "ansrate", n, ".txt", sep = "")
+  output_compare_path <- paste(dir_path, "compare-", n, ".txt", sep = "")
+  output_ansrate_path <- paste(dir_path, "ansrate-", n, ".txt", sep = "")
   checkCorrectAlignment(input_path = "../Alignment/ex_data/",
                         input_correct_path = "../Alignment/check_data/",
                         output_compare_path,
@@ -50,3 +50,4 @@ if (0) {
                         s5 = -4,
                         gap = -2)
 }
+
