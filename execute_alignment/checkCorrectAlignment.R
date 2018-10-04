@@ -2,6 +2,7 @@
 sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/needlemanWunsch.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/makeScoringMatrix.R", envir = .myfunc.env)
+sys.source("needleman_wunsch/makeFeatureMatrix.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
@@ -17,6 +18,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
 {
   # make scoring matrix
   #scoring_matrix <- makeScoringMatrix(s1, s2, s3, s4, s5)
+  scoring_matrix <- makeFeatureMatrix(s5)
   
   # input files list
   name_list <- list.files(input_path)
@@ -45,6 +47,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
     check_word_list <- makeWordList(read_correct_path_list[[i]])
     word_list_length <- length(word_list)
     
+    assumed_form_check <- paste(check_word_list[[1]], collapse = " ")
     assumed_form <- word_list[[1]]
     rlt_list <- list()
     sink(output_compare_path, append = T)
@@ -52,14 +55,15 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
       seq2 <- word_list[[k]]
       align <- needlemanWunsch(assumed_form, seq2, p = gap, scoring_matrix)
       
-      align <- paste(align[["seq2"]], collapse = "")
-      correct_align <- paste(check_word_list[[k]], collapse = "")
+      align <- paste(align[["seq2"]], collapse = " ")
+      correct_align <- paste(check_word_list[[k]], collapse = " ")
       if ((align != correct_align) && (k != 1)) {
         # if (align != correct_align) {
         print(name_list[[i]])
         print(k)
-        print(paste("align: ", align, sep = ""))
-        print(paste("check: ", correct_align, sep = ""))
+        print(paste("assumed: ", assumed_form_check, sep = ""))
+        print(paste("align  : ", align, sep = ""))
+        print(paste("check  : ", correct_align, sep = ""))
         cat("\n")
         break
       }
