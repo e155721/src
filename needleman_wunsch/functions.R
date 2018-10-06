@@ -33,48 +33,40 @@ initializeMat <- function(x, p)
   return(x)
 }
 
-s <- 
-  R6Class("s",
+D <- 
+  R6Class("D",
           public = list(
             seq1 = NA,
             seq2 = NA,
             scoring_matrix = NA,
+            p = NA,
             
-            initialize = function(seq1, seq2, scoring_matrix)
+            initialize = function(seq1, seq2, scoring_matrix, p)
             {
               self$seq1 <- seq1
               self$seq2 <- seq2
               self$scoring_matrix <- scoring_matrix
+              self$p <- p                
             },
             
-            getScore = function(i,j)
+            getScore = function(x, i, j)
             {
-              x <- y <- score <-  NA
-              x <- self$seq1[i]
-              y <- self$seq2[j]
-              score <- self$scoring_matrix[x,y]
-              return(score)
+              d1 <- x[i-1, j-1, 1] + self$scoring_matrix[self$seq1[i], self$seq2[j]]
+              d2 <- x[i-1, j, 1] + self$p
+              d3 <- x[i, j-1, 1] + self$p
+              
+              d <- list()
+              d[[1]] <- max(d1, d2, d3)
+              
+              if (d[[1]] == d1) {
+                d[[2]] <- 0 # (0,0)
+              } else if (d[[1]] == d2) {
+                d[[2]] <- 1 # (0,1)
+              } else {
+                d[[2]] <- -1 # (-1,0)
+              }
+              
+              return(d)
             }
           )
   )
-
-# this function's aruments range are greater than equal 2
-D <- function(x, i, j, p, s)
-{
-  d1 <- x[i-1, j-1, 1] + s$getScore(i, j)
-  d2 <- x[i-1, j, 1] + p
-  d3 <- x[i, j-1, 1] + p
-  
-  d <- list()
-  d[[1]] <- max(d1, d2, d3)
-  
-  if (d[[1]] == d1) {
-    d[[2]] <- 0 # (0,0)
-  } else if (d[[1]] == d2) {
-    d[[2]] <- 1 # (0,1)
-  } else {
-    d[[2]] <- -1 # (-1,0)
-  }
-  
-  return(d)
-}
