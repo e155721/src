@@ -27,7 +27,7 @@ initializeMat <- function(x, p)
   for (j in 1:len2) {
     x[1, j, 1] <- g
     x[1, j, 2] <- -1
-    g = g + p
+    g <- g + p
   }
   
   return(x)
@@ -38,19 +38,21 @@ s <-
           public = list(
             seq1 = NA,
             seq2 = NA,
-            scoringMatrix = NA,
-            initialize = function(seq1, seq2, scoringMatrix)
+            scoring_matrix = NA,
+            
+            initialize = function(seq1, seq2, scoring_matrix)
             {
               self$seq1 <- seq1
               self$seq2 <- seq2
-              self$scoringMatrix <- scoringMatrix
+              self$scoring_matrix <- scoring_matrix
             },
-            get_score = function(i,j)
+            
+            getScore = function(i,j)
             {
               x <- y <- score <-  NA
               x <- self$seq1[i]
               y <- self$seq2[j]
-              score <- self$scoringMatrix[x,y]
+              score <- self$scoring_matrix[x,y]
               return(score)
             }
           )
@@ -59,7 +61,7 @@ s <-
 # this function's aruments range are greater than equal 2
 D <- function(x, i, j, p, s)
 {
-  d1 <- x[i-1, j-1, 1] + s$get_score(i, j)
+  d1 <- x[i-1, j-1, 1] + s$getScore(i, j)
   d2 <- x[i-1, j, 1] + p
   d3 <- x[i, j-1, 1] + p
   
