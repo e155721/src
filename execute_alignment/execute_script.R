@@ -4,28 +4,7 @@ sys.source("execute_alignment/checkCorrectAlignment.R", envir = .myfunc.env)
 sys.source("execute_alignment/makeGapComb.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-makeGapComb <- function(min = 1)
-{
-  num_list <- list()
-  tmp <- list()
-  
-  num1 <- c(-1:-min)
-  num2 <- c(-1:-min)
-  
-  k <- 1
-  for (i in 1:min) {
-    for (j in 1:min) {
-      tmp[[1]] <- num1[i]
-      tmp[[2]] <- num2[j]
-      num_list[[k]] <- tmp
-      k <- k + 1
-    }
-  }
-  return(num_list)
-}
-
 num_list <- makeGapComb()
-
 n <- 1
 for (i in num_list) {
   dir_path <- "../Alignment/"
