@@ -1,5 +1,3 @@
-
-
 makeGapComb <- function(min = 1)
 {
   num_list <- list()
