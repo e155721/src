@@ -7,7 +7,7 @@ needlemanWunsch <- function(seq1, seq2, p = -1, scoringMatrix)
   # initialize variable
   seq1 <- append(seq1, NA, after = 0)
   seq2 <- append(seq2, NA, after = 0)
-  s <- s$new(seq1, seq2, scoringMatrix)
+  D <- D$new(seq1, seq2, scoringMatrix, p)
   
   # calculate matrix for sequence alignment
   mat <- makeMatrix(seq1, seq2)
@@ -17,12 +17,11 @@ needlemanWunsch <- function(seq1, seq2, p = -1, scoringMatrix)
   colLen <- length(seq2)
   
   for (i in 2:rowLen) {
-    for (j in 2: colLen) {
-      mat[i,j, 1] <- D(mat,i,j,p,s)[[1]]
-      mat[i,j, 2] <- D(mat,i,j,p,s)[[2]]
-      j = j + 1
+    for (j in 2:colLen) {
+      d <- D$getScore(mat,i,j)
+      mat[i, j, 1] <- d[[1]]
+      mat[i, j, 2] <- d[[2]]
     }
-    i = i + 1
   }
   
   # trace back
