@@ -1,10 +1,10 @@
 #!/bin/zsh
 
-BASE=data-2
-check=($(<$1))
+base=$1
+check=($(<$2))
 
 for f in $check
 do
-  c="$(grep "$f" "$BASE")"
+  c="$(grep "$f" "$base")"
   [ -z "$c" ] && echo "$f"
 done
