@@ -58,7 +58,7 @@ D <-
             getScore = function(x, i, j)
             {
               p <- self$p1
-              if (bp == T) {
+              if (self$bp == T) {
                 p <- self$p2
               }
               d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
@@ -70,13 +70,13 @@ D <-
               
               if (d[[1]] == d1) {
                 d[[2]] <- 0 # (0,0)
-                bp <- F
+                self$bp <- F
               } else if (d[[1]] == d2) {
                 d[[2]] <- 1 # (0,1)
-                bp <- T
+                self$bp <- T
               } else {
                 d[[2]] <- -1 # (-1,0)
-                bp <- T
+                self$bp <- T
               }
               
               return(d)
