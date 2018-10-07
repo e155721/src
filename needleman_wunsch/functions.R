@@ -41,15 +41,15 @@ D <-
           public = list(
             seq1 = NA,
             seq2 = NA,
-            s = NA,
             p = NA,
+            s = NA,
             
-            initialize = function(seq1, seq2, s, p)
+            initialize = function(seq1, seq2, p, s)
             {
               self$seq1 <- seq1
               self$seq2 <- seq2
-              self$s <- s
               self$p <- p                
+              self$s <- s
             },
             
             getScore = function(x, i, j)
