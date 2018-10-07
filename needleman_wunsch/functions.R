@@ -62,8 +62,8 @@ D <-
                 p <- self$p2
               }
               d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
-              d2 <- x[i-1, j, 1] + self$p
-              d3 <- x[i, j-1, 1] + self$p
+              d2 <- x[i-1, j, 1] + p
+              d3 <- x[i, j-1, 1] + p
               
               d <- list()
               d[[1]] <- max(d1, d2, d3)
