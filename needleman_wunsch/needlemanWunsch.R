@@ -7,7 +7,7 @@ needlemanWunsch <- function(seq1, seq2, p = -1, s)
   # initialize variable
   seq1 <- append(seq1, NA, after = 0)
   seq2 <- append(seq2, NA, after = 0)
-  D <- D$new(seq1, seq2, s, p)
+  D <- D$new(seq1, seq2, p, s)
   
   # calculate matrix for sequence alignment
   mat <- makeMatrix(seq1, seq2)
