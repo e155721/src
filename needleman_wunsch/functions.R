@@ -41,19 +41,26 @@ D <-
           public = list(
             seq1 = NA,
             seq2 = NA,
-            p = NA,
+            p1 = NA,
+            p2 = NA,
             s = NA,
+            bp = F,
             
-            initialize = function(seq1, seq2, p, s)
+            initialize = function(seq1, seq2, p1, p2, s)
             {
               self$seq1 <- seq1
               self$seq2 <- seq2
-              self$p <- p                
+              self$p1 <- p1
+              self$p2 <- p2
               self$s <- s
             },
             
             getScore = function(x, i, j)
             {
+              p <- self$p1
+              if (bp == T) {
+                p <- self$p2
+              }
               d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
               d2 <- x[i-1, j, 1] + self$p
               d3 <- x[i, j-1, 1] + self$p
@@ -63,10 +70,13 @@ D <-
               
               if (d[[1]] == d1) {
                 d[[2]] <- 0 # (0,0)
+                bp <- F
               } else if (d[[1]] == d2) {
                 d[[2]] <- 1 # (0,1)
+                bp <- T
               } else {
                 d[[2]] <- -1 # (-1,0)
+                bp <- T
               }
               
               return(d)
