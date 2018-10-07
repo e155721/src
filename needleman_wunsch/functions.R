@@ -38,20 +38,20 @@ D <-
           public = list(
             seq1 = NA,
             seq2 = NA,
-            scoring_matrix = NA,
+            s = NA,
             p = NA,
             
-            initialize = function(seq1, seq2, scoring_matrix, p)
+            initialize = function(seq1, seq2, s, p)
             {
               self$seq1 <- seq1
               self$seq2 <- seq2
-              self$scoring_matrix <- scoring_matrix
+              self$s <- s
               self$p <- p                
             },
             
             getScore = function(x, i, j)
             {
-              d1 <- x[i-1, j-1, 1] + self$scoring_matrix[self$seq1[i], self$seq2[j]]
+              d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
               d2 <- x[i-1, j, 1] + self$p
               d3 <- x[i, j-1, 1] + self$p
               
