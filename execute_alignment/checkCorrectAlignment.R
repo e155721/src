@@ -53,6 +53,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
     sink(output_compare_path, append = T)
     for (k in 1:word_list_length) {
       seq2 <- word_list[[k]]
+      # Needleman-Wunsch
       align <- needlemanWunsch(assumed_form, seq2, p = gap, scoring_matrix)
       
       align <- paste(align[["seq2"]], collapse = " ")
