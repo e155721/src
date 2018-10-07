@@ -16,15 +16,18 @@ initializeMat <- function(x, p)
   len1 <- dim(x)[1]
   len2 <- dim(x)[2]
   
-  g <- 0
-  for (i in 1:len1) {
+  x[1, 1, 1] <- 0
+  x[1, 1, 2] <- 0
+  
+  g <- p
+  for (i in 2:len1) {
     x[i, 1, 1] <- g
     x[i, 1, 2] <- 1
     g <- g + p
   }
   
-  g <- 0
-  for (j in 1:len2) {
+  g <- p
+  for (j in 2:len2) {
     x[1, j, 1] <- g
     x[1, j, 2] <- -1
     g <- g + p
