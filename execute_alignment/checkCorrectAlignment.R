@@ -14,7 +14,8 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
                                   s3 = -1,
                                   s4 = -1, 
                                   s5 = -3,
-                                  gap = -1)
+                                  p1 = -1,
+                                  p2 = -1)
 {
   # make scoring matrix
   #scoring_matrix <- makeScoringMatrix(s1, s2, s3, s4, s5)
@@ -38,7 +39,8 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
   print(paste("s3:  ", s3))
   print(paste("s4:  ", s4))
   print(paste("s5:  ", s5))
-  print(paste("gap: ", gap))
+  print(paste("gap_open: ", p1))
+  print(paste("gap_ext : ", p2))
   cat("\n")
   sink()
 
@@ -54,7 +56,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
     for (k in 1:word_list_length) {
       seq2 <- word_list[[k]]
       # Needleman-Wunsch
-      align <- needlemanWunsch(assumed_form, seq2, p = gap, scoring_matrix)
+      align <- needlemanWunsch(assumed_form, seq2, p1, p2, scoring_matrix)
       
       align <- paste(align[["seq2"]], collapse = " ")
       correct_align <- paste(check_word_list[[k]], collapse = " ")
