@@ -2,16 +2,16 @@
 sys.source("needleman_wunsch/functions.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-needlemanWunsch <- function(seq1, seq2, p = -1, s)
+needlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
 {
   # initialize variable
   seq1 <- append(seq1, NA, after = 0)
   seq2 <- append(seq2, NA, after = 0)
-  D <- D$new(seq1, seq2, p, s)
+  D <- D$new(seq1, seq2, p1, p2, s)
   
   # calculate matrix for sequence alignment
   mat <- makeMatrix(seq1, seq2)
-  mat <- initializeMat(mat, p)
+  mat <- initializeMat(mat, p1, p2)
   
   rowLen <- length(seq1)
   colLen <- length(seq2)
