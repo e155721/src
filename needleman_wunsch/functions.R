@@ -11,7 +11,7 @@ makeMatrix <- function(seq1, seq2)
 }
 
 # this function initialises matrix
-initializeMat <- function(x, p)
+initializeMat <- function(x, p1, p2)
 {
   len1 <- dim(x)[1]
   len2 <- dim(x)[2]
@@ -19,18 +19,18 @@ initializeMat <- function(x, p)
   x[1, 1, 1] <- 0
   x[1, 1, 2] <- 0
   
-  g <- p
+  g <- p1
   for (i in 2:len1) {
     x[i, 1, 1] <- g
     x[i, 1, 2] <- 1
-    g <- g + p
+    g <- g + p2
   }
   
-  g <- p
+  g <- p1
   for (j in 2:len2) {
     x[1, j, 1] <- g
     x[1, j, 2] <- -1
-    g <- g + p
+    g <- g + p2
   }
   
   return(x)
