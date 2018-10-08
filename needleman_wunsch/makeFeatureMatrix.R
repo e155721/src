@@ -23,12 +23,10 @@ makeFeatureMatrix <- function(s5 = NA)
   l <- dim(c_feature)[[2]]
   
   c <- matrix(NA, k, l, dimnames = list(consonant, c()))
-  c[, 1] <- c_feature$V1
-  c[, 2] <- c_feature$V2
-  c[, 3] <- c_feature$V3
-  c[, 4] <- c_feature$V4
-  c[, 5] <- c_feature$V5
-  
+  for (i in 1:l) {
+    c[, i] <- c_feature[, i]
+  }
+
   c_match <- matrix(NA, k, k)
   for (i in 1:k) {
     for (j in 1:k) {
@@ -47,11 +45,9 @@ makeFeatureMatrix <- function(s5 = NA)
   l <- dim(v_feature)[[2]]
   
   v <- matrix(NA, k, l)
-  v[, 1] <- v_feature$V1
-  v[, 2] <- v_feature$V2
-  v[, 3] <- v_feature$V3
-  v[, 4] <- v_feature$V4
-  v[, 5] <- v_feature$V5
+  for (i in 1:l) {
+    v[, i] <- v_feature[, i]
+  }
   
   v_match <- matrix(NA, k, k)
   for (i in 1:k) {
