@@ -65,8 +65,8 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
         print(name_list[[i]])
         print(k)
         print(paste("assumed: ", assumed_form_check, sep = ""))
-        print(paste("align  : ", align, sep = ""))
         print(paste("check  : ", correct_align, sep = ""))
+        print(paste("align  : ", align, sep = ""))
         cat("\n")
         break
       }
