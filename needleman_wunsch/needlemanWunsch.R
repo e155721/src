@@ -61,10 +61,10 @@ needlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
       j <- j + 1
     } else if(gap[t] == 1) {
       align1 <- append(align1, s1[i])
-      align2<- append(align2, "_")
+      align2<- append(align2, "-")
       i <- i + 1
     } else {
-      align1 <- append(align1, "_")
+      align1 <- append(align1, "-")
       align2 <- append(align2, s2[j])
       j <- j + 1
     }
