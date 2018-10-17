@@ -4,7 +4,7 @@ sys.source("needleman_wunsch/needlemanWunsch.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/makeScoringMatrix.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-executeNwunsch <- function(input_path = "../Alignment/ex_data/", 
+executeNwunsch <- function(input_path = "../Alignment/input_data/", 
                            output_path = "../Alignment/align_data/",
                            s1 = 1, 
                            s2 = 1,
@@ -47,3 +47,4 @@ executeNwunsch <- function(input_path = "../Alignment/ex_data/",
     sink()
   }
 }
+
