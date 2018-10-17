@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+# This script is received only inputfile name
+
 inFile=$1
 outFile=$1.tmp
 
