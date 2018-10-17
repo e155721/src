@@ -1,24 +1,46 @@
 #!/bin/zsh
 
-# This script is received only inputfile name
-
-inFile=$1
-outFile=$1.tmp
-
-line=($(wc -l $inFile))
-tail -n $((line[1]-2)) $inFile >$outFile
-mv $outFile $inFile
-
-head=($(head -n1 "$inFile"))
-len=${#head[*]}
-i=1
-while [ $i -le $len ]
+# labels delete
+for f in *.org
 do
-    if [ "$head[$i]" = "\".\"" ]; then
-        i=$((i-1))
-        cut -f2-$i -d" " "$inFile" >"$outFile"
-        mv "$outFile" "$inFile"
-        exit
-    fi
-    i=$((i+1))
+    outFile=$f.tmp
+
+    line=($(wc -l $f))
+    tail -n $((line[1]-2)) $f >$outFile
+    mv $outFile $f
+done
+
+# cut by a max length word from data file
+for f in *.org
+do
+    outFile=$f.tmp
+
+    head=($(head -n1 "$f"))
+    len=${#head[*]}
+    i=1
+    while [ $i -le $len ]
+    do
+        if [ "$head[$i]" = "\".\"" ]; then
+            i=$((i-1))
+            cut -f2-$i -d" " "$f" >"$outFile"
+            mv "$outFile" "$f"
+            break
+        fi
+        i=$((i+1))
+    done
+done
+
+# remove lines that there have only "-9"
+for f in *.org
+do
+    outFile=$f.tmp
+    <$f | grep -v "\-9" >$outFile
+    mv $outFile $f
+done
+
+# remove files that there have the word of original form
+for f in *.org
+do
+    l=($(wc -l $f))
+    [ $l[1] -eq 1 ] && rm $f
 done
