@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# Descripttion: This script does preprocess org_data.
+# Arguments: This script do not have any arguments.
+
 # labels delete
 for f in *.org
 do
