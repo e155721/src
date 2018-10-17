@@ -58,15 +58,17 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
       # Needleman-Wunsch
       align <- needlemanWunsch(assumed_form, seq2, p1, p2, scoring_matrix)
       
+      align_seq1 <- paste(align[["seq1"]], collapse = " ")
       align <- paste(align[["seq2"]], collapse = " ")
       correct_align <- paste(check_word_list[[k]], collapse = " ")
       if ((align != correct_align) && (k != 1)) {
         # if (align != correct_align) {
         print(name_list[[i]])
         print(k)
-        print(paste("assumed: ", assumed_form_check, sep = ""))
-        print(paste("check  : ", correct_align, sep = ""))
-        print(paste("align  : ", align, sep = ""))
+        print(paste("original  : ", assumed_form_check, sep = ""))
+        print(paste("correct   : ", correct_align, sep = ""))
+        print(paste("algin_seq1: ", align_seq1, sep = ""))
+        print(paste("align_seq2: ", align, sep = ""))
         cat("\n")
         break
       }
