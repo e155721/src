@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# Description: This script formats a file type .org to .correct.
+# Arguments: This script only two arguments that one is input filename and other one is output filename.
+
 input_file=$1
 out_file=$2
 
