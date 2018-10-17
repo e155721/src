@@ -18,6 +18,6 @@ excelDataAbstraction <- function(input_path = "../Data/test_data.xlsm",
   # output sheets
   for (i in 6:135) {
     sheet <- read.xlsx(input_path, sheet = i)[,12:27]
-    write.table(sheet, paste(output_path, sheet_names[i], sep = "/"))
+    write.table(sheet, paste(output_path, sheet_names[i], ".org", sep = ""))
   }
 }
