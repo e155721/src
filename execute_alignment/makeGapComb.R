@@ -1,10 +1,10 @@
-makeGapComb <- function(min = 1)
+makeGapComb <- function(min = 1, max = 1)
 {
   num_list <- list()
   tmp <- list()
   
-  num1 <- c(-1:-min)
-  num2 <- c(-1:-min)
+  num1 <- c(-max:-min)
+  num2 <- c(-max:-min)
   
   k <- 1
   for (i in 1:min) {
