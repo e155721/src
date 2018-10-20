@@ -3,6 +3,12 @@
 # Descripttion: This script does preprocess org_data.
 # Arguments: This script do not have any arguments.
 
+# remove blanks of filename
+for f in *
+do
+    mv $f $(echo $f | sed 's/*[ ]*//g')
+done
+
 # labels delete
 for f in *.org
 do
