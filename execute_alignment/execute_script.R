@@ -27,7 +27,7 @@ for (ext in 1:3) {
 
 
 # constant penalty
-num_list <- makeGapComb(2)
+num_list <- makeGapComb(1,1)
 n <- 1
 for (i in num_list) {
   dir_path <- "../Alignment/"
@@ -44,4 +44,3 @@ for (i in num_list) {
                         p2 = i[[2]])
   n <- n + 1
 }
-
