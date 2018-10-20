@@ -52,6 +52,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
     assumed_form_check <- paste(check_word_list[[1]], collapse = " ")
     assumed_form <- word_list[[1]]
     rlt_list <- list()
+    correct <- 0
     sink(output_compare_path, append = T)
     for (k in 1:word_list_length) {
       seq2 <- word_list[[k]]
@@ -61,6 +62,9 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
       align_seq1 <- paste(align[["seq1"]], collapse = " ")
       align <- paste(align[["seq2"]], collapse = " ")
       correct_align <- paste(check_word_list[[k]], collapse = " ")
+      if ((align == correct_align) && (k != 1)) {
+        correct <- correct + 1
+      }
       if ((align != correct_align) && (k != 1)) {
         # if (align != correct_align) {
         print(name_list[[i]])
@@ -70,13 +74,13 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
         print(paste("algin_seq1: ", align_seq1, sep = ""))
         print(paste("align_seq2: ", align, sep = ""))
         cat("\n")
-        break
+        #break
       }
     }
     sink()
     
     sink(output_ansrate_path, append = T)
-    result <- paste(name_list[[i]], (k-1)/(word_list_length-1)*100, sep = " ")
+    result <- paste(name_list[[i]], (correct)/(word_list_length-1)*100, sep = " ")
     print(result, quote = F)
     cat("\n")
     sink()
