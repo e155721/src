@@ -3,6 +3,26 @@ sys.source("execute_alignment/checkCorrectAlignment.R", envir = .myfunc.env)
 sys.source("execute_alignment/makeGapComb.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
+# constant penalty
+num_list <- makeGapComb(1,1)
+n <- 1
+for (i in num_list) {
+  dir_path <- "../Alignment/"
+  if (!dir.exists(dir_path))
+    dir.create(dir_path)
+  output_compare_path <- paste(dir_path, "compare-", n, ".txt", sep = "")
+  output_ansrate_path <- paste(dir_path, "ansrate-", n, ".txt", sep = "")
+  checkCorrectAlignment(input_path = "../Alignment/input_data/",
+                        input_correct_path = "../Alignment/correct_data/",
+                        output_compare_path,
+                        output_ansrate_path,
+                        s5 = i[[1]],
+                        p1 = i[[2]],
+                        p2 = i[[2]])
+  n <- n + 1
+}
+
+
 # affine gap penalty
 num_list <- makeGapComb(10)
 for (ext in 1:3) {
@@ -23,24 +43,4 @@ for (ext in 1:3) {
                           p2 = i[[2]] + ext)
     n <- n + 1
   }
-}
-
-
-# constant penalty
-num_list <- makeGapComb(1,1)
-n <- 1
-for (i in num_list) {
-  dir_path <- "../Alignment/"
-  if (!dir.exists(dir_path))
-    dir.create(dir_path)
-  output_compare_path <- paste(dir_path, "compare-", n, ".txt", sep = "")
-  output_ansrate_path <- paste(dir_path, "ansrate-", n, ".txt", sep = "")
-  checkCorrectAlignment(input_path = "../Alignment/input_data/",
-                        input_correct_path = "../Alignment/correct_data/",
-                        output_compare_path,
-                        output_ansrate_path,
-                        s5 = i[[1]],
-                        p1 = i[[2]],
-                        p2 = i[[2]])
-  n <- n + 1
 }
