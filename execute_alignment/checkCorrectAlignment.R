@@ -70,7 +70,7 @@ checkCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
         print(k-1)
         print(paste("original  : ", assumed_form_check, sep = ""))
         print(paste("correct   : ", correct_align, sep = ""))
-        print(paste("algin_seq1: ", align_seq1, sep = ""))
+        print(paste("align_seq1: ", align_seq1, sep = ""))
         print(paste("align_seq2: ", align_seq2, sep = ""))
         cat("\n")
         #break

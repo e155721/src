@@ -16,7 +16,7 @@ for (i in num_list) {
                         input_correct_path = "../Alignment/correct_data/",
                         output_compare_path,
                         output_ansrate_path,
-                        s5 = i[[1]],
+                        s5 = -100,
                         p1 = i[[2]],
                         p2 = i[[2]])
   n <- n + 1
