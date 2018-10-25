@@ -5,7 +5,7 @@
 # s4 mismatch between vowel to vowel
 # s5 mismatch between consonant to vowel
 
-makeScoringMatrix <- function(s1 = 1, s2 = 1, s3 = -1, s4 = -1, s5 = -3)
+MakeScoringMatrix <- function(s1 = 1, s2 = 1, s3 = -1, s4 = -1, s5 = -3)
 {
   # make consonant array
   consonant <- as.matrix(read.table("symbols/consonant.txt"))

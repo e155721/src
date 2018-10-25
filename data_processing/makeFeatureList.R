@@ -1,10 +1,10 @@
 .myfunc.env <- new.env()
-sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
+sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 makeFeatureList <- function(input_file)
 {
-  x <- makeWordList(input_file)
+  x <- MakeWordList(input_file)
   list_length <- length(x)
   y <- list()
   tmp <- vector()

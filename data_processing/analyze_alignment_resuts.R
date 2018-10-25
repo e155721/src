@@ -1,25 +1,25 @@
-dir_path <- "../Alignment/wrong_align-1.txt"
-files_name <- list.files(dir_path)
-files_path <- paste(dir_path, files_name, sep = "")
+dirPath <- "../Alignment/wrong_align-2.txt"
+filesName <- list.files(dirPath)
+filesPath <- paste(dirPath, filesName, sep = "")
 
 # make average list of correct answer rate
-data_list <- c()
+dataList <- c()
 i <- 1
-for (f in files_path) {
+for (f in filesPath) {
   data <- read.table(f)$V2
   data <- sum(data)/length(data)
-  data_list[[i]] <- data
+  dataList[[i]] <- data
   i <- i + 1
 }
 
 # make max average list of correct answer rate
-max_average <- max(data_list)
-max_average_files <- list()
+maxAverage <- max(dataList)
+maxAverageFiles <- list()
 i <- 1
 j <- 1
-for (f in data_list) {
-  if (f == max_average) {
-    max_average_files[[j]] <- files_path[[i]]
+for (f in dataList) {
+  if (f == maxAverage) {
+    maxAverageFiles[[j]] <- filesPath[[i]]
     j <- j + 1
   }
   i <- i + 1
@@ -28,20 +28,20 @@ for (f in data_list) {
 # make list of histogram object
 h <- list()
 i <- 1
-for (f in max_average_files) {
+for (f in maxAverageFiles) {
   data <- read.table(f)
   h[[i]] <- hist(data$V2, breaks = seq(0,100,10))
   i <- i + 1
 }
 
 ##
-score_list <- list()
+scoreList <- list()
 i <- 1
-for (f in max_average_files) {
+for (f in maxAverageFiles) {
   f <- gsub("wrong", "compare", f)
   f <- gsub("_align", "", f)
   f <- gsub("txt", "score", f)
   score <- read.table(f)$V1
-  score_list[[i]] <- score[1] - score[2]
+  scoreList[[i]] <- score[1] - score[2]
   i <- i + 1
 }

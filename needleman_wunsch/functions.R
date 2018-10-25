@@ -11,7 +11,7 @@ makeMatrix <- function(seq1, seq2)
 }
 
 # this function initialises matrix
-initializeMat <- function(x, p1, p2)
+InitializeMat <- function(x, p1, p2)
 {
   len1 <- dim(x)[1]
   len2 <- dim(x)[2]

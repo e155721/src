@@ -1,5 +1,5 @@
 .myfunc.env <- new.env()
-sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
+sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 excelFeatureAbstraction <- function(input_path = "../Data/test_data.xlsm",

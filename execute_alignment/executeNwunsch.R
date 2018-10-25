@@ -1,8 +1,8 @@
 .myfunc.env <- new.env()
-sys.source("data_processing/makeWordList.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/needlemanWunsch.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/makeScoringMatrix.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/makeFeatureMatrix.R", envir = .myfunc.env)
+sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
+sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
+sys.source("needleman_wunsch/MakeScoringMatrix.R", envir = .myfunc.env)
+sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 executeNwunsch <- function(input_path = "../Alignment/input_data/", 
@@ -15,8 +15,8 @@ executeNwunsch <- function(input_path = "../Alignment/input_data/",
                            p = -1)
 {
   # make scoring matrix
-  #scoring_matrix <- makeScoringMatrix(s1, s2, s3, s4, s5)
-  scoring_matrix <- makeFeatureMatrix(s5)
+  #scoring_matrix <- MakeScoringMatrix(s1, s2, s3, s4, s5)
+  scoring_matrix <- MakeFeatureMatrix(s5)
   
   # input files list
   name_list <- list.files(input_path)
@@ -34,14 +34,14 @@ executeNwunsch <- function(input_path = "../Alignment/input_data/",
   write_path_list <- paste(write_base_path, name_list, ".aln", sep = "")
   
   for (f in 1:number_of_words) {
-    word_list <- makeWordList(read_path_list[[f]])
+    word_list <- MakeWordList(read_path_list[[f]])
     word_list_length <- length(word_list)
     
     assumed_form <- word_list[[1]]
     sink(write_path_list[[f]], append = T)
     for (i in 1:word_list_length) {
       seq2 <- word_list[[i]]
-      align <- needlemanWunsch(assumed_form, seq2, p1 = p, p2 = p, scoring_matrix)
+      align <- NeedlemanWunsch(assumed_form, seq2, p1 = p, p2 = p, scoring_matrix)
       if (i != 1) {
         print(align[["seq1"]])
         print(align[["seq2"]])

@@ -1,4 +1,4 @@
-makeFeatureMatrix <- function(s5 = NA)
+MakeFeatureMatrix <- function(s5 = NA)
 {
   ######
   # make consonant array

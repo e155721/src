@@ -1,5 +1,5 @@
 # make word list
-makeWordList <- function(file)
+MakeWordList <- function(file)
 {
   # load words data
   sheet <- read.table(file, sep = " ")

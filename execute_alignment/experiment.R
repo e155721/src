@@ -3,7 +3,7 @@ sys.source("../src/data_processing/getFeaturesScore.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 score_symbols <- getFeaturesScore()
-scoring_matrix <- makeScoringMatrix(s5 = -4)
+scoring_matrix <- MakeScoringMatrix(s5 = -4)
 d <- dim(scoring_matrix)[1]
 
 # ex1 (rejection)
@@ -27,12 +27,12 @@ diag(scoring_matrix) <- match
 
 # ex3
 score_symbols <- getFeaturesScore()
-scoring_matrix <- makeScoringMatrix(s5 = -4)
+scoring_matrix <- MakeScoringMatrix(s5 = -4)
 diag(scoring_matrix) <- diag(scoring_matrix) + score_symbols
 
 # ex4
 score_symbols <- getFeaturesScore()
-scoring_matrix <- makeScoringMatrix(s5 = -4)
+scoring_matrix <- MakeScoringMatrix(s5 = -4)
 d <- dim(scoring_matrix)[1]
 
 for (i in 1:d) {
@@ -44,7 +44,7 @@ match <- diag(scoring_matrix)
 consonant_mismatch <- scoring_matrix[1:81, 1:81]
 vowel_mismatch <- scoring_matrix[82:118, 82:118]
 
-scoring_matrix <- makeScoringMatrix(s5 = -4)
+scoring_matrix <- MakeScoringMatrix(s5 = -4)
 scoring_matrix[1:81, 1:81] <- consonant_mismatch
 scoring_matrix[82:118, 82:118] <- vowel_mismatch
 diag(scoring_matrix) <- match
