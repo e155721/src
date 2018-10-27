@@ -8,7 +8,7 @@ ExecutePairWise <- function(inputFile, s5, p1, p2)
 {
   # make scoring matrix
   scoring_matrix <- MakeFeatureMatrix(s5)
-    
+  
   # remove original form
   wordList <- MakeWordList(inputFile)
   wordList <- wordList[-1]
@@ -18,14 +18,16 @@ ExecutePairWise <- function(inputFile, s5, p1, p2)
   for (w in wordList) {
     wLength <- append(wLength, length(w), length(wLength))
   }
-  #names(wordList) <- wLength
-  #seq1 <- wordList[[as.character(max(wLength))]]
+  # names(wordList) <- wLength
+  # seq1 <- wordList[[as.character(max(wLength))]]
+  
   maxWordLength <- max(wLength)
   wordListLength <- length(wordList)
   for (i in 1:wordListLength) {
     if (length(wordList[[i]]) == maxWordLength){
       maxLengthWord <- i
       seq1 <- wordList[[i]]
+      break
     }
   }
   
