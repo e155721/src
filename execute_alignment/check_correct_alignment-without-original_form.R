@@ -4,12 +4,12 @@ sys.source("execute_alignment/ExecutePairWise.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 inputDirPath <- "../Alignment/input_data/"
-inputFilesList <- list.files(inputDirPath)
-inputFilesPath <- paste(inputDirPath, inputFilesList, sep = "")
+inputFilesName <- list.files(inputDirPath)
+inputFilesPath <- paste(inputDirPath, inputFilesName, sep = "")
 
 correctDirPath <- "../Alignment/correct_data/"
-correctFilesList <- list.files(correctDirPath)
-correctFilesPath <- paste(correctDirPath, correctFilesList, sep = "")
+correctFilesName <- list.files(correctDirPath)
+correctFilesPath <- paste(correctDirPath, correctFilesName, sep = "")
 
 # define a score and gap penaltys
 s5 <- -2
@@ -17,7 +17,8 @@ p1 <- -5
 p2 <- -5
 
 # make scoring matrix
-scoring_matrix <- MakeFeatureMatrix(s5)
+#scoring_matrix <- MakeFeatureMatrix(s5)
+
 
 corInd <- 1
 for (f in inputFilesPath) {
