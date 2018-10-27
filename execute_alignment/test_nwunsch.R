@@ -6,5 +6,10 @@ attach(.myfunc.env)
 
 seq1 <- c("n", "a") 
 seq2 <- c("n", "a:")
-scoring_matrix <- MakeScoringMatrix()
-NeedlemanWunsch(seq1, seq2, s = scoring_matrix)
+
+seq1 <- c("?", "a", "a", "ts2x", "i:")
+seq2 <- c("a", "k", "a", "ts", "y")
+
+scoringMatrix <- MakeScoringMatrix()
+scoringMatrix <- MakeFeatureMatrix(-2)
+NeedlemanWunsch(seq1, seq2, s = scoringMatrix)
