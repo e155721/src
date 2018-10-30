@@ -9,6 +9,7 @@ seq2 <- c("n", "a:")
 
 seq1 <- c("?", "a", "a", "ts2x", "i:")
 seq2 <- c("a", "k", "a", "ts", "y")
+seq2 <- c("k", "a:", "ts", "y")
 
 scoringMatrix <- MakeScoringMatrix()
 scoringMatrix <- MakeFeatureMatrix(-2)
