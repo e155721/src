@@ -7,25 +7,26 @@ attach(.myfunc.env)
 ExecutePairWise <- function(inputFile, s5, p1, p2)
 {
   # make scoring matrix
-  scoring_matrix <- MakeFeatureMatrix(s5)
+  scoringMatrix <- MakeFeatureMatrix(s5)
   
   # remove original form
   wordList <- MakeWordList(inputFile)
   wordList <- wordList[-1]
   
   # search a max length word
-  wLength <- c()
+  wordLength <- c()
   for (w in wordList) {
-    wLength <- append(wLength, length(w), length(wLength))
+    wordLength <- append(wordLength, length(w), length(wordLength))
   }
+
   # names(wordList) <- wLength
   # seq1 <- wordList[[as.character(max(wLength))]]
   
-  maxWordLength <- max(wLength)
+  maxWordLength <- max(wordLength)
   wordListLength <- length(wordList)
   for (i in 1:wordListLength) {
     if (length(wordList[[i]]) == maxWordLength){
-      maxLengthWord <- i
+      IndexOfMaxLengthWord <- i
       seq1 <- wordList[[i]]
       break
     }
@@ -36,7 +37,7 @@ ExecutePairWise <- function(inputFile, s5, p1, p2)
   alignLength <- c()
   alignList <- list()
   for (seq2 in wordList) {
-    alignList[[i]] <- NeedlemanWunsch(seq1, seq2, p1, p2, scoring_matrix)[["seq2"]]
+    alignList[[i]] <- NeedlemanWunsch(seq1, seq2, p1, p2, scoringMatrix)[["seq2"]]
     alignLength <- append(alignLength, length(alignList[[i]]))
     i <- i + 1
   }
@@ -63,7 +64,7 @@ ExecutePairWise <- function(inputFile, s5, p1, p2)
   
   result <- list(NA, NA)
   names(result) <- c("seq1", "mat") 
-  result[["maxLengthWord"]] <- maxLengthWord
+  result[["IndexOfMaxLengthWord"]] <- IndexOfMaxLengthWord
   result[["mat"]] <- resultsMatrix
   return(result)
 }
