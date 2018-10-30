@@ -1,4 +1,4 @@
-dirPath <- "../Alignment/wrong_align-2.txt"
+dirPath <- "../Alignment/results/wrong/wrong_align-15.txt"
 filesName <- list.files(dirPath)
 filesPath <- paste(dirPath, filesName, sep = "")
 
@@ -30,7 +30,7 @@ h <- list()
 i <- 1
 for (f in maxAverageFiles) {
   data <- read.table(f)
-  h[[i]] <- hist(data$V2, breaks = seq(0,100,10))
+  h[[i]] <- hist(data$V2, breaks = seq(0,100,10), main = f)
   i <- i + 1
 }
 
