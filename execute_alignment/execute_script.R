@@ -4,8 +4,8 @@ sys.source("execute_alignment/MakeGapComb.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 # constant penalty
-num_list <- makeGapComb(1,1)
-n <- 2
+num_list <- makeGapComb(10, 1)
+n <- 1
 for (i in num_list) {
   dir_path <- "../Alignment/"
   if (!dir.exists(dir_path))
@@ -16,12 +16,12 @@ for (i in num_list) {
                         input_correct_path = "../Alignment/correct_data/",
                         output_compare_path,
                         output_ansrate_path,
-                        #s5 = i[[1]],
-                        #p1 = i[[2]],
-                        #p2 = i[[2]])
-                        s5 = -2,
-                        p1 = -5,
-                        p2 = -5)
+                        s5 = i[[1]],
+                        p1 = i[[2]],
+                        p2 = i[[2]])
+                        #s5 = -2,
+                        #p1 = -5,
+                        #p2 = -5)
   n <- n + 1
 }
 
