@@ -35,13 +35,15 @@ for (f in maxAverageFiles) {
 }
 
 ##
-scoreList <- list()
-i <- 1
-for (f in maxAverageFiles) {
-  f <- gsub("wrong", "compare", f)
-  f <- gsub("_align", "", f)
-  f <- gsub("txt", "score", f)
-  score <- read.table(f)$V1
-  scoreList[[i]] <- score[1] - score[2]
-  i <- i + 1
+if (0) {
+  scoreList <- list()
+  i <- 1
+  for (f in maxAverageFiles) {
+    f <- gsub("wrong", "compare", f)
+    f <- gsub("_align", "", f)
+    f <- gsub("txt", "score", f)
+    score <- read.table(f)$V1
+    scoreList[[i]] <- score[1] - score[2]
+    i <- i + 1
+  }
 }
