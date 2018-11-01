@@ -5,8 +5,8 @@ sys.source("needleman_wunsch/MakeScoringMatrix.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-CheckCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
-                                  input_correct_path = "../Alignment/check_data/",
+CheckCorrectAlignment <- function(input_path = "../Alignment/input_data/",
+                                  input_correct_path = "../Alignment/correct_data/",
                                   output_compare_path = "../Alignment/compare.txt",
                                   output_ansrate_path = "../Alignment/ansrate.txt",
                                   s1 = 1, 
@@ -83,7 +83,6 @@ CheckCorrectAlignment <- function(input_path = "../Alignment/ex_data/",
     result <- paste(name_list[[i]], (correct)/(word_list_length-1)*100, sep = " ")
     #result <- paste(name_list[[i]], (correct)/(word_list_length)*100, sep = " ")
     print(result, quote = F)
-    cat("\n")
     sink()
   }
 }
