@@ -1,4 +1,4 @@
-dirPath <- "../Alignment/results/wrong/wrong_align-15.txt"
+dirPath <- "../Alignment/ex-10_30/analyze/"
 filesName <- list.files(dirPath)
 filesPath <- paste(dirPath, filesName, sep = "")
 
