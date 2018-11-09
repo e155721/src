@@ -27,6 +27,13 @@ for (f in filesPath) {
   i <- i + 1
 }
 
+file <- "../Alignment/ex-10_30/val/tm"
+data <- read.table(file)
+
+names <- as.vector(1:127)
+rate <- sort(as.vector(data$V2))
+
+h <- hist(data)
 
 dirPath <- list.dirs("../Alignment/ex-10_30/val/words_unique/")
 filesName <- list.files("../Alignment/ex-10_30/val/words_unique/")
@@ -55,4 +62,3 @@ for (f in filesPath) {
   table[[i]] <- xtable(w)
   i <- i + 1
 }
-
