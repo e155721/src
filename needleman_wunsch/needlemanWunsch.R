@@ -70,11 +70,6 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
     }
   }
   
-  if (0) {
-    print(c("seq1: ", align1), quote = F)
-    print(c("seq2: ", align2), quote = F)
-    print(c("score: ", score), quote = F)
-  }
   align <- list(NA, NA)
   names(align) <- c("seq1", "seq2")
   align[["seq1"]] <- align1
