@@ -98,7 +98,7 @@ for (num in numList) {
     print(rlt, quote = F)
     sink()
     
-    n <- n + 1
-    
   }
+print(paste("Progress:", (n/length(numList))*100, sep = " "))
+    n <- n + 1
 }
