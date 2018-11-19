@@ -26,9 +26,6 @@ for (i in 1:numOfFiles) {
   filesPath[[i]]["name"] <- inputFilese[[i]]
 }
 
-
-
-
 # constant penalty
 numList <- makeGapComb(10, 1)
 n <- 1
@@ -43,9 +40,6 @@ for (num in numList) {
   
   ansratePath <- paste("../Alignment/ansrate-", n, ".txt", sep = "") 
   comparePath <- paste("../Alignment/compare-", n, ".txt", sep = "")
-  
-  rltMat <- matrix(NA, numOfFiles, 2)
-  rlt <- 1
   
   # conduct the alignment for each files
   for (f in filesPath) {
@@ -99,25 +93,26 @@ for (num in numList) {
       l <- l + 1
     }
     
-    if (0) {
+    if (1) {
       sink(ansratePath, append = T)
       matchingRate <- count / sum((regions-1):1) * 100
       rlt <- paste(f["name"], matchingRate, sep = " ")
-      print(rlt)
+print(rlt, quote = F)
       sink()
-      print(rlt)
     }
     
     
 
-    if (1) {
+    if (0) {
       matchingRate <- count / sum((regions-1):1) * 100
       rltMat[rlt, ] <- as.vector(paste(f["name"], matchingRate, sep = " "))
+      print(rlt)
       rlt <- rlt + 1
     }
   }
-  
-  write(rltMat, ansratePath)
+
+exit
+
   
   n <- n + 1
   
