@@ -113,6 +113,7 @@ for (num in numList) {
     if (1) {
       matchingRate <- count / sum((regions-1):1) * 100
       rltMat[rlt, ] <- as.vector(paste(f["name"], matchingRate, sep = " "))
+      print(rlt)
       rlt <- rlt + 1
     }
   }
