@@ -1,4 +1,5 @@
-dirPath <- "../Alignment/ex-10_30/analyze/"
+#dirPath <- "../Alignment/ex-10_30/analyze/"
+dirPath <- "../Alignment/ex-11_19/ansrate/"
 filesName <- list.files(dirPath)
 filesPath <- paste(dirPath, filesName, sep = "")
 
@@ -6,7 +7,7 @@ filesPath <- paste(dirPath, filesName, sep = "")
 dataList <- c()
 i <- 1
 for (f in filesPath) {
-  data <- read.table(f)$V2
+  data <- read.table(f)$V3
   data <- sum(data)/length(data)
   dataList[[i]] <- data
   i <- i + 1
