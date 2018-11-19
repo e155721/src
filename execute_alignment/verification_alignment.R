@@ -56,6 +56,9 @@ for (num in numList) {
     outputPath <- "../Alignment/"
     outputPath <- paste(outputPath, gsub("\\..+$", "", f["name"]), ".aln", sep = "")
     
+    rltMat <- matrix(NA, regions, 2)
+    rlt <- 1
+    
     l <- 2
     count <- 0
     for (k in 1:(regions-1)) {
@@ -96,7 +99,7 @@ for (num in numList) {
       l <- l + 1
     }
     
-    if (1) {
+    if (0) {
       sink(ansratePath, append = T)
       matchingRate <- count / sum((regions-1):1) * 100
       rlt <- paste(f["name"], matchingRate, sep = " ")
@@ -104,8 +107,20 @@ for (num in numList) {
       sink()
       print(rlt)
     }
+    
+    
+
+    if (1) {
+      #sink(ansratePath, append = T)
+      matchingRate <- count / sum((regions-1):1) * 100
+      rltMat[rlt, ] <- as.vector(paste(f["name"], matchingRate, sep = " "))
+      #print(rlt)
+      #sink()
+      write(rltMat, ansratePath)
+    }
   }
   
+
   
   
   n <- n + 1
