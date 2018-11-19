@@ -111,14 +111,13 @@ for (num in numList) {
     
 
     if (1) {
-      #sink(ansratePath, append = T)
       matchingRate <- count / sum((regions-1):1) * 100
       rltMat[rlt, ] <- as.vector(paste(f["name"], matchingRate, sep = " "))
-      #print(rlt)
-      #sink()
-      write(rltMat, ansratePath)
+      rlt <- rlt + 1
     }
   }
+  
+  write(rltMat, ansratePath)
   
 
   
