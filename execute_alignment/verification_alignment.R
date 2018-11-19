@@ -116,10 +116,11 @@ for (num in numList) {
       rltMat[rlt, ] <- as.vector(paste(f["name"], matchingRate, sep = " "))
       #print(rlt)
       #sink()
-      print(rlt)
+      write(rltMat, ansratePath)
     }
   }
   
+
   
   
   n <- n + 1
