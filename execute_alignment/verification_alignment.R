@@ -3,7 +3,6 @@ sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 sys.source("data_processing/RemkSeq.R", envir = .myfunc.env)
 sys.source("execute_alignment/MakeGapComb.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/MakeScoringMatrix.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
@@ -93,28 +92,13 @@ for (num in numList) {
       l <- l + 1
     }
     
-    if (1) {
-      sink(ansratePath, append = T)
-      matchingRate <- count / sum((regions-1):1) * 100
-      rlt <- paste(f["name"], matchingRate, sep = " ")
-print(rlt, quote = F)
-      sink()
-    }
+    sink(ansratePath, append = T)
+    matchingRate <- count / sum((regions-1):1) * 100
+    rlt <- paste(f["name"], matchingRate, sep = " ")
+    print(rlt, quote = F)
+    sink()
     
+    n <- n + 1
     
-
-    if (0) {
-      matchingRate <- count / sum((regions-1):1) * 100
-      rltMat[rlt, ] <- as.vector(paste(f["name"], matchingRate, sep = " "))
-      print(rlt)
-      rlt <- rlt + 1
-    }
   }
-
-exit
-
-  
-  n <- n + 1
-  
-  
 }
