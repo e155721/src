@@ -44,6 +44,9 @@ for (num in numList) {
   ansratePath <- paste("../Alignment/ansrate-", n, ".txt", sep = "") 
   comparePath <- paste("../Alignment/compare-", n, ".txt", sep = "")
   
+  rltMat <- matrix(NA, numOfFiles, 2)
+  rlt <- 1
+  
   # conduct the alignment for each files
   for (f in filesPath) {
     
@@ -55,9 +58,6 @@ for (num in numList) {
     # output file
     outputPath <- "../Alignment/"
     outputPath <- paste(outputPath, gsub("\\..+$", "", f["name"]), ".aln", sep = "")
-    
-    rltMat <- matrix(NA, regions, 2)
-    rlt <- 1
     
     l <- 2
     count <- 0
@@ -111,17 +111,13 @@ for (num in numList) {
     
 
     if (1) {
-      #sink(ansratePath, append = T)
       matchingRate <- count / sum((regions-1):1) * 100
       rltMat[rlt, ] <- as.vector(paste(f["name"], matchingRate, sep = " "))
-      #print(rlt)
-      #sink()
-      write(rltMat, ansratePath)
+      rlt <- rlt + 1
     }
   }
   
-
-  
+  write(rltMat, ansratePath)
   
   n <- n + 1
   
