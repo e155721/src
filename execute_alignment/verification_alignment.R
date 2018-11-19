@@ -99,7 +99,7 @@ for (num in numList) {
     if (1) {
       sink(ansratePath, append = T)
       matchingRate <- count / sum((regions-1):1) * 100
-      rlt <- paste(f["name"], " ", matchingRate, sep = "")
+      rlt <- paste(f["name"], matchingRate, sep = " ")
       print(rlt)
       sink()
       print(rlt)
