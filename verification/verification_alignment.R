@@ -12,13 +12,19 @@ attach(.myfunc.env)
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
+# get the all of files path
+filesPath <- GetFilesPath(inputDir = "../Alignment/input_tmp/",
+                          correctDir = "../Alignment/correct_tmp/")
+
 # constant penalty
-numList <- makeGapComb(10, 1)
+#numList <- makeGapComb(10, 1)
 n <- 1
-for (num in numList) {
-  p1 <- num[[1]]
-  p2 <- num[[1]]
-  s5 <- num[[2]]
+#for (num in numList) {
+  #p1 <- num[[1]]
+  #p2 <- num[[1]]
+  #s5 <- num[[2]]
+  p1 <- p2 <- -1
+  s5 <- -2
   
   # make scoring matrix
   scoringMatrix <- MakeFeatureMatrix(s5)
@@ -33,4 +39,4 @@ for (num in numList) {
   # display the progress
   print(paste("Progress:", (n/length(numList))*100, sep = " "))
   n <- n + 1
-}
+#}
