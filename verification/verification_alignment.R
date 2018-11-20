@@ -13,8 +13,8 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
 # get the all of files path
-filesPath <- GetFilesPath(inputDir = "../Alignment/input_tmp/",
-                          correctDir = "../Alignment/correct_tmp/")
+# filesPath <- GetFilesPath(inputDir = "../Alignment/input_tmp/",
+#                           correctDir = "../Alignment/correct_tmp/")
 
 # constant penalty
 #numList <- makeGapComb(10, 1)
