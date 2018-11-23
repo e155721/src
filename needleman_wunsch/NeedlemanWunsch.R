@@ -19,20 +19,20 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
   for (i in 2:rowLen) {
     for (j in 2:colLen) {
       d <- D$getScore(mat,i,j)
-      mat[i, j, 1] <- d[[1]]
-      mat[i, j, 2] <- d[[2]]
+      mat[i, j, 1] <- d[1]
+      mat[i, j, 2] <- d[2]
     }
   }
   
   # trace back
-  score <- gap <- c() 
+  score <- traceVec <- c() 
   i <- rowLen
   j <- colLen
   n <- 1
   score <- mat[i, j, 1]
   while (TRUE) {
     if (i == 1 && j == 1) break
-    gap[n] <- mat[i, j, 2]
+    traceVec[n] <- mat[i, j, 2]
     n <- n + 1
     
     trace <- mat[i, j, 2]
@@ -45,7 +45,8 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
       j <- j - 1
     }
   }
-  gap <- rev(gap)
+  traceVec <- rev(traceVec)
+  print(traceVec)
   
   # output alignment
   s1 <- seq1[2:length(seq1)]
@@ -53,13 +54,13 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
   
   align1 <- align2 <- c()
   i <- j <- 1
-  for (t in 1:length(gap)) {
-    if(gap[t] == 0) {
+  for (t in 1:length(traceVec)) {
+    if(traceVec[t] == 0) {
       align1 <- append(align1, s1[i])
       align2 <- append(align2, s2[j])
       i <- i + 1
       j <- j + 1
-    } else if(gap[t] == 1) {
+    } else if(traceVec[t] == 1) {
       align1 <- append(align1, s1[i])
       align2<- append(align2, "-")
       i <- i + 1
