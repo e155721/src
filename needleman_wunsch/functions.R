@@ -68,7 +68,10 @@ D <-
               d <- c(NA, NA)
               d[1] <- max(d1, d2, d3)
               
-              if (length(self$seq1) <= length(self$seq2)) {
+              lenSeq1 <- length(self$seq1)
+              lenSeq2 <- length(self$seq2)
+              
+              if (lenSeq1 <= lenSeq2) {
                 if (d[1] == d3) {
                   d[2] <- -1 # (-1,0)
                   self$bp <- T
@@ -80,7 +83,7 @@ D <-
                   self$bp <- F
                 }
               }
-              else if (length(self$seq2) < length(self$seq1)) {
+              else if (lenSeq2 < lenSeq1) {
                 if (d[1] == d2) {
                   d[2] <- 1 # (0,1)
                   self$bp <- T
