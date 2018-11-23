@@ -1,32 +1,9 @@
+.myfunc.env = new.env()
+sys.source("data_processing/FormatData.R", envir = .myfunc.env)
+attach(.myfunc.env)
+
 # load openxlsx
 library(openxlsx)
-
-# FormatData
-FormatData <- function(sheet)
-{
-  # delete the labels and the assumed form
-  sheet <- sheet[-1:-2, ]
-  
-  dim <- dim(sheet)
-  x <- matrix(NA, dim[1], dim[2])
-  
-  for (j in 1:dim[2]) {
-    dots <- sum(sheet[, j] == ".")
-    if (dots != 0) break
-    x[, j] <- as.vector(sheet[, j])
-  }
-  
-  for (i in 1:dim[1]) {
-    if(x[i, 1] == -9) {
-      x[i, ] <- NA
-    } else {
-      x[i, ] <- gsub("-1", "-", x[i, ] )
-    }
-  }
-  
-  return(x)
-}
-
 
 # excelDataAbstraction
 excelDataAbstraction <- function(input_path = "../Data/fix_test_data.xlsm",
