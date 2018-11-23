@@ -9,15 +9,12 @@ sys.source("verification/ForEachRegion.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 # get the all of files path
-# filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
-#                          correctDir = "../Alignment/correct_data/")
-
-# get the all of files path
-filesPath <- GetFilesPath(inputDir = "../Alignment/input_tmp/",
-                          correctDir = "../Alignment/correct_tmp/")
+filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
+                          correctDir = "../Alignment/org_data/")
 
 # constant penalty
-#numList <- makeGapComb(10, 1)
+# numList <- makeGapComb(10, 1)
+numList <- makeGapComb(1, 1)
 n <- 1
 #for (num in numList) {
   #p1 <- num[[1]]
