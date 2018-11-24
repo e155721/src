@@ -1,5 +1,7 @@
 ForEachRegion <- function(filesPath, ansratePath, comparePath)
 {
+  
+  z <- 1
   # conduct the alignment for each files
   for (f in filesPath) {
     
@@ -10,6 +12,11 @@ ForEachRegion <- function(filesPath, ansratePath, comparePath)
     # get the number of the regions
     regions <- length(wordList$vec)
     
+    # make compare path
+    #comparePath <- paste("../Alignment/compare-", z, sep = "")
+    #print(comparePath)
+    #z <- z + 1
+        
     l <- 2
     count <- 0
     for (k in 1:(regions-1)) {
@@ -24,14 +31,14 @@ ForEachRegion <- function(filesPath, ansratePath, comparePath)
         if (rltAln != rltCor) {
           sink(comparePath, append = T)
           cat("\n")
-          print("by The Needleman-Wunsch")
-          print(paste(align$seq1))
-          print(align$seq2)
+          #print("by The Needleman-Wunsch")
+          print(paste(align$seq1, collapse = " "))
+          print(paste(align$seq2, collapse = " "))
           
           cat("\n")
-          print("by The Linguists")
-          print(correctMat[1, ])
-          print(correctMat[2, ])
+          #print("by The Linguists")
+          print(paste(correctMat[1, ], collapse = " "))
+          print(paste(correctMat[2, ], collapse = " "))
           sink()
         } else {
           count <- count + 1
