@@ -2,8 +2,9 @@
 sys.source("data_processing/FormatData.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-# load openxlsx
+# load libraries
 library(openxlsx)
+library(data.table)
 
 # excelDataAbstraction
 excelDataAbstraction <- function(input_path = "../Data/fix_test_data.xlsm",
@@ -25,11 +26,12 @@ excelDataAbstraction <- function(input_path = "../Data/fix_test_data.xlsm",
   
   # output sheets
   # for (i in 6:135) {
-  for (i in 6:6) {
+  for (i in 6:16) {
     sheet <- read.xlsx(input_path, sheet = i)[, 12:27]
     sheet <- transform(sheet, Regions = regions)
     setcolorder(sheet, "Regions")
     sheet <- FormatData(sheet)
-    write.table(sheet, paste(output_path, sheet_names[i], ".org", sep = ""))
+    # write.table(sheet, paste(output_path, sheet_names[i], ".org", sep = ""))
+    write.table(sheet, paste(output_path, i, ".org", sep = ""))
   }
 }

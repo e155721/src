@@ -15,9 +15,10 @@ FormatData <- function(sheet)
     x[, j] <- gsub("\\.", NA, x[, j])
   }
   
+  # all of row elements are changed "-9" if the row has "-9"
   for (i in 1:dim[1]) {
     if (x[i, 2] == "-9")
-      x[i, ] <- NA
+      x[i, ] <- "-9"
   } 
   
   return(x)
