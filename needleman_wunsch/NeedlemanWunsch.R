@@ -46,7 +46,6 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
     }
   }
   traceVec <- rev(traceVec)
-  print(traceVec)
   
   # output alignment
   s1 <- seq1[2:length(seq1)]
