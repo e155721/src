@@ -6,7 +6,7 @@ attach(.myfunc.env)
 library(openxlsx)
 library(data.table)
 
-# excelDataAbstraction
+# ExcelDataExtraction
 excelDataAbstraction <- function(input_path = "../Data/fix_test_data.xlsm",
                                  output_path = "../Alignment/org_data/")
 {
