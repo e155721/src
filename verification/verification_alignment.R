@@ -17,9 +17,10 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
 numList <- makeGapComb(1, 1)
 n <- 1
 for (num in numList) {
-  p1 <- num[[1]]
-  p2 <- num[[1]]
-  s5 <- num[[2]]
+  #p1 <- num[[1]]
+  #p2 <- num[[1]]
+  p1 <- p2 <- -2
+  s5 <- -5
   
   # make scoring matrix
   scoringMatrix <- MakeFeatureMatrix(s5)

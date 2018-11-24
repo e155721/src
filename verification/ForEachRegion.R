@@ -8,19 +8,15 @@ ForEachRegion <- function(filesPath, ansratePath, comparePath)
     correct <- MakeWordList(f["correct"])
     
     # get the number of the regions
-    regions <- length(wordList)
-    
-    # make output file path
-    # outputPath <- "../Alignment/"
-    # outputPath <- paste(outputPath, gsub("\\..+$", "", f["name"]), ".aln", sep = "")
+    regions <- length(wordList$vec)
     
     l <- 2
     count <- 0
     for (k in 1:(regions-1)) {
       # the start of the alignment for each the region pair
       for (i in l:regions) {
-        correctMat <- RemkSeq(correct[[k]], correct[[i]])
-        align <- NeedlemanWunsch(wordList[[k]], wordList[[i]], p1, p2, scoringMatrix)
+        correctMat <- RemkSeq(correct$list[[k]], correct$list[[i]])
+        align <- NeedlemanWunsch(wordList$list[[k]], wordList$list[[i]], p1, p2, scoringMatrix)
         
         rltAln <- paste(paste(align$seq1, align$seq2, sep = ""), collapse = "")
         rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
