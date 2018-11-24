@@ -16,7 +16,7 @@ ForEachRegion <- function(filesPath, ansratePath, comparePath)
     #comparePath <- paste("../Alignment/compare-", z, sep = "")
     #print(comparePath)
     #z <- z + 1
-        
+    
     l <- 2
     count <- 0
     for (k in 1:(regions-1)) {

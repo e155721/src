@@ -10,16 +10,16 @@ attach(.myfunc.env)
 
 # get the all of files path
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
-                          correctDir = "../Alignment/org_data/")
+                          correctDir = "../Alignment/correct_data/")
 
 # constant penalty
 # numList <- makeGapComb(10, 1)
 numList <- makeGapComb(1, 1)
 n <- 1
-
 for (num in numList) {
   #p1 <- num[[1]]
   #p2 <- num[[1]]
+  #s5 <- num[[2]]
   p1 <- p2 <- -1
   s5 <- -2
   
