@@ -7,24 +7,19 @@ FormatData <- function(sheet)
   dim <- dim(sheet)
   x <- matrix(NA, dim[1], dim[2])
   
-  charLen <- 0
+  #** region name symbols become numeric if gsub() contains rows of sheet
+  #** region name symbols must be used as elements of a vector
   for (j in 1:dim[2]) {
-    dots <- sum(sheet[, j] == ".")
-    if (dots != 0) break
-    charLen <- charLen + 1
     x[, j] <- as.vector(sheet[, j])
+    x[, j] <- gsub("-1", "-", x[, j])
+    x[, j] <- gsub("\\.", NA, x[, j])
   }
   
+  # all of row elements are changed "-9" if the row has "-9"
   for (i in 1:dim[1]) {
-    if(x[i, 1] == -9) {
-      x[i, ] <- NA
-    } else {
-      x[i, ] <- gsub("-1", "-", x[i, ] )
-    }
-  }
-  
-  # remove NA calumns
-  x <- x[, -(charLen+1):-dim[2]]
+    if (x[i, 2] == "-9")
+      x[i, ] <- "-9"
+  } 
   
   return(x)
 }
