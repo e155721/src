@@ -7,7 +7,7 @@ library(openxlsx)
 library(data.table)
 
 # ExcelDataExtraction
-excelDataAbstraction <- function(input_path = "../Data/fix_test_data.xlsm",
+ExcelDataExtraction <- function(input_path = "../Data/fix_test_data.xlsm",
                                  output_path = "../Alignment/org_data/")
 {
   if (!dir.exists(output_path)) {
