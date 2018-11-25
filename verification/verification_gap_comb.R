@@ -40,10 +40,12 @@ for (num in numList) {
     
     # get the number of the regions
     regions <- length(wordList$vec)
-    reg <- length(correct$vec) 
-    print(regions)
-    if (regions != reg) {
+    corRegions <- length(correct$vec)
+    # check the error    
+    if (regions != corRegions) {
       print("HOGE!!!")
+      print(f["input"])
+      return(1)
     }
     
     # conduct the alignment for each region
