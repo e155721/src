@@ -15,6 +15,9 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
 gapVec <- 1:10
 numVec <- 1:10
 
+lenGapVec <- length(gapVec)
+lenNumVec <- length(numVec)
+
 for (p in gapVec) {
   
   output_path <- "../Alignment/gap_"
@@ -41,6 +44,10 @@ for (p in gapVec) {
     
     # conduct the alignment for each files
     for (f in filesPath) {
+      # display the progress
+      print(paste("Whole Progress:", (p/lenGapVec)*100, sep = " "))
+      print(paste("Progress:", (num/lenNumVec)*100, sep = " "))
+      
       # make the word list
       wordList <- MakeWordList(f["input"])
       correct <- MakeWordList(f["correct"])
@@ -64,7 +71,7 @@ for (p in gapVec) {
     }
     
     # display the progress
-    print(paste("Progress:", (num/length(numVec))*100, sep = " "))
+    # print(paste("Progress:", (num/length(numVec))*100, sep = " "))
     # n <- n + 1
   }
 }
