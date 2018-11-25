@@ -1,4 +1,4 @@
-makeGapComb <- function(min = 1, max = 1)
+MakeGapComb <- function(min = 1, max = 1)
 {
   num_list <- list()
   tmp <- list()

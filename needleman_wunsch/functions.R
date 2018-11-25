@@ -65,18 +65,35 @@ D <-
               d2 <- x[i-1, j, 1] + p
               d3 <- x[i, j-1, 1] + p
               
-              d <- list()
-              d[[1]] <- max(d1, d2, d3)
+              d <- c(NA, NA)
+              d[1] <- max(d1, d2, d3)
               
-              if (d[[1]] == d1) {
-                d[[2]] <- 0 # (0,0)
-                self$bp <- F
-              } else if (d[[1]] == d3) {
-                d[[2]] <- -1 # (-1,0)
-                self$bp <- T
-              } else if (d[[1]] == d2) {
-                d[[2]] <- 1 # (0,1)
-                self$bp <- T
+              lenSeq1 <- length(self$seq1)
+              lenSeq2 <- length(self$seq2)
+              
+              if (lenSeq1 <= lenSeq2) {
+                if (d[1] == d3) {
+                  d[2] <- -1 # (-1,0)
+                  self$bp <- T
+                } else if (d[1] == d2) {
+                  d[2] <- 1 # (0,1)
+                  self$bp <- T
+                } else if (d[1] == d1) {
+                  d[2] <- 0 # (0,0)
+                  self$bp <- F
+                }
+              }
+              else if (lenSeq2 < lenSeq1) {
+                if (d[1] == d2) {
+                  d[2] <- 1 # (0,1)
+                  self$bp <- T
+                } else if (d[1] == d3) {
+                  d[2] <- -1 # (-1,0)
+                  self$bp <- T
+                } else if (d[1] == d1) {
+                  d[2] <- 0 # (0,0)
+                  self$bp <- F
+                }
               }
               
               return(d)
