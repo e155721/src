@@ -10,28 +10,30 @@ ForEachRegion <- function(correct, wordList, ansratePath, comparePath, compariso
       rltAln <- paste(paste(align$seq1, align$seq2, sep = ""), collapse = "")
       rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
       
-      if ((rltAln != rltCor) && comparison) {
-        sink(comparePath, append = T)
-        cat("\n")
-        print("by The Needleman-Wunsch")
-        rltVec1 <- rltVec2 <- c()
-        rltVec1[1] <- wordList$vec[k]
-        rltVec1[2] <- paste(align$seq1, collapse = " ")
-        rltVec2[1] <- wordList$vec[i]
-        rltVec2[2] <- paste(align$seq2, collapse = " ")
-        print(rltVec1)
-        print(rltVec2)
-        
-        cat("\n")
-        print("by The Linguists")
-        rltVec1 <- rltVec2 <- c()
-        rltVec1[1] <- correct$vec[k]
-        rltVec1[2] <- paste(correctMat[1, ], collapse = " ")
-        rltVec2[1] <- correct$vec[i]
-        rltVec2[2] <- paste(correctMat[2, ], collapse = " ")
-        print(rltVec1)
-        print(rltVec2)
-        sink()
+      if (rltAln != rltCor) {
+        if (comparison) {
+          sink(comparePath, append = T)
+          cat("\n")
+          print("by The Needleman-Wunsch")
+          rltVec1 <- rltVec2 <- c()
+          rltVec1[1] <- wordList$vec[k]
+          rltVec1[2] <- paste(align$seq1, collapse = " ")
+          rltVec2[1] <- wordList$vec[i]
+          rltVec2[2] <- paste(align$seq2, collapse = " ")
+          print(rltVec1)
+          print(rltVec2)
+          
+          cat("\n")
+          print("by The Linguists")
+          rltVec1 <- rltVec2 <- c()
+          rltVec1[1] <- correct$vec[k]
+          rltVec1[2] <- paste(correctMat[1, ], collapse = " ")
+          rltVec2[1] <- correct$vec[i]
+          rltVec2[2] <- paste(correctMat[2, ], collapse = " ")
+          print(rltVec1)
+          print(rltVec2)
+          sink()
+        }
       } else {
         count <- count + 1
       }
