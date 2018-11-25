@@ -17,11 +17,9 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
 numList <- makeGapComb(1, 1)
 n <- 1
 for (num in numList) {
-  #p1 <- num[[1]]
-  #p2 <- num[[1]]
-  #s5 <- num[[2]]
-  p1 <- p2 <- -1
-  s5 <- -2
+  p1 <- num[[1]]
+  p2 <- num[[1]]
+  s5 <- num[[2]]
   
   # make scoring matrix
   scoringMatrix <- MakeFeatureMatrix(s5)
@@ -30,8 +28,23 @@ for (num in numList) {
   ansratePath <- paste("../Alignment/ansrate-", n, ".txt", sep = "") 
   comparePath <- paste("../Alignment/compare-", n, ".txt", sep = "")
   
-  # conduct the alignment for each region
-  ForEachRegion(filesPath, ansratePath, comparePath)
+  w <- 1
+  # conduct the alignment for each files
+  for (f in filesPath) {
+    # make compare path
+    comparePath <- paste("../Alignment/compare-", w, sep = "")
+    w <- w + 1
+    
+    # make the word list
+    wordList <- MakeWordList(f["input"])
+    correct <- MakeWordList(f["correct"])
+    
+    # get the number of the regions
+    regions <- length(wordList$vec)
+    
+    # conduct the alignment for each region
+    ForEachRegion(filesPath, ansratePath, comparePath)
+  }
   
   # display the progress
   print(paste("Progress:", (n/length(numList))*100, sep = " "))
