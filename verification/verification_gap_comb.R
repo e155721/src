@@ -12,8 +12,8 @@ attach(.myfunc.env)
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-gapVec <- -1:-10
-numVec <- -1:-10
+gapVec <- 1:10
+numVec <- 1:10
 
 lenGapVec <- length(gapVec)
 lenNumVec <- length(numVec)
@@ -31,9 +31,9 @@ for (p in gapVec) {
   # numList <- MakeGapComb(10, 1)
   # n <- 1
   for (num in numVec) {
-    p1 <- 1
-    p2 <- 1
-    s5 <- num
+    p1 <- -p
+    p2 <- -p
+    s5 <- -num
     
     # make scoring matrix
     scoringMatrix <- MakeFeatureMatrix(s5)
@@ -67,11 +67,7 @@ for (p in gapVec) {
       }
       
       # conduct the alignment for each region
-      ForEachRegion(correct, wordList, ansratePath, comparePath)
+      ForEachRegion(correct, wordList, ansratePath, comparePath, regions)
     }
-    
-    # display the progress
-    # print(paste("Progress:", (num/length(numVec))*100, sep = " "))
-    # n <- n + 1
   }
 }

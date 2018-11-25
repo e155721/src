@@ -1,4 +1,4 @@
-ForEachRegion <- function(correct, wordList, ansratePath, comparePath, comparison = F)
+ForEachRegion <- function(correct, wordList, ansratePath, comparePath, regions, comparison = F)
 {
   l <- 2
   count <- 0
