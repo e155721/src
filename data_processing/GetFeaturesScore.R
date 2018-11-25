@@ -3,7 +3,7 @@ sys.source("data_processing/MakeFeatureList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 # This function return a value that it type is vector
-getFeaturesScore <- function(consonant_file = "../Feature_Data/feature/母音入力数値一覧",
+GetFeaturesScore <- function(consonant_file = "../Feature_Data/feature/母音入力数値一覧",
                              vowel_file = "../Feature_Data/feature/子音入力数値一覧")
   
 {
