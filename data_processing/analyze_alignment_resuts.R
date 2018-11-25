@@ -76,24 +76,3 @@ print(paste("Max Matching Words:", maxMatch, sep = " "))
 scorePair <- makeGapComb(10,1)
 print(paste(scorePair[scoreVec]))
 print(paste(maxAverageFiles, maxMatchVec, sep = " "))
-
-
-
-
-
-if (0) {
-  ##################
-  a <- read.table("../Alignment/tmp_compare/compare-10")
-  a <- read.table("../Alignment/compare-1.txt")
-  len <- length(a$V2)
-  c <- matrix(a$V2, len, 1, a$V2)
-  b <- list()
-  k <- 0
-  for (i in 1:(len/2)) {
-    b[[i]] <- list(NA, NA)
-    k <- k + 1
-    b[[i]][1] <- as.vector(c[k, ])
-    k <- k + 1
-    b[[i]][2] <- as.vector(c[k, ])
-  }
-}
