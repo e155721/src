@@ -34,8 +34,17 @@ for (num in numList) {
     wordList <- MakeWordList(f["input"])
     correct <- MakeWordList(f["correct"])
     
+    print(paste("input:", f["input"], sep = " "))
+    print(paste("correct:", f["correct"], sep = " "))
+    cat("\n")
+    
     # get the number of the regions
     regions <- length(wordList$vec)
+    reg <- length(correct$vec) 
+    print(regions)
+    if (regions != reg) {
+      print("HOGE!!!")
+    }
     
     # conduct the alignment for each region
     ForEachRegion(correct, wordList, ansratePath, comparePath)
