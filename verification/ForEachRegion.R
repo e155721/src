@@ -1,4 +1,4 @@
-ForEachRegion <- function(filesPath, ansratePath, comparePath)
+ForEachRegion <- function(filesPath, ansratePath, comparePath, comparison = F)
 {
   l <- 2
   count <- 0
@@ -10,7 +10,7 @@ ForEachRegion <- function(filesPath, ansratePath, comparePath)
       rltAln <- paste(paste(align$seq1, align$seq2, sep = ""), collapse = "")
       rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
       
-      if (rltAln != rltCor) {
+      if ((rltAln != rltCor) && comparison) {
         sink(comparePath, append = T)
         cat("\n")
         print("by The Needleman-Wunsch")
@@ -34,15 +34,6 @@ ForEachRegion <- function(filesPath, ansratePath, comparePath)
         sink()
       } else {
         count <- count + 1
-      }
-      
-      if (0) {
-        sink(outputPath, append = T)
-        cat("\n")
-        print("by The Needleman-Wunsch")
-        print(paste(align$seq1))
-        print(align$seq2)
-        sink()
       }
     }
     # the end of the aligne for each the region pair
