@@ -45,8 +45,8 @@ for (mis in misVec) {
     # conduct the alignment for each files
     for (f in filesPath) {
       # display the progress
-      print(paste("Whole Progress:", (mis/lenMisVec)*100, sep = " "))
-      print(paste("Progress:", (p/lenGapVec)*100, sep = " "))
+      print(paste("Whole Progress:", ((mis/mis)/lenMisVec)*100, sep = " "))
+      print(paste("Progress:", ((p/p)/lenGapVec)*100, sep = " "))
       
       # make the word list
       wordList <- MakeWordList(f["input"])
