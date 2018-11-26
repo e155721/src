@@ -12,8 +12,10 @@ attach(.myfunc.env)
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-misVec <- 1:10
-gapVec <- 1:10
+misVec <- 11:15
+gapVec <- 11:15
+# misVec <- 1:10
+# gapVec <- 1:10
 
 lenMisVec <- length(misVec)
 lenGapVec <- length(gapVec)
