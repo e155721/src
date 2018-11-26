@@ -60,9 +60,9 @@ if (0) {
 average <- sum(meanVec)/length(meanVec)
 # plot(meanVec, type = "l", xlab = "Gap Penalty", ylab = "Matching Rate Average (%)")
 # plot(x = -1:-10, y = meanVec, type = "l", xlab = "Gap Penalty", ylab = "Matching Rate Average (%)")
-plot(x = -1:-10, y = meanVec, type = "l", 
-     xlab = "Mismatch Score (s5)", ylab = "Matching Rate Average (%)",
-     xlim = c(-1,-10), ylim = c(95,97))
+# plot(x = -1:-10, y = meanVec, type = "l", 
+#     xlab = "Mismatch Score (s5)", ylab = "Matching Rate Average (%)",
+#     xlim = c(-1,-10), ylim = c(95,97))
 par(new = T)
 #par(new = T)
 #plot(x = -1:-10, y = diffVec, type = "l", xaxt = "n", yaxt = "n", ann = F)
