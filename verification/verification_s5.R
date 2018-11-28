@@ -14,6 +14,7 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
 
 misVec <- 1:10
 gapVec <- 1:10
+digits <- 2
 
 lenMisVec <- length(misVec)
 lenGapVec <- length(gapVec)
@@ -21,7 +22,7 @@ lenGapVec <- length(gapVec)
 for (mis in misVec) {
   
   output_path <- "../Alignment/s5_"
-  output_path <- paste(output_path, mis, "/", sep = "")
+  output_path <- paste(output_path, formatC(mis, width = digits, flag = 0), "/", sep = "")
   print(output_path)
   if (!dir.exists(output_path)) {
     dir.create(output_path)
@@ -37,8 +38,8 @@ for (mis in misVec) {
     scoringMatrix <- MakeFeatureMatrix(s5)
     
     # make the output paths
-    ansratePath <- paste(output_path, "ansrate-", p, ".txt", sep = "") 
-    comparePath <- paste(output_path, "compare-", p, ".txt", sep = "")
+    ansratePath <- paste(output_path, "ansrate-", formatC(p, width = 2, flag = 0), ".txt", sep = "") 
+    comparePath <- paste(output_path, "compare-", formatC(p, width = 2, flag = 0), ".txt", sep = "")
     
     # conduct the alignment for each files
     for (f in filesPath) {
