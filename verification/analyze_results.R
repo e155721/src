@@ -3,7 +3,7 @@ sys.source("verification/plot_functions.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 # make the list for each file in all directories
-dirPath <- "../Alignment/ex-11_26/gap/gap_01/"
+dirPath <- "../Alignment/ex-11_26/gap/"
 # dirPath <- "../Alignment/ex-11_26/s5/"
 dirPathList <- list.dirs(dirPath)
 dirPathList <- dirPathList[-1]
