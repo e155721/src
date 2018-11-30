@@ -36,7 +36,7 @@ for (f in filesPath) {
   regions <- length(wordList$vec)
   
   # conduct the alignment for each region
-  ForEachRegion(correct, wordList, ansratePath, comparePath, comparison = T)
+  ForEachRegion(correct, wordList, ansratePath, comparePath, regions, comparison = T)
   
   # display the progress
   print(paste("Progress:", ((w-1)/length(filesPath))*100, sep = " "))
