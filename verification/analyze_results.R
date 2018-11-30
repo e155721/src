@@ -4,7 +4,8 @@ attach(.myfunc.env)
 
 # make the list for each file in all directories
 dirPath <- "../Alignment/ex-11_26/gap/"
-# dirPath <- "../Alignment/ex-11_26/s5/"
+dirPath <- "../Alignment/ex-11_26/s5/"
+dirPath <- "../Alignment/t/"
 dirPathList <- list.dirs(dirPath)
 dirPathList <- dirPathList[-1]
 
@@ -79,13 +80,14 @@ misLab <- "Gap Penalty: p"
 gapTitle <- "Gap Penalty (p) ="
 gapLab <- "Mismatch Score: s5"
 
-s <- 1
+s <- 2
+xRange <- -1:-15
 yLim <- GetMinMax(meanVecList)
 switch(s,
        # plot the graphs of min matching rate for each gap penalty
-       PlotGraph(-1:-10, meanVecList, selectVec, yLim, gapTitle, gapLab),
+       PlotGraph(xRange, meanVecList, selectVec, yLim, gapTitle, gapLab),
        # plot the graphs of mean matching rate for each mismatch score
-       PlotGraph(-1:-10, meanVecList, selectVec, yLim, misTitle, misLab)
+       PlotGraph(xRange, meanVecList, selectVec, yLim, misTitle, misLab)
 )
 
 # plot histogram
