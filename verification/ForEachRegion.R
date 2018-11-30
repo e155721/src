@@ -16,23 +16,17 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
           sink(comparePath, append = T)
           # by The Needleman-Wunsch
           cat("\n")
-          rltVec1 <- rltVec2 <- c()
-          rltVec1[1] <- wordList$vec[k]
-          rltVec1[2] <- paste(align$seq1, collapse = " ")
-          rltVec2[1] <- wordList$vec[i]
-          rltVec2[2] <- paste(align$seq2, collapse = " ")
-          print(rltVec1)
-          print(rltVec2)
+          print(c(wordList$vec[k], 
+                  paste(align$seq1, collapse = " ")))
+          print(c(wordList$vec[i],
+                  paste(align$seq2, collapse = " ")))
           
           # by The Linguists
           cat("\n")
-          rltVec1 <- rltVec2 <- c()
-          rltVec1[1] <- correct$vec[k]
-          rltVec1[2] <- paste(correctMat[1, ], collapse = " ")
-          rltVec2[1] <- correct$vec[i]
-          rltVec2[2] <- paste(correctMat[2, ], collapse = " ")
-          print(rltVec1)
-          print(rltVec2)
+          print(c(correct$vec[k],
+                  paste(correctMat[1, ], collapse = " ")))
+          print(c(correct$vec[i],
+                  paste(correctMat[2, ], collapse = " ")))
           sink()
         }
       } else {
