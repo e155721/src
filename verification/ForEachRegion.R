@@ -1,6 +1,5 @@
-ForEachRegion <- function(correct, wordList, 
-                          ansratePath, comparePath, 
-                          regions, comparison = F, p)
+ForEachRegion <- function(correct, wordList, p, scoringMatrix,
+                          ansratePath, comparePath, regions, comparison = F)
 {
   l <- 2
   count <- 0
@@ -15,8 +14,8 @@ ForEachRegion <- function(correct, wordList,
       if (rltAln != rltCor) {
         if (comparison) {
           sink(comparePath, append = T)
+          # by The Needleman-Wunsch
           cat("\n")
-          print("by The Needleman-Wunsch")
           rltVec1 <- rltVec2 <- c()
           rltVec1[1] <- wordList$vec[k]
           rltVec1[2] <- paste(align$seq1, collapse = " ")
@@ -25,8 +24,8 @@ ForEachRegion <- function(correct, wordList,
           print(rltVec1)
           print(rltVec2)
           
+          # by The Linguists
           cat("\n")
-          print("by The Linguists")
           rltVec1 <- rltVec2 <- c()
           rltVec1[1] <- correct$vec[k]
           rltVec1[2] <- paste(correctMat[1, ], collapse = " ")
