@@ -8,7 +8,6 @@ DelDupSeq <- function(inputDir = "../Alignment/results/")
   
   z <- 1
   for (file in filesList) {
-    print(file)
     x <- read.table(file)
     
     # make a vector of region name symbols
@@ -20,44 +19,47 @@ DelDupSeq <- function(inputDir = "../Alignment/results/")
     
     # make sequences list
     seqList <- list()
+    regList <- list()
     k <- 1
     for (i in 1:(numSeq/2)) {
       seqList[[i]] <- list(NA, NA)
-      # 
+      regList[[i]] <- list(NA, NA)
+      
       seqList[[i]][1] <- seqVec[k]
+      regList[[i]][1] <- regVec[k]
       k <- k + 1
       seqList[[i]][2] <- seqVec[k]
+      regList[[i]][2] <- regVec[k]
       k <- k + 1
     }
     
     # remove duplicate sequences
     bool <- duplicated(seqList)
-    seqList <- seqList[bool]
-    regVec <- regVec[bool]
     
-    lenVec <- length(regVec)
-    lenList <- length(seqList)
-    
-    print(lenList)
-    
-    if (0) {
-      k <- 1
-      # sink(outputFilesList[[z]], append = T)
-      for (i in 1:lenList) {
-        if ((i%%2) == 0) {
-          print("by The Linguists")
-          cat("\n")
-        } else {
-          print("by The Needleman-Wunsch")
-          cat("\n")
-        }
-        print(paste(regVec[k], seqList[[i]][1], sep = ": "))
-        k <- k + 1
-        print(paste(regVec[k], seqList[[i]][2], sep = ": "))
-        k <- k + 1
-      }
+    if (sum(bool) != 0) {
+      seqList <- seqList[!bool]      
+      regList <- regList[!bool]
     }
-    # sink()
-    #z <- z + 1
+    
+    lenRegList <- length(regList)
+    lenSeqList <- length(seqList)
+    
+    k <- 1
+    sink(outputFilesList[[z]], append = T)
+    for (i in 1:lenSeqList) {
+      if ((i%%2) == 0) {
+        cat("\n")
+        print("by The Linguists")
+      } else {
+        cat("\n")
+        print("by The Needleman-Wunsch")
+      }
+      print(paste(regList[[i]][1], seqList[[i]][1], sep = ": "))
+      k <- k + 1
+      print(paste(regList[[i]][2], seqList[[i]][2], sep = ": "))
+      k <- k + 1
+    }
+    sink()
+    z <- z + 1
   }
 }
