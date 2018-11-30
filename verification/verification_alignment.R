@@ -12,7 +12,7 @@ attach(.myfunc.env)
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-p1 <- p2 <- -1
+p <- -1
 s5 <- -2
 
 # make scoring matrix
@@ -36,7 +36,8 @@ for (f in filesPath) {
   regions <- length(wordList$vec)
   
   # conduct the alignment for each region
-  ForEachRegion(correct, wordList, ansratePath, comparePath, regions, comparison = T)
+  ForEachRegion(correct, wordList, ansratePath, comparePath, 
+                regions, comparison = T, p)
   
   # display the progress
   print(paste("Progress:", ((w-1)/length(filesPath))*100, sep = " "))
