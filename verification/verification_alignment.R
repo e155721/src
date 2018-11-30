@@ -12,8 +12,8 @@ attach(.myfunc.env)
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-p <- -1
-s5 <- -2
+p <- -5
+s5 <- -10
 
 # make scoring matrix
 scoringMatrix <- MakeFeatureMatrix(s5)
