@@ -1,6 +1,5 @@
-ForEachRegion <- function(correct, wordList, 
-                          ansratePath, comparePath, 
-                          regions, comparison = F, p)
+ForEachRegion <- function(correct, wordList, p, scoringMatrix,
+                          ansratePath, comparePath, regions, comparison = F)
 {
   l <- 2
   count <- 0
