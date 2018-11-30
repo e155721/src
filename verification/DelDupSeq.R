@@ -22,15 +22,9 @@ DelDupSeq <- function(inputDir = "../Alignment/results/")
     regList <- list()
     k <- 1
     for (i in 1:(numSeq/2)) {
-      seqList[[i]] <- list(NA, NA)
-      regList[[i]] <- list(NA, NA)
-      
-      seqList[[i]][1] <- seqVec[k]
-      regList[[i]][1] <- regVec[k]
-      k <- k + 1
-      seqList[[i]][2] <- seqVec[k]
-      regList[[i]][2] <- regVec[k]
-      k <- k + 1
+      seqList[[i]] <- list(seqVec[k], seqVec[k+1])
+      regList[[i]] <- list(regVec[k], regVec[k+1])
+      k <- k + 2
     }
     
     # remove duplicate sequences
