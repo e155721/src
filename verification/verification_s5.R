@@ -13,7 +13,7 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
 misVec <- 10
-gapVec <- 1:15
+gapVec <- 15
 # misVec <- 1:10
 # gapVec <- 1:10
 digits <- 2
