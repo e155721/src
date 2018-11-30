@@ -66,7 +66,8 @@ for (mis in misVec) {
       }
       
       # conduct the alignment for each region
-      ForEachRegion(correct, wordList, ansratePath, comparePath, regions)
+      ForEachRegion(correct, wordList, p, scoringMatrix,
+                    ansratePath, comparePath, regions, comparison = T)
     }
   }
 }
