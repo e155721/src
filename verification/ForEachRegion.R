@@ -1,4 +1,6 @@
-ForEachRegion <- function(correct, wordList, ansratePath, comparePath, regions, comparison = F)
+ForEachRegion <- function(correct, wordList, 
+                          ansratePath, comparePath, 
+                          regions, comparison = F, p)
 {
   l <- 2
   count <- 0
@@ -6,7 +8,7 @@ ForEachRegion <- function(correct, wordList, ansratePath, comparePath, regions, 
     # the start of the alignment for each the region pair
     for (i in l:regions) {
       correctMat <- RemkSeq(correct$list[[k]], correct$list[[i]])
-      align <- NeedlemanWunsch(wordList$list[[k]], wordList$list[[i]], p1, p2, scoringMatrix)
+      align <- NeedlemanWunsch(wordList$list[[k]], wordList$list[[i]], p, p, scoringMatrix)
       rltAln <- paste(paste(align$seq1, align$seq2, sep = ""), collapse = "")
       rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
       
