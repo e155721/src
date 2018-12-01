@@ -13,12 +13,12 @@ GetMinMax <- function(list)
   return(rltVec)
 }
 
-PlotGraph <- function(x, list, selectVec, yLim, title, xlab)
+PlotGraph <- function(x, list, fixValVec, yLim, title, xlab)
 {
   for (i in 1:length(list)) {
     plot(x = x, y = list[[i]], type = "l",
          ylim = c(yLim["min"], yLim["max"]),
-         main = paste(title, -selectVec[i], sep = " "),
+         main = paste(title, -fixValVec[i], sep = " "),
          xlab = xlab, ylab = "Matching Rate (%)")
   }
 }
