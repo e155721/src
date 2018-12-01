@@ -38,14 +38,18 @@ for (mis in misVec) {
     scoringMatrix <- MakeFeatureMatrix(s5)
     
     # make the output paths
-    ansratePath <- paste(output_path, "ansrate-", formatC(p, width = 2, flag = 0), ".txt", sep = "") 
-    comparePath <- paste(output_path, "compare-", formatC(p, width = 2, flag = 0), ".txt", sep = "")
+    ansratePath <- paste(output_path, "ansrate-", 
+                         formatC(mis, width = 2, flag = 0), "_",
+                         formatC(p, width = 2, flag = 0), ".txt", sep = "") 
+    comparePath <- paste(output_path, "compare-",
+                         formatC(mis, width = 2, flag = 0), "_",
+                         formatC(p, width = 2, flag = 0), ".txt", sep = "")
     
     # conduct the alignment for each files
     for (f in filesPath) {
       # display the progress
-      print(paste("Whole Progress:", (mis/lenMisVec)*100, sep = " "))
-      print(paste("Progress:", (p/lenGapVec)*100, sep = " "))
+      print(paste("Whole Progress:", (mis/tail(misVec, n = 1))*100, sep = " "))
+      print(paste("Progress:", (p/tail(gapVec, n = 1))*100, sep = " "))
       
       # make the word list
       wordList <- MakeWordList(f["input"])

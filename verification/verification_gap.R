@@ -13,13 +13,13 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
 gapVec <- 3:5
-numVec <- 1:15
+misVec <- 1:15
 # gapVec <- 1:10
-# numVec <- 1:10
+# misVec <- 1:10
 digits <- 2
 
 lenGapVec <- length(gapVec)
-lenNumVec <- length(numVec)
+lenMisVec <- length(misVec)
 
 for (p in gapVec) {
   
@@ -31,25 +31,27 @@ for (p in gapVec) {
   }
   
   # constant penalty
-  # numList <- MakeGapComb(10, 1)
-  # n <- 1
-  for (num in numVec) {
+  for (mis in misVec) {
     p1 <- -p
     p2 <- -p
-    s5 <- -num
+    s5 <- -mis
     
     # make scoring matrix
     scoringMatrix <- MakeFeatureMatrix(s5)
     
     # make the output paths
-    ansratePath <- paste(output_path, "ansrate-", formatC(num, width = digits, flag = 0), ".txt", sep = "") 
-    comparePath <- paste(output_path, "compare-", formatC(num, width = digits, flag = 0), ".txt", sep = "")
+    ansratePath <- paste(output_path, "ansrate-", 
+                         formatC(p, width = digits, flag = 0), "_", 
+                         formatC(mis, width = digits, flag = 0), ".txt", sep = "") 
+    comparePath <- paste(output_path, "compare-", 
+                         formatC(p, width = digits, flag = 0), "_",
+                         formatC(mis, width = digits, flag = 0), ".txt", sep = "")
     
     # conduct the alignment for each files
     for (f in filesPath) {
       # display the progress
-      print(paste("Whole Progress:", (p/lenGapVec)*100, sep = " "))
-      print(paste("Progress:", (num/lenNumVec)*100, sep = " "))
+      print(paste("Whole Progress:", (p/tail(gapVec, n = 1))*100, sep = " "))
+      print(paste("Progress:", (mis/tail(misVec, n = 1))*100, sep = " "))
       
       # make the word list
       wordList <- MakeWordList(f["input"])
