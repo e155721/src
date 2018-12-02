@@ -41,10 +41,8 @@ for (p in gapVec) {
     
     # make the output paths
     ansratePath <- paste(output_path, "ansrate-", 
-                         formatC(p, width = digits, flag = 0), "_", 
                          formatC(mis, width = digits, flag = 0), ".txt", sep = "") 
     comparePath <- paste(output_path, "compare-", 
-                         formatC(p, width = digits, flag = 0), "_",
                          formatC(mis, width = digits, flag = 0), ".txt", sep = "")
     
     # conduct the alignment for each files
@@ -73,7 +71,7 @@ for (p in gapVec) {
       
       # conduct the alignment for each region
       ForEachRegion(correct, wordList, p, scoringMatrix,
-                    ansratePath, comparePath, regions, comparison = T)
+                    ansratePath, comparePath, regions, comparison = F)
     }
   }
 }
