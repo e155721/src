@@ -41,7 +41,7 @@ DelDupSeq <- function(inputDir = "../Alignment/results/")
     k <- 1
     sink(outputFilesList[[z]], append = T)
     for (i in 1:lenSeqList) {
-      if ((i%%2) == 0) {
+      if ((i%%2) != 0) {
         cat("\n")
         print("by The Linguists")
       } else {
