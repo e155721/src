@@ -14,19 +14,19 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
       if (rltAln != rltCor) {
         if (comparison) {
           sink(comparePath, append = T)
-          # by The Needleman-Wunsch
-          cat("\n")
-          print(c(wordList$vec[k], 
-                  paste(align$seq1, collapse = " ")))
-          print(c(wordList$vec[i],
-                  paste(align$seq2, collapse = " ")))
-          
           # by The Linguists
           cat("\n")
           print(c(correct$vec[k],
                   paste(correctMat[1, ], collapse = " ")))
           print(c(correct$vec[i],
                   paste(correctMat[2, ], collapse = " ")))
+          
+          # by The Needleman-Wunsch
+          cat("\n")
+          print(c(wordList$vec[k], 
+                  paste(align$seq1, collapse = " ")))
+          print(c(wordList$vec[i],
+                  paste(align$seq2, collapse = " ")))
           sink()
         }
       } else {
