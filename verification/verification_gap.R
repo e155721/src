@@ -32,8 +32,6 @@ for (p in gapVec) {
   
   # constant penalty
   for (mis in misVec) {
-    p1 <- -p
-    p2 <- -p
     s5 <- -mis
     
     # make scoring matrix
@@ -70,8 +68,8 @@ for (p in gapVec) {
       }
       
       # conduct the alignment for each region
-      ForEachRegion(correct, wordList, p, scoringMatrix,
-                    ansratePath, comparePath, regions, comparison = T)
+      ForEachRegion(correct, wordList, -p, scoringMatrix,
+                    ansratePath, comparePath, regions, comparison = F)
     }
   }
 }
