@@ -25,7 +25,9 @@ w <- 1
 # conduct the alignment for each files
 for (f in filesPath) {
   # make compare path
-  comparePath <- paste("../Alignment/compare-", w, ".txt", sep = "")
+  n <- gsub("\\..*$", "", basename(f["input"]))
+  comparePath <- paste("../Alignment/compare-", n, ".txt", sep = "")
+  # comparePath <- paste("../Alignment/compare-", w, ".txt", sep = "")
   w <- w + 1
   
   # make the word list
