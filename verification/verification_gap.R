@@ -12,8 +12,8 @@ attach(.myfunc.env)
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-gapVec <- 1:10
-misVec <- 1:10
+gapVec <- 3:5
+misVec <- 1:15
 # gapVec <- 1:10
 # misVec <- 1:10
 digits <- 2
