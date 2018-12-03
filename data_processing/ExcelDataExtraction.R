@@ -33,7 +33,7 @@ ExcelDataExtraction <- function(input_path = "../Data/fix_test_data.xlsm",
     setcolorder(sheet, "Regions")
     sheet <- FormatData(sheet)
     # write.table(sheet, paste(output_path, sheet_names[i], ".org", sep = ""))
-    write.table(sheet, paste(output_path, k, ".org", sep = ""))
+    write.table(sheet, paste(output_path, formatC(k, width = 2, flag = 0), ".org", sep = ""))
     k <- k + 1
   }
 }
