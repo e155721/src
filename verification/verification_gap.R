@@ -9,8 +9,8 @@ sys.source("verification/ForEachRegion.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 # get the all of files path
-filesPath <- GetFilesPath(inputDir = "../Alignment/input_data.back/",
-                          correctDir = "../Alignment/correct_data.back/")
+filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
+                          correctDir = "../Alignment/correct_data/")
 
 gapVec <- 1:10
 misVec <- 1:10
