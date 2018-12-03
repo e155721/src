@@ -40,8 +40,7 @@ for (mis in misVec) {
     # make the output paths
     ansratePath <- paste(output_path, "ansrate-", 
                          formatC(p, width = 2, flag = 0), ".txt", sep = "") 
-    comparePath <- paste(output_path, "compare-",
-                         formatC(p, width = 2, flag = 0), ".txt", sep = "")
+    comparePath <- F
     
     # conduct the alignment for each files
     for (f in filesPath) {
@@ -60,12 +59,6 @@ for (mis in misVec) {
       # get the number of the regions
       regions <- length(wordList$vec)
       corRegions <- length(correct$vec)
-      # check the error    
-      if (regions != corRegions) {
-        print("HOGE!!!")
-        print(f["input"])
-        return(1)
-      }
       
       # conduct the alignment for each region
       ForEachRegion(correct, wordList, -p, scoringMatrix,

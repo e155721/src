@@ -42,6 +42,7 @@ for (p in gapVec) {
                          formatC(mis, width = digits, flag = 0), ".txt", sep = "") 
     comparePath <- paste(output_path, "compare-", 
                          formatC(mis, width = digits, flag = 0), ".txt", sep = "")
+    comparePath <- F
     
     # conduct the alignment for each files
     for (f in filesPath) {
@@ -60,12 +61,6 @@ for (p in gapVec) {
       # get the number of the regions
       regions <- length(wordList$vec)
       corRegions <- length(correct$vec)
-      # check the error    
-      if (regions != corRegions) {
-        print("HOGE!!!")
-        print(f["input"])
-        return(1)
-      }
       
       # conduct the alignment for each region
       ForEachRegion(correct, wordList, -p, scoringMatrix,
