@@ -12,8 +12,8 @@ attach(.myfunc.env)
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-p <- -1
-s5 <- -2
+p <- -3
+s5 <- -10
 
 # make scoring matrix
 scoringMatrix <- MakeFeatureMatrix(s5)
@@ -25,7 +25,9 @@ w <- 1
 # conduct the alignment for each files
 for (f in filesPath) {
   # make compare path
-  comparePath <- paste("../Alignment/compare-", w, ".txt", sep = "")
+  n <- gsub("\\..*$", "", basename(f["input"]))
+  comparePath <- paste("../Alignment/compare-", n, ".txt", sep = "")
+  # comparePath <- paste("../Alignment/compare-", w, ".txt", sep = "")
   w <- w + 1
   
   # make the word list
