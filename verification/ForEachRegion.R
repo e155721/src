@@ -39,8 +39,10 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
   
   # output the matching rate
   sink(ansratePath, append = T)
-  matchingRate <- count / sum((regions-1):1) * 100
-  rlt <- paste(f["name"], matchingRate, sep = " ")
+  allResions <- sum((regions-1):1)
+  matchingRate <- count / allResions * 100
+  misMatchRate <- (allResions - count)
+  rlt <- paste(f["name"], matchingRate, misMatchRate, sep = " ")
   print(rlt, quote = F)
   sink()
   
