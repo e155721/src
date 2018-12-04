@@ -6,7 +6,8 @@ attach(.myfunc.env)
 dirPath <- "../Alignment/ex-11_26/gap/"
 dirPath <- "../Alignment/ex-11_26/s5/"
 dirPath <- "../Alignment/ex-11_29/gap/"
-dirPath <- "../Alignment/ex-12_03/gap_01-15/"
+dirPath <- "../Alignment/ex-11/ex-11_29/gap/"
+#dirPath <- "../Alignment/ex-12_03/gap_01-15/"
 dirPath <- "../Alignment/ex-12_03/gap_01-10/"
 dirPathList <- list.dirs(dirPath)
 dirPathList <- dirPathList[-1]
