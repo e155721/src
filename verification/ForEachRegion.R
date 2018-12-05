@@ -14,19 +14,19 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
       if (rltAln != rltCor) {
         if (comparison) {
           sink(comparePath, append = T)
-          # by The Needleman-Wunsch
-          cat("\n")
-          print(c(wordList$vec[k], 
-                  paste(align$seq1, collapse = " ")))
-          print(c(wordList$vec[i],
-                  paste(align$seq2, collapse = " ")))
-          
           # by The Linguists
           cat("\n")
           print(c(correct$vec[k],
                   paste(correctMat[1, ], collapse = " ")))
           print(c(correct$vec[i],
                   paste(correctMat[2, ], collapse = " ")))
+          
+          # by The Needleman-Wunsch
+          cat("\n")
+          print(c(wordList$vec[k], 
+                  paste(align$seq1, collapse = " ")))
+          print(c(wordList$vec[i],
+                  paste(align$seq2, collapse = " ")))
           sink()
         }
       } else {
@@ -39,8 +39,10 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
   
   # output the matching rate
   sink(ansratePath, append = T)
-  matchingRate <- count / sum((regions-1):1) * 100
-  rlt <- paste(f["name"], matchingRate, sep = " ")
+  allResions <- sum((regions-1):1)
+  matchingRate <- count / allResions * 100
+  misMatchRate <- (allResions - count) / allResions * 100
+  rlt <- paste(f["name"], matchingRate, misMatchRate, sep = " ")
   print(rlt, quote = F)
   sink()
   
