@@ -14,6 +14,6 @@ seq2 <- c("k", "a:", "ts", "y")
 seq1 <- c("p", "i", "t", "e", "ts", "u")
 seq2 <- c("tx", "i2", "t")
 
-scoringMatrix <- MakeScoringMatrix()
-scoringMatrix <- MakeFeatureMatrix(-2)
-NeedlemanWunsch(seq1, seq2, s = scoringMatrix, p1 = -5, p2 = -5)
+scoringMatrix <- MakeFeatureMatrix(-10)
+p1 <- p2 <- -3
+NeedlemanWunsch(seq1, seq2, s = scoringMatrix, p1, p2)
