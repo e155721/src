@@ -23,6 +23,7 @@ for (f in inFilesList) {
   lenWordList <- length(wordList$list)
   i <- 1
   align <- NeedlemanWunsch(wordList$list[[i]], wordList$list[[i+1]], p1, p2, scoringMatrix)
+  i <- i + 2
   while (i <= lenWordList) {
     align <- NeedlemanWunsch(align$multi, wordList$list[[i]], p1, p2, scoringMatrix)
     i <- i + 1
@@ -58,7 +59,7 @@ for (f in inFilesList) {
   print((count/nrow)*100)
   
   sink("multi_test.txt", append = T)
-  print(paste(f, match, sep = " "))
+  print(paste(f, match, sep = " "), quote = F)
   sink()
   
   cor <- cor + 1
