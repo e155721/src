@@ -19,6 +19,7 @@ cor <- 1
 for (f in inFilesList) {
   wordList <- MakeWordList(f)
   correctWordList <- MakeWordList(corFilesList[[cor]])
+  correctWordList$list <- rev(correctWordList$list)
   
   lenWordList <- length(wordList$list)
   wordList$list <- rev(wordList$list)
