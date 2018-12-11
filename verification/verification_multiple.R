@@ -21,6 +21,7 @@ for (f in inFilesList) {
   correctWordList <- MakeWordList(corFilesList[[cor]])
   
   lenWordList <- length(wordList$list)
+  wordList$list <- rev(wordList$list)
   i <- 1
   align <- NeedlemanWunsch(wordList$list[[i]], wordList$list[[i+1]], p1, p2, scoringMatrix)
   i <- i + 2
