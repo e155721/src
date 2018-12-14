@@ -1,4 +1,4 @@
-MakeFeatureMatrix <- function(s5 = NA)
+MakeFeatureMatrix <- function(s5 = NA, p = NA)
 {
   ######
   # make consonant array
@@ -10,13 +10,18 @@ MakeFeatureMatrix <- function(s5 = NA)
   vowel_length <- length(vowel)
   
   # get the sum of length of consonant and vowel
-  score_row <- score_col <- consonant_length + vowel_length
+  score_row <- score_col <- consonant_length + vowel_length + 1
   
-  symbols <- c(consonant, vowel)
+  symbols <- c(consonant, vowel, "-")
   
+  # assign s5 scores
   feature_matrix <- matrix(s5, nrow = score_row, ncol = score_col, 
                            dimnames = list(symbols, symbols))
-  
+  # assign gap penalty
+  feature_matrix["-", ] <- p
+  feature_matrix[, "-"] <- p
+  feature_matrix["-", "-"] <- 0
+    
   # consonant feature
   c_feature <- read.table("../Feature_Data/feature/子音入力数値一覧")
   k <- dim(c_feature)[[1]]

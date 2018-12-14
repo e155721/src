@@ -19,7 +19,7 @@ MakeWordList <- function(file)
     tmp_vector <- as.vector(sheet[i, ])
     tmp_vector <- tmp_vector[!is.na(tmp_vector)]
     if (length(tmp_vector) != 0) {
-      word_list[[k]] <- tmp_vector
+      word_list[[k]] <- t(as.matrix(tmp_vector))
       k <- k + 1
     }
   }

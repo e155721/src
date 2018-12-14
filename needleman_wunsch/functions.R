@@ -5,8 +5,9 @@ makeMatrix <- function(seq1, seq2)
 {
   len1 <- length(seq1)
   len2 <- length(seq2)
-  x <- array(dim=c(len1, len2, 2),
-             dimnames = list(seq1, seq2))
+  x <- array(dim=c(len1, len2, 2))
+  # x <- array(dim=c(len1, len2, 2),
+  #           dimnames = list(seq1, seq2))
   return(x)
 }
 
@@ -61,7 +62,20 @@ D <-
               if (self$bp == T) {
                 p <- self$p2
               }
-              d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
+              
+              spVec <- append(self$seq1[, i], self$seq2[, j])
+              sp <- 0
+              l <- 2
+              len <- length(spVec)
+              for (k in 1:(len-1)) {
+                for (m in l:len) {
+                  sp <- sp + self$s[spVec[k], spVec[l]]
+                }
+                l <- l + 1
+              }
+
+              d1 <- x[i-1, j-1, 1] + sp
+              # d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
               d2 <- x[i-1, j, 1] + p
               d3 <- x[i, j-1, 1] + p
               
