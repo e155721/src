@@ -53,7 +53,7 @@ for (f in inFilesList) {
   # check
   count <- 0
   for (i in 1:nrow) {
-    if (correctMat[i, ] == align$multi[i, ]) {
+    if (paste(correctMat[i, ], collapse = "") == paste(align$multi[i, ], collapse = "")) {
       count <- count + 1
     }
   }
