@@ -103,14 +103,12 @@ ProgressiveAlignment <- function(inFile, corFile)
   for (i in 1:lenWordList) {
     input <- paste(inputAlign[i, ], collapse = "")
     correct <- paste(corAlign[i, ], collapse = "")
+    print(paste(input, correct))
     if (input == correct) {
       count <- count + 1
     }
   }
   
-  match <- (count/nrow)*100
-  print((count/nrow)*100)
-  
-  matchingRate <- (count / lenWordList) * 100
+  matchingRate <- (count/nrow)*100
   return(matchingRate)
 }
