@@ -1,13 +1,10 @@
 .myfunc.env = new.env()
 sys.source("needleman_wunsch/functions.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-ProgressiveAlignment <- function(inFile, corFile)
+ProgressiveAlignment <- function(wordList, p, scoringMatrix)
 {
-  wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList$list)
   distMat <- matrix(NA, lenWordList, lenWordList)
   
@@ -22,93 +19,39 @@ ProgressiveAlignment <- function(inFile, corFile)
     i <- i + 1
   }
   
+  # make guide tree  
   aln.d <- dist(distMat)
   aln.hc <- hclust(aln.d)
-  
-  mat <- aln.hc$merge
-  len <- dim(mat)[1]
+  guide <- aln.hc$merge
   
   # progressive alignment
-  guide <- list()
+  progressive <- list()
+  len <- dim(guide)[1]
   for (i in 1:len) {
-    flg <- sum(mat[i, ] < 0)
+    flg <- sum(guide[i, ] < 0)
     if (flg == 2) {
-      seq1 <- mat[i, 1] * -1
-      seq2 <- mat[i, 2] * -1
+      seq1 <- guide[i, 1] * -1
+      seq2 <- guide[i, 2] * -1
       aln <- NeedlemanWunsch(wordList$list[[seq1]], wordList$list[[seq2]], p, p, scoringMatrix)
-      guide[[i]] <- aln$multi
+      progressive[[i]] <- aln$multi
     } 
     else if(flg == 1) {
-      clt <- mat[i, 2]
-      seq2 <- mat[i, 1] * -1
-      aln <- NeedlemanWunsch(guide[[clt]], wordList$list[[seq2]], p, p, scoringMatrix)
-      guide[[i]] <- aln$multi
+      clt <- guide[i, 2]
+      seq2 <- guide[i, 1] * -1
+      aln <- NeedlemanWunsch(progressive[[clt]], wordList$list[[seq2]], p, p, scoringMatrix)
+      progressive[[i]] <- aln$multi
     } else {
-      clt1 <- mat[i, 1]
-      clt2 <- mat[i, 2]
-      aln <- NeedlemanWunsch(guide[[clt1]], guide[[clt2]], p, p, scoringMatrix)
-      guide[[i]] <- aln$multi
+      clt1 <- guide[i, 1]
+      clt2 <- guide[i, 2]
+      aln <- NeedlemanWunsch(progressive[[clt1]], progressive[[clt2]], p, p, scoringMatrix)
+      progressive[[i]] <- aln$multi
     }
   }
   
-  # make correct matrix
-  corWordList <- MakeWordList(corFile)
-  lenCorWordList <- length(corWordList$list)
-  
-  nrow <- length(corWordList$list)
-  ncol <- length(corWordList$list[[1]])
-  
-  corMat <- matrix(NA, nrow, ncol)
-  for (i in 1:nrow) {
-    corMat[i, ] <- corWordList$list[[i]]
-  }
-  
-  j <- 1
-  while (j <= dim(corMat)[2]) {
-    m <- match(corMat[, j], "-")
-    m <- !is.na(m)
-    if (sum(m) == nrow) {
-      corMat <- corMat[, -j]
-    }
-    j <- j + 1
-  }
-  
-  corGuide <- list()
-  for (i in 1:len) {
-    flg <- sum(mat[i, ] < 0)
-    if (flg == 2) {
-      seq1 <- mat[i, 1] * -1
-      seq2 <- mat[i, 2] * -1
-      aln <- rbind(corMat[seq1, ], corMat[seq2, ])
-      corGuide[[i]] <- aln
-    } 
-    else if(flg == 1) {
-      clt <- mat[i, 2]
-      seq2 <- mat[i, 1] * -1
-      aln <- rbind(corGuide[[clt]], corMat[seq2, ])
-      corGuide[[i]] <- aln
-    } else {
-      clt1 <- mat[i, 1]
-      clt2 <- mat[i, 2]
-      aln <- rbind(corGuide[[clt1]], corGuide[[clt2]])
-      corGuide[[i]] <- aln
-    }
-  }
-  
-  # calculate matching rate
-  inputAlign <- tail(guide, n = 1)[[1]]
-  corAlign <- tail(corGuide, n = 1)[[1]]
-  
-  count <- 0
-  for (i in 1:lenWordList) {
-    input <- paste(inputAlign[i, ], collapse = "")
-    correct <- paste(corAlign[i, ], collapse = "")
-    print(paste(input, correct))
-    if (input == correct) {
-      count <- count + 1
-    }
-  }
-  
-  matchingRate <- (count/nrow)*100
-  return(matchingRate)
+  # return
+  paRlt <- list(NA, NA)
+  names(paRlt) <- c("multi", "guide")
+  paRlt$multi <- tail(progressive, n = 1)[[1]]
+  paRlt$guide <- guide
+  return(paRlt)
 }
