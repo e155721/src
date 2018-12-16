@@ -7,7 +7,7 @@ attach(.myfunc.env)
 VerificationPA <- function(inFile, corFile, p, scoringMatrix)
 {
   wordList <- MakeWordList(inFile)
-  lenWordList <- length(wordList$list)
+  lenWordList <- length(wordList)
   paRlt <- ProgressiveAlignment(wordList, p, scoringMatrix)
   inputAlign <- paRlt$multi
   gtree <- paRlt$guide
