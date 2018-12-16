@@ -1,5 +1,4 @@
 .myfunc.env = new.env()
-sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
 attach(.myfunc.env)
