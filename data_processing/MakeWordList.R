@@ -24,10 +24,10 @@ MakeWordList <- function(file)
     }
   }
   
-  dataList <- list(NA, NA)
-  names(dataList) <- c("vec", "list")
-  dataList$vec <- regVec
-  dataList$list <- word_list
+  len <- length(regVec)
+  for (i in 1:len) {
+    word_list[[i]] <- cbind(regVec[i], word_list[[i]])
+  }
   
-  return(dataList)
+  return(word_list)
 }
