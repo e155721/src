@@ -26,7 +26,10 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
     seq1 <- t(as.matrix(seq1))
     
     # remove ith sequence
-    seq2 <- pa[-i, ]
+    seq2 <- as.matrix(pa[-i, ])
+    if (dim(seq2)[2] == 1) {
+      seq2 <- t(seq2)
+    }    
     
     # new pairwise alignment
     aln <- NeedlemanWunsch(seq1, seq2, p, p, scoringMatrix)
