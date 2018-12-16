@@ -16,6 +16,7 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
   # exit condition
   count <- 0
   max <- 2 * n * n
+  lVec <- c()
   
   i <- 1
   while (i <= n) {
@@ -39,6 +40,7 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
       print(paste("count:", count))
       pa <- newPa
       beforeScore <- afterScore
+      lVec <- append(lVec, i, after = length(lVec))
     } else {
       print(paste("line:", i))
       i <- i + 1
@@ -50,5 +52,9 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
     }
   }
   
-  return(pa)
+  rltList <- list()
+  rltList$multi <- pa
+  rltList$vec <- lVec
+  
+  return(rltList)
 }
