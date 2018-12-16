@@ -18,7 +18,7 @@ filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
 for (f in filesPath) {
   # matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, scoringMatrix)
   matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, scoringMatrix)
-  print(matchingRate)
+  print(paste(basename(f[["input"]]), matchingRate, sep = ": "))
   
   # sink("multi_test.txt", append = T)
   sink("IR_result.txt", append = T)
