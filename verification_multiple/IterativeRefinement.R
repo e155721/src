@@ -49,5 +49,6 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
       break
     }
   }
+  
+  return(pa)
 }
-
