@@ -3,11 +3,9 @@ library(R6)
 # this function makes matrix for sequence alignment
 makeMatrix <- function(seq1, seq2)
 {
-  len1 <- length(seq1)
-  len2 <- length(seq2)
+  len1 <- dim(seq1)[2]
+  len2 <- dim(seq2)[2]
   x <- array(dim=c(len1, len2, 2))
-  # x <- array(dim=c(len1, len2, 2),
-  #           dimnames = list(seq1, seq2))
   return(x)
 }
 
