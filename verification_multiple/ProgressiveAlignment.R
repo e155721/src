@@ -21,7 +21,7 @@ ProgressiveAlignment <- function(wordList, p, scoringMatrix)
   
   # make guide tree  
   aln.d <- dist(distMat)
-  aln.hc <- hclust(aln.d)
+  aln.hc <- hclust(aln.d, "average")
   gtree <- aln.hc$merge
   
   # progressive alignment
