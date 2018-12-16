@@ -5,14 +5,14 @@ attach(.myfunc.env)
 
 ProgressiveAlignment <- function(wordList, p, scoringMatrix)
 {
-  lenWordList <- length(wordList$list)
+  lenWordList <- length(wordList)
   distMat <- matrix(NA, lenWordList, lenWordList)
   
   i <- 2
   for (j in 1:(lenWordList-1)) {
     # the start of the alignment for each the region pair
     for (i in 1:lenWordList) {
-      align <- NeedlemanWunsch(wordList$list[[i]], wordList$list[[j]], p, p, scoringMatrix)
+      align <- NeedlemanWunsch(wordList[[i]], wordList[[j]], p, p, scoringMatrix)
       distMat[i, j] <- align$score
     }
     # the end of the aligne for each the region pair
@@ -32,13 +32,13 @@ ProgressiveAlignment <- function(wordList, p, scoringMatrix)
     if (flg == 2) {
       seq1 <- guide[i, 1] * -1
       seq2 <- guide[i, 2] * -1
-      aln <- NeedlemanWunsch(wordList$list[[seq1]], wordList$list[[seq2]], p, p, scoringMatrix)
+      aln <- NeedlemanWunsch(wordList[[seq1]], wordList[[seq2]], p, p, scoringMatrix)
       progressive[[i]] <- aln$multi
     } 
     else if(flg == 1) {
       clt <- guide[i, 2]
       seq2 <- guide[i, 1] * -1
-      aln <- NeedlemanWunsch(progressive[[clt]], wordList$list[[seq2]], p, p, scoringMatrix)
+      aln <- NeedlemanWunsch(progressive[[clt]], wordList[[seq2]], p, p, scoringMatrix)
       progressive[[i]] <- aln$multi
     } else {
       clt1 <- guide[i, 1]
