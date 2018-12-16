@@ -53,5 +53,6 @@ ProgressiveAlignment <- function(wordList, p, scoringMatrix)
   names(paRlt) <- c("multi", "guide")
   paRlt$multi <- tail(progressive, n = 1)[[1]]
   paRlt$guide <- guide
+  paRlt$score <- aln$score
   return(paRlt)
 }

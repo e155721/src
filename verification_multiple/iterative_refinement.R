@@ -6,9 +6,7 @@ sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 file <- "../Alignment/input_data/002.dat"
-file <- "../Alignment/input_data/128.dat"
-file <- "../Alignment/input_data/100.dat"
-# file <- "../Alignment/input_data/025.dat"
+file <- "../Alignment/input_data/025.dat"
 
 wordList <- MakeWordList(file)
 
@@ -33,15 +31,16 @@ while (i <= n) {
   rlt <- NeedlemanWunsch(seq1, seq2, -3, -3, smat)
   after <- rlt$score
   pa <- rlt$multi
+  
   if (after <= before) {
     i <- i + 1
     pa <- org
-    print(i)
   } else {
     count <- count + 1
-    before <- score
+    before <- after
+    print(count)
   }
-    
+  
   if (count == max) {
     break
   }
