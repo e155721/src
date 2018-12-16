@@ -10,7 +10,6 @@ VerificationPA <- function(inFile, corFile, p, scoringMatrix)
   lenWordList <- length(wordList)
   paRlt <- ProgressiveAlignment(wordList, p, scoringMatrix)
   paMat <- paRlt$multi
-  gtree <- paRlt$guide
   
   # make the correct words matrix
   corWordList <- MakeWordList(corFile)

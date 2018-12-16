@@ -16,7 +16,6 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
   # exit condition
   count <- 0
   max <- 2 * n * n
-  lVec <- c()
   
   i <- 1
   while (i <= n) {
@@ -30,19 +29,18 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
     seq2 <- pa[-i, ]
     
     # new pairwise alignment
-    aln <- NeedlemanWunsch(seq1, seq2, p, p, smat)
+    aln <- NeedlemanWunsch(seq1, seq2, p, p, scoringMatrix)
     newPa <- aln$multi
     afterScore <- aln$score
     
     # refine score
     if (afterScore > beforeScore) {
       count <- count + 1
-      print(paste("count:", count))
+      # print(paste("count:", count))
       pa <- newPa
       beforeScore <- afterScore
-      lVec <- append(lVec, i, after = length(lVec))
     } else {
-      print(paste("line:", i))
+      # print(paste("line:", i))
       i <- i + 1
     }
     
@@ -52,9 +50,5 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
     }
   }
   
-  rltList <- list()
-  rltList$multi <- pa
-  rltList$vec <- lVec
-  
-  return(rltList)
+  return(pa)
 }
