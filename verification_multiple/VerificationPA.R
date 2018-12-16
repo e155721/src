@@ -9,19 +9,27 @@ VerificationPA <- function(inFile, corFile, p, scoringMatrix)
   wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList)
   paRlt <- ProgressiveAlignment(wordList, p, scoringMatrix)
-  inputAlign <- paRlt$multi
+  paMat <- paRlt$multi
   gtree <- paRlt$guide
   
+  # make the correct words matrix
   corWordList <- MakeWordList(corFile)
-  corAlign <- MakeCorMat(corWordList, gtree)
+  nrow <- length(corWordList)
+  ncol <- dim(corWordList[[1]])[2]
+  corMat <- matrix(NA, nrow, ncol)
+  for (i in 1:nrow) {
+    corMat[i, ] <- corWordList[[i]]
+  }
   
-  nrow <- dim(corAlign)[1]
+  # sort by order the region  
+  paMat <- paMat[order(paMat[, 1]), ]
+  corMat <- corMat[order(corMat[, 1]), ]
   
   # calculate matching rate
   count <- 0
   for (i in 1:nrow) {
-    input <- paste(inputAlign[i, ], collapse = "")
-    correct <- paste(corAlign[i, ], collapse = "")
+    input <- paste(paMat[i, ], collapse = "")
+    correct <- paste(corMat[i, ], collapse = "")
     if (input == correct) {
       count <- count + 1
     }

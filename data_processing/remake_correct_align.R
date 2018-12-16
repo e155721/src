@@ -7,25 +7,24 @@ filesName <- list.files(dirPath)
 inputFiles <- paste(dirPath, filesName, sep = "")
 
 for (f in inputFiles) {
-  wordList <- makeWordList(f)
-  wRow <- length(wordList)
-  wCol <- length(wordList[[1]])
-  wordMatrix <- matrix(NA, wRow, wCol)
-
-  for (i in 1:wRow) {
-    wordMatrix[i, ] <- wordList[[i]]
+  wordList <- MakeWordList(f)
+  nrow <- length(wordList)
+  ncol <- length(wordList[[1]])
+  wordMat <- matrix(NA, nrow, ncol)
+  
+  for (i in 1:nrow) {
+    wordMat[i, ] <- wordList[[i]]
   }
   
-  matCol <- wCol
   j <- 1
-  while (j <= matCol) {
-    el <- regexpr("-", wordMatrix[, j])
-    if (sum(el) == wRow) {
-      wordMatrix <- wordMatrix[, -j]
-      matCol <- dim(wordMatrix)[2]
-    } else {
-      j <- j + 1
+  while (j <= dim(wordMat)[2]) {
+    m <- match(wordMat[, j], "-")
+    m <- !is.na(m)
+    if (sum(m) == nrow) {
+      wordMat <- wordMat[, -j]
     }
+    j <- j + 1
   }
-  write.table(wordMatrix, paste(f, "txt", sep = "."))
+  
+  write.table(wordMat, f)
 }

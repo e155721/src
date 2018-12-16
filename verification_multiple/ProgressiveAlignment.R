@@ -22,27 +22,27 @@ ProgressiveAlignment <- function(wordList, p, scoringMatrix)
   # make guide tree  
   aln.d <- dist(distMat)
   aln.hc <- hclust(aln.d)
-  guide <- aln.hc$merge
+  gtree <- aln.hc$merge
   
   # progressive alignment
   progressive <- list()
-  len <- dim(guide)[1]
+  len <- dim(gtree)[1]
   for (i in 1:len) {
-    flg <- sum(guide[i, ] < 0)
+    flg <- sum(gtree[i, ] < 0)
     if (flg == 2) {
-      seq1 <- guide[i, 1] * -1
-      seq2 <- guide[i, 2] * -1
+      seq1 <- gtree[i, 1] * -1
+      seq2 <- gtree[i, 2] * -1
       aln <- NeedlemanWunsch(wordList[[seq1]], wordList[[seq2]], p, p, scoringMatrix)
       progressive[[i]] <- aln$multi
     } 
     else if(flg == 1) {
-      clt <- guide[i, 2]
-      seq2 <- guide[i, 1] * -1
+      clt <- gtree[i, 2]
+      seq2 <- gtree[i, 1] * -1
       aln <- NeedlemanWunsch(progressive[[clt]], wordList[[seq2]], p, p, scoringMatrix)
       progressive[[i]] <- aln$multi
     } else {
-      clt1 <- guide[i, 1]
-      clt2 <- guide[i, 2]
+      clt1 <- gtree[i, 1]
+      clt2 <- gtree[i, 2]
       aln <- NeedlemanWunsch(progressive[[clt1]], progressive[[clt2]], p, p, scoringMatrix)
       progressive[[i]] <- aln$multi
     }
@@ -50,9 +50,9 @@ ProgressiveAlignment <- function(wordList, p, scoringMatrix)
   
   # return
   paRlt <- list(NA, NA)
-  names(paRlt) <- c("multi", "guide")
+  names(paRlt) <- c("multi", "gtree")
   paRlt$multi <- tail(progressive, n = 1)[[1]]
-  paRlt$guide <- guide
+  paRlt$gtree <- gtree
   paRlt$score <- aln$score
   return(paRlt)
 }
