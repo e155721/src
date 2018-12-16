@@ -67,7 +67,7 @@ D <-
               len <- length(spVec)
               for (k in 1:(len-1)) {
                 for (m in l:len) {
-                  sp <- sp + self$s[spVec[k], spVec[l]]
+                  sp <- sp + self$s[spVec[k], spVec[m]]
                 }
                 l <- l + 1
               }
