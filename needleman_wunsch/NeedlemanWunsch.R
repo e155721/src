@@ -5,16 +5,11 @@ attach(.myfunc.env)
 NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
 {
   # initialize variable
-  s1 <- seq1
-  s2 <- seq2
-  
-  na1 <- matrix(NA, nrow = dim(seq1)[1])
   g1 <- matrix("-", nrow = dim(seq1)[1])
-  na2 <- matrix(NA, nrow = dim(seq2)[1])
   g2 <- matrix("-", nrow = dim(seq2)[1])
   
-  seq1 <- cbind(na1, seq1)
-  seq2 <- cbind(na2, seq2)
+  # seq1 <- cbind(na1, seq1)
+  # seq2 <- cbind(na2, seq2)
   D <- D$new(seq1, seq2, p1, p2, s)
   
   # calculate matrix for sequence alignment
@@ -68,25 +63,23 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
     }
   }
   
-  align1 <- matrix(NA, nrow = dim(s1)[1])
-  align2 <- matrix(NA, nrow = dim(s2)[1])
-  align1 <- align1[, -1]
-  align2 <- align2[, -1]
+  align1 <- matrix(seq1[, 1], nrow = dim(seq1)[1])
+  align2 <- matrix(seq2[, 1], nrow = dim(seq2)[1])
   
-  i <- j <- 1
-  for (t in 1:length(traceVec)) {
-    if(traceVec[t] == 0) {
-      align1 <- cbind(align1, s1[, i])
-      align2 <- cbind(align2, s2[, j])
+  i <- j <- 2
+  for (t in traceVec) {
+    if(t == 0) {
+      align1 <- cbind(align1, seq1[, i])
+      align2 <- cbind(align2, seq2[, j])
       i <- i + 1
       j <- j + 1
-    } else if(traceVec[t] == 1) {
-      align1 <- cbind(align1, s1[, i])
+    } else if(t == 1) {
+      align1 <- cbind(align1, seq1[, i])
       align2 <- cbind(align2, g2)
       i <- i + 1
     } else {
       align1 <- cbind(align1, g1)
-      align2 <- cbind(align2, s2[, j])
+      align2 <- cbind(align2, seq2[, j])
       j <- j + 1
     }
   }
