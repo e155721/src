@@ -41,6 +41,8 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
       count <- count + 1
       # print(paste("count:", count))
       pa <- newPa
+      # print(paste("before:", beforeScore))
+      # print(paste("after:", afterScore))
       beforeScore <- afterScore
     } else {
       # print(paste("line:", i))
