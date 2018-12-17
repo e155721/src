@@ -56,6 +56,7 @@ D <-
             
             getScore = function(x, i, j)
             {
+              # exchange the gap penalty
               p <- self$p1
               if (self$bp == T) {
                 p <- self$p2
