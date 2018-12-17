@@ -83,6 +83,9 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
       j <- j + 1
     }
   }
+  #print(mat)
+  #print(seq1)
+  #print(seq2)
   
   align <- list(NA, NA, NA, NA)
   names(align) <- c("seq1", "seq2", "multi", "score")
