@@ -6,10 +6,29 @@ sys.source("verification_multiple/VerificationPA.R", envir = .myfunc.env)
 sys.source("verification_multiple/VerificationIR.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
+library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
+
+MPA <- function(f, method, output, p, s)
+{
+  switch (method,
+          "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s),
+          "ir" = matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, s)
+  )
+  # matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s)
+  # matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, s)
+  print(paste(basename(f[["input"]]), matchingRate, sep = ": "))
+  
+  sink(output, append = T)
+  print(paste(f[["name"]], matchingRate, sep = " "), quote = F)
+  sink()
+}
+
 verif <- function(method, output = "multi_test.txt")
 {
   # make scoring matrix and gap penalty
-  scoringMatrix <- MakeFeatureMatrix(-10, -3)
+  s <- MakeFeatureMatrix(-10, -3)
   p <- -3
   
   # get the all of files path
@@ -17,17 +36,7 @@ verif <- function(method, output = "multi_test.txt")
                             correctDir = "../Alignment/correct_data/")
   
   # alignment for each
-  for (f in filesPath) {
-    switch (method,
-            "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, scoringMatrix),
-            "ir" = matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, scoringMatrix)
-    )
-    # matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, scoringMatrix)
-    # matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, scoringMatrix)
-    print(paste(basename(f[["input"]]), matchingRate, sep = ": "))
-    
-    sink(output, append = T)
-    print(paste(f[["name"]], matchingRate, sep = " "), quote = F)
-    sink()
+  foreach (f = filesPath) {
+    MPA(f, method, output, p, s)
   }
 }
