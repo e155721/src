@@ -9,7 +9,7 @@ makeMatrix <- function(seq1, seq2)
   return(x)
 }
 
-initializeMat = function(x, g1, g2, s)
+initializeMat = function(x, seq1, seq2, g1, g2, s)
 {
   len1 <- dim(x)[1]
   len2 <- dim(x)[2]

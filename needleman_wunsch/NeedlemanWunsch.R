@@ -14,8 +14,8 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
   
   # calculate matrix for sequence alignment
   mat <- makeMatrix(seq1, seq2)
-  mat <- initializeMat(mat, g1, g2, s)
-  
+  mat <- initializeMat(mat, seq1, seq2, g1, g2, s)
+
   rowLen <- dim(seq1)[2]
   colLen <- dim(seq2)[2]
   
@@ -26,7 +26,7 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
       mat[i, j, 2] <- d[2]
     }
   }
-  
+    
   # trace back
   score <- traceVec <- c() 
   i <- rowLen
