@@ -14,14 +14,14 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
   
   # calculate matrix for sequence alignment
   mat <- makeMatrix(seq1, seq2)
-  mat <- InitializeMat(mat, seq1, seq2, p1, p2, g1, g2, s)
+  mat <- D$initializeMat(mat, g1, g2)
   
   rowLen <- dim(seq1)[2]
   colLen <- dim(seq2)[2]
   
   for (i in 2:rowLen) {
     for (j in 2:colLen) {
-      d <- D$getScore(mat,i,j,g1,g2)
+      d <- D$getScore(mat, i, j, g1, g2)
       mat[i, j, 1] <- d[1]
       mat[i, j, 2] <- d[2]
     }
