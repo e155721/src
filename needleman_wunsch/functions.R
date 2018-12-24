@@ -68,28 +68,24 @@ D <-
                 p <- self$p2
               }
               
-              if (0) {
-                spVec <- append(self$seq1[, i], self$seq2[, j])
-                sp <- 0
-                l <- 2
-                len <- length(spVec)
-                for (k in 1:(len-1)) {
-                  for (m in l:len) {
-                    sp <- sp + self$s[spVec[k], spVec[m]]
-                  }
-                  l <- l + 1
-                }
-              }
+              # make profiles
+              prof1 <- as.matrix(self$seq1[, i])
+              prof2 <- as.matrix(self$seq2[, j])
+              prof <- rbind(prof1, prof2)
               
-              prof1 <- as.vector(self$seq1[, i])
-              prof2 <- as.vector(self$seq2[, j])
+              # get length of profiles
+              prof.len <- length(prof)
+              len1 <- prof.len-1
+              len2 <- prof.len
+              
+              # calculate D(i,j)
               sp <- 0
-              len1 <- length(prof1)
-              len2 <- length(prof2)
+              l <- 2
               for (k in 1:len1) {
-                for (m in 1:len2) {
-                  sp <- sp + self$s[prof1[k], prof2[m]]
+                for (m in l:len2) {
+                  sp <- sp + self$s[prof[k], prof[m]]
                 }
+                l <- l + 1
               }
               d1 <- x[i-1, j-1, 1] + sp
               # d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
