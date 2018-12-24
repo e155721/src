@@ -10,11 +10,12 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
   
   # seq1 <- cbind(na1, seq1)
   # seq2 <- cbind(na2, seq2)
+  SP <- SP$new(s)
   D <- D$new(seq1, seq2, p1, p2, s)
   
   # calculate matrix for sequence alignment
   mat <- makeMatrix(seq1, seq2)
-  mat <- D$initializeMat(mat, g1, g2)
+  mat <- initializeMat(mat, g1, g2)
   
   rowLen <- dim(seq1)[2]
   colLen <- dim(seq2)[2]
