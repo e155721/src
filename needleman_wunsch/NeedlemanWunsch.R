@@ -21,7 +21,7 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
   
   for (i in 2:rowLen) {
     for (j in 2:colLen) {
-      d <- D$getScore(mat,i,j)
+      d <- D$getScore(mat,i,j,g1,g2)
       mat[i, j, 1] <- d[1]
       mat[i, j, 2] <- d[2]
     }

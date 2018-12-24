@@ -60,7 +60,7 @@ D <-
               self$s <- s
             },
             
-            getScore = function(x, i, j)
+            getScore = function(x, i, j, g1, g2)
             {
               # exchange the gap penalty
               p <- self$p1
@@ -92,21 +92,34 @@ D <-
               # d2 <- x[i-1, j, 1] + p
               # d3 <- x[i, j-1, 1] + p
               
+              # vertical gap
+              prof1 <- as.matrix(self$seq1[, i])
+              prof2 <- as.matrix(g2)
+              prof <- rbind(prof1, prof2)
+              
               sp <- 0
-              lp <- length(self$seq2[, j])
-              for (k in 1:lp) {
-                for (m in self$seq1[, i]) {
-                  sp <- sp + self$s[m, "-"]
+              l <- 2
+              for (k in 1:len1) {
+                for (m in l:len2) {
+                  sp <- sp + self$s[prof[k], prof[m]]
                 }
+                l <- l + 1
               }
               d2 <- x[i-1, j, 1] + sp
               
+              
+              # horizontally gap
+              prof1 <- as.matrix(g1)
+              prof2 <- as.matrix(self$seq2[, j])
+              prof <- rbind(prof1, prof2)
+              
               sp <- 0
-              lp <- length(self$seq1[, i])
-              for (k in 1:lp) {
-                for (m in self$seq2[, j]) {
-                  sp <- sp + self$s[m, "-"]
+              l <- 2
+              for (k in 1:len1) {
+                for (m in l:len2) {
+                  sp <- sp + self$s[prof[k], prof[m]]
                 }
+                l <- l + 1
               }
               d3 <- x[i, j-1, 1] + sp
               
