@@ -5,7 +5,11 @@ sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-tmp <- function(x)
+library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
+
+CheckScore <- function(x)
 {
   nrow <- dim(x)[1]
   ncol <- dim(x)[2]
@@ -25,14 +29,12 @@ tmp <- function(x)
   return(sp)
 }
 
-
 path <- "../Alignment/input_data/"
 files <- list.files(path)
 files <- paste(path, files, sep = "")
 
-for (f in files) {
-  print(f)
-  
+CheckNwunsch <- function(f)
+{
   wordList <- MakeWordList(f)
   wl.len <- length(wordList)
   seq1 <- NeedlemanWunsch(wordList[[1]], wordList[[2]], s = scoringMatrix, p, p)
@@ -45,4 +47,9 @@ for (f in files) {
   if (seq1$score != tmp(seq1$multi)) {
     print(f)
   }
+  return(0)
+}
+
+foreach(f = files) %dopar% {
+  nwunsch(f)
 }
