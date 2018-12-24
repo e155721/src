@@ -5,6 +5,10 @@ sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
+library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
+
 tmp <- function(x)
 {
   nrow <- dim(x)[1]
@@ -48,4 +52,6 @@ nwunsch <- function(f)
   return(0)
 }
 
-lapply(files, nwunsch)
+foreach(f = files) %dopar% {
+  nwunsch(f)
+}
