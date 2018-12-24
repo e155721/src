@@ -36,7 +36,7 @@ verif <- function(method, output = "multi_test.txt")
                             correctDir = "../Alignment/correct_data/")
   
   # alignment for each
-  foreach (f = filesPath) {
+  foreach (f = filesPath) %dopar% {
     MPA(f, method, output, p, s)
   }
 }
