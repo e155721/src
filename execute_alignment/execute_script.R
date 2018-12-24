@@ -1,6 +1,5 @@
 .myfunc.env <- new.env()
 sys.source("execute_alignment/CheckCorrectAlignment.R", envir = .myfunc.env)
-sys.source("execute_alignment/MakeGapComb.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 # constant penalty
