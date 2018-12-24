@@ -9,7 +9,7 @@ makeMatrix <- function(seq1, seq2)
   return(x)
 }
 
-initializeMat = function(x, g1, g2)
+initializeMat = function(x, g1, g2, s)
 {
   len1 <- dim(x)[1]
   len2 <- dim(x)[2]
@@ -21,43 +21,38 @@ initializeMat = function(x, g1, g2)
   for (i in 2:len1) {
     prof1 <- as.matrix(seq1[, i])
     prof2 <- as.matrix(g2)
-    sp <- sp(prof1, prof2)
+    sp <- sp(prof1, prof2, s)
     x[i, 1, 1] <- x[i-1, 1, 1] + sp
+  }
+  
+  x[1, , 2]  <- -1
+  for (j in 2:len2) {
+    prof1 <- as.matrix(g1)
+    prof2 <- as.matrix(seq2[, j]) 
+    sp <- sp(prof1, prof2, s)
+    x[1, j, 1] <- x[1, j-1, 1] + sp
   }
   return(x)
 }
 
-SP <-
-  R6Class("SP",
-          public = list(
-            s = NA
-          ),
-          
-          initialize = function(s)
-          {
-            self$s <- s
-          },
-          
-          sp = function(prof1, prof2)
-          {
-            # make profiles
-            prof <- rbind(prof1, prof2)
-            prof.len <- length(prof)
-            len1 <- prof.len-1
-            len2 <- prof.len
-            
-            sp <- 0
-            l <- 2
-            for (k in 1:len1) {
-              for (m in l:len2) {
-                sp <- sp + self$s[prof[k], prof[m]]
-              }
-              l <- l + 1
-            }
-            return(sp)
-          }
-  )
-
+sp <- function(prof1, prof2, s)
+{
+  # make profiles
+  prof <- rbind(prof1, prof2)
+  prof.len <- length(prof)
+  len1 <- prof.len-1
+  len2 <- prof.len
+  
+  sp <- 0
+  l <- 2
+  for (k in 1:len1) {
+    for (m in l:len2) {
+      sp <- sp + s[prof[k], prof[m]]
+    }
+    l <- l + 1
+  }
+  return(sp)
+}
 
 D <- 
   R6Class("D",
@@ -89,7 +84,7 @@ D <-
               # calculate D(i,j)
               prof1 <- as.matrix(self$seq1[, i])
               prof2 <- as.matrix(self$seq2[, j])
-              sp <- SP$sp(prof1, prof2)
+              sp <- sp(prof1, prof2, self$s)
               d1 <- x[i-1, j-1, 1] + sp
               # d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
               # d2 <- x[i-1, j, 1] + p
@@ -98,13 +93,13 @@ D <-
               # vertical gap
               prof1 <- as.matrix(self$seq1[, i])
               prof2 <- as.matrix(g2)
-              sp <- SP$sp(prof1, prof2)
+              sp <- sp(prof1, prof2, self$s)
               d2 <- x[i-1, j, 1] + sp
               
               # horizontally gap
               prof1 <- as.matrix(g1)
               prof2 <- as.matrix(self$seq2[, j])
-              sp <- SP$sp(prof1, prof2)
+              sp <- sp(prof1, prof2, self$s)
               d3 <- x[i, j-1, 1] + sp
               
               d <- c(NA, NA)
