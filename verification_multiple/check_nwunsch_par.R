@@ -31,6 +31,8 @@ files <- paste(path, files, sep = "")
 
 nwunsch <- function(f)
 {
+  print(f)
+  
   wordList <- MakeWordList(f)
   wl.len <- length(wordList)
   seq1 <- NeedlemanWunsch(wordList[[1]], wordList[[2]], s = scoringMatrix, p, p)
