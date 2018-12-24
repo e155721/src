@@ -34,8 +34,11 @@ for (f in files) {
   wordList <- MakeWordList(f)
   wl.len <- length(wordList)
   seq1 <- NeedlemanWunsch(wordList[[1]], wordList[[2]], s = scoringMatrix, p, p)
-  for (i in 3:wl.len) {
-    seq1 <- NeedlemanWunsch(seq1$multi, wordList[[i]], s = scoringMatrix, p, p)
+  
+  if (wl.len >= 3) {
+    for (i in 3:wl.len) {
+      seq1 <- NeedlemanWunsch(seq1$multi, wordList[[i]], s = scoringMatrix, p, p)
+    }
   }
   if (seq1$score != tmp(seq1$multi)) {
     print(f)
