@@ -5,33 +5,31 @@ sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-seq1 <- c("n", "a") 
-seq2 <- c("n", "a:")
-
-seq1 <- c("?", "a", "a", "ts2x", "i:")
-seq2 <- c("a", "k", "a", "ts", "y")
-seq2 <- c("k", "a:", "ts", "y")
-
-seq1 <- matrix(NA, 2, 6)
-seq1[1, ] <- c("p", "i", "t", "e", "ts", "u")
-seq1[2, ] <- c("p", "i", "t", "e", "t", "-")
-
-# seq1 <- t(matrix(c("p", "i", "t", "e", "ts", "u")))
-# seq2 <- t(matrix(c("tx", "i2", "t")))
-
-wordList <- MakeWordList("../Alignment/input_data/002.dat")
-
-seq1 <- wordList$list[[1]]
-seq2 <- wordList$list[[10]]
+wordList <- MakeWordList("../Alignment/input_data/005.dat")
+wordList <- MakeWordList("../Alignment/input_data/018.dat")
+wordList <- MakeWordList("../Alignment/input_data/001.dat")
+seq1 <- wordList[[1]]
+seq2 <- wordList[[2]]
+seq2 <- wordList[[3]]
 
 scoringMatrix <- MakeFeatureMatrix(-10, -3)
-p1 <- p2 <- -3
-NeedlemanWunsch(seq1, seq2, s = scoringMatrix, p1, p2)
-aln <- NeedlemanWunsch(seq1, seq2, s = scoringMatrix, p1, p2)
+p <- -3
+m <- NeedlemanWunsch(seq1, seq1, s = scoringMatrix, p, p)
+tmp(m$multi)
 
-aln <- NeedlemanWunsch(aln$seq1, aln$seq2, s = scoringMatrix, p1, p2)
+m <- NeedlemanWunsch(m$multi, seq1, s = scoringMatrix, p, p)
+tmp(m$multi)
 
-NeedlemanWunsch(aln$multi, wordList$list[[10]], s = scoringMatrix, p1, p2)
+m <- NeedlemanWunsch(m$multi, seq1, s = scoringMatrix, p, p)
+tmp(m$multi)
 
+wl.len <- length(wordList)
+seq1 <- NeedlemanWunsch(wordList[[1]], wordList[[2]], s = scoringMatrix, p, p)
+NeedlemanWunsch(seq1$multi, wordList[[3]], s = scoringMatrix, p, p)
 
- 
+for (i in 3:wl.len) {
+  seq1 <- NeedlemanWunsch(seq1$multi, wordList[[i]], s = scoringMatrix, p, p)
+  print(seq1$multi)
+}
+print(seq1$score)
+tmp(seq1$multi)

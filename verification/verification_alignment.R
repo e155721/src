@@ -1,7 +1,6 @@
 .myfunc.env <- new.env()
 sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 sys.source("data_processing/RemkSeq.R", envir = .myfunc.env)
-sys.source("execute_alignment/MakeGapComb.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 sys.source("verification/GetFilesPath.R", envir = .myfunc.env)
