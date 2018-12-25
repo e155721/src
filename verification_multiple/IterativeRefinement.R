@@ -3,10 +3,10 @@ sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-IterativeRefinement <- function(wordList, p, scoringMatrix)
+IterativeRefinement <- function(wordList, p, s)
 {
   ## progressive alignmen
-  paRlt <- ProgressiveAlignment(wordList, p, scoringMatrix)
+  paRlt <- ProgressiveAlignment(wordList, p, s)
   pa <- paRlt$multi
   beforeScore <- paRlt$score
   
@@ -32,7 +32,7 @@ IterativeRefinement <- function(wordList, p, scoringMatrix)
     }    
     
     # new pairwise alignment
-    aln <- NeedlemanWunsch(seq1, seq2, p, p, scoringMatrix)
+    aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
     newPa <- aln$multi
     afterScore <- aln$score
     
