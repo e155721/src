@@ -41,9 +41,8 @@ BestFirst <- function(wordList, p, s)
       
       # new pairwise alignment
       aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
-      newPa <- DelGap(aln$multi)
-      scoreVec[i] <- Delaln$score
-      paList[[i]] <- newPa
+      scoreVec[i] <- aln$score
+      paList[[i]] <- DelGap(aln$multi)
     }
     
     scoreInd <- grep(scoreVec, pattern = max(scoreVec))
