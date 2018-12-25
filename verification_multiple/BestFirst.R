@@ -41,8 +41,8 @@ BestFirst <- function(wordList, p, s)
       
       # new pairwise alignment
       aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
-      newPa <- aln$multi
-      scoreVec[i] <- aln$score
+      newPa <- DelGap(aln$multi)
+      scoreVec[i] <- Delaln$score
       paList[[i]] <- newPa
     }
     
@@ -55,7 +55,7 @@ BestFirst <- function(wordList, p, s)
     # refine score
     if (afterScore > beforeScore) {
       count <- count + 1
-      pa <- DelGap(paList[[scoreInd]])
+      pa <- paList[[scoreInd]]
       beforeScore <- afterScore
     } else {
       break
