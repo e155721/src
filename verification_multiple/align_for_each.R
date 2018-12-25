@@ -3,7 +3,8 @@ sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
 sys.source("verification/GetFilesPath.R", envir = .myfunc.env)
 sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
 sys.source("verification_multiple/VerificationPA.R", envir = .myfunc.env)
-sys.source("verification_multiple/VerificationIR.R", envir = .myfunc.env)
+sys.source("verification_multiple/VerificationRF.R", envir = .myfunc.env)
+sys.source("verification_multiple/VerificationBF.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 library(foreach)
@@ -14,7 +15,8 @@ MPA <- function(f, method, output, p, s)
 {
   switch (method,
           "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s),
-          "ir" = matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, s)
+          "rf" = matchingRate <- VerificationRF(f[["input"]], f[["correct"]], p, s),
+          "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s)
   )
   # matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s)
   # matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, s)

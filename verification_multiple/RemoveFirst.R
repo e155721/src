@@ -3,7 +3,7 @@ sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-IterativeRefinement <- function(wordList, p, s)
+RemoveFirst <- function(wordList, p, s)
 {
   ## progressive alignmen
   paRlt <- ProgressiveAlignment(wordList, p, s)
@@ -39,13 +39,9 @@ IterativeRefinement <- function(wordList, p, s)
     # refine score
     if (afterScore > beforeScore) {
       count <- count + 1
-      # print(paste("count:", count))
       pa <- newPa
-      # print(paste("before:", beforeScore))
-      # print(paste("after:", afterScore))
       beforeScore <- afterScore
     } else {
-      # print(paste("line:", i))
       i <- i + 1
     }
     

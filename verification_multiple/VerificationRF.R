@@ -1,13 +1,13 @@
 .myfunc.env = new.env()
 sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-sys.source("verification_multiple/IterativeRefinement.R", envir = .myfunc.env)
+sys.source("verification_multiple/RemoveFirst.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-VerificationIR <- function(inFile, corFile, p, scoringMatrix)
+VerificationRF <- function(inFile, corFile, p, scoringMatrix)
 {
   wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList)
-  paMat <- IterativeRefinement(wordList, p, scoringMatrix)
+  paMat <- RemoveFirst(wordList, p, scoringMatrix)
   
   # make the correct words matrix
   corWordList <- MakeWordList(corFile)
