@@ -18,9 +18,6 @@ MPA <- function(f, method, output, p, s)
           "rf" = matchingRate <- VerificationRF(f[["input"]], f[["correct"]], p, s),
           "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s)
   )
-  # matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s)
-  # matchingRate <- VerificationIR(f[["input"]], f[["correct"]], p, s)
-  #print(paste(basename(f[["input"]]), matchingRate, sep = ": "))
   
   sink(output, append = T)
   print(paste(f[["name"]], matchingRate, sep = " "), quote = F)
