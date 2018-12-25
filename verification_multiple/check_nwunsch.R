@@ -51,5 +51,5 @@ CheckNwunsch <- function(f)
 }
 
 foreach(f = files) %dopar% {
-  nwunsch(f)
+  # CheckNwunsch(f)
 }
