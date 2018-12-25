@@ -41,7 +41,7 @@ BestFirst <- function(wordList, p, s)
       # new pairwise alignment
       aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
       newPa <- aln$multi
-      scoreVec <- append(scoreVec, aln$score, length(scoreVec))
+      scoreVec[i] <- aln$score
       paList[[i]] <- newPa
     }
     
