@@ -47,8 +47,6 @@ BestFirst <- function(wordList, p, s)
     
     scoreInd <- grep(scoreVec, pattern = max(scoreVec))
     scoreInd <- head(scoreInd, n = 1)
-    print(paste("paList:", length(paList)))
-    print(paste("scoreInd:", scoreInd))
     afterScore <- scoreVec[scoreInd]
     
     # refine score
