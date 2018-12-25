@@ -33,5 +33,6 @@ VerificationBF <- function(inFile, corFile, p, scoringMatrix)
   }
   
   matchingRate <- (count/nrow)*100
+  print(matchingRate)
   return(matchingRate)
 }
