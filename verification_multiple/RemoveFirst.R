@@ -1,5 +1,6 @@
 .myfunc.env = new.env()
 sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
+sys.source("verification_multiple/DelGap.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
@@ -33,7 +34,7 @@ RemoveFirst <- function(wordList, p, s)
     
     # new pairwise alignment
     aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
-    newPa <- aln$multi
+    newPa <- DelGap(aln$multi)
     afterScore <- aln$score
     
     # refine score
