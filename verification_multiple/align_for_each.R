@@ -13,12 +13,13 @@ registerDoParallel(detectCores())
 
 MPA <- function(f, method, output, p, s)
 {
-  print(paste("Executing:",f))
+  print(paste("Executing:",f[["name"]]))
   switch (method,
           "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s),
           "rf" = matchingRate <- VerificationRF(f[["input"]], f[["correct"]], p, s),
           "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s)
   )
+  print(paste("Finished:",f[["name"]]))
 
   sink(output, append = T)
   print(paste(f[["name"]], matchingRate, sep = " "), quote = F)
