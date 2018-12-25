@@ -1,5 +1,6 @@
 .myfunc.env = new.env()
 sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
+sys.source("verification_multiple/DelGap.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
@@ -47,12 +48,14 @@ BestFirst <- function(wordList, p, s)
     
     scoreInd <- grep(scoreVec, pattern = max(scoreVec))
     scoreInd <- head(scoreInd, n = 1)
+    print(paste("paList:", length(paList)))
+    print(paste("scoreInd:", scoreInd))
     afterScore <- scoreVec[scoreInd]
     
     # refine score
     if (afterScore > beforeScore) {
       count <- count + 1
-      pa <- paList[[scoreInd]]
+      pa <- DelGap(paList[[scoreInd]])
       beforeScore <- afterScore
     } else {
       break
