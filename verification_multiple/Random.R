@@ -25,7 +25,7 @@ Random <- function(wordList, p, s)
     # separate msa
     R <- floor(runif(1, min=2, max=M+1))
     seq1 <- matrix(pa[1:R-1, ], R-1, N)
-    seq1 <- matrix(pa[R:M, ], M-(R-1), N)
+    seq2 <- matrix(pa[R:M, ], M-(R-1), N)
     
     # new pairwise alignment
     aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
