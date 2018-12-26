@@ -18,7 +18,7 @@ MPA <- function(f, method, output, p, s)
           "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s),
           "rf" = matchingRate <- VerificationRF(f[["input"]], f[["correct"]], p, s),
           "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s),
-          "rm" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
+          "rd" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
   )
   
   sink(output, append = T)
