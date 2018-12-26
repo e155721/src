@@ -5,7 +5,7 @@ sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
 sys.source("verification_multiple/VerificationPA.R", envir = .myfunc.env)
 sys.source("verification_multiple/VerificationRF.R", envir = .myfunc.env)
 sys.source("verification_multiple/VerificationBF.R", envir = .myfunc.env)
-sys.source("verification_multiple/VerificationRM.R", envir = .myfunc.env)
+sys.source("verification_multiple/VerificationRD.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
 library(foreach)
@@ -18,7 +18,7 @@ MPA <- function(f, method, output, p, s)
           "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s),
           "rf" = matchingRate <- VerificationRF(f[["input"]], f[["correct"]], p, s),
           "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s),
-          "rm" = matchingRate <- VerificationRM(f[["input"]], f[["correct"]], p, s)
+          "rm" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
   )
   
   sink(output, append = T)

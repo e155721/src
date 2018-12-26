@@ -3,7 +3,7 @@ sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 sys.source("verification_multiple/Random.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-VerificationRM <- function(inFile, corFile, p, scoringMatrix)
+VerificationRD <- function(inFile, corFile, p, scoringMatrix)
 {
   wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList)
