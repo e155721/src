@@ -13,13 +13,13 @@ RemoveFirst <- function(wordList, p, s)
   
   ## iterative refinement
   # number of sequences
-  n <- dim(pa)[1]
+  N <- dim(pa)[1]
   # exit condition
   count <- 0
-  max <- 2 * n * n
+  max <- 2*N*N
   
   i <- 1
-  while (i <= n) {
+  while (i <= N) {
     # remove gaps
     seq1 <- pa[i, ]
     seq1 <- gsub("-", NA, seq1)
