@@ -36,15 +36,15 @@ verif <- function(method, output = "multi_test.txt")
                             correctDir = "../Alignment/correct_data/")
 
   # alignment for each
-  msa.vec <- foreach (f = filesPath) %dopar% {
+  msa.list <- foreach (f = filesPath) %dopar% {
     MPA(f, method, output, p, s)
   }
 
-  seq.num <- length(msa.vec)
+  seq.num <- length(msa.list)
   msa.mat <- matrix(NA, seq.num, 2)
   for (i in 1:seq.num) {
-    msa.mat[i, ] <- msa.vec[i]
+    msa.mat[i, ] <- msa.list[[i]]
   }
-  msa.mat <- msa.mat[order(msa.mat[, 2]), ]
+  msa.mat <- msa.mat[order(msa.mat[, 1]), ]
   write.table(msa.mat, output)
 }
