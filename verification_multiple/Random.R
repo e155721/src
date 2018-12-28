@@ -20,7 +20,11 @@ Random <- function(wordList, p, s)
   max <- 2*M*M
   
   i <- 0
-  while (i < M) {
+  while (1) {
+  
+    # exit condition  
+    if (i == M) break
+    if (count == max) break
     
     # separate msa
     R <- floor(runif(1, min=2, max=M+1))
@@ -40,8 +44,6 @@ Random <- function(wordList, p, s)
     } else {
       i <- i + 1
     }
-    
-    if (count == max) break
     
   }
   
