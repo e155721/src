@@ -21,8 +21,8 @@ MPA <- function(f, method, output, p, s)
           "rd" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
   )
 
-  msaRlt.vec <- c(f[["name"]], matchingRate)
-  return(msaRlt.vec)
+  msa.vec <- c(f[["name"]], matchingRate)
+  return(msa.vec)
 }
 
 verif <- function(method, output = "multi_test.txt")
