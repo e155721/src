@@ -49,7 +49,7 @@ verif <- function(method, output = "multi_test.txt")
   
   sink(output)
   for (i in 1:seq.num) {
-    print(msa.mat[i, ])
+    print(msa.mat[i, ], quote = F)
   }
   sink()
   
