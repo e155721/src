@@ -20,10 +20,8 @@ MPA <- function(f, method, output, p, s)
           "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s),
           "rd" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
   )
-  
-  sink(output, append = T)
-  print(paste(f[["name"]], matchingRate, sep = " "), quote = F)
-  sink()
+
+  return(matchingRate)
 }
 
 verif <- function(method, output = "multi_test.txt")
@@ -31,13 +29,25 @@ verif <- function(method, output = "multi_test.txt")
   # make scoring matrix and gap penalty
   s <- MakeFeatureMatrix(-10, -3)
   p <- -3
-  
+
   # get the all of files path
   filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                             correctDir = "../Alignment/correct_data/")
-  
+
   # alignment for each
-  foreach (f = filesPath) %dopar% {
+  matchingRate <- foreach (f = filesPath) %dopar% {
     MPA(f, method, output, p, s)
   }
+
+  matchingRate <- unlist(matchingRate)
+  matchingRate <- sort(matchingRate)
+
+  i <- 1
+  for (f in filesPath) {
+    sink(output, append = T)
+    print(paste(f[["name"]], matchingRate[i], sep = " "), quote = F)
+    sink()
+    i <- i + 1
+  }
+
 }
