@@ -21,8 +21,9 @@ MPA <- function(f, method, output, p, s)
           "rd" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
   )
   
-  msa.vec <- c(f[["name"]], matchingRate)
-  return(msa.vec)
+  sink(output, append = T)
+  print(paste(f[["name"]], matchingRate), quote = F)
+  sink()
 }
 
 verif <- function(method, output = "multi_test.txt")
@@ -40,18 +41,4 @@ verif <- function(method, output = "multi_test.txt")
     MPA(f, method, output, p, s)
   }
   
-  seq.num <- length(msa.list)
-  msa.mat <- matrix(NA, seq.num, 2)
-  for (i in 1:seq.num) {
-    msa.mat[i, ] <- msa.list[[i]]
-  }
-  msa.mat <- msa.mat[order(msa.mat[, 1]), ]
-  
-  sink(output)
-  for (i in 1:seq.num) {
-    print(msa.mat[i, ], quote = F)
-  }
-  sink()
-  
-  #write.table(msa.mat, output)
 }
