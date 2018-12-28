@@ -21,7 +21,8 @@ MPA <- function(f, method, output, p, s)
           "rd" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
   )
 
-  return(matchingRate)
+  msaRlt.vec <- c(f[["name"]], matchingRate)
+  return(msaRlt.vec)
 }
 
 verif <- function(method, output = "multi_test.txt")
@@ -35,19 +36,15 @@ verif <- function(method, output = "multi_test.txt")
                             correctDir = "../Alignment/correct_data/")
 
   # alignment for each
-  matchingRate <- foreach (f = filesPath) %dopar% {
+  msa.vec <- foreach (f = filesPath) %dopar% {
     MPA(f, method, output, p, s)
   }
 
-  matchingRate <- unlist(matchingRate)
-  matchingRate <- sort(matchingRate)
-
-  i <- 1
-  for (f in filesPath) {
-    sink(output, append = T)
-    print(paste(f[["name"]], matchingRate[i], sep = " "), quote = F)
-    sink()
-    i <- i + 1
+  seq.num <- length(msa.vec)
+  msa.mat <- matrix(NA, seq.num, 2)
+  for (i in 1:seq.num) {
+    msa.mat[i, ] <- msa.vec[i]
   }
-
+  msa.mat <- msa.mat[order(msa.mat[, 2]), ]
+  write.table(msa.mat, output)
 }
