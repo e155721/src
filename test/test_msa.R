@@ -8,11 +8,18 @@ sys.source("verification_multiple/Random.R", envir = .myfunc.env)
 sys.source("verification_multiple/check_nwunsch.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-wordList <- MakeWordList("../Alignment/input_data/001.dat")
-p <- -3
-s <- MakeFeatureMatrix(-10, p)
-
-pa <- ProgressiveAlignment(wordList, p, s)
-rf <- RemoveFirst(wordList, p, s)
-bf <- BestFirst(wordList, p, s)
-rd <- Random(wordList, p, s)
+test <- function(file)
+{
+  wordList <- MakeWordList(file)
+  p <- -3
+  s <- MakeFeatureMatrix(-10, p)
+  
+  switch(method,
+         "pa" = msa <- ProgressiveAlignment(wordList, p, s),
+         "rf" = msa <- RemoveFirst(wordList, p, s),
+         "bf" = msa <- BestFirst(wordList, p, s),
+         "rd" = msa <- Random(wordList, p, s)
+  )
+  
+  return(msa)
+}
