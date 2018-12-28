@@ -40,6 +40,7 @@ Random <- function(wordList, p, s)
     if (afterScore > beforeScore) {
       count <- count + 1
       pa <- newPa
+      N <- dim(pa)[2]
       beforeScore <- afterScore
     } else {
       i <- i + 1
