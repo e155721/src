@@ -26,11 +26,10 @@ MPA <- function(f, method, output, p, s)
   sink()
 }
 
-verif <- function(method, output = "multi_test.txt")
+verif <- function(method, output = "multi_test.txt", p = -3)
 {
   # make scoring matrix and gap penalty
-  s <- MakeFeatureMatrix(-10, -3)
-  p <- -3
+  s <- MakeFeatureMatrix(-10, p)
   
   # get the all of files path
   filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
