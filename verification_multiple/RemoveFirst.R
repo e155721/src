@@ -20,13 +20,8 @@ RemoveFirst <- function(wordList, p, s)
   
   i <- 1
   while (i <= N) {
-    # remove gaps
-    seq1 <- pa[i, ]
-    seq1 <- gsub("-", NA, seq1)
-    seq1 <- seq1[!is.na(seq1)]
-    seq1 <- t(as.matrix(seq1))
-    
     # remove ith sequence
+    seq1 <- pa[drop = F, i, ]
     seq2 <- as.matrix(pa[-i, ])
     if (dim(seq2)[2] == 1) {
       seq2 <- t(seq2)
