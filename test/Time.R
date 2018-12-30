@@ -8,9 +8,9 @@ source("verification_multiple/BestFirst.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("data_processing/MakeWordList.R")
 
-TicRF <- function()
+TicRF <- function(file = "../Alignment/input_data/014.dat")
 {
-  wordList <- MakeWordList("../Alignment/input_data/014.dat")
+  wordList <- MakeWordList(file)
   p <- -4
   s <- MakeFeatureMatrix(-10, p)
   
@@ -20,9 +20,9 @@ TicRF <- function()
   return(0)
 }
 
-TicBF <- function()
+TicBF <- function(file = "../Alignment/input_data/014.dat")
 {
-  wordList <- MakeWordList("../Alignment/input_data/014.dat")
+  wordList <- MakeWordList(file)
   p <- -4
   s <- MakeFeatureMatrix(-10, p)
   
