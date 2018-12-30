@@ -15,7 +15,7 @@ TicRF <- function()
   s <- MakeFeatureMatrix(-10, p)
   
   tic()
-  print(paste("RF:", RemoveFirst(wordList, p, s)))
+  RemoveFirst(wordList, p, s)
   toc()
   return(0)
 }
@@ -27,20 +27,7 @@ TicBF <- function()
   s <- MakeFeatureMatrix(-10, p)
   
   tic()
-  print(paste("BF:", BestFirst(wordList, p, s)))
+  BestFirst(wordList, p, s)
   toc()
   return(0)
-}
-
-TicMSA <- function(i)
-{
-  switch (i,
-    "1" = TicRF(),
-    "2" = TicBF()
-  )  
-  return(0)
-}
-
-foreach(i = 1:2) %dopar% {
-  TicMSA(i)
 }
