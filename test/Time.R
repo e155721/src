@@ -8,26 +8,40 @@ source("verification_multiple/BestFirst.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("data_processing/MakeWordList.R")
 
-TicRF <- function(file = "../Alignment/input_data/014.dat")
+TimeRF <- function(file = "../Alignment/input_data/014.dat")
 {
   wordList <- MakeWordList(file)
   p <- -4
   s <- MakeFeatureMatrix(-10, p)
   
-  tic()
-  RemoveFirst(wordList, p, s)
-  toc()
+  time.list <- foreach(i = 1:10) %dopar% {
+    tic()
+    RemoveFirst(wordList, p, s)
+    toc()
+  }
+  
+  time.vec <- unlist(time.list)
+  time.ave <- sum(time.vec)/10
+  print(paste("Time of RF:", time.ave))
+  
   return(0)
 }
 
-TicBF <- function(file = "../Alignment/input_data/014.dat")
+TimeBF <- function(file = "../Alignment/input_data/014.dat")
 {
   wordList <- MakeWordList(file)
   p <- -4
   s <- MakeFeatureMatrix(-10, p)
   
-  tic()
-  BestFirst(wordList, p, s)
-  toc()
+  time.list <- foreach(i = 1:10) %dopar% {
+    tic()
+    BestFirst(wordList, p, s)
+    toc()
+  }
+  
+  time.vec <- unlist(time.list)
+  time.ave <- sum(time.vec)/10
+  print(paste("Time of BF:", time.ave))
+      
   return(0)
 }
