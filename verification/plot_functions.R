@@ -41,5 +41,5 @@ PlotHist <- function(inFile)
   axis(1, at=seq(0,100,10), pos=-3)
   abline(v=mean, col=2, lwd=3, lty=2)
   text(x = mean(data)-25, y = 110, 
-       paste("Matching Rate Average =", round(mean, digits = 3), "%", sep = " "), col = 2)
+       paste("Average Matching Rate =", round(mean, digits = 3), "%", sep = " "), col = 2)
 }
