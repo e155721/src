@@ -64,31 +64,20 @@ D <-
             s = NA,
             bp = F,
             
-            initialize = function(seq1, seq2, p1, p2, s)
+            initialize = function(seq1, seq2, s)
             {
               self$seq1 <- seq1
               self$seq2 <- seq2
-              self$p1 <- p1
-              self$p2 <- p2
               self$s <- s
             },
             
             getScore = function(x, i, j, g1, g2)
             {
-              # exchange the gap penalty
-              p <- self$p1
-              if (self$bp == T) {
-                p <- self$p2
-              }
-              
               # calculate D(i,j)
               prof1 <- as.matrix(self$seq1[, i])
               prof2 <- as.matrix(self$seq2[, j])
               sp <- sp(prof1, prof2, self$s)
               d1 <- x[i-1, j-1, 1] + sp
-              # d1 <- x[i-1, j-1, 1] + self$s[self$seq1[i], self$seq2[j]]
-              # d2 <- x[i-1, j, 1] + p
-              # d3 <- x[i, j-1, 1] + p
               
               # vertical gap
               prof1 <- as.matrix(self$seq1[, i])
@@ -111,25 +100,19 @@ D <-
               if (lenSeq1 <= lenSeq2) {
                 if (d[1] == d3) {
                   d[2] <- -1 # (-1,0)
-                  self$bp <- T
                 } else if (d[1] == d2) {
                   d[2] <- 1 # (0,1)
-                  self$bp <- T
                 } else if (d[1] == d1) {
                   d[2] <- 0 # (0,0)
-                  self$bp <- F
                 }
               }
               else if (lenSeq2 < lenSeq1) {
                 if (d[1] == d2) {
                   d[2] <- 1 # (0,1)
-                  self$bp <- T
                 } else if (d[1] == d3) {
                   d[2] <- -1 # (-1,0)
-                  self$bp <- T
                 } else if (d[1] == d1) {
                   d[2] <- 0 # (0,0)
-                  self$bp <- F
                 }
               }
               
