@@ -2,7 +2,7 @@
 sys.source("needleman_wunsch/functions.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-NeedlemanWunsch <- function(seq1, seq2, p = -1, p = -1, s)
+NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
 {
   # initialize variable
   g1 <- matrix("-", nrow = dim(seq1)[1])
