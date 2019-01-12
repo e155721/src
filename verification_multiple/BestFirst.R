@@ -4,6 +4,8 @@ sys.source("verification_multiple/DelGap.R", envir = .myfunc.env)
 sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
+library(foreach)
+
 BestFirst <- function(wordList, p, s)
 {
   ## progressive alignmen
@@ -26,18 +28,23 @@ BestFirst <- function(wordList, p, s)
       break
     }
     
-    for (i in 1:N) {
+    aln.list <- foreach (i = 1:N) %dopar% {
       # remove ith sequence
       seq1 <- pa[drop = F, i, ]
-      seq2 <- as.matrix(pa[-i, ])
-      if (dim(seq2)[2] == 1) {
-        seq2 <- t(seq2)
-      }    
+      seq2 <- pa[drop = F, -i, ]
       
       # new pairwise alignment
-      aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
-      scoreVec[i] <- aln$score
-      paList[[i]] <- DelGap(aln$multi)
+      #aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
+      NeedlemanWunsch(seq1, seq2, p, p, s)
+      # scoreVec[i] <- aln$score
+      # paList[[i]] <- DelGap(aln$multi)
+    }
+    
+    for (i in 1:N) {
+      #scoreVec <- unlist(aln.list$score)
+      #paList <- DelGap(aln.list$multi)
+      scoreVec[i] <- aln.list[[i]]$score
+      paList[[i]] <- DelGap(aln.list[[i]]$multi)
     }
     
     scoreInd <- grep(scoreVec, pattern = max(scoreVec))
@@ -47,7 +54,7 @@ BestFirst <- function(wordList, p, s)
     # refine score
     if (afterScore > beforeScore) {
       count <- count + 1
-      pa <- paList[[scoreInd]]
+      pa <- DelGap(paList[[scoreInd]])
       beforeScore <- afterScore
     } else {
       break
