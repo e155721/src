@@ -14,14 +14,6 @@ seq2 <- wordList[[3]]
 
 scoringMatrix <- MakeFeatureMatrix(-10, -3)
 p <- -3
-m <- NeedlemanWunsch(seq1, seq1, s = scoringMatrix, p, p)
-tmp(m$multi)
-
-m <- NeedlemanWunsch(m$multi, seq1, s = scoringMatrix, p, p)
-tmp(m$multi)
-
-m <- NeedlemanWunsch(m$multi, seq1, s = scoringMatrix, p, p)
-tmp(m$multi)
 
 wl.len <- length(wordList)
 seq1 <- NeedlemanWunsch(wordList[[1]], wordList[[2]], s = scoringMatrix, p, p)
@@ -32,4 +24,3 @@ for (i in 3:wl.len) {
   print(seq1$multi)
 }
 print(seq1$score)
-tmp(seq1$multi)
