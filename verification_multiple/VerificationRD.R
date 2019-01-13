@@ -33,5 +33,8 @@ VerificationRD <- function(inFile, corFile, p, scoringMatrix)
   }
   
   matchingRate <- (count/nrow)*100
+  if (matchingRate == 0) {
+    write.table(paMat, paste(basename(inFile), ".rd", sep = ""))
+  }
   return(matchingRate)
 }

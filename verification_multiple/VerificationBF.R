@@ -34,7 +34,7 @@ VerificationBF <- function(inFile, corFile, p, scoringMatrix)
   
   matchingRate <- (count/nrow)*100
   if (matchingRate == 0) {
-    write.table(paMat, basename(inFile))
+    write.table(paMat, paste(basename(inFile), ".bf", sep = ""))
   }
   return(matchingRate)
 }
