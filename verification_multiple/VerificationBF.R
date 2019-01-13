@@ -33,5 +33,8 @@ VerificationBF <- function(inFile, corFile, p, scoringMatrix)
   }
   
   matchingRate <- (count/nrow)*100
+  if (matchingRate == 0) {
+    write.table(paMat, basename(inFile))
+  }
   return(matchingRate)
 }
