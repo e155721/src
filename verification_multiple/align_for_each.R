@@ -26,7 +26,7 @@ MPA <- function(f, method, output, p, s)
   sink()
 }
 
-verif <- function(method, output = "multi_test.txt", p = -3)
+verif <- function(method, output = "multi_test.txt", p = -3, words = NA)
 {
   # make scoring matrix and gap penalty
   s <- MakeFeatureMatrix(-10, p)
@@ -34,6 +34,11 @@ verif <- function(method, output = "multi_test.txt", p = -3)
   # get the all of files path
   filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                             correctDir = "../Alignment/correct_data/")
+  
+  # decide the number of words
+  if (!is.na(words)) {
+    filesPath <- filesPath[1:words]
+  }
   
   # alignment for each
   msa.list <- foreach (f = filesPath) %dopar% {
