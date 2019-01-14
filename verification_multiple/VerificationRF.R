@@ -12,11 +12,11 @@ VerificationRF <- function(inFile, corFile, p, s, words)
   if (!is.na(words)) {
     sink(paste("rf-", words, ".time", sep = ""), append = T)
     tic(basename(inFile))
-    paMat <- BestFirst(wordList, p, s)
+    paMat <- RemoveFirst(wordList, p, s)
     toc()
     sink()
   } else {
-    paMat <- BestFirst(wordList, p, s)
+    paMat <- RemoveFirst(wordList, p, s)
   }
   
   # make the correct words matrix

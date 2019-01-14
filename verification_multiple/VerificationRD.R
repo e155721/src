@@ -12,11 +12,11 @@ VerificationRD <- function(inFile, corFile, p, s)
   if (!is.na(words)) {
     sink(paste("rd-", words, ".time", sep = ""), append = T)
     tic(basename(inFile))
-    paMat <- BestFirst(wordList, p, s)
+    paMat <- Random(wordList, p, s)
     toc()
     sink()
   } else {
-    paMat <- BestFirst(wordList, p, s)
+    paMat <- Random(wordList, p, s)
   }
   
   # make the correct words matrix
