@@ -1,9 +1,9 @@
-.myfunc.env = new.env()
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-sys.source("verification_multiple/Random.R", envir = .myfunc.env)
-attach(.myfunc.env)
 
-VerificationRD <- function(inFile, corFile, p, s)
+source("data_processing/MakeWordList.R")
+source("verification_multiple/Random.R")
+
+
+VerificationRD <- function(inFile, corFile, p, s, words)
 {
   wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList)
