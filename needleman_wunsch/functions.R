@@ -94,8 +94,8 @@ D <-
               d <- c(NA, NA)
               d[1] <- max(d1, d2, d3)
               
-              lenSeq1 <- length(self$seq1)
-              lenSeq2 <- length(self$seq2)
+              lenSeq1 <- dim(self$seq1)[2]
+              lenSeq2 <- dim(self$seq2)[2]
               
               if (lenSeq1 <= lenSeq2) {
                 if (d[1] == d3) {
