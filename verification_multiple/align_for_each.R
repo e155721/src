@@ -12,13 +12,13 @@ library(foreach)
 library(doParallel)
 registerDoParallel(detectCores())
 
-MPA <- function(f, method, output, p, s)
+MPA <- function(f, method, output, p, s, words)
 {
   switch (method,
-          "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s),
-          "rf" = matchingRate <- VerificationRF(f[["input"]], f[["correct"]], p, s),
-          "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s),
-          "rd" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s)
+          "pa" = matchingRate <- VerificationPA(f[["input"]], f[["correct"]], p, s, words),
+          "rf" = matchingRate <- VerificationRF(f[["input"]], f[["correct"]], p, s, words),
+          "bf" = matchingRate <- VerificationBF(f[["input"]], f[["correct"]], p, s, words),
+          "rd" = matchingRate <- VerificationRD(f[["input"]], f[["correct"]], p, s, words)
   )
   
   sink(output, append = T)
@@ -42,7 +42,7 @@ verif <- function(method, output = "multi_test.txt", p = -3, words = NA)
   
   # alignment for each
   msa.list <- foreach (f = filesPath) %dopar% {
-    MPA(f, method, output, p, s)
+    MPA(f, method, output, p, s, words)
   }
   
 }

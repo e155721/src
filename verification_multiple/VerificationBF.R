@@ -3,11 +3,23 @@ sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 sys.source("verification_multiple/BestFirst.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-VerificationBF <- function(inFile, corFile, p, scoringMatrix)
+library(tictoc)
+
+VerificationBF <- function(inFile, corFile, p, s, words)
 {
   wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList)
-  paMat <- BestFirst(wordList, p, scoringMatrix)
+  
+  # output the time of MSA execution
+  if (!is.na(words)) {
+    sink(paste("bf-", words, ".time", sep = ""), append = T)
+    tic(basename(inFile))
+    paMat <- BestFirst(wordList, p, s)
+    toc()
+    sink()
+  } else {
+    paMat <- BestFirst(wordList, p, s)
+  }
   
   # make the correct words matrix
   corWordList <- MakeWordList(corFile)

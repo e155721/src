@@ -3,11 +3,21 @@ sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 sys.source("verification_multiple/RemoveFirst.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-VerificationRF <- function(inFile, corFile, p, scoringMatrix)
+VerificationRF <- function(inFile, corFile, p, s, words)
 {
   wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList)
-  paMat <- RemoveFirst(wordList, p, scoringMatrix)
+  
+  # output the time of MSA execution
+  if (!is.na(words)) {
+    sink(paste("rf-", words, ".time", sep = ""), append = T)
+    tic(basename(inFile))
+    paMat <- BestFirst(wordList, p, s)
+    toc()
+    sink()
+  } else {
+    paMat <- BestFirst(wordList, p, s)
+  }
   
   # make the correct words matrix
   corWordList <- MakeWordList(corFile)

@@ -3,11 +3,21 @@ sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
 sys.source("verification_multiple/Random.R", envir = .myfunc.env)
 attach(.myfunc.env)
 
-VerificationRD <- function(inFile, corFile, p, scoringMatrix)
+VerificationRD <- function(inFile, corFile, p, s)
 {
   wordList <- MakeWordList(inFile)
   lenWordList <- length(wordList)
-  paMat <- Random(wordList, p, scoringMatrix)
+  
+  # output the time of MSA execution
+  if (!is.na(words)) {
+    sink(paste("rd-", words, ".time", sep = ""), append = T)
+    tic(basename(inFile))
+    paMat <- BestFirst(wordList, p, s)
+    toc()
+    sink()
+  } else {
+    paMat <- BestFirst(wordList, p, s)
+  }
   
   # make the correct words matrix
   corWordList <- MakeWordList(corFile)
