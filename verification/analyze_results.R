@@ -1,6 +1,6 @@
 .myfunc.env <- new.env()
-sys.source("verification/plot_functions.R", envir = .myfunc.env)
-attach(.myfunc.env)
+source("verification/plot_functions.R")
+
 
 # make the list for each file in all directories
 dirPath <- "../Alignment/ex-11_26/gap/"

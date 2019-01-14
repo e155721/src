@@ -1,8 +1,8 @@
-.myfunc.env = new.env()
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
-sys.source("verification_multiple/MakeCorMat.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("data_processing/MakeWordList.R")
+source("verification_multiple/ProgressiveAlignment.R")
+source("verification_multiple/MakeCorMat.R")
+
 
 VerificationPA <- function(inFile, corFile, p, scoringMatrix)
 {

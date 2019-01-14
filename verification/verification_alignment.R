@@ -1,11 +1,11 @@
 .myfunc.env <- new.env()
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-sys.source("data_processing/RemkSeq.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
-sys.source("verification/GetFilesPath.R", envir = .myfunc.env)
-sys.source("verification/ForEachRegion.R", envir = .myfunc.env)
-attach(.myfunc.env)
+source("data_processing/MakeWordList.R")
+source("data_processing/RemkSeq.R")
+source("needleman_wunsch/NeedlemanWunsch.R")
+source("needleman_wunsch/MakeFeatureMatrix.R")
+source("verification/GetFilesPath.R")
+source("verification/ForEachRegion.R")
+
 
 # get the all of files path
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",

@@ -1,6 +1,6 @@
-.myfunc.env = new.env()
-sys.source("needleman_wunsch/functions.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("needleman_wunsch/functions.R")
+
 
 NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
 {

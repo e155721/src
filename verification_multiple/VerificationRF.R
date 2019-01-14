@@ -1,7 +1,7 @@
-.myfunc.env = new.env()
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-sys.source("verification_multiple/RemoveFirst.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("data_processing/MakeWordList.R")
+source("verification_multiple/RemoveFirst.R")
+
 
 VerificationRF <- function(inFile, corFile, p, s, words)
 {

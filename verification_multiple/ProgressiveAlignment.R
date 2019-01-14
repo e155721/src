@@ -1,8 +1,8 @@
-.myfunc.env = new.env()
-sys.source("needleman_wunsch/functions.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-sys.source("verification_multiple/DelGap.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("needleman_wunsch/functions.R")
+source("needleman_wunsch/NeedlemanWunsch.R")
+source("verification_multiple/DelGap.R")
+
 
 ProgressiveAlignment <- function(wordList, p, s)
 {

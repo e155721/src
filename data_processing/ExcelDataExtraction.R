@@ -1,6 +1,6 @@
-.myfunc.env = new.env()
-sys.source("data_processing/FormatData.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("data_processing/FormatData.R")
+
 
 # load libraries
 library(openxlsx)

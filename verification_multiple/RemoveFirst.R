@@ -1,8 +1,8 @@
-.myfunc.env = new.env()
-sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
-sys.source("verification_multiple/DelGap.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("verification_multiple/ProgressiveAlignment.R")
+source("verification_multiple/DelGap.R")
+source("needleman_wunsch/NeedlemanWunsch.R")
+
 
 RemoveFirst <- function(wordList, p, s)
 {

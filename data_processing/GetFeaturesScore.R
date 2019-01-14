@@ -1,6 +1,6 @@
 .myfunc.env <- new.env()
-sys.source("data_processing/MakeFeatureList.R", envir = .myfunc.env)
-attach(.myfunc.env)
+source("data_processing/MakeFeatureList.R")
+
 
 # This function return a value that it type is vector
 GetFeaturesScore <- function(consonant_file = "../Feature_Data/feature/母音入力数値一覧",

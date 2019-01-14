@@ -1,9 +1,9 @@
 .myfunc.env <- new.env()
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/MakeScoringMatrix.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
-attach(.myfunc.env)
+source("data_processing/MakeWordList.R")
+source("needleman_wunsch/NeedlemanWunsch.R")
+source("needleman_wunsch/MakeScoringMatrix.R")
+source("needleman_wunsch/MakeFeatureMatrix.R")
+
 
 executeNwunsch <- function(input_path = "../Alignment/input_data/", 
                            output_path = "../Alignment/align_data/",

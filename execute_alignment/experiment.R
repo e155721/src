@@ -1,6 +1,6 @@
 .myfunc.env <- new.env()
-sys.source("../src/data_processing/getFeaturesScore.R", envir = .myfunc.env)
-attach(.myfunc.env)
+source("../src/data_processing/getFeaturesScore.R")
+
 
 score_symbols <- getFeaturesScore()
 scoring_matrix <- MakeScoringMatrix(s5 = -4)

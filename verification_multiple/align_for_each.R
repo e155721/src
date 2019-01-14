@@ -1,12 +1,12 @@
-.myfunc.env = new.env()
-sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
-sys.source("verification/GetFilesPath.R", envir = .myfunc.env)
-sys.source("verification_multiple/ProgressiveAlignment.R", envir = .myfunc.env)
-sys.source("verification_multiple/VerificationPA.R", envir = .myfunc.env)
-sys.source("verification_multiple/VerificationRF.R", envir = .myfunc.env)
-sys.source("verification_multiple/VerificationBF.R", envir = .myfunc.env)
-sys.source("verification_multiple/VerificationRD.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("needleman_wunsch/MakeFeatureMatrix.R")
+source("verification/GetFilesPath.R")
+source("verification_multiple/ProgressiveAlignment.R")
+source("verification_multiple/VerificationPA.R")
+source("verification_multiple/VerificationRF.R")
+source("verification_multiple/VerificationBF.R")
+source("verification_multiple/VerificationRD.R")
+
 
 library(foreach)
 library(doParallel)

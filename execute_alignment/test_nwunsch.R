@@ -1,9 +1,9 @@
-.myfunc.env = new.env()
-sys.source("needleman_wunsch/functions.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("needleman_wunsch/functions.R")
+source("needleman_wunsch/NeedlemanWunsch.R")
+source("needleman_wunsch/MakeFeatureMatrix.R")
+source("data_processing/MakeWordList.R")
+
 
 wordList <- MakeWordList("../Alignment/input_data/005.dat")
 wordList <- MakeWordList("../Alignment/input_data/018.dat")

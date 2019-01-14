@@ -1,8 +1,8 @@
-.myfunc.env = new.env()
-sys.source("needleman_wunsch/NeedlemanWunsch.R", envir = .myfunc.env)
-sys.source("needleman_wunsch/MakeFeatureMatrix.R", envir = .myfunc.env)
-sys.source("data_processing/MakeWordList.R", envir = .myfunc.env)
-attach(.myfunc.env)
+
+source("needleman_wunsch/NeedlemanWunsch.R")
+source("needleman_wunsch/MakeFeatureMatrix.R")
+source("data_processing/MakeWordList.R")
+
 
 ExecutePairWise <- function(inputFile, s5, p1, p2)
 {
