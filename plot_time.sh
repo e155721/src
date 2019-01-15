@@ -4,6 +4,7 @@ gnuplot <<EOF
 set term "svg"
 set output "hoge.svg"
 set key top left
+set xrange [10:110]
 
 set xlabel 'Words'
 set ylabel 'Time (s)'
