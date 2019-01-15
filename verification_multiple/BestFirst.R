@@ -1,10 +1,10 @@
-
 source("verification_multiple/ProgressiveAlignment.R")
 source("verification_multiple/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
-
 library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
 
 BestFirst <- function(wordList, p, s)
 {
