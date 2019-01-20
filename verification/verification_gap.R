@@ -23,7 +23,8 @@ digits <- 2
 lenGapVec <- length(gapVec)
 lenMisVec <- length(misVec)
 
-for (p in gapVec) {
+# for (p in gapVec) {
+pairwise <- foreach (p == gapVec) %dopar% {
   
   output_path <- "../Alignment/gap_"
   output_path <- paste(output_path, formatC(p, width = digits, flag = 0), "/", sep = "")
