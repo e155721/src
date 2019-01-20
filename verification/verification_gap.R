@@ -1,4 +1,3 @@
-.myfunc.env <- new.env()
 source("data_processing/MakeWordList.R")
 source("data_processing/RemkSeq.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
@@ -14,8 +13,8 @@ registerDoParallel(detectCores())
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-gapVec <- 3:5
-misVec <- 1:15
+gapVec <- -1:-20
+misVec <- -1:-20
 # gapVec <- 1:10
 # misVec <- 1:10
 digits <- 2
@@ -24,7 +23,7 @@ lenGapVec <- length(gapVec)
 lenMisVec <- length(misVec)
 
 # for (p in gapVec) {
-pairwise <- foreach (p == gapVec) %dopar% {
+pairwise <- foreach (p = gapVec) %dopar% {
   
   output_path <- "../Alignment/gap_"
   output_path <- paste(output_path, formatC(p, width = digits, flag = 0), "/", sep = "")
@@ -66,7 +65,8 @@ pairwise <- foreach (p == gapVec) %dopar% {
       corRegions <- length(correct)
       
       # conduct the alignment for each region
-      ForEachRegion(correct, wordList, -p, scoringMatrix,
+      # ForEachRegion(correct, wordList, -p, scoringMatrix,
+      ForEachRegion(f, correct, wordList, p, scoringMatrix,
                     ansratePath, comparePath, regions, comparison = F)
     }
   }

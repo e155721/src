@@ -1,4 +1,4 @@
-ForEachRegion <- function(correct, wordList, p, scoringMatrix,
+ForEachRegion <- function(f, correct, wordList, p, scoringMatrix,
                           ansratePath, comparePath, regions, comparison = F)
 {
   l <- 2
