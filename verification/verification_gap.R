@@ -6,6 +6,9 @@ source("needleman_wunsch/MakeFeatureMatrix.R")
 source("verification/GetFilesPath.R")
 source("verification/ForEachRegion.R")
 
+library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
 
 # get the all of files path
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
@@ -34,7 +37,7 @@ for (p in gapVec) {
     s5 <- -mis
     
     # make scoring matrix
-    scoringMatrix <- MakeFeatureMatrix(s5)
+    scoringMatrix <- MakeFeatureMatrix(s5, p)
     
     # make the output paths
     ansratePath <- paste(output_path, "ansrate-", 
@@ -58,8 +61,8 @@ for (p in gapVec) {
       cat("\n")
       
       # get the number of the regions
-      regions <- length(wordList$vec)
-      corRegions <- length(correct$vec)
+      regions <- length(wordList)
+      corRegions <- length(correct)
       
       # conduct the alignment for each region
       ForEachRegion(correct, wordList, -p, scoringMatrix,
