@@ -43,7 +43,7 @@ VerificationRD <- function(inFile, corFile, p, s, words)
   }
   
   matchingRate <- (count/nrow)*100
-  if (matchingRate == 0) {
+  if (matchingRate != 100) {
     write.table(paMat, paste(basename(inFile), ".", p, ".rd", sep = ""))
   }
   return(matchingRate)
