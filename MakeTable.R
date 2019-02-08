@@ -17,14 +17,16 @@ MakeTable <- function(file1, file2)
   lg.list <- list()
   
   # file1
+  num <- 1
   f1<-file(file1, "r")
   for(i in 1:lines1[[1]]){
     line <- readLines(con=f1, 1)
     
     if (line == "")
-      nw <- append(nw, " ", after = length(nw))
+      nw <- append(nw, "¥", after = length(nw))
     else {
-      nw <- append(nw, line, after = length(nw))
+      nw <- append(nw, paste("¥", num, line), after = length(nw))
+      num <- num + 1
     }
     
   }
@@ -60,7 +62,6 @@ MakeTable <- function(file1, file2)
   sink()
   
 }
-
 
 dir <- "/Users/e155721/OkazakiLab/Experiment/Alignment/msa_mismatch-02_02"
 files.rf <- list.files(dir, ".rf")
