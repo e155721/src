@@ -38,17 +38,17 @@ pairwise <- foreach (p = gapVec) %dopar% {
     scoringMatrix <- MakeFeatureMatrix(s5, p)
     
     # make the output paths
-    ansratePath <- paste(output_path, "ansrate-", 
+    ansratePath <- paste(output_path, "ansrate", 
                          formatC(mis, width = digits, flag = 0), ".txt", sep = "") 
-    comparePath <- paste(output_path, "compare-", 
+    comparePath <- paste(output_path, "compare", 
                          formatC(mis, width = digits, flag = 0), ".txt", sep = "")
     comparePath <- F
     
     # conduct the alignment for each files
     for (f in filesPath) {
       # display the progress
-      print(paste("Whole Progress:", (p/tail(gapVec, n = 1))*100, sep = " "))
-      print(paste("Progress:", (mis/tail(misVec, n = 1))*100, sep = " "))
+      # print(paste("Whole Progress:", (p/tail(gapVec, n = 1))*100, sep = " "))
+      # print(paste("Progress:", (mis/tail(misVec, n = 1))*100, sep = " "))
       
       # make the word list
       wordList <- MakeWordList(f["input"])
