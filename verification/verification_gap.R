@@ -13,10 +13,8 @@ registerDoParallel(detectCores())
 filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
                           correctDir = "../Alignment/correct_data/")
 
-gapVec <- -1:-20
-misVec <- -1:-20
-# gapVec <- 1:10
-# misVec <- 1:10
+gapVec <- -1:-15
+misVec <- -1:-15
 digits <- 2
 
 lenGapVec <- length(gapVec)
@@ -34,7 +32,7 @@ pairwise <- foreach (p = gapVec) %dopar% {
   
   # constant penalty
   for (mis in misVec) {
-    s5 <- -mis
+    s5 <- mis
     
     # make scoring matrix
     scoringMatrix <- MakeFeatureMatrix(s5, p)
