@@ -42,7 +42,6 @@ pairwise <- foreach (p = gapVec) %dopar% {
                          formatC(-mis, width = digits, flag = 0), ".txt", sep = "") 
     comparePath <- paste(output_path, "compare-", 
                          formatC(-mis, width = digits, flag = 0), ".txt", sep = "")
-    comparePath <- F
     
     # conduct the alignment for each files
     for (f in filesPath) {
