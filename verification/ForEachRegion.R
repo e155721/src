@@ -17,17 +17,13 @@ ForEachRegion <- function(f, correct, wordList, p, scoringMatrix,
           sink(comparePath, append = T)
           # by The Linguists
           cat("\n")
-          print(c(correct[[k]],
-                  paste(correctMat[1, ], collapse = " ")))
-          print(c(correct[[i]],
-                  paste(correctMat[2, ], collapse = " ")))
+          print(paste(correctMat[1, ], collapse = " "))
+          print(paste(correctMat[2, ], collapse = " "))
           
           # by The Needleman-Wunsch
           cat("\n")
-          print(c(wordList[[k]], 
-                  paste(align$seq1, collapse = " ")))
-          print(c(wordList[[i]],
-                  paste(align$seq2, collapse = " ")))
+          print(paste(align$seq1, collapse = " "))
+          print(paste(align$seq2, collapse = " "))
           sink()
         }
       } else {
