@@ -24,7 +24,7 @@ lenMisVec <- length(misVec)
 pairwise <- foreach (p = gapVec) %dopar% {
   
   output_path <- "../Alignment/gap_"
-  output_path <- paste(output_path, formatC(p, width = digits, flag = 0), "/", sep = "")
+  output_path <- paste(output_path, formatC(-p, width = digits, flag = 0), "/", sep = "")
   print(output_path)
   if (!dir.exists(output_path)) {
     dir.create(output_path)
@@ -38,10 +38,10 @@ pairwise <- foreach (p = gapVec) %dopar% {
     scoringMatrix <- MakeFeatureMatrix(s5, p)
     
     # make the output paths
-    ansratePath <- paste(output_path, "ansrate", 
-                         formatC(mis, width = digits, flag = 0), ".txt", sep = "") 
-    comparePath <- paste(output_path, "compare", 
-                         formatC(mis, width = digits, flag = 0), ".txt", sep = "")
+    ansratePath <- paste(output_path, "ansrate-", 
+                         formatC(-mis, width = digits, flag = 0), ".txt", sep = "") 
+    comparePath <- paste(output_path, "compare-", 
+                         formatC(-mis, width = digits, flag = 0), ".txt", sep = "")
     comparePath <- F
     
     # conduct the alignment for each files
