@@ -1,4 +1,4 @@
-ForEachRegion <- function(correct, wordList, p, scoringMatrix,
+ForEachRegion <- function(f, correct, wordList, p, scoringMatrix,
                           ansratePath, comparePath, regions, comparison = F)
 {
   l <- 2
@@ -6,8 +6,9 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
   for (k in 1:(regions-1)) {
     # the start of the alignment for each the region pair
     for (i in l:regions) {
-      correctMat <- RemkSeq(correct$list[[k]], correct$list[[i]])
-      align <- NeedlemanWunsch(wordList$list[[k]], wordList$list[[i]], p, p, scoringMatrix)
+      correctMat <- RemkSeq(correct[[k]], correct[[i]])
+      align <- NeedlemanWunsch(as.matrix(wordList[[k]], drop = F), 
+                               as.matrix(wordList[[i]], drop = F), p, p, scoringMatrix)
       rltAln <- paste(paste(align$seq1, align$seq2, sep = ""), collapse = "")
       rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
       
@@ -16,17 +17,13 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
           sink(comparePath, append = T)
           # by The Linguists
           cat("\n")
-          print(c(correct$vec[k],
-                  paste(correctMat[1, ], collapse = " ")))
-          print(c(correct$vec[i],
-                  paste(correctMat[2, ], collapse = " ")))
+          print(paste(correctMat[1, ], collapse = " "))
+          print(paste(correctMat[2, ], collapse = " "))
           
           # by The Needleman-Wunsch
           cat("\n")
-          print(c(wordList$vec[k], 
-                  paste(align$seq1, collapse = " ")))
-          print(c(wordList$vec[i],
-                  paste(align$seq2, collapse = " ")))
+          print(paste(align$seq1, collapse = " "))
+          print(paste(align$seq2, collapse = " "))
           sink()
         }
       } else {
@@ -41,8 +38,7 @@ ForEachRegion <- function(correct, wordList, p, scoringMatrix,
   sink(ansratePath, append = T)
   allResions <- sum((regions-1):1)
   matchingRate <- count / allResions * 100
-  misMatchRate <- (allResions - count) / allResions * 100
-  rlt <- paste(f["name"], matchingRate, misMatchRate, sep = " ")
+  rlt <- paste(f["name"], matchingRate, sep = " ")
   print(rlt, quote = F)
   sink()
   
