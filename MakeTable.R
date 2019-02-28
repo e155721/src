@@ -45,13 +45,13 @@ MakeTable <- function(file1, file2)
   
   # file1
   nw.len <- length(nw)
-  for (j in 1:(nw.len-1))
+  for (j in 1:(nw.len))
     nw.list[[j]] <- matrix(unlist(strsplit(nw[j], split = " ")), nrow = 1)
   nw.mat <- list2mat(nw.list)
   
   # file2
   lg.len <- length(lg)
-  for (j in 1:(lg.len-1))
+  for (j in 1:(lg.len))
     lg.list[[j]] <- matrix(unlist(strsplit(lg[j], split = " ")), nrow = 1)
   lg.mat <- list2mat(lg.list)
   
@@ -63,7 +63,7 @@ MakeTable <- function(file1, file2)
   
 }
 
-dir <- "/Users/e155721/OkazakiLab/Experiment/Alignment/msa_mismatch-02_02"
+dir <- "/Users/e155721/OkazakiLab/Experiment/Alignment/ex-msa/msa_mismatch-02_11/dat/"
 files.rf <- list.files(dir, ".rf")
 files.lg <- list.files(dir, ".lg")
 
@@ -78,8 +78,8 @@ for (i in 1:len) {
   MakeTable(file1, file2)
 }
 
-if (0) {
-  dir <- "/Users/e155721/OkazakiLab/Experiment/Alignment/tmp/remove_dup/"
+if (1) {
+  dir <- "/Users/e155721/OkazakiLab/Experiment/Alignment/ex-pairwise/nw_mismatch/remove_dup/"
   files.nw <- list.files(dir, ".nw")
   files.lg <- list.files(dir, ".lg")
   
