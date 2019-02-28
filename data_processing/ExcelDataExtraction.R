@@ -1,6 +1,4 @@
-
 source("data_processing/FormatData.R")
-
 
 # load libraries
 library(openxlsx)
@@ -18,7 +16,7 @@ ExcelDataExtraction <- function(input_path = "../Data/fix_test_data.xlsm",
   sheet_names <- getSheetNames(input_path)
   sheet_names_length <- length(sheet_names)
   for (i in 1:sheet_names_length) {
-    sheet_names[i] <- gsub(" ", "", sheet_names[i])
+    sheet_names[i] <- gsub("*[ ]*", "", sheet_names[i])
   }
   
   # get the name symbols for each region
