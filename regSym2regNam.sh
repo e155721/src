@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-regions=($(</Users/e155721/OkazakiLab/Experiment/Alignment/regions))
-regionsName=($(</Users/e155721/OkazakiLab/Experiment/Alignment/regionsName))
+regions=($(</Users/e155721/OkazakiLab/Experiment/src/name_table/regions_sym))
+regionsName=($(</Users/e155721/OkazakiLab/Experiment/src/name_table/regions_name))
 
 for f in *
 do
