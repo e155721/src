@@ -29,7 +29,7 @@ FormatData <- function(sheet)
 }
 
 # ExcelDataExtraction
-ExcelDataExtraction <- function(input_path = "../Data/fix_test_data.xlsm",
+ExtractExcelData <- function(input_path = "../Data/fix_test_data.xlsm",
                                 output_path = "../Alignment/org_data/")
 {
   if (!dir.exists(output_path)) {
@@ -59,4 +59,4 @@ ExcelDataExtraction <- function(input_path = "../Data/fix_test_data.xlsm",
   }
 }
 
-ExcelDataExtraction()
+ExtractExcelData()
