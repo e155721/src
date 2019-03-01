@@ -1,4 +1,4 @@
-source("/Users/e155721/OkazakiLab/Experiment/src/data_processing/MakeWordList.R")
+source("data_processing/MakeWordList.R")
 
 MakeFeaturesValTable <- function(input_path = "../Data/test_data.xlsm",
                                     output_path = "features/")
