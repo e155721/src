@@ -1,12 +1,19 @@
 MakeFeatureMatrix <- function(s5 = NA, p = NA)
 {
+  
+  cSymFile <- "symbols/consonants"
+  vSymFile <- "symbols/vowels"
+  
+  cValFile <- "features/consonants_values"
+  vValFile <- "features/vowels_values"
+  
   ######
   # make consonant array
-  consonant <- as.matrix(read.table("symbols/consonant.txt"))
+  consonant <- as.matrix(read.table(cSymFile))
   consonant_length <- length(consonant)
   
   # make vowel array
-  vowel <- as.matrix(read.table("symbols/vowel.txt"))
+  vowel <- as.matrix(read.table(vSymFile))
   vowel_length <- length(vowel)
   
   # get the sum of length of consonant and vowel
@@ -23,7 +30,7 @@ MakeFeatureMatrix <- function(s5 = NA, p = NA)
   feature_matrix["-", "-"] <- 0
     
   # consonant feature
-  c_feature <- read.table("../Feature_Data/feature/子音入力数値一覧")
+  c_feature <- read.table(cValFile)
   k <- dim(c_feature)[[1]]
   l <- dim(c_feature)[[2]]
   
@@ -45,7 +52,7 @@ MakeFeatureMatrix <- function(s5 = NA, p = NA)
   }
   
   # vowel feature
-  v_feature <- read.table("../Feature_Data/feature/母音入力数値一覧")
+  v_feature <- read.table(vValFile)
   k <- dim(v_feature)[[1]]
   l <- dim(v_feature)[[2]]
   
