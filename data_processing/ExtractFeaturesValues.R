@@ -25,3 +25,5 @@ ExtractFeaturesValues <- function(input_path = "../Data/test_data.xlsm",
               row.names = F,
               col.names = F)
 }
+
+ExtractFeaturesValues()
