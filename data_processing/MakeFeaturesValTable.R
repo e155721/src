@@ -1,6 +1,6 @@
 source("data_processing/MakeWordList.R")
 
-ExtractFeaturesValues <- function(input_path = "../Data/test_data.xlsm",
+MakeFeaturesValTable <- function(input_path = "../Data/test_data.xlsm",
                                     output_path = "features/")
 {
   if (!dir.exists(output_path)) {
@@ -26,4 +26,4 @@ ExtractFeaturesValues <- function(input_path = "../Data/test_data.xlsm",
               col.names = F)
 }
 
-ExtractFeaturesValues()
+MakeFeaturesValTable()
