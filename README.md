@@ -1,2 +1,7 @@
-prepare_data.sh -> format_to_nwunsch.sh
-prepare_data.sh -> format_to_correct.sh
+1.
+ExtractExcelData.R
+MakeFeaturesValTable.R
+MakeWordTable.R
+
+2.
+prepare_data.sh
