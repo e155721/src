@@ -11,10 +11,10 @@ test <- function(file, method)
   s <- MakeFeatureMatrix(-10, p)
 
   switch(method,
-         "pa" = msa <- ProgressiveAlignment(wordList, p, s),
-         "rf" = msa <- RemoveFirst(wordList, p, s),
-         "bf" = msa <- BestFirst(wordList, p, s),
-         "rd" = msa <- Random(wordList, p, s)
+         "pa" = msa <- ProgressiveAlignment(wordList, s),
+         "rf" = msa <- RemoveFirst(wordList, s),
+         "bf" = msa <- BestFirst(wordList, s),
+         "rd" = msa <- Random(wordList, s)
   )
 
   return(msa)
