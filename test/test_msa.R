@@ -1,10 +1,8 @@
-source("data_processing/MakeFeatureList.R")
 source("data_processing/MakeWordList.R")
-source("verification_multiple/ProgressiveAlignment.R")
-source("verification_multiple/RemoveFirst.R")
-source("verification_multiple/BestFirst.R")
-source("verification_multiple/Random.R")
-source("verification_multiple/check_nwunsch.R")
+source("msa/ProgressiveAlignment.R")
+source("msa/RemoveFirst.R")
+source("msa/BestFirst.R")
+source("msa/Random.R")
 
 test <- function(file, method)
 {
@@ -21,3 +19,4 @@ test <- function(file, method)
 
   return(msa)
 }
+
