@@ -1,5 +1,5 @@
 source("data_processing/MakeWordList.R")
-source("verification/GetFilesPath.R")
+source("data_processing/GetFilesPath.R")
 source("verification/ForEachRegion.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 
