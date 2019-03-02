@@ -57,6 +57,8 @@ ExtractExcelData <- function(input_path = "../Data/fix_test_data.xlsm",
     write.table(sheet, paste(output_path, formatC(k, width = 3, flag = 0), ".org", sep = ""))
     k <- k + 1
   }
+  
+  return(0)
 }
 
 ExtractExcelData()

@@ -24,6 +24,8 @@ MakeFeaturesValTable <- function(input_path = "../Data/test_data.xlsm",
               paste(output_path, cName, sep = "/"),
               row.names = F,
               col.names = F)
+  
+  return(0)
 }
 
 MakeFeaturesValTable()
