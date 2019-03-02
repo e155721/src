@@ -17,3 +17,5 @@ MakeWordTable <- function(input_path = "../Data/fix_test_data.xlsm")
   
   return(0)
 }
+
+MakeWordTable()
