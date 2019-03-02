@@ -1,8 +1,6 @@
-
+source("data_processing/DelGap.R")
 source("needleman_wunsch/functions.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
-source("verification_multiple/DelGap.R")
-
 
 ProgressiveAlignment <- function(wordList, p, s)
 {
@@ -12,7 +10,7 @@ ProgressiveAlignment <- function(wordList, p, s)
   for (j in 1:(lenWordList-1)) {
     # the start of the alignment for each the region pair
     for (i in 1:lenWordList) {
-      align <- NeedlemanWunsch(wordList[[i]], wordList[[j]], p, p, s)
+      align <- NeedlemanWunsch(wordList[[i]], wordList[[j]], s)
       distMat[i, j] <- align$score
     }
   }
@@ -30,18 +28,18 @@ ProgressiveAlignment <- function(wordList, p, s)
     if (flg == 2) {
       seq1 <- gtree[i, 1] * -1
       seq2 <- gtree[i, 2] * -1
-      aln <- NeedlemanWunsch(wordList[[seq1]], wordList[[seq2]], p, p, s)
+      aln <- NeedlemanWunsch(wordList[[seq1]], wordList[[seq2]], s)
       progressive[[i]] <- DelGap(aln$multi)
     } 
     else if(flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
-      aln <- NeedlemanWunsch(progressive[[clt]], wordList[[seq2]], p, p, s)
+      aln <- NeedlemanWunsch(progressive[[clt]], wordList[[seq2]], s)
       progressive[[i]] <- DelGap(aln$multi)
     } else {
       clt1 <- gtree[i, 1]
       clt2 <- gtree[i, 2]
-      aln <- NeedlemanWunsch(progressive[[clt1]], progressive[[clt2]], p, p, s)
+      aln <- NeedlemanWunsch(progressive[[clt1]], progressive[[clt2]], s)
       progressive[[i]] <- DelGap(aln$multi)
     }
   }
