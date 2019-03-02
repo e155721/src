@@ -2,10 +2,10 @@ source("msa/ProgressiveAlignment.R")
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
-Random <- function(wordList, p, s)
+Random <- function(wordList, s)
 {
   ## progressive alignmen
-  paRlt <- ProgressiveAlignment(wordList, p, s)
+  paRlt <- ProgressiveAlignment(wordList, s)
   pa <- paRlt$multi
   beforeScore <- paRlt$score
   
@@ -19,7 +19,7 @@ Random <- function(wordList, p, s)
   
   i <- 0
   while (1) {
-  
+    
     # exit condition  
     if (i == M) break
     if (count == max) break

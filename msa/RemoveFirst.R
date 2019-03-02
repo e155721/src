@@ -2,10 +2,10 @@ source("msa/ProgressiveAlignment.R")
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
-RemoveFirst <- function(wordList, p, s)
+RemoveFirst <- function(wordList, s)
 {
   ## progressive alignmen
-  paRlt <- ProgressiveAlignment(wordList, p, s)
+  paRlt <- ProgressiveAlignment(wordList, s)
   pa <- paRlt$multi
   beforeScore <- paRlt$score
   
