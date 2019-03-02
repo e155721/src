@@ -1,21 +1,17 @@
-
 source("needleman_wunsch/functions.R")
 
-
-NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
+NeedlemanWunsch <- function(seq1, seq2, s)
 {
   # initialize variable
   g1 <- matrix("-", nrow = dim(seq1)[1])
   g2 <- matrix("-", nrow = dim(seq2)[1])
   
-  # seq1 <- cbind(na1, seq1)
-  # seq2 <- cbind(na2, seq2)
   D <- D$new(seq1, seq2, s)
   
   # calculate matrix for sequence alignment
   mat <- makeMatrix(seq1, seq2)
   mat <- initializeMat(mat, seq1, seq2, g1, g2, s)
-
+  
   rowLen <- dim(seq1)[2]
   colLen <- dim(seq2)[2]
   
@@ -26,7 +22,7 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
       mat[i, j, 2] <- d[2]
     }
   }
-    
+  
   # trace back
   score <- traceVec <- c() 
   i <- rowLen
@@ -83,9 +79,6 @@ NeedlemanWunsch <- function(seq1, seq2, p1 = -1, p2 = -1, s)
       j <- j + 1
     }
   }
-  #print(mat)
-  #print(seq1)
-  #print(seq2)
   
   align <- list(NA, NA, NA, NA)
   names(align) <- c("seq1", "seq2", "multi", "score")
