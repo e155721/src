@@ -1,8 +1,6 @@
-
 source("verification_multiple/ProgressiveAlignment.R")
-source("verification_multiple/DelGap.R")
+source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
-
 
 Random <- function(wordList, p, s)
 {
@@ -32,7 +30,7 @@ Random <- function(wordList, p, s)
     seq2 <- matrix(pa[R:M, ], M-(R-1), N)
     
     # new pairwise alignment
-    aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
+    aln <- NeedlemanWunsch(seq1, seq2, s)
     newPa <- DelGap(aln$multi)
     afterScore <- aln$score
     

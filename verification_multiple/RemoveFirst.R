@@ -1,8 +1,6 @@
-
 source("verification_multiple/ProgressiveAlignment.R")
-source("verification_multiple/DelGap.R")
+source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
-
 
 RemoveFirst <- function(wordList, p, s)
 {
@@ -28,7 +26,7 @@ RemoveFirst <- function(wordList, p, s)
     }    
     
     # new pairwise alignment
-    aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
+    aln <- NeedlemanWunsch(seq1, seq2, s)
     newPa <- DelGap(aln$multi)
     afterScore <- aln$score
     

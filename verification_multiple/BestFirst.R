@@ -1,5 +1,5 @@
 source("verification_multiple/ProgressiveAlignment.R")
-source("verification_multiple/DelGap.R")
+source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
 library(foreach)
@@ -35,7 +35,7 @@ BestFirst <- function(wordList, p, s)
       
       # new pairwise alignment
       #aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
-      NeedlemanWunsch(seq1, seq2, p, p, s)
+      NeedlemanWunsch(seq1, seq2, s)
       # scoreVec[i] <- aln$score
       # paList[[i]] <- DelGap(aln$multi)
     }

@@ -1,7 +1,5 @@
-
 source("data_processing/MakeWordList.R")
 source("verification_multiple/RemoveFirst.R")
-
 
 VerificationRF <- function(inFile, corFile, p, s, words)
 {
