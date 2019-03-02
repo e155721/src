@@ -1,7 +1,5 @@
-
 source("data_processing/MakeWordList.R")
-source("verification_multiple/Random.R")
-
+source("msa/Random.R")
 
 VerificationRD <- function(inFile, corFile, p, s, words)
 {

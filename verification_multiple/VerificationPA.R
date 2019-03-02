@@ -1,8 +1,6 @@
-
 source("data_processing/MakeWordList.R")
-source("verification_multiple/ProgressiveAlignment.R")
+source("msa/ProgressiveAlignment.R")
 source("verification_multiple/MakeCorMat.R")
-
 
 VerificationPA <- function(inFile, corFile, p, scoringMatrix)
 {

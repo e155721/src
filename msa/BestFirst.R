@@ -1,4 +1,4 @@
-source("verification_multiple/ProgressiveAlignment.R")
+source("msa/ProgressiveAlignment.R")
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 

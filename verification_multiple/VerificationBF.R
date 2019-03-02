@@ -1,7 +1,5 @@
-
 source("data_processing/MakeWordList.R")
-source("verification_multiple/BestFirst.R")
-
+source("msa/BestFirst.R")
 
 library(tictoc)
 

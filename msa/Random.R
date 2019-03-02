@@ -1,8 +1,8 @@
-source("verification_multiple/ProgressiveAlignment.R")
+source("msa/ProgressiveAlignment.R")
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
-RemoveFirst <- function(wordList, p, s)
+Random <- function(wordList, p, s)
 {
   ## progressive alignmen
   paRlt <- ProgressiveAlignment(wordList, p, s)
@@ -11,19 +11,23 @@ RemoveFirst <- function(wordList, p, s)
   
   ## iterative refinement
   # number of sequences
-  N <- dim(pa)[1]
+  M <- dim(pa)[1]
+  N <- dim(pa)[2]
   # exit condition
   count <- 0
-  max <- 2*N*N
+  max <- 2*M*M
   
-  i <- 1
-  while (i <= N) {
-    # remove ith sequence
-    seq1 <- pa[drop = F, i, ]
-    seq2 <- as.matrix(pa[-i, ])
-    if (dim(seq2)[2] == 1) {
-      seq2 <- t(seq2)
-    }    
+  i <- 0
+  while (1) {
+  
+    # exit condition  
+    if (i == M) break
+    if (count == max) break
+    
+    # separate msa
+    R <- floor(runif(1, min=2, max=M+1))
+    seq1 <- matrix(pa[1:R-1, ], R-1, N)
+    seq2 <- matrix(pa[R:M, ], M-(R-1), N)
     
     # new pairwise alignment
     aln <- NeedlemanWunsch(seq1, seq2, s)
@@ -34,15 +38,12 @@ RemoveFirst <- function(wordList, p, s)
     if (afterScore > beforeScore) {
       count <- count + 1
       pa <- newPa
+      N <- dim(pa)[2]
       beforeScore <- afterScore
     } else {
       i <- i + 1
     }
     
-    # exit condition
-    if (count == max) {
-      break
-    }
   }
   
   return(pa)
