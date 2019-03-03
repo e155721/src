@@ -1,6 +1,6 @@
 source("data_processing/MakeWordList.R")
 
-MakeFeaturesValTable <- function(input_path = "../Data/test_data.xlsm",
+MakeFeaturesValTable <- function(input_path = "../../Data/test_data.xlsm",
                                     output_path = "features/")
 {
   if (!dir.exists(output_path)) {

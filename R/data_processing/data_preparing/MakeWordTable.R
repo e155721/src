@@ -1,7 +1,7 @@
 # load libraries
 library(openxlsx)
 
-MakeWordTable <- function(input_path = "../Data/fix_test_data.xlsm")
+MakeWordTable <- function(input_path = "../../Data/fix_test_data.xlsm")
 {
   sheet_names <- getSheetNames(input_path)
   sheet_names <- sheet_names[-1:-5]

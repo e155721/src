@@ -29,8 +29,8 @@ FormatData <- function(sheet)
 }
 
 # ExcelDataExtraction
-ExtractExcelData <- function(input_path = "../Data/fix_test_data.xlsm",
-                                output_path = "../Alignment/org_data/")
+ExtractExcelData <- function(input_path = "../../Data/fix_test_data.xlsm",
+                                output_path = "../../Alignment/org_data/")
 {
   if (!dir.exists(output_path)) {
     dir.create(output_path)
