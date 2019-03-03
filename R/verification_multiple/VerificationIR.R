@@ -58,10 +58,20 @@ VerificationIR <- function(method, inFile, corFile, p, words)
     }
   }
   
+  outDir <- "msa_results"
+  if (!dir.exists(outDir)) {
+    dir.create(outDir)
+  }
+  
+  outDir <- paste(outDir, "/", method, "_p", p, sep = "")
+  if (!dir.exists(outDir)) {
+    dir.create(outDir)
+  }
+  
   matchingRate <- (count/nrow)*100
   if (matchingRate != 0) {
-    write.table(msa, paste(basename(inFile), ".", p, ".", method, sep = ""))
-    write.table(corMat, paste(basename(corFile), ".", p, ".", method, sep = ""))
+    write.table(msa, paste(outDir, "/", gsub("\\..*$", "", basename(inFile)), ".aln", sep = ""))
+    write.table(corMat, paste(outDir, "/", gsub("\\..*$", "", basename(corFile)), ".lg", sep = ""))
   }
   return(matchingRate)
 }
