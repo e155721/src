@@ -59,8 +59,9 @@ VerificationIR <- function(method, inFile, corFile, p, words)
   }
   
   matchingRate <- (count/nrow)*100
-  if (matchingRate == 0) {
+  if (matchingRate != 0) {
     write.table(msa, paste(basename(inFile), ".", p, ".", method, sep = ""))
+    write.table(corMat, paste(basename(corFile), ".", p, ".", method, sep = ""))
   }
   return(matchingRate)
 }

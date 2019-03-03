@@ -1,5 +1,5 @@
 source("needleman_wunsch/MakeFeatureMatrix.R")
-source("data_processing//GetFilesPath.R")
+source("data_processing/GetFilesPath.R")
 source("verification_multiple/VerificationIR.R")
 
 library(foreach)
