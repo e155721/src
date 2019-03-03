@@ -47,8 +47,7 @@ pairwise <- foreach (p = pVec) %dopar% {
     # conduct the alignment for each files
     for (f in filesPath) {
       
-      comparePath <- paste(output_compPath, "compare-", 
-                           gsub("\\..*$", "", f["name"]), ".txt", sep = "")
+      comparePath <- paste(output_compPath, "compare-", sep = "")
       
       # make the word list
       wordList <- MakeWordList(f["input"])
@@ -71,4 +70,3 @@ pairwise <- foreach (p = pVec) %dopar% {
     }
   }
 }
-

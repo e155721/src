@@ -18,13 +18,15 @@ ForEachRegion <- function(f, correct, wordList, s,
       
       if (rltAln != rltCor) {
         if (comparison) {
-          sink(comparePath, append = T)
           # by The Linguists
+          sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".lg", sep = ""), append = T)
           cat("\n")
           print(paste(correctMat[1, ], collapse = " "))
           print(paste(correctMat[2, ], collapse = " "))
+          sink()
           
           # by The Needleman-Wunsch
+          sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".aln", sep = ""), append = T)
           cat("\n")
           print(paste(align$seq1, collapse = " "))
           print(paste(align$seq2, collapse = " "))
