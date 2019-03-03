@@ -5,9 +5,9 @@ source("needleman_wunsch/MakeFeatureMatrix.R")
 source("data_processing/MakeWordList.R")
 
 
-wordList <- MakeWordList("../Alignment/input_data/005.dat")
-wordList <- MakeWordList("../Alignment/input_data/018.dat")
-wordList <- MakeWordList("../Alignment/input_data/001.dat")
+wordList <- MakeWordList("../../Alignment/input_data/005.dat")
+wordList <- MakeWordList("../../Alignment/input_data/018.dat")
+wordList <- MakeWordList("../../Alignment/input_data/001.dat")
 seq1 <- wordList[[1]]
 seq2 <- wordList[[2]]
 seq2 <- wordList[[3]]

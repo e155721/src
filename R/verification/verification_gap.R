@@ -8,8 +8,8 @@ library(doParallel)
 registerDoParallel(detectCores())
 
 # get the all of files path
-filesPath <- GetFilesPath(inputDir = "../Alignment/input_data/",
-                          correctDir = "../Alignment/correct_data/")
+filesPath <- GetFilesPath(inputDir = "../../Alignment/input_data/",
+                          correctDir = "../../Alignment/correct_data/")
 
 pVec <- -1:-15
 s5Vec <- -1:-15
