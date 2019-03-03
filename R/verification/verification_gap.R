@@ -21,8 +21,8 @@ lens5Vec <- length(s5Vec)
 # for (p in pVec) {
 pairwise <- foreach (p = pVec) %dopar% {
   
-  output_path <- "../Alignment/gap_"
-  output_compPath <- "../Alignment/comparison_"
+  output_path <- "../../Alignment/gap_"
+  output_compPath <- "../../Alignment/comparison_"
   
   output_path <- paste(output_path, formatC(-p, width = digits, flag = 0), "/", sep = "")
   print(output_path)
