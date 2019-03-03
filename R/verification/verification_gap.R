@@ -22,7 +22,7 @@ lens5Vec <- length(s5Vec)
 pairwise <- foreach (p = pVec) %dopar% {
   
   output_path <- "../../Alignment/gap_"
-  output_compPath <- "../../Alignment/comparison_"
+  comparePath <- "../../Alignment/comparison_"
   
   output_path <- paste(output_path, formatC(-p, width = digits, flag = 0), "/", sep = "")
   print(output_path)
@@ -30,15 +30,14 @@ pairwise <- foreach (p = pVec) %dopar% {
     dir.create(output_path)
   }
   
-  output_compPath <- paste(output_compPath, formatC(-p, width = digits, flag = 0), "/", sep = "")
-  print(output_compPath)
-  if (!dir.exists(output_compPath)) {
-    dir.create(output_compPath)
+  comparePath <- paste(comparePath, formatC(-p, width = digits, flag = 0), "/", sep = "")
+  print(comparePath)
+  if (!dir.exists(comparePath)) {
+    dir.create(comparePath)
   }
   
   # constant penalty
   for (s5 in s5Vec) {
-    #s5 <- s5
     
     # make the output paths
     ansratePath <- paste(output_path, "ansrate-", 
@@ -46,9 +45,7 @@ pairwise <- foreach (p = pVec) %dopar% {
     
     # conduct the alignment for each files
     for (f in filesPath) {
-      
-      comparePath <- paste(output_compPath, "compare-", sep = "")
-      
+            
       # make the word list
       wordList <- MakeWordList(f["input"])
       correct <- MakeWordList(f["correct"])
