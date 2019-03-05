@@ -9,8 +9,7 @@ registerDoParallel(detectCores())
 verif <- function(method, output = "multi_test.txt", p = -3, words = NA)
 {
   # get the all of files path
-  filesPath <- GetPathList(inputDir = "../../Alignment/input_data/",
-                            correctDir = "../../Alignment/correct_data/")
+  filesPath <- GetPathList()
   
   # decide the number of words
   if (!is.na(words)) {

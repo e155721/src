@@ -1,4 +1,4 @@
-source("verification/GetFilesPath.R")
+source("verification/GetPathList.R")
 
 # make data files to plot graphs by gnuplot
 MakeData <- function(files, xrange, output)
@@ -14,11 +14,11 @@ MakeData <- function(files, xrange, output)
   return(0)
 }
 
-files <- GetFilesPath("../Alignment/ex-pairwise/ex-12_03/gap/gap_01-10/gap_03/")
+files <- GetPathList("../Alignment/ex-pairwise/ex-12_03/gap/gap_01-10/gap_03/")
 xrange <- seq(-1,-10,-1)
 #MakeData(files, xrange, "gap_03.ave")
 MakeData(files, xrange, "gap_05.ave")
 
-files <- GetFilesPath("../Alignment/ex-pairwise/ex-12_03/gap/gap_03-15/gap_05/")
+files <- GetPathList("../Alignment/ex-pairwise/ex-12_03/gap/gap_03-15/gap_05/")
 xrange <- seq(-1,-15,-1)
 MakeData(files, xrange, "gap_05.ave")

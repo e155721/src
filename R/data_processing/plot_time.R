@@ -7,7 +7,7 @@ dir_rd <- "../Alignment/ex-msa/ex-01_13/ex-time/rd_time/"
 
 GetTime <- function(dir, words.vec)
 {
-  files <- GetFilesPath(dir)
+  files <- GetPathList(dir)
   time.vec <- c()
   i <- 0
   for (f in files) {

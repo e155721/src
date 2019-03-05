@@ -1,4 +1,4 @@
-source("verification_multiple/VerifForEeach.R")
+source("verification_multiple/VerifForEach.R")
 
 methods <- c("rf", "bf", "rd")
 for (method in methods) {

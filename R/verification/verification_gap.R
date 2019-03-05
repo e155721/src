@@ -1,5 +1,5 @@
 source("data_processing/MakeWordList.R")
-source("data_processing/GetFilesPath.R")
+source("data_processing/GetPathList.R")
 source("verification/ForEachRegion.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 
@@ -8,8 +8,7 @@ library(doParallel)
 registerDoParallel(detectCores())
 
 # get the all of files path
-filesPath <- GetFilesPath(inputDir = "../../Alignment/input_data/",
-                          correctDir = "../../Alignment/correct_data/")
+filesPath <- GetPathList()
 
 pVec <- -1:-15
 s5Vec <- -1:-15
