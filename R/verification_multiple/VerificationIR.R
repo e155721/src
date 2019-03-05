@@ -1,4 +1,5 @@
 source("data_processing/MakeWordList.R")
+source("data_processing/list2mat.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("msa/RemoveFirst.R")
 source("msa/BestFirst.R")
@@ -37,19 +38,15 @@ VerificationIR <- function(method, inFile, corFile, p, words)
   
   # make the correct words matrix
   corWordList <- MakeWordList(corFile)
-  nrow <- length(corWordList)
-  ncol <- dim(corWordList[[1]])[2]
-  corMat <- matrix(NA, nrow, ncol)
-  for (i in 1:nrow) {
-    corMat[i, ] <- corWordList[[i]]
-  }
-  
+  corMat <- list2mat(corWordList)
+   
   # sort by order the region  
   msa <- msa[order(msa[, 1]), ]
   corMat <- corMat[order(corMat[, 1]), ]
   
   # calculate matching rate
   count <- 0
+  nrow <- dim(corMat)[1]
   for (i in 1:nrow) {
     input <- paste(msa[i, ], collapse = "")
     correct <- paste(corMat[i, ], collapse = "")
