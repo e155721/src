@@ -1,6 +1,6 @@
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("data_processing/GetPathList.R")
-source("verification_multiple/VerificationIR.R")
+source("verification_multiple/for_acc/VerificationIR.R")
 
 library(foreach)
 library(doParallel)

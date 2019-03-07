@@ -1,4 +1,5 @@
-source("verification_multiple/align_for_each.R")
+source("verification_multiple/for_time/align_for_each.R")
+
 words.vec <- seq(10,110,10)
 
 dir_rf <- "../../Alignment/ex-msa/old/ex-01_13/ex-time/rf_time/"

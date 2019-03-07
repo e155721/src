@@ -1,4 +1,4 @@
-source("verification_multiple/IRTime.R")
+source("verification_multiple/for_time/IRTime.R")
 source("data_processing/GetPathList.R")
 
 wordNum <- seq(10,110,10)
