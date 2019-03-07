@@ -29,6 +29,7 @@ pairwise <- foreach (p = pVec) %dopar% {
     dir.create(output_path)
   }
   
+  # result path
   comparePath <- paste(comparePath, formatC(-p, width = digits, flag = 0), "/", sep = "")
   print(comparePath)
   if (!dir.exists(comparePath)) {
@@ -38,13 +39,20 @@ pairwise <- foreach (p = pVec) %dopar% {
   # constant penalty
   for (s5 in s5Vec) {
     
-    # make the output paths
+    # matchingrate path
     ansratePath <- paste(output_path, "ansrate-", 
                          formatC(-s5, width = digits, flag = 0), ".txt", sep = "") 
     
+    # result path
+    comparePath <- paste(comparePath, "s5_", formatC(-s5, width = digits, flag = 0), "/", sep = "")
+    print(comparePath)
+    if (!dir.exists(comparePath)) {
+      dir.create(comparePath)
+    }
+    
     # conduct the alignment for each files
     for (f in filesPath) {
-            
+      
       # make the word list
       wordList <- MakeWordList(f["input"])
       correct <- MakeWordList(f["correct"])
