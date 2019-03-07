@@ -1,11 +1,11 @@
 MakeFeatureMatrix <- function(s5 = NA, p = NA)
 {
   
-  cSymFile <- "data/symbols/consonants"
-  vSymFile <- "data/symbols/vowels"
+  cSymFile <- "../data/symbols/consonants"
+  vSymFile <- "../data/symbols/vowels"
   
-  cValFile <- "data/features/consonants_values"
-  vValFile <- "data/features/vowels_values"
+  cValFile <- "../data/features/consonants_values"
+  vValFile <- "../data/features/vowels_values"
   
   ######
   # make consonant array
