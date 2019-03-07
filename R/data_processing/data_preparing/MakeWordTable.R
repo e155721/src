@@ -10,6 +10,8 @@ MakeWordTable <- function(input_path = "../../Data/fix_test_data.xlsm")
   
   for (i in 1:len) {
     sheet_names[[i]] <- gsub("*[ ]*", "", sheet_names[[i]])
+    sheet_names[[i]] <- gsub("（", "(", sheet_names[[i]])
+    sheet_names[[i]] <- gsub("）", ")", sheet_names[[i]])
   }
   
   write(sheet_num, "gpu_name")
