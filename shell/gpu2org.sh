@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-gpu_name=($(</Users/e155721/OkazakiLab/Experiment/src/name_table/gpu_name))
-org_name=($(</Users/e155721/OkazakiLab/Experiment/src/name_table/org_name))
+gpu_name=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/gpu_name))
+org_name=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/org_name))
 
 ext=$1
 

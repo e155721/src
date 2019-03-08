@@ -61,31 +61,17 @@ MakeTable <- function(file1, file2)
   print(xtable(align.mat))
   sink()
   
+  return(0)
 }
 
-dir <- "/Users/e155721/OkazakiLab/Experiment/Alignment/ex-msa/msa_mismatch-02_11/dat/"
-files.rf <- list.files(dir, ".rf")
-files.lg <- list.files(dir, ".lg")
-
-len <- length(files.rf)
-for (i in 1:len) {
-  file1 <- files.rf[[i]]
-  file2 <- files.lg[[i]]
-  
-  file1 <- paste(dir, file1, sep = "")
-  file2 <- paste(dir, file2, sep = "")
-  
-  MakeTable(file1, file2)
-}
-
-if (1) {
-  dir <- "/Users/e155721/OkazakiLab/Experiment/Alignment/ex-pairwise/nw_mismatch/remove_dup/"
-  files.nw <- list.files(dir, ".nw")
+ExeMakeTable <- function(dir)
+{
+  files.aln <- list.files(dir, ".aln")
   files.lg <- list.files(dir, ".lg")
   
-  len <- length(files.nw)
+  len <- length(files.aln)
   for (i in 1:len) {
-    file1 <- files.nw[[i]]
+    file1 <- files.aln[[i]]
     file2 <- files.lg[[i]]
     
     file1 <- paste(dir, file1, sep = "")
@@ -93,4 +79,6 @@ if (1) {
     
     MakeTable(file1, file2)
   }
+  
+  return(0)
 }

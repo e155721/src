@@ -1,13 +1,14 @@
-source("verification_multiple/align_for_each.R")
+source("verification_multiple/for_time/align_for_each.R")
+
 words.vec <- seq(10,110,10)
 
-dir_rf <- "../Alignment/ex-msa/ex-01_13/ex-time/rf_time/"
-dir_bf <- "../Alignment/ex-msa/ex-01_13/ex-time/bf_time/"
-dir_rd <- "../Alignment/ex-msa/ex-01_13/ex-time/rd_time/"
+dir_rf <- "../../Alignment/ex-msa/old/ex-01_13/ex-time/rf_time/"
+dir_bf <- "../../Alignment/ex-msa/old/ex-01_13/ex-time/bf_time/"
+dir_rd <- "../../Alignment/ex-msa/old/ex-01_13/ex-time/rd_time/"
 
 GetTime <- function(dir, words.vec)
 {
-  files <- GetFilesPath(dir)
+  files <- GetPathList(dir)
   time.vec <- c()
   i <- 0
   for (f in files) {

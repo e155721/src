@@ -1,8 +1,8 @@
 source("data_processing/MakeWordList.R")
-source("verification/GetFilesPath.R")
+source("verification/GetPathList.R")
 source("data_processing/list2mat.R")
 
-files <- GetFilesPath()
+files <- GetPathList()
 for (f in files) {
   wl.list <- MakeWordList(f[["correct"]])
   wl.mat <-list2mat(wl.list)

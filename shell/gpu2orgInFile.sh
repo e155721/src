@@ -10,9 +10,14 @@ if [ -z "$ext" ]; then
     exit
 fi
 
-i=1
-for f in $org_name
+for f in *
 do
-    mv "$f"."$ext" "$gpu_name[$i]"."$ext"
-    i="$((i+1))"
+    i=1
+    for gpu in $gpu_name
+    do
+        sed -i.tmp "s/$gpu.$ext/$org_name[$i]/" "$f"
+        i=$((i+1))
+    done
 done
+
+rm *.tmp
