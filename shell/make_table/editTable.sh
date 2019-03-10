@@ -9,7 +9,7 @@ files=(*.tex)
 list="list"
 for f in $files
 do
-    echo \\input{"$f"} >>"$list"
+    echo \%\\input{"$f"} >>"$list"
 done
 
 out="edit_table.tex"
@@ -21,7 +21,6 @@ cat >"$out" <<EOF
 \date{}
 \title{}
 
-% "$f:r"
 \begin{document}
 \pagestyle{empty}
 
