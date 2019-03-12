@@ -13,6 +13,7 @@ done
 
 for f in $files
 do
+    sed -i.tmp '1d' "$f"
     sed -i.tmp 's/"//g' "$f"
 done
 
