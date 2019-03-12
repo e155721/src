@@ -82,3 +82,7 @@ ExeMakeTable <- function(dir)
   
   return(0)
 }
+
+dir = commandArgs(trailingOnly=TRUE)[1]
+
+ExeMakeTable(dir)
