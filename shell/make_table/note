@@ -2,4 +2,4 @@
 2. MakeTable.R
 3. fixTable.sh
 4. editTable.sh -> edit the tex files
-5. makeTable.sh
+5. ctexTable.sh
