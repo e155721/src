@@ -7,7 +7,12 @@ files+=($lg)
 
 for f in $files
 do
-    sed -i.tmp 's/\[1\] //' "$f"
+    <"$f" cut -f2- -d" " >"$f".tmp
+    mv "$f".tmp "$f"
+done
+
+for f in $files
+do
     sed -i.tmp 's/"//g' "$f"
 done
 
