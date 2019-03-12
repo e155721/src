@@ -66,7 +66,7 @@ VerificationIR <- function(method, inFile, corFile, p, words)
   }
   
   matchingRate <- (count/nrow)*100
-  if (matchingRate == 0) {
+  if (matchingRate != 100) {
     write.table(msa, paste(outDir, "/", gsub("\\..*$", "", basename(inFile)), ".aln", sep = ""))
     write.table(corMat, paste(outDir, "/", gsub("\\..*$", "", basename(corFile)), ".lg", sep = ""))
   }
