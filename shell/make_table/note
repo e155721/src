@@ -1,4 +1,5 @@
 1. preTable.sh
-2. MakeTable.R
-3. editTable.sh -> edit the tex files
-4. makeTable.sh
+2. makeTable.sh
+3. fixTable.sh
+4. editTable.sh -> edit the tex files
+5. ctexTable.sh

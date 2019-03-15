@@ -1,19 +1,16 @@
 #!/bin/zsh
 
-dir="edit_table"
-mkdir "$dir"
-cp *.tex "$dir"
-cd "$dir"
 
 files=(*.tex)
-list="list"
+
+dir="table"
+mkdir "$dir"
+cd "$dir"
+
 for f in $files
 do
-    echo \%\\input{"$f"} >>"$list"
-done
 
-out="edit_table.tex"
-cat >"$out" <<EOF
+    cat >"$f" <<EOF
 \documentclass[a4j]{jarticle}
 \usepackage{longtable}
 
@@ -21,11 +18,21 @@ cat >"$out" <<EOF
 \date{}
 \title{}
 
+% "$f:r"
 \begin{document}
 \pagestyle{empty}
 
-$(<list)
+\input{../"$f"}
 
 \end{document}
 EOF
-rm "$list"
+
+    ctex
+    ctex
+    rm "$f"
+
+done
+
+rtex
+
+/Users/e155721/OkazakiLab/Experiment/src/shell/gpu2org.sh pdf

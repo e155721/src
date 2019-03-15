@@ -66,6 +66,7 @@ MakeTable <- function(file1, file2)
 
 ExeMakeTable <- function(dir)
 {
+  dir <- paste(dir, "/", sep = "")
   files.aln <- list.files(dir, ".aln")
   files.lg <- list.files(dir, ".lg")
   
@@ -82,3 +83,7 @@ ExeMakeTable <- function(dir)
   
   return(0)
 }
+
+dir = commandArgs(trailingOnly=TRUE)[1]
+
+ExeMakeTable(dir)
