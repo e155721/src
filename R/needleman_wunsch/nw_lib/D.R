@@ -1,59 +1,5 @@
 library(R6)
 
-# this function makes matrix for sequence alignment
-makeMatrix <- function(seq1, seq2)
-{
-  len1 <- dim(seq1)[2]
-  len2 <- dim(seq2)[2]
-  x <- array(dim=c(len1, len2, 2))
-  return(x)
-}
-
-initializeMat = function(x, seq1, seq2, g1, g2, s)
-{
-  len1 <- dim(x)[1]
-  len2 <- dim(x)[2]
-  
-  x[1, 1, 1] <- 0
-  x[1, 1, 2] <- 0
-  
-  x[, 1, 2] <- 1
-  for (i in 2:len1) {
-    prof1 <- as.matrix(seq1[, i])
-    prof2 <- as.matrix(g2)
-    sp <- sp(prof1, prof2, s)
-    x[i, 1, 1] <- x[i-1, 1, 1] + sp
-  }
-  
-  x[1, , 2]  <- -1
-  for (j in 2:len2) {
-    prof1 <- as.matrix(g1)
-    prof2 <- as.matrix(seq2[, j]) 
-    sp <- sp(prof1, prof2, s)
-    x[1, j, 1] <- x[1, j-1, 1] + sp
-  }
-  return(x)
-}
-
-sp <- function(prof1, prof2, s)
-{
-  # make profiles
-  prof <- rbind(prof1, prof2)
-  prof.len <- length(prof)
-  len1 <- prof.len-1
-  len2 <- prof.len
-  
-  sp <- 0
-  l <- 2
-  for (k in 1:len1) {
-    for (m in l:len2) {
-      sp <- sp + s[prof[k], prof[m]]
-    }
-    l <- l + 1
-  }
-  return(sp)
-}
-
 D <- 
   R6Class("D",
           public = list(
@@ -62,7 +8,6 @@ D <-
             p1 = NA,
             p2 = NA,
             s = NA,
-            bp = F,
             
             initialize = function(seq1, seq2, s)
             {
@@ -76,19 +21,19 @@ D <-
               # calculate D(i,j)
               prof1 <- as.matrix(self$seq1[, i])
               prof2 <- as.matrix(self$seq2[, j])
-              sp <- sp(prof1, prof2, self$s)
+              sp <- SP(prof1, prof2, self$s)
               d1 <- x[i-1, j-1, 1] + sp
               
               # vertical gap
               prof1 <- as.matrix(self$seq1[, i])
               prof2 <- as.matrix(g2)
-              sp <- sp(prof1, prof2, self$s)
+              sp <- SP(prof1, prof2, self$s)
               d2 <- x[i-1, j, 1] + sp
               
               # horizontally gap
               prof1 <- as.matrix(g1)
               prof2 <- as.matrix(self$seq2[, j])
-              sp <- sp(prof1, prof2, self$s)
+              sp <- SP(prof1, prof2, self$s)
               d3 <- x[i, j-1, 1] + sp
               
               d <- c(NA, NA)

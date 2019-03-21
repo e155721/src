@@ -1,4 +1,4 @@
-source("needleman_wunsch/functions.R")
+source("needleman_wunsch/nw_lib/functions.R")
 
 NeedlemanWunsch <- function(seq1, seq2, s)
 {
@@ -9,8 +9,8 @@ NeedlemanWunsch <- function(seq1, seq2, s)
   D <- D$new(seq1, seq2, s)
   
   # calculate matrix for sequence alignment
-  mat <- makeMatrix(seq1, seq2)
-  mat <- initializeMat(mat, seq1, seq2, g1, g2, s)
+  mat <- MakeMatrix(seq1, seq2)
+  mat <- InitializeMat(mat, seq1, seq2, g1, g2, s)
   
   rowLen <- dim(seq1)[2]
   colLen <- dim(seq2)[2]
