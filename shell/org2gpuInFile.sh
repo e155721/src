@@ -10,7 +10,7 @@ if [ -z "$ext" ]; then
     exit
 fi
 
-for f in *
+for f in *"$ext"
 do
     i=1
     for org in $org_name
