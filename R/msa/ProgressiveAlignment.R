@@ -1,5 +1,4 @@
 source("data_processing/DelGap.R")
-source("needleman_wunsch/functions.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
 ProgressiveAlignment <- function(wordList, s)
