@@ -46,19 +46,6 @@ NeedlemanWunsch <- function(seq1, seq2, s)
   }
   traceVec <- rev(traceVec)
   
-  # output alignment
-  if (0) {
-    s1 <- as.matrix(seq1[, 2:dim(seq1)[2]])
-    if (dim(s1)[2] == 1) {
-      s1 <- t(s1)
-    }
-    
-    s2 <- as.matrix(seq2[, 2:dim(seq2)[2]])
-    if (dim(s2)[2] == 1) {
-      s2 <- t(s2)
-    }
-  }
-  
   align1 <- matrix(seq1[, 1], nrow = dim(seq1)[1])
   align2 <- matrix(seq2[, 1], nrow = dim(seq2)[1])
   

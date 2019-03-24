@@ -1,4 +1,3 @@
-source("needleman_wunsch/functions.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("data_processing/MakeWordList.R")
