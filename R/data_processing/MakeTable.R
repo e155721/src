@@ -6,7 +6,6 @@ source("data_processing/list2mat.R")
 
 MakeTable <- function(file1, file2)
 {
-  
   lines1 <- countLines(file1)
   lines2 <- countLines(file2)
   
@@ -28,7 +27,6 @@ MakeTable <- function(file1, file2)
       nw <- append(nw, paste("¥", num, line), after = length(nw))
       num <- num + 1
     }
-    
   }
   
   # file2
@@ -57,13 +55,38 @@ MakeTable <- function(file1, file2)
   
   align.mat <- cbind(nw.mat, lg.mat)
   
-  sink(gsub("\\..*$", "\\.tex", file1))
-  print(xtable(align.mat))
+  # get the num of col
+  align.col <- dim(align.mat)[2]
+
+  nw.col <- dim(nw.mat)[2]
+  nw.col <- nw.col-1
+
+  lg.col <- dim(lg.mat)[2]
+  lg.col <- lg.col
+  
+  # make the xtable align
+  align <- c()
+  align.col <- align.col + 1
+  align <- c("r", "l")
+  for (col in 3:align.col) {
+    if (col != nw.col) {
+      align <- append(align, "c")
+    } else {
+      align <- append(align, "c|")
+    }
+  }
+  
+  # output tex file
+  sink(gsub("\\..*$", 
+            paste("-", (align.col-2), "-", (nw.col-2), "-", lg.col, "\\.tex", sep = ""),
+            file1))
+  print(xtable(align.mat, align = align))
   sink()
   
   return(0)
 }
 
+# applicate the MakeTable() to each file
 ExeMakeTable <- function(dir)
 {
   dir <- paste(dir, "/", sep = "")
@@ -84,6 +107,6 @@ ExeMakeTable <- function(dir)
   return(0)
 }
 
+# reference from command line
 dir = commandArgs(trailingOnly=TRUE)[1]
-
 ExeMakeTable(dir)
