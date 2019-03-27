@@ -30,7 +30,7 @@ do
     out="$(echo $f | sed 's/-.*-.'//)"
 
     line=$(<"$f" grep -n "longtable" | head -n1 | cut -f1 -d":")
-    line=$((line+3))
+    sed -i.tmp "$((line+1)),$((line+3))d" "$f"
     cat <<EOF | sed -i.tmp "${line}r /dev/stdin" "$f"
      \multicolumn{$align}{c}{$out} \\\\
      \hline
