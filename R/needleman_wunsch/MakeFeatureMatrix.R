@@ -80,6 +80,7 @@ MakeFeatureMatrix <- function(s5 = NA, p = NA)
   feature_matrix[1:81, 1:81] <- 1
   # feature_matrix[82:118, 82:118] <- v_match
   feature_matrix[82:118, 82:118] <- 1
+  diag(feature_matrix) <- 0
   
   return(feature_matrix)
 }
