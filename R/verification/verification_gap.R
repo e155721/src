@@ -23,14 +23,14 @@ pairwise <- foreach (p = pVec) %dopar% {
   output_path <- "../../Alignment/gap_"
   comparePath <- "../../Alignment/comparison_"
 
-  output_path <- paste(output_path, formatC(-p, width = digits, flag = 0), "/", sep = "")
+  output_path <- paste(output_path, formatC(p, width = digits, flag = 0), "/", sep = "")
   print(output_path)
   if (!dir.exists(output_path)) {
     dir.create(output_path)
   }
 
   # result path
-  comparePath <- paste(comparePath, formatC(-p, width = digits, flag = 0), "/", sep = "")
+  comparePath <- paste(comparePath, formatC(p, width = digits, flag = 0), "/", sep = "")
   print(comparePath)
   if (!dir.exists(comparePath)) {
     dir.create(comparePath)
@@ -41,10 +41,10 @@ pairwise <- foreach (p = pVec) %dopar% {
 
     # matchingrate path
     ansratePath <- paste(output_path, "ansrate-",
-                         formatC(-s5, width = digits, flag = 0), ".txt", sep = "")
+                         formatC(s5, width = digits, flag = 0), ".txt", sep = "")
 
     # result path
-    comparePath <- paste(comparePath, "s5_", formatC(-s5, width = digits, flag = 0), "/", sep = "")
+    comparePath <- paste(comparePath, "s5_", formatC(s5, width = digits, flag = 0), "/", sep = "")
     print(comparePath)
     if (!dir.exists(comparePath)) {
       dir.create(comparePath)
