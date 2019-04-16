@@ -37,7 +37,7 @@ D <-
               d3 <- x[i, j-1, 1] + sp
               
               d <- c(NA, NA)
-              d[1] <- max(d1, d2, d3)
+              d[1] <- min(d1, d2, d3)
               
               lenSeq1 <- dim(self$seq1)[2]
               lenSeq2 <- dim(self$seq2)[2]

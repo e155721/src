@@ -10,8 +10,8 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-pVec <- -1:-15
-s5Vec <- -1:-15
+pVec <- 1
+s5Vec <- 10
 digits <- 2
 
 lenpVec <- length(pVec)
