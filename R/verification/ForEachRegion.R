@@ -44,8 +44,8 @@ ForEachRegion <- function(f, correct, wordList, s,
   
   # output the matching rate
   sink(ansratePath, append = T)
-  allResions <- sum((regions-1):1)
-  matchingRate <- count / allResions * 100
+  npairs <- sum((regions-1):1)
+  matchingRate <- count / npairs * 100
   rlt <- paste(f["name"], matchingRate, sep = " ")
   print(rlt, quote = F)
   sink()
