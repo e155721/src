@@ -21,6 +21,7 @@ InitializeMat = function(x, seq1, seq2, g1, g2, s)
     sp <- SP(prof1, prof2, s)
     x[1, j, 1] <- x[1, j-1, 1] + sp
   }
+  x[1, 1, 2] <- 0
   
   return(x)
 }
