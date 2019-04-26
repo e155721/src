@@ -1,7 +1,9 @@
 #!/bin/zsh
 
-regions=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/regions_sym))
-regionsName=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/regions_name))
+# This script convers the regions symbol in specified files to regions name.
+
+regions=($(<$HOME/OkazakiLab/Experiment/src/data/name_table/regions_sym))
+regionsName=($(<$HOME/OkazakiLab/Experiment/src/data/name_table/regions_name))
 
 ext=$1
 

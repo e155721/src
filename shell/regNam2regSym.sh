@@ -1,7 +1,9 @@
 #!/bin/zsh
 
-regionsName=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/regions_name))
-regions=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/regions_sym))
+# This script convers the regions name in specified files to regisons symbol.
+
+regionsName=($(<$HOME/OkazakiLab/Experiment/src/data/name_table/regions_name))
+regions=($(<$HOME/OkazakiLab/Experiment/src/data/name_table/regions_sym))
 
 ext=$1
 

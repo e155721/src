@@ -1,7 +1,9 @@
 #!/bin/zsh
 
-gpu_name=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/gpu_name))
-org_name=($(</Users/e155721/OkazakiLab/Experiment/src/data/name_table/org_name))
+# This script converts the word files name from org to gpu.
+
+gpu_name=($(<$HOME/OkazakiLab/Experiment/src/data/name_table/gpu_name))
+org_name=($(<$HOME/OkazakiLab/Experiment/src/data/name_table/org_name))
 
 ext=$1
 
