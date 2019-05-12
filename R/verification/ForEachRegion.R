@@ -1,10 +1,31 @@
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
-ForEachRegion <- function(f, correct, wordList, s,
-                          ansratePath, comparePath, regions)
+MakeGoldStandard <- function(f, correct, comparePath, regions, s)
 {
+  # making gold standard
+  l <- 2
+  for (k in 1:(regions-1)) {
+    # the start of the alignment for each the region pair
+    for (i in l:regions) {
+      correctMat <- DelGap(rbind(correct[[k]], correct[[i]]))
+      rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
 
+      # gold standard
+      sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".lg", sep = ""), append = T)
+      cat("\n")
+      print(paste(correctMat[1, ], collapse = " "))
+      print(paste(correctMat[2, ], collapse = " "))
+      sink()
+    }
+    # the end of the aligne for each the region pair
+    l <- l + 1
+  }
+}
+
+MakePairwise <- function(f, correct, wordList, s,
+                         ansratePath, comparePath, regions)
+{
   l <- 2
   count <- 0
   for (k in 1:(regions-1)) {
@@ -21,14 +42,6 @@ ForEachRegion <- function(f, correct, wordList, s,
         count <- count + 1
       }
 
-      # the alignment results always output
-      # by The Linguists
-      sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".lg", sep = ""), append = T)
-      cat("\n")
-      print(paste(correctMat[1, ], collapse = " "))
-      print(paste(correctMat[2, ], collapse = " "))
-      sink()
-
       # by The Needleman-Wunsch
       sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".aln", sep = ""), append = T)
       cat("\n")
@@ -40,6 +53,20 @@ ForEachRegion <- function(f, correct, wordList, s,
     # the end of the aligne for each the region pair
     l <- l + 1
   }
+
+  return(count)
+}
+
+
+ForEachRegion <- function(f, correct, wordList, s,
+                          ansratePath, comparePath, regions)
+{
+  # making gold standard
+  MakeGoldStandard(f, correct, comparePath, regions, s)
+
+  # making pairwise
+  count <- MakePairwise(f, correct, wordList, s,
+                        ansratePath, comparePath, regions)
 
   # output the matching rate
   sink(ansratePath, append = T)
