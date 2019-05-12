@@ -70,7 +70,7 @@ pairwise <- foreach (p = pVec) %dopar% {
 
       # conduct the alignment for each region
       ForEachRegion(f, correct, wordList, scoringMatrix,
-                    ansratePath, comparePath, regions, comparison = T)
+                    ansratePath, comparePath, regions)
     }
   }
 }
