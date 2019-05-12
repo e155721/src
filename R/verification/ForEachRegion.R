@@ -2,7 +2,7 @@ source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
 ForEachRegion <- function(f, correct, wordList, s,
-                          ansratePath, comparePath, regions, comparison = F)
+                          ansratePath, comparePath, regions)
 {
 
   l <- 2
@@ -16,26 +16,25 @@ ForEachRegion <- function(f, correct, wordList, s,
       rltAln <- paste(paste(align$seq1, align$seq2, sep = ""), collapse = "")
       rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
 
+      # counting correct alignment
       if (rltAln == rltCor) {
         count <- count + 1
       }
 
       # the alignment results always output
-      if (comparison) {
-        # by The Linguists
-        sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".lg", sep = ""), append = T)
-        cat("\n")
-        print(paste(correctMat[1, ], collapse = " "))
-        print(paste(correctMat[2, ], collapse = " "))
-        sink()
+      # by The Linguists
+      sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".lg", sep = ""), append = T)
+      cat("\n")
+      print(paste(correctMat[1, ], collapse = " "))
+      print(paste(correctMat[2, ], collapse = " "))
+      sink()
 
-        # by The Needleman-Wunsch
-        sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".aln", sep = ""), append = T)
-        cat("\n")
-        print(paste(align$seq1, collapse = " "))
-        print(paste(align$seq2, collapse = " "))
-        sink()
-      }
+      # by The Needleman-Wunsch
+      sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".aln", sep = ""), append = T)
+      cat("\n")
+      print(paste(align$seq1, collapse = " "))
+      print(paste(align$seq2, collapse = " "))
+      sink()
 
     }
     # the end of the aligne for each the region pair
