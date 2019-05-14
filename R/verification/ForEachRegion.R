@@ -110,6 +110,7 @@ ForEachRegion <- function(f, correct, wordList, s,
     
     newcorpus <- MakeCorpus(corpus)
     col <- dim(newcorpus)[2]
+    N <- col*2
     maxpmi <- 0
     for (j in 1:col) {
       a <- newcorpus[1, j]
@@ -139,6 +140,9 @@ ForEachRegion <- function(f, correct, wordList, s,
     corpus <- rlt$corpus
     
     # exit contraint
+    if (loop == N) {
+      break
+    }
     if (count == newcount) {
       break
     } else {
