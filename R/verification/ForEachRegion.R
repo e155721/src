@@ -114,12 +114,10 @@ ForEachRegion <- function(f, correct, wordList, s,
     for (j in 1:col) {
       a <- newcorpus[1, j]
       b <- newcorpus[2, j]
-      if (a != b) {
-        pmi <- PMI(a,b,newcorpus)
-        s[a,b] <- pmi
-        if (maxpmi<pmi) {
-          maxpmi <- pmi
-        }
+      pmi <- PMI(a,b,newcorpus)
+      s[a,b] <- pmi
+      if (maxpmi<pmi) {
+        maxpmi <- pmi
       }
     }
     
