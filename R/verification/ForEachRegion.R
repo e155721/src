@@ -92,23 +92,27 @@ ForEachRegion <- function(f, correct, wordList, s,
   # making gold standard
   MakeGoldStandard(f, correct, comparePath, regions, s)
   
+  # making pairwise
+  rlt <- MakePairwise(f, correct, wordList, s,
+                      ansratePath, comparePath, regions)
+  count <- rlt$count
+  corpus <- rlt$corpus
+  
   newcount <- 0
-  z <- 1
+  loop <- 1
   while (1) {
-    # making pairwise
-    rlt <- MakePairwise(f, correct, wordList, s,
-                        ansratePath, comparePath, regions)
-    count <- rlt$count
-    corpus <- rlt$corpus
     
-    if (count == newcount)
+    if (count == newcount) {
       break
+    } else {
+      count <- newcount
+    }
     
-    print(z)
-    z <- z+1
+    print(loop)
+    loop <- loop+1
     
     newcorpus <- MakeCorpus(corpus)
-    col <- length(newcorpus)
+    col <- dim(newcorpus)[2]
     maxpmi <- 0
     for (j in 1:col) {
       a <- newcorpus[1, j]
@@ -120,15 +124,19 @@ ForEachRegion <- function(f, correct, wordList, s,
       }
     }
     
-    if (0) {
-      s.row <- dim(s)[1]
-      s.col <- dim(s)[2]
-      for (t1 in 1:s.row) {
-        for (t2 in 1:s.col) {
-          s[t1,t2] <- 0-s[t1,t2]+maxpmi
-        }
+    s.row <- dim(s)[1]
+    s.col <- dim(s)[2]
+    for (t1 in 1:s.row) {
+      for (t2 in 1:s.col) {
+        s[t1,t2] <- 0-s[t1,t2]+maxpmi
       }
     }
+    
+    # making pairwise
+    rlt <- MakePairwise(f, correct, wordList, s,
+                        ansratePath, comparePath, regions)
+    newcount <- rlt$count
+    corpus <- rlt$corpus
   }
   
   cpsrow <- length(corpus)
