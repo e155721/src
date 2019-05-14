@@ -98,18 +98,15 @@ ForEachRegion <- function(f, correct, wordList, s,
   count <- rlt$count
   corpus <- rlt$corpus
   
+  # print the number of current matched
+  print(paste("base matched:", count))
+  
+  # store the org scoring matrix
+  s.old <- s
+  
   newcount <- 0
   loop <- 1
   while (1) {
-    
-    if (count == newcount) {
-      break
-    } else {
-      count <- newcount
-    }
-    
-    print(loop)
-    loop <- loop+1
     
     newcorpus <- MakeCorpus(corpus)
     col <- dim(newcorpus)[2]
@@ -117,10 +114,12 @@ ForEachRegion <- function(f, correct, wordList, s,
     for (j in 1:col) {
       a <- newcorpus[1, j]
       b <- newcorpus[2, j]
-      pmi <- PMI(a,b,newcorpus)
-      s[a,b] <- pmi
-      if (maxpmi<pmi) {
-        maxpmi <- pmi
+      if (a != b) {
+        pmi <- PMI(a,b,newcorpus)
+        s[a,b] <- pmi
+        if (maxpmi<pmi) {
+          maxpmi <- pmi
+        }
       }
     }
     
@@ -128,15 +127,32 @@ ForEachRegion <- function(f, correct, wordList, s,
     s.col <- dim(s)[2]
     for (t1 in 1:s.row) {
       for (t2 in 1:s.col) {
-        s[t1,t2] <- 0-s[t1,t2]+maxpmi
+        if (s.old[t1,t2] != s[t1,t2]) {
+          s[t1,t2] <- 0-s[t1,t2]+maxpmi
+        }
       }
     }
+    s.old <- s
     
     # making pairwise
     rlt <- MakePairwise(f, correct, wordList, s,
                         ansratePath, comparePath, regions)
     newcount <- rlt$count
     corpus <- rlt$corpus
+    
+    # exit contraint
+    if (count == newcount) {
+      break
+    } else {
+      count <- newcount
+    }
+    
+    # print the number of loop
+    print(paste("loop:", loop))
+    loop <- loop+1
+    
+    # print the number of current matched
+    print(paste("new matched", newcount))
   }
   
   cpsrow <- length(corpus)
@@ -159,5 +175,5 @@ ForEachRegion <- function(f, correct, wordList, s,
   print(rlt, quote = F)
   sink()
   
-  return(0)
+  return(s)
 }
