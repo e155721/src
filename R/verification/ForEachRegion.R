@@ -140,6 +140,7 @@ ForEachRegion <- function(f, correct, wordList, s,
   }
   
   cpsrow <- length(corpus)
+  i <- 1
   while (i <= cpsrow) {
     # by The Needleman-Wunsch
     sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".aln", sep = ""), append = T)
