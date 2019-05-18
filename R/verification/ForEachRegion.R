@@ -1,63 +1,6 @@
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
-MakeGoldStandard <- function(f, correct, comparePath, regions, s)
-{
-  # making gold standard
-  l <- 2
-  for (k in 1:(regions-1)) {
-    # the start of the alignment for each the region pair
-    for (i in l:regions) {
-      correctMat <- DelGap(rbind(correct[[k]], correct[[i]]))
-      rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
-      
-      # gold standard
-      sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".lg", sep = ""), append = T)
-      cat("\n")
-      print(paste(correctMat[1, ], collapse = " "))
-      print(paste(correctMat[2, ], collapse = " "))
-      sink()
-    }
-    # the end of the aligne for each the region pair
-    l <- l + 1
-  }  
-}
-
-MakePairwise <- function(f, correct, wordList, s,
-                         ansratePath, comparePath, regions)
-{
-  l <- 2
-  count <- 0
-  for (k in 1:(regions-1)) {
-    # the start of the alignment for each the region pair
-    for (i in l:regions) {
-      correctMat <- DelGap(rbind(correct[[k]], correct[[i]]))
-      align <- NeedlemanWunsch(as.matrix(wordList[[k]], drop = F), 
-                               as.matrix(wordList[[i]], drop = F), s)
-      rltAln <- paste(paste(align$seq1, align$seq2, sep = ""), collapse = "")
-      rltCor <- paste(paste(correctMat[1, ], correctMat[2, ], sep = ""), collapse = "")
-      
-      # counting correct alignment
-      if (rltAln == rltCor) {
-        count <- count + 1
-      }
-      
-      # by The Needleman-Wunsch
-      sink(paste(comparePath, gsub("\\..*$", "", f["name"]), ".aln", sep = ""), append = T)
-      cat("\n")
-      print(paste(align$seq1, collapse = " "))
-      print(paste(align$seq2, collapse = " "))
-      sink()
-      
-    }
-    # the end of the aligne for each the region pair
-    l <- l + 1
-  }
-  
-  return(count)
-}
-
-
 ForEachRegion <- function(f, correct, wordList, s,
                           ansratePath, comparePath, regions)
 {
