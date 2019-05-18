@@ -4,34 +4,31 @@ TraceBack <- function(x, seq1, seq2, g1, g2)
   len2 <- dim(seq2)[2]
   
   # trace back
-  score <- traceVec <- c() 
+  trace <- c() 
   i <- len1
   j <- len2
-  n <- 1
-  score <- x[i, j, 1]
+  
   while (TRUE) {
     if (i == 1 && j == 1) break
-    traceVec[n] <- x[i, j, 2]
-    n <- n + 1
-    
-    trace <- x[i, j, 2]
-    if (trace == 0) {
+    trace <- append(trace, x[i, j, 2])
+    path <- x[i, j, 2]
+    if (path == 0) {
       i <- i - 1
       j <- j - 1
-    } else if (trace == 1) {
+    } else if (path == 1) {
       i <- i - 1
-    } else if (trace == -1){
+    } else if (path == -1){
       j <- j - 1
     }
   }
-  traceVec <- rev(traceVec)
+  trace <- rev(trace)
   
   # make alignment
   align1 <- matrix(seq1[, 1], nrow = dim(seq1)[1])
   align2 <- matrix(seq2[, 1], nrow = dim(seq2)[1])
   
   i <- j <- 2
-  for (t in traceVec) {
+  for (t in trace) {
     if(t == 0) {
       align1 <- cbind(align1, seq1[, i])
       align2 <- cbind(align2, seq2[, j])

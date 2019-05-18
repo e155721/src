@@ -22,4 +22,3 @@ print(seq1$score)
 
 # 69
 # 3827
-
