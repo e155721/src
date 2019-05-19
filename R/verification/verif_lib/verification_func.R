@@ -5,8 +5,10 @@ LoadVerifFunc <- function()
   #  "/Users/e155721/OkazakiLab/Experiment/src/R/verification/verif_lib/"
   source((paste(lib.path, "MakeGoldStandard.R", sep = "")))
   source((paste(lib.path, "MakePairwise.R", sep = "")))
+  source((paste(lib.path, "MakeCorpus.R", sep = "")))
   source((paste(lib.path, "VerifAcc.R", sep = "")))
   source((paste(lib.path, "OutputAlignment.R", sep = "")))
+  source((paste(lib.path, "PMI.R", sep = "")))
   
   return(0)
 }

@@ -19,4 +19,3 @@ VerifAcc <- function(gold.aln, psa.aln, regions)
   
   return(matching.rate)
 }
-

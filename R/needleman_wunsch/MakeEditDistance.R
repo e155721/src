@@ -1,4 +1,4 @@
-MakeEditDistance <- function(s5 = NA, p = NA)
+MakeEditDistance <- function(s5 = NA)
 {
   
   cSymFile <- "../data/symbols/consonants"
@@ -25,8 +25,8 @@ MakeEditDistance <- function(s5 = NA, p = NA)
   feature_matrix <- matrix(s5, nrow = score_row, ncol = score_col, 
                            dimnames = list(symbols, symbols))
   # assign gap penalty
-  feature_matrix["-", ] <- p
-  feature_matrix[, "-"] <- p
+  feature_matrix["-", ] <- 1
+  feature_matrix[, "-"] <- 1
   feature_matrix["-", "-"] <- 0
   
   if (0) {
