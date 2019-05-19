@@ -90,11 +90,6 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     matching.rate.new <- VerifAcc(gold.aln, psa.aln, regions)
     
     # exit contraint
-    if (loop == max) {
-      matching.rate <- matching.rate.new
-      print("max")
-      break
-    }
     if (matching.rate == matching.rate.new) {
       print("match")
       break
