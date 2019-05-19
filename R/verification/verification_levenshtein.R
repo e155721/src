@@ -1,7 +1,7 @@
 source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
 source("verification/ForEachRegion.R")
-source("needleman_wunsch/MakeFeatureMatrix.R")
+source("needleman_wunsch/MakeEditDistance.R")
 
 library(foreach)
 library(doParallel)
@@ -66,7 +66,7 @@ pairwise <- foreach (p = pVec) %do% {
       corRegions <- length(correct)
       
       # make scoring matrix
-      scoringMatrix <- MakeFeatureMatrix(s5, p)
+      scoringMatrix <- MakeEditDistance(s5, p)
       
       # conduct the alignment for each region
       ForEachRegion(f, correct, wordList, scoringMatrix,
