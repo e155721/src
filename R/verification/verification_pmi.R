@@ -10,134 +10,115 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-pVec <- 1
-digits <- 2
-lenpVec <- length(pVec)
+# matchingrate path
+ansrate.file <- "../../Alignment/ansrate_levenshtein.txt"
 
-pairwise <- foreach (p = pVec) %do% {
+# result path
+output.dir <- paste("../../Alignment/pairwise_", format(Sys.Date()), "/", sep = "")
+if (!dir.exists(output.dir)) {
+  dir.create(output.dir)
+}
+
+# conduct the alignment for each files
+hoge <- foreach (f = filesPath) %dopar% {
   
-  ansrate.dir <- paste("../../Alignment/ansrate_", format(Sys.Date()), "/", sep = "")
-  print(ansrate.dir)
-  if (!dir.exists(ansrate.dir)) {
-    dir.create(ansrate.dir)
-  }
+  print(paste("input:", f["input"], sep = " "))
+  print(paste("correct:", f["correct"], sep = " "))
+  cat("\n")
   
-  output.dir <- paste("../../Alignment/pairwise_", format(Sys.Date()), "/", sep = "")
-  print(output.dir)
-  if (!dir.exists(output.dir)) {
-    dir.create(output.dir)
-  }
+  # make the word list
+  word.list <- MakeWordList(f["input"])
+  correct.aln <- MakeWordList(f["correct"])
   
-  # matchingrate path
-  ansrate.file <- paste(ansrate.dir, "ansrate_p_",
-                        formatC(p, width = digits, flag = 0), ".txt", sep = "")
+  # get the number of the regions
+  regions <- length(word.list)
   
-  # result path
-  output.dir.sub <- paste(output.dir, "pairwise_p_",
-                          formatC(p, width = digits, flag = 0), "/", sep = "")
-  if (!dir.exists(output.dir.sub)) {
-    dir.create(output.dir.sub)
-  }
+  # make scoring matrix
+  s <- MakeEditDistance(-10)
   
-  # conduct the alignment for each files
-  hoge <- foreach (f = filesPath) %dopar% {
+  # making the gold standard alignments
+  gold.aln <- MakeGoldStandard(correct.aln, regions)
+  
+  # making the pairwise alignment in all regions
+  psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
+  
+  # calculating the matching rate
+  matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
+  
+  #######
+  # print the number of current matched
+  print(paste("base matched:", matching.rate))
+  
+  # store the org scoring matrix
+  s.old <- s
+  
+  matching.rate.new <- 0
+  loop <- 1
+  while (1) {
     
-    print(paste("input:", f["input"], sep = " "))
-    print(paste("correct:", f["correct"], sep = " "))
-    cat("\n")
+    newcorpus <- MakeCorpus(psa.aln)
+    col <- dim(newcorpus)[2]
+    max <- 100
+    maxpmi <- 0
+    for (j in 1:col) {
+      a <- newcorpus[1, j]
+      b <- newcorpus[2, j]
+      if (a != b) {
+        pmi <- PMI(a,b,newcorpus)
+        s[a,b] <- pmi
+        if (maxpmi<pmi) {
+          maxpmi <- pmi
+        }
+      }
+    }
     
-    # make the word list
-    word.list <- MakeWordList(f["input"])
-    correct.aln <- MakeWordList(f["correct"])
-    
-    # get the number of the regions
-    regions <- length(word.list)
-    
-    # make scoring matrix
-    s <- MakeEditDistance(-10)
-    
-    # making the gold standard alignments
-    gold.aln <- MakeGoldStandard(correct.aln, regions)
+    s.row <- dim(s)[1]
+    s.col <- dim(s)[2]
+    for (t1 in 1:s.row) {
+      for (t2 in 1:s.col) {
+        if (s.old[t1,t2] != s[t1,t2]) {
+          s[t1,t2] <- 0-s[t1,t2]+maxpmi
+        }
+      }
+    }
+    s.old <- s
     
     # making the pairwise alignment in all regions
     psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
     
     # calculating the matching rate
-    matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
+    matching.rate.new <- VerifAcc(gold.aln, psa.aln, regions)
     
-    #######
-    # print the number of current matched
-    print(paste("base matched:", matching.rate))
-    
-    # store the org scoring matrix
-    s.old <- s
-    
-    matching.rate.new <- 0
-    loop <- 1
-    while (1) {
-      
-      newcorpus <- MakeCorpus(psa.aln)
-      col <- dim(newcorpus)[2]
-      max <- 100
-      maxpmi <- 0
-      for (j in 1:col) {
-        a <- newcorpus[1, j]
-        b <- newcorpus[2, j]
-        if (a != b) {
-          pmi <- PMI(a,b,newcorpus)
-          s[a,b] <- pmi
-          if (maxpmi<pmi) {
-            maxpmi <- pmi
-          }
-        }
-      }
-      
-      s.row <- dim(s)[1]
-      s.col <- dim(s)[2]
-      for (t1 in 1:s.row) {
-        for (t2 in 1:s.col) {
-          if (s.old[t1,t2] != s[t1,t2]) {
-            s[t1,t2] <- 0-s[t1,t2]+maxpmi
-          }
-        }
-      }
-      s.old <- s
-      
-      # making the pairwise alignment in all regions
-      psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
-      
-      # calculating the matching rate
-      matching.rate.new <- VerifAcc(gold.aln, psa.aln, regions)
-      
-      # exit contraint
-      if (loop == max) {
-        matching.rate <- matching.rate.new
-        break
-      }
-      if (matching.rate == matching.rate.new) {
-        break
-      } else {
-        matching.rate <- matching.rate.new
-      }
-      
-      # print the number of loop
-      print(paste("loop:", loop))
-      loop <- loop+1
-      
-      # print the number of current matched
-      print(paste("new matched", matching.rate.new))
+    # exit contraint
+    if (loop == max) {
+      matching.rate <- matching.rate.new
+      print("max")
+      break
+    }
+    if (matching.rate == matching.rate.new) {
+      print("match")
+      break
+    } else {
+      matching.rate <- matching.rate.new
     }
     
-    #######
-    # output gold standard
-    OutputAlignment(f["name"], output.dir.sub, ".lg", gold.aln)
-    # output pairwise
-    OutputAlignment(f["name"], output.dir.sub, ".aln", psa.aln)
+    # print the number of loop
+    print(paste("loop:", loop))
+    loop <- loop+1
     
-    # output the matching rate
-    sink(ansrate.file, append = T)
-    rlt <- paste(f["name"], matching.rate, sep = " ")
-    print(rlt, quote = F)
-    sink()
+    # print the number of current matched
+    print(paste("new matched", matching.rate.new))
   }
+  
+  #######
+  # output gold standard
+  OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
+  # output pairwise
+  OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
+  
+  # output the matching rate
+  sink(ansrate.file, append = T)
+  rlt <- paste(f["name"], matching.rate, sep = " ")
+  print(rlt, quote = F)
+  sink()
 }
