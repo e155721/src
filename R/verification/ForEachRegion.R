@@ -18,6 +18,6 @@ ForEachRegion <- function(f, correct, wordList, s,
   rlt <- paste(f["name"], matchingRate, sep = " ")
   print(rlt, quote = F)
   sink()
-  
+
   return(0)
 }

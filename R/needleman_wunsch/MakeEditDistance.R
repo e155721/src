@@ -1,4 +1,4 @@
-MakeFeatureMatrix <- function(s5 = NA, p = NA)
+MakeEditDistance <- function(s5 = NA, p = NA)
 {
   
   cSymFile <- "../data/symbols/consonants"
