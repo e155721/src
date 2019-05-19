@@ -14,7 +14,7 @@ filesPath <- GetPathList()
 ansrate.file <- "../../Alignment/ansrate_levenshtein.txt"
 
 # result path
-output.dir <- paste("../../Alignment/pairwise_", format(Sys.Date()), "/", sep = "")
+output.dir <- paste("../../Alignment/pairwise_lev", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
@@ -23,7 +23,7 @@ if (!dir.exists(output.dir)) {
 s <- MakeEditDistance(10)
 
 # conduct the alignment for each files
-foreach (f = filesPath) %dopar% {
+foreach.rlt <- foreach (f = filesPath) %dopar% {
   print(f["name"])
   print(paste("input:", f["input"], sep = " "))
   print(paste("correct:", f["correct"], sep = " "))
