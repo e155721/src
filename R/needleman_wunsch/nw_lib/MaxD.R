@@ -1,7 +1,12 @@
-MaxD <- function(d1, d2, d3, lenSeq1, lenSeq2)
+MaxD <- function(d1, d2, d3, lenSeq1, lenSeq2, fmin)
 {
   d <- c(NA, NA)
-  d[1] <- max(d1, d2, d3)
+  
+  if (fmin) {
+    d[1] <- min(d1, d2, d3)
+  } else {
+    d[1] <- max(d1, d2, d3)
+  }
   
   if (lenSeq1 <= lenSeq2) {
     if (d[1] == d3) {

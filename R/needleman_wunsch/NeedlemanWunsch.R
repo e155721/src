@@ -1,6 +1,6 @@
 source("needleman_wunsch/nw_lib/functions.R")
 
-NeedlemanWunsch <- function(seq1, seq2, s)
+NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
 {
   # get the lengths of sequences
   lenSeq1 <- dim(seq1)[2]
@@ -36,7 +36,7 @@ NeedlemanWunsch <- function(seq1, seq2, s)
       d1 <- D$D1(mat, i, j)
       d2 <- D$D2(mat, i, j)
       d3 <- D$D3(mat, i, j)
-      mat[i, j, 1:2] <- MaxD(d1, d2, d3, lenSeq1, lenSeq2)
+      mat[i, j, 1:2] <- MaxD(d1, d2, d3, lenSeq1, lenSeq2, fmin)
     }
   }
   
