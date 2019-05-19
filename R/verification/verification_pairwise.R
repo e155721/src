@@ -1,11 +1,7 @@
 source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
-source("verification/ForEachRegion.R")
-source("verification/MakeGoldStandard.R")
-source("verification/MakePairwise.R")
-source("verification/VerifAcc.R")
-source("verification/OutputAlignment.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
+source("verification/verif_lib/verification_func.R")
 
 library(foreach)
 library(doParallel)
