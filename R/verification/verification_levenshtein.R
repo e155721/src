@@ -20,7 +20,7 @@ if (!dir.exists(output.dir)) {
 }
 
 # make scoring matrix
-s <- MakeEditDistance(-10)
+s <- MakeEditDistance(10)
 
 # conduct the alignment for each files
 foreach (f = filesPath) %dopar% {
