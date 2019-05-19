@@ -19,3 +19,6 @@ for (i in 3:wl.len) {
   print(seq1$multi)
 }
 print(seq1$score)
+
+# 69
+# 3827

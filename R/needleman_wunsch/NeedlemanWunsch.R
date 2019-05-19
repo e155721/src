@@ -1,78 +1,54 @@
 source("needleman_wunsch/nw_lib/functions.R")
 
-NeedlemanWunsch <- function(seq1, seq2, s)
+NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
 {
+  # get the lengths of sequences
+  lenSeq1 <- dim(seq1)[2]
+  lenSeq2 <- dim(seq2)[2]
+  
   # initialize variable
   g1 <- matrix("-", nrow = dim(seq1)[1])
   g2 <- matrix("-", nrow = dim(seq2)[1])
+  D <- D$new(seq1, seq2, g1, g2, s)
   
-  D <- D$new(seq1, seq2, s)
+  # making the distance matrix
+  mat <- array(dim=c(lenSeq1, lenSeq2, 2))
   
-  # calculate matrix for sequence alignment
-  mat <- MakeMatrix(seq1, seq2)
-  mat <- InitializeMat(mat, seq1, seq2, g1, g2, s)
+  # initializing the distance matrix
+  mat[1, 1, ] <- 0
   
-  rowLen <- dim(seq1)[2]
-  colLen <- dim(seq2)[2]
+  # vertical gap
+  for (i in 2:lenSeq1) {
+    mat[i, 1, 1] <- D$D2(mat, i, 1)
+    mat[i, 1, 2] <- 1
+  }
   
-  for (i in 2:rowLen) {
-    for (j in 2:colLen) {
-      d <- D$getScore(mat, i, j, g1, g2)
-      mat[i, j, 1] <- d[1]
-      mat[i, j, 2] <- d[2]
+  # holiontally gap
+  for (j in 2:lenSeq2) {
+    mat[1, j, 1] <- D$D3(mat, 1, j)
+    mat[1, j, 2] <- -1
+  }
+  
+  # calculation the distance matrix
+  for (i in 2:lenSeq1) {
+    for (j in 2:lenSeq2) {
+      
+      d1 <- D$D1(mat, i, j)
+      d2 <- D$D2(mat, i, j)
+      d3 <- D$D3(mat, i, j)
+      mat[i, j, 1:2] <- MaxD(d1, d2, d3, lenSeq1, lenSeq2, fmin)
     }
   }
   
   # trace back
-  score <- traceVec <- c() 
-  i <- rowLen
-  j <- colLen
-  n <- 1
-  score <- mat[i, j, 1]
-  while (TRUE) {
-    if (i == 1 && j == 1) break
-    traceVec[n] <- mat[i, j, 2]
-    n <- n + 1
-    
-    trace <- mat[i, j, 2]
-    if (trace == 0) {
-      i <- i - 1
-      j <- j - 1
-    } else if (trace == 1) {
-      i <- i - 1
-    } else if (trace == -1){
-      j <- j - 1
-    }
-  }
-  traceVec <- rev(traceVec)
+  align <- TraceBack(mat, seq1, seq2, g1, g2)
   
-  align1 <- matrix(seq1[, 1], nrow = dim(seq1)[1])
-  align2 <- matrix(seq2[, 1], nrow = dim(seq2)[1])
+  rlt <- list(NA, NA, NA, NA)
+  names(rlt) <- c("seq1", "seq2", "multi", "score")
+  rlt[["seq1"]] <- align[[1]]
+  rlt[["seq2"]] <- align[[2]]
+  rlt[["multi"]] <- rbind(align[[1]], align[[2]])
+  rlt[["score"]] <- mat[lenSeq1, lenSeq2, 1]
   
-  i <- j <- 2
-  for (t in traceVec) {
-    if(t == 0) {
-      align1 <- cbind(align1, seq1[, i])
-      align2 <- cbind(align2, seq2[, j])
-      i <- i + 1
-      j <- j + 1
-    } else if(t == 1) {
-      align1 <- cbind(align1, seq1[, i])
-      align2 <- cbind(align2, g2)
-      i <- i + 1
-    } else {
-      align1 <- cbind(align1, g1)
-      align2 <- cbind(align2, seq2[, j])
-      j <- j + 1
-    }
-  }
-  
-  align <- list(NA, NA, NA, NA)
-  names(align) <- c("seq1", "seq2", "multi", "score")
-  align[["seq1"]] <- align1
-  align[["seq2"]] <- align2
-  align[["multi"]] <- rbind(align1, align2)
-  align[["score"]] <- score
-  
-  return(align)
+  return(rlt)
 }
