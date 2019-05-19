@@ -20,7 +20,7 @@ if (!dir.exists(output.dir)) {
 }
 
 # conduct the alignment for each files
-hoge <- foreach (f = filesPath) %dopar% {
+foreach.rlt <- foreach (f = filesPath) %dopar% {
   
   print(paste("input:", f["input"], sep = " "))
   print(paste("correct:", f["correct"], sep = " "))

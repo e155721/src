@@ -4,7 +4,7 @@ f <- function(x,y,corpus)
   col <- dim(corpus)[2]
   count <- 0
   for (j in 1:col) {
-    if (corpus[1, j] == corpus[2, j]) {
+    if (x==corpus[1, j] && y==corpus[2, j]) {
       count <- count+1
     }
   }
