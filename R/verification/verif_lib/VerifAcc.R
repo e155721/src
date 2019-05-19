@@ -1,7 +1,6 @@
 VerifAcc <- function(gold.aln, psa.aln, regions)
 {
   N <- length(gold.aln)
-  print(N)
   match <- 0  
   i <- 1
   while (i <= N) {

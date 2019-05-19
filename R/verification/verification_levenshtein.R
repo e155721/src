@@ -10,70 +10,49 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-pVec <- 1
-digits <- 2
-lenpVec <- length(pVec)
+# matchingrate path
+ansrate.file <- "../../Alignment/ansrate_levenshtein.txt"
 
-pairwise <- foreach (p = pVec) %do% {
+# result path
+output.dir <- paste("../../Alignment/pairwise_", format(Sys.Date()), "/", sep = "")
+if (!dir.exists(output.dir)) {
+  dir.create(output.dir)
+}
+
+# make scoring matrix
+s <- MakeEditDistance(-10)
+
+# conduct the alignment for each files
+foreach (f = filesPath) %dopar% {
+  print(f["name"])
+  print(paste("input:", f["input"], sep = " "))
+  print(paste("correct:", f["correct"], sep = " "))
+  cat("\n")
   
-  ansrate.dir <- paste("../../Alignment/ansrate_", format(Sys.Date()), "/", sep = "")
-  print(ansrate.dir)
-  if (!dir.exists(ansrate.dir)) {
-    dir.create(ansrate.dir)
-  }
+  # make the word list
+  word.list <- MakeWordList(f["input"])
+  correct.aln <- MakeWordList(f["correct"])
   
-  output.dir <- paste("../../Alignment/pairwise_", format(Sys.Date()), "/", sep = "")
-  print(output.dir)
-  if (!dir.exists(output.dir)) {
-    dir.create(output.dir)
-  }
+  # get the number of the regions
+  regions <- length(word.list)
   
-  # matchingrate path
-  ansrate.file <- paste(ansrate.dir, "ansrate_p_",
-                        formatC(p, width = digits, flag = 0), ".txt", sep = "")
+  # making the gold standard alignments
+  gold.aln <- MakeGoldStandard(correct.aln, regions)
   
-  # result path
-  output.dir.sub <- paste(output.dir, "pairwise_p_",
-                          formatC(p, width = digits, flag = 0), "/", sep = "")
-  if (!dir.exists(output.dir.sub)) {
-    dir.create(output.dir.sub)
-  }
+  # making the pairwise alignment in all regions
+  psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
   
-  # conduct the alignment for each files
-  foreach (f = filesPath) %dopar% {
-    
-    print(paste("input:", f["input"], sep = " "))
-    print(paste("correct:", f["correct"], sep = " "))
-    cat("\n")
-    
-    # make the word list
-    word.list <- MakeWordList(f["input"])
-    correct.aln <- MakeWordList(f["correct"])
-    
-    # get the number of the regions
-    regions <- length(word.list)
-    
-    # make scoring matrix
-    s <- MakeEditDistance(-10)
-    
-    # making the gold standard alignments
-    gold.aln <- MakeGoldStandard(correct.aln, regions)
-    
-    # making the pairwise alignment in all regions
-    psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
-    
-    # calculating the matching rate
-    matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
-    
-    # output gold standard
-    OutputAlignment(f["name"], output.dir.sub, ".lg", gold.aln)
-    # output pairwise
-    OutputAlignment(f["name"], output.dir.sub, ".aln", psa.aln)
-    
-    # output the matching rate
-    sink(ansrate.file, append = T)
-    rlt <- paste(f["name"], matching.rate, sep = " ")
-    print(rlt, quote = F)
-    sink()
-  }
+  # calculating the matching rate
+  matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
+  
+  # output gold standard
+  OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
+  # output pairwise
+  OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
+  
+  # output the matching rate
+  sink(ansrate.file, append = T)
+  rlt <- paste(f["name"], matching.rate, sep = " ")
+  print(rlt, quote = F)
+  sink()
 }
