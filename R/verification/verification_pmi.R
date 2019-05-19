@@ -34,7 +34,7 @@ hoge <- foreach (f = filesPath) %dopar% {
   regions <- length(word.list)
   
   # make scoring matrix
-  s <- MakeEditDistance(-10)
+  s <- MakeEditDistance(10)
   
   # making the gold standard alignments
   gold.aln <- MakeGoldStandard(correct.aln, regions)
