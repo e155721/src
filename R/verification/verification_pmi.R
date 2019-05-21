@@ -81,7 +81,13 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
         }
       }
     }
+    # updating CV penalties
+    s[1:81, 82:118] <- maxpmi
+    s[82:118, 1:81] <- maxpmi
+    # updating old scoring matrix
     s.old <- s
+    s.old[1:81, 82:118] <- 10
+    s.old[82:118, 1:81] <- 10
     
     # making the pairwise alignment in all regions
     psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
