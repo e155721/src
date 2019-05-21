@@ -1,5 +1,5 @@
-#f(x,y)
-f <- function(x,y,corpus)
+#h(x,y)
+h <- function(x,y,corpus)
 {
   X <- x==corpus[1, ]
   Y <- y==corpus[2, ]
@@ -18,15 +18,19 @@ g <- function(x,corpus)
   return(nx1+nx2)
 }
 
-PMI <- function(x,y,corpus)
+MakeCoMat <- function(corpus)
 {
-  N <- length(corpus)
+  seg.vec <- unique(c(corpus))
+  row <- length(seg.vec)
+  col <- length(seg.vec)
+  co.mat <- matrix(0, row, col, dimnames = list(seg.vec, seg.vec))
   
-  # f(x,y)  
-  p1 <- f(x,y,corpus)*N
-  # g(x), g(y)
-  p2 <- g(x, corpus)*g(y, corpus)
-  pmi <- log2(p1/p2)
-  
-  return(pmi)
+  for (i in seg.vec) {
+    for (j in seg.vec) {
+      if (i!=j) {
+        co.mat[i, j] <- co.mat[i, j]+h(i, j, corpus)
+      }
+    }
+  }
+  return(co.mat)
 }
