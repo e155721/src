@@ -55,39 +55,42 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   matching.rate.new <- 0
   loop <- 1
   while (1) {
-    
+    # update scoring matrix
     newcorpus <- MakeCorpus(psa.aln)
-    col <- dim(newcorpus)[2]
-    max <- 100
-    maxpmi <- 0
-    for (j in 1:col) {
-      a <- newcorpus[1, j]
-      b <- newcorpus[2, j]
-      if (a != b) {
-        pmi <- PMI(a,b,newcorpus)
-        s[a,b] <- pmi
-        if (maxpmi<pmi) {
-          maxpmi <- pmi
+    co.mat <- MakeCoMat(newcorpus)
+    v.vec <- dimnames(co.mat)[[1]]
+    V <- length(v.vec)
+    N <- length(newcorpus)
+    maxpmi <- c()
+    for (i in 1:V) {
+      for (j in 1:V) {
+        a <- v.vec[i]
+        b <- v.vec[j]
+        if (a!=b) {
+          p1 <- (co.mat[a, b]+1)*(N+V)
+          p2 <- (g(a, newcorpus)+1)*(g(b, newcorpus)+1)
+          pmi <- log2(p1/p2)
+          s[a, b] <- pmi
+          maxpmi <- append(maxpmi, pmi)
+        }
+      }
+    }
+    maxpmi <- max(maxpmi)[1]
+    
+    for (t1 in v.vec) {
+      for (t2 in v.vec) {
+        if (t1 != t2) {
+          s[t1, t2] <- 0-s[t1, t2]+maxpmi
         }
       }
     }
     
-    s.row <- dim(s)[1]
-    s.col <- dim(s)[2]
-    for (t1 in 1:s.row) {
-      for (t2 in 1:s.col) {
-        if (s.old[t1,t2] != s[t1,t2]) {
-          s[t1,t2] <- 0-s[t1,t2]+maxpmi
-        }
-      }
-    }
     # updating CV penalties
-    s[1:81, 82:118] <- maxpmi
-    s[82:118, 1:81] <- maxpmi
+    s[1:81, 82:118] <- 10+maxpmi
+    s[82:118, 1:81] <- 10+maxpmi
+    
     # updating old scoring matrix
     s.old <- s
-    s.old[1:81, 82:118] <- 10
-    s.old[82:118, 1:81] <- 10
     
     # making the pairwise alignment in all regions
     psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
@@ -97,7 +100,6 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     
     # exit contraint
     if (matching.rate == matching.rate.new) {
-      print("match")
       break
     } else {
       matching.rate <- matching.rate.new
