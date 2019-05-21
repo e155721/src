@@ -1,13 +1,11 @@
 #f(x,y)
 f <- function(x,y,corpus)
 {
-  col <- dim(corpus)[2]
-  count <- 0
-  for (j in 1:col) {
-    if (x==corpus[1, j] && y==corpus[2, j]) {
-      count <- count+1
-    }
-  }
+  X <- x==corpus[1, ]
+  Y <- y==corpus[2, ]
+  Z <- X+Y
+  count <- length(Z[Z==2])
+  
   return(count)
 }
 
@@ -16,6 +14,7 @@ g <- function(x,corpus)
 {
   nx1 <- length(corpus[1, corpus[1,]==x])
   nx2 <- length(corpus[2, corpus[2,]==x])
+  
   return(nx1+nx2)
 }
 
