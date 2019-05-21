@@ -24,11 +24,7 @@ PMI <- function(x,y,corpus)
   N <- length(corpus)
   
   # f(x,y)  
-  p1 <- f(x,y,corpus)
-  if (x != y) {
-    p1 <- p1 + f(y,x,corpus)
-  }
-  p1 <- p1*N
+  p1 <- f(x,y,corpus)*N
   # g(x), g(y)
   p2 <- g(x, corpus)*g(y, corpus)
   pmi <- log2(p1/p2)
