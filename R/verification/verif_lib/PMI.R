@@ -4,18 +4,17 @@ h <- function(x,y,corpus)
   X <- x==corpus[1, ]
   Y <- y==corpus[2, ]
   Z <- X+Y
-  count <- length(Z[Z==2])
+  f.xy <- length(Z[Z==2])
   
-  return(count)
+  return(f.xy)
 }
 
 # g(x)
 g <- function(x,corpus)
 {
-  nx1 <- length(corpus[1, corpus[1,]==x])
-  nx2 <- length(corpus[2, corpus[2,]==x])
+  f.x <- length(corpus[corpus==x])
   
-  return(nx1+nx2)
+  return(f.x)
 }
 
 MakeCoMat <- function(corpus)
@@ -27,9 +26,7 @@ MakeCoMat <- function(corpus)
   
   for (i in seg.vec) {
     for (j in seg.vec) {
-      if (i!=j) {
-        co.mat[i, j] <- co.mat[i, j]+h(i, j, corpus)
-      }
+      co.mat[i, j] <- co.mat[i, j]+h(i, j, corpus)
     }
   }
   return(co.mat)
