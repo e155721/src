@@ -10,11 +10,11 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-pVec <- 1
+pVec <- 3
 digits <- 2
 lenpVec <- length(pVec)
 
-pairwise <- foreach (p = pVec) %dopar% {
+pairwise <- foreach (p = pVec) %do% {
   
   ansrate.dir <- paste("../../Alignment/ansrate_", format(Sys.Date()), "/", sep = "")
   print(ansrate.dir)
@@ -40,7 +40,7 @@ pairwise <- foreach (p = pVec) %dopar% {
   }
   
   # conduct the alignment for each files
-  for (f in filesPath) {
+  foreach (f = filesPath) %dopar% {
     
     print(paste("input:", f["input"], sep = " "))
     print(paste("correct:", f["correct"], sep = " "))
