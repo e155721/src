@@ -11,7 +11,7 @@ registerDoParallel(detectCores())
 filesPath <- GetPathList()
 
 # matchingrate path
-ansrate.file <- paste("../../Alignment/ansrate_levenshtein_", format(Sys.Date()), ".txt", sep = "")
+ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), ".txt", sep = "")
 
 # result path
 output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "/", sep = "")
