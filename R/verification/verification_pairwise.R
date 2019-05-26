@@ -47,8 +47,8 @@ pairwise <- foreach (p = pVec) %do% {
     cat("\n")
     
     # make the word list
-    correct.aln <- MakeWordList(f["input"])
-    word.list <- MakeInputSeq(correct.aln)
+    gold.aln <- MakeWordList(f["input"])
+    word.list <- MakeInputSeq(gold.aln)
     
     # get the number of the regions
     regions <- length(word.list)
@@ -57,7 +57,7 @@ pairwise <- foreach (p = pVec) %do% {
     s <- MakeFeatureMatrix(-10, -p)
     
     # making the gold standard alignments
-    gold.aln <- MakeGoldStandard(correct.aln, regions)
+    gold.aln <- MakeGoldStandard(gold.aln, regions)
     
     # making the pairwise alignment in all regions
     psa.aln <- MakePairwise(word.list, regions, s)

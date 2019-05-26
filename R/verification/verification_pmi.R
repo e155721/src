@@ -2,6 +2,7 @@ source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeEditDistance.R")
 source("verification/verif_lib/verification_func.R")
+source("verification/verif_lib/MakeInputSeq.R")
 
 library(foreach)
 library(doParallel)
@@ -23,24 +24,23 @@ if (!dir.exists(output.dir)) {
 foreach.rlt <- foreach (f = filesPath) %dopar% {
   
   print(paste("input:", f["input"], sep = " "))
-  print(paste("correct:", f["correct"], sep = " "))
   cat("\n")
   
   # make the word list
-  word.list <- MakeWordList(f["input"])
-  correct.aln <- MakeWordList(f["correct"])
+  gold.list <- MakeWordList(f["input"])
+  input.list <- MakeInputSeq(gold.list)
   
   # get the number of the regions
-  regions <- length(word.list)
+  regions <- length(input.list)
   
   # make scoring matrix
   s <- MakeEditDistance(10)
   
   # making the gold standard alignments
-  gold.aln <- MakeGoldStandard(correct.aln, regions)
+  gold.aln <- MakeGoldStandard(gold.list, regions)
   
   # making the pairwise alignment in all regions
-  psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
+  psa.aln <- MakePairwise(input.list, regions, s, fmin = T)
   
   # calculating the matching rate
   matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
@@ -93,7 +93,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     s.old <- s
     
     # making the pairwise alignment in all regions
-    psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
+    psa.aln <- MakePairwise(input.list, regions, s, fmin = T)
     
     # calculating the matching rate
     matching.rate.new <- VerifAcc(gold.aln, psa.aln, regions)
