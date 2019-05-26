@@ -2,6 +2,7 @@ source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("verification/verif_lib/verification_func.R")
+source("verification/verif_lib/MakeInputSeq.R")
 
 library(foreach)
 library(doParallel)
@@ -43,12 +44,11 @@ pairwise <- foreach (p = pVec) %do% {
   foreach (f = filesPath) %dopar% {
     
     print(paste("input:", f["input"], sep = " "))
-    print(paste("correct:", f["correct"], sep = " "))
     cat("\n")
     
     # make the word list
-    word.list <- MakeWordList(f["input"])
-    correct.aln <- MakeWordList(f["correct"])
+    correct.aln <- MakeWordList(f["input"])
+    word.list <- MakeInputSeq(correct.aln)
     
     # get the number of the regions
     regions <- length(word.list)
@@ -66,13 +66,13 @@ pairwise <- foreach (p = pVec) %do% {
     matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
     
     # output gold standard
-    OutputAlignment(f["name"], output.dir.sub, ".lg", gold.aln)
+    OutputAlignment(f["input"], output.dir.sub, ".lg", gold.aln)
     # output pairwise
-    OutputAlignment(f["name"], output.dir.sub, ".aln", psa.aln)
+    OutputAlignment(f["input"], output.dir.sub, ".aln", psa.aln)
     
     # output the matching rate
     sink(ansrate.file, append = T)
-    rlt <- paste(f["name"], matching.rate, sep = " ")
+    rlt <- paste(f["input"], matching.rate, sep = " ")
     print(rlt, quote = F)
     sink()
   }
