@@ -23,9 +23,6 @@ if (!dir.exists(output.dir)) {
 # conduct the alignment for each files
 foreach.rlt <- foreach (f = filesPath) %dopar% {
   
-  print(paste("input:", f["input"], sep = " "))
-  cat("\n")
-  
   # make the word list
   gold.list <- MakeWordList(f["input"])
   input.list <- MakeInputSeq(gold.list)

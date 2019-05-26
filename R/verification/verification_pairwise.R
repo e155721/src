@@ -18,13 +18,11 @@ lenpVec <- length(pVec)
 pairwise <- foreach (p = pVec) %do% {
   
   ansrate.dir <- paste("../../Alignment/ansrate_", format(Sys.Date()), "/", sep = "")
-  print(ansrate.dir)
   if (!dir.exists(ansrate.dir)) {
     dir.create(ansrate.dir)
   }
   
   output.dir <- paste("../../Alignment/pairwise_", format(Sys.Date()), "/", sep = "")
-  print(output.dir)
   if (!dir.exists(output.dir)) {
     dir.create(output.dir)
   }
@@ -42,10 +40,7 @@ pairwise <- foreach (p = pVec) %do% {
   
   # conduct the alignment for each files
   foreach (f = filesPath) %dopar% {
-    
-    print(paste("input:", f["input"], sep = " "))
-    cat("\n")
-    
+            
     # make the word list
     gold.aln <- MakeWordList(f["input"])
     word.list <- MakeInputSeq(gold.aln)
