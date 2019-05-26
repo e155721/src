@@ -72,7 +72,7 @@ pairwise <- foreach (p = pVec) %do% {
     
     # output the matching rate
     sink(ansrate.file, append = T)
-    rlt <- paste(f["input"], matching.rate, sep = " ")
+    rlt <- paste(f["name"], matching.rate, sep = " ")
     print(rlt, quote = F)
     sink()
   }
