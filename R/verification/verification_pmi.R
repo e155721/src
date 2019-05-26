@@ -31,7 +31,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   regions <- length(input.list)
   
   # make scoring matrix
-  s <- MakeEditDistance(10)
+  s <- MakeEditDistance(Inf)
   
   # making the gold standard alignments
   gold.aln <- MakeGoldStandard(gold.list, regions)
@@ -83,8 +83,10 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     }
     
     # updating CV penalties
-    s[1:81, 82:118] <- 10+maxpmi
-    s[82:118, 1:81] <- 10+maxpmi
+    # s[1:81, 82:118] <- 10+maxpmi
+    # s[82:118, 1:81] <- 10+maxpmi
+    s[1:81, 82:118] <- Inf
+    s[82:118, 1:81] <- Inf
     
     # updating old scoring matrix
     s.old <- s

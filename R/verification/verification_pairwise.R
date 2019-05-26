@@ -49,7 +49,7 @@ pairwise <- foreach (p = pVec) %do% {
     regions <- length(word.list)
     
     # make scoring matrix
-    s <- MakeFeatureMatrix(-10, -p)
+    s <- MakeFeatureMatrix(-Inf, -p)
     
     # making the gold standard alignments
     gold.aln <- MakeGoldStandard(gold.aln, regions)
