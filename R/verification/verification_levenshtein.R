@@ -2,6 +2,7 @@ source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeEditDistance.R")
 source("verification/verif_lib/verification_func.R")
+source("verification/verif_lib/MakeInputSeq.R")
 
 library(foreach)
 library(doParallel)
@@ -14,7 +15,7 @@ filesPath <- GetPathList()
 ansrate.file <- "../../Alignment/ansrate_levenshtein.txt"
 
 # result path
-output.dir <- paste("../../Alignment/pairwise_lev", format(Sys.Date()), "/", sep = "")
+output.dir <- paste("../../Alignment/pairwise_levenshtein", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
@@ -24,20 +25,16 @@ s <- MakeEditDistance(10)
 
 # conduct the alignment for each files
 foreach.rlt <- foreach (f = filesPath) %dopar% {
-  print(f["name"])
-  print(paste("input:", f["input"], sep = " "))
-  print(paste("correct:", f["correct"], sep = " "))
-  cat("\n")
   
   # make the word list
-  word.list <- MakeWordList(f["input"])
-  correct.aln <- MakeWordList(f["correct"])
+  gold.list <- MakeWordList(f["input"])
+  word.list <- MakeInputSeq(gold.list)
   
   # get the number of the regions
   regions <- length(word.list)
   
   # making the gold standard alignments
-  gold.aln <- MakeGoldStandard(correct.aln, regions)
+  gold.aln <- MakeGoldStandard(gold.list, regions)
   
   # making the pairwise alignment in all regions
   psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
