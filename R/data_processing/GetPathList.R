@@ -8,9 +8,10 @@ GetPathList <- function(inputDir = "../../Alignment/org_data/")
   pathList <- list()
   numOfFiles <- length(inputFiles)
   for (i in 1:numOfFiles) {
-    pathList[[i]] <- c(NA)
-    names(pathList[[i]]) <- c("input")
+    pathList[[i]] <- c(NA, NA)
+    names(pathList[[i]]) <- c("input", "name")
     pathList[[i]]["input"] <- inputPaths[[i]]
+    pathList[[i]]["name"] <- inputFiles[[i]]
   }
   
   return(pathList)
