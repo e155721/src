@@ -66,9 +66,9 @@ pairwise <- foreach (p = pVec) %do% {
     matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
     
     # output gold standard
-    OutputAlignment(f["input"], output.dir.sub, ".lg", gold.aln)
+    OutputAlignment(f["name"], output.dir.sub, ".lg", gold.aln)
     # output pairwise
-    OutputAlignment(f["input"], output.dir.sub, ".aln", psa.aln)
+    OutputAlignment(f["name"], output.dir.sub, ".aln", psa.aln)
     
     # output the matching rate
     sink(ansrate.file, append = T)
