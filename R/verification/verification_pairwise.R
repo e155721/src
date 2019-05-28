@@ -11,11 +11,11 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-pVec <- 3
+p.vec <- -3
 digits <- 2
-lenpVec <- length(pVec)
+lenp.vec <- length(p.vec)
 
-pairwise <- foreach (p = pVec) %do% {
+pairwise <- foreach (p = p.vec) %do% {
   
   ansrate.dir <- paste("../../Alignment/ansrate_", format(Sys.Date()), "/", sep = "")
   if (!dir.exists(ansrate.dir)) {
@@ -29,11 +29,11 @@ pairwise <- foreach (p = pVec) %do% {
   
   # matchingrate path
   ansrate.file <- paste(ansrate.dir, "ansrate_p_",
-                        formatC(p, width = digits, flag = 0), ".txt", sep = "")
+                        formatC(-p, width = digits, flag = 0), ".txt", sep = "")
   
   # result path
   output.dir.sub <- paste(output.dir, "pairwise_p_",
-                          formatC(p, width = digits, flag = 0), "/", sep = "")
+                          formatC(-p, width = digits, flag = 0), "/", sep = "")
   if (!dir.exists(output.dir.sub)) {
     dir.create(output.dir.sub)
   }
@@ -42,17 +42,17 @@ pairwise <- foreach (p = pVec) %do% {
   foreach (f = filesPath) %dopar% {
             
     # make the word list
-    gold.aln <- MakeWordList(f["input"])
-    word.list <- MakeInputSeq(gold.aln)
+    gold.list <- MakeWordList(f["input"])
+    word.list <- MakeInputSeq(gold.list)
     
     # get the number of the regions
     regions <- length(word.list)
     
     # make scoring matrix
-    s <- MakeFeatureMatrix(-Inf, -p)
+    s <- MakeFeatureMatrix(-Inf, p)
     
     # making the gold standard alignments
-    gold.aln <- MakeGoldStandard(gold.aln, regions)
+    gold.aln <- MakeGoldStandard(gold.list, regions)
     
     # making the pairwise alignment in all regions
     psa.aln <- MakePairwise(word.list, regions, s)
