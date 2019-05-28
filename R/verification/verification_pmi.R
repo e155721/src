@@ -27,20 +27,17 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   gold.list <- MakeWordList(f["input"])
   input.list <- MakeInputSeq(gold.list)
   
-  # get the number of the regions
-  regions <- length(input.list)
-  
   # make scoring matrix
   s <- MakeEditDistance(Inf)
   
   # making the gold standard alignments
-  gold.aln <- MakeGoldStandard(gold.list, regions)
+  gold.aln <- MakeGoldStandard(gold.list)
   
   # making the pairwise alignment in all regions
-  psa.aln <- MakePairwise(input.list, regions, s, fmin = T)
+  psa.aln <- MakePairwise(input.list, s, fmin = T)
   
   # calculating the matching rate
-  matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
+  matching.rate <- VerifAcc(gold.aln, psa.aln)
   
   #######
   # print the number of current matched
@@ -92,10 +89,10 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     s.old <- s
     
     # making the pairwise alignment in all regions
-    psa.aln <- MakePairwise(input.list, regions, s, fmin = T)
+    psa.aln <- MakePairwise(input.list, s, fmin = T)
     
     # calculating the matching rate
-    matching.rate.new <- VerifAcc(gold.aln, psa.aln, regions)
+    matching.rate.new <- VerifAcc(gold.aln, psa.aln)
     
     # exit contraint
     if (matching.rate == matching.rate.new) {

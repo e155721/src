@@ -1,8 +1,10 @@
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanWunsch.R")
 
-MakePairwise <- function(wordList, regions, s, fmin=F)
+MakePairwise <- function(word.list, s, fmin=F)
 {
+  regions <- length(word.list)
+  
   # pairwise alignments
   psa.aln <- list()
   
@@ -11,8 +13,8 @@ MakePairwise <- function(wordList, regions, s, fmin=F)
   for (k in 1:(regions-1)) {
     # the start of the alignment for each the region pair
     for (l in m:regions) {
-      psa <- NeedlemanWunsch(as.matrix(wordList[[k]], drop = F),
-                               as.matrix(wordList[[l]], drop = F), s, fmin)
+      psa <- NeedlemanWunsch(as.matrix(word.list[[k]], drop = F),
+                             as.matrix(word.list[[l]], drop = F), s, fmin)
       psa.aln[[n]] <- psa$seq1
       psa.aln[[n+1]] <- psa$seq2
       n <- n+2

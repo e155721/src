@@ -1,9 +1,9 @@
-VerifAcc <- function(gold.aln, psa.aln, regions)
+VerifAcc <- function(gold.aln, psa.aln)
 {
-  N <- length(gold.aln)
+  regions <- length(gold.aln)
   match <- 0  
   i <- 1
-  while (i <= N) {
+  while (i <= regions) {
     gold <- paste(gold.aln[[i]][1, -1], gold.aln[[i+1]][1, -1], sep = "", collapse = "")
     psa <- paste(psa.aln[[i]][1, -1], psa.aln[[i+1]][1, -1], sep = "", collapse = "")
     i <- i+2
@@ -13,7 +13,7 @@ VerifAcc <- function(gold.aln, psa.aln, regions)
     }
   }
   
-  npairs <- sum((regions-1):1)
+  npairs <- regions/2
   matching.rate <- match / npairs * 100
   
   return(matching.rate)

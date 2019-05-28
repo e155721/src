@@ -30,17 +30,14 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   gold.list <- MakeWordList(f["input"])
   word.list <- MakeInputSeq(gold.list)
   
-  # get the number of the regions
-  regions <- length(word.list)
-  
   # making the gold standard alignments
-  gold.aln <- MakeGoldStandard(gold.list, regions)
+  gold.aln <- MakeGoldStandard(gold.list)
   
   # making the pairwise alignment in all regions
-  psa.aln <- MakePairwise(word.list, regions, s, fmin = T)
+  psa.aln <- MakePairwise(word.list, s, fmin = T)
   
   # calculating the matching rate
-  matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
+  matching.rate <- VerifAcc(gold.aln, psa.aln)
   
   # output gold standard
   OutputAlignment(f["name"], output.dir, ".lg", gold.aln)

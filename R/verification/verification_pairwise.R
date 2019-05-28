@@ -45,20 +45,17 @@ pairwise <- foreach (p = p.vec) %do% {
     gold.list <- MakeWordList(f["input"])
     word.list <- MakeInputSeq(gold.list)
     
-    # get the number of the regions
-    regions <- length(word.list)
-    
     # make scoring matrix
     s <- MakeFeatureMatrix(-Inf, p)
     
     # making the gold standard alignments
-    gold.aln <- MakeGoldStandard(gold.list, regions)
+    gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.aln <- MakePairwise(word.list, regions, s)
+    psa.aln <- MakePairwise(word.list, s)
     
     # calculating the matching rate
-    matching.rate <- VerifAcc(gold.aln, psa.aln, regions)
+    matching.rate <- VerifAcc(gold.aln, psa.aln)
     
     # output gold standard
     OutputAlignment(f["name"], output.dir.sub, ".lg", gold.aln)
