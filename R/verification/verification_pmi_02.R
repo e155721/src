@@ -104,7 +104,7 @@ for (denom in denom.vec) {
         break
       } else {
         matching.rate <- matching.rate.new
-        print(matching.rate)
+        print(paste(f["name"], matching.rate))
       }
     }
     
