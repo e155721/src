@@ -51,6 +51,9 @@ for (denom in denom.vec) {
     s.old <- s
     
     matching.rate.new <- 0
+    loop <- 1
+    rate <- 0        
+    rate.vec <- c()
     while (1) {
       # calculating PMI
       newcorpus <- MakeCorpus(psa.aln)
@@ -123,18 +126,18 @@ for (denom in denom.vec) {
           break
         }
       }
-      
-      #######
-      # output gold standard
-      OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
-      # output pairwise
-      OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
-      
-      # output the matching rate
-      sink(ansrate.file, append = T)
-      rlt <- paste(f["name"], matching.rate, sep = " ")
-      print(rlt, quote = F)
-      sink()
     }
+    
+    #######
+    # output gold standard
+    OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
+    # output pairwise
+    OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
+    
+    # output the matching rate
+    sink(ansrate.file, append = T)
+    rlt <- paste(f["name"], matching.rate, sep = " ")
+    print(rlt, quote = F)
+    sink()
   }
 }
