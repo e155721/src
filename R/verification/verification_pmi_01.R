@@ -12,7 +12,7 @@ registerDoParallel(detectCores())
 filesPath <- GetPathList()
 
 E <- 1
-denom.vec <- c(10, 100, 1000, 10000, 100000)
+denom.vec <- c(1, 10, 100, 1000, 10000, 100000)
 for (denom in denom.vec) {
   
   # initialize epsilon
@@ -51,6 +51,9 @@ for (denom in denom.vec) {
     s.old <- s
     
     matching.rate.new <- 0
+    loop <- 1
+    rate <- 0        
+    rate.vec <- c()
     while (1) {
       # calculating PMI
       newcorpus <- MakeCorpus(psa.aln)
@@ -102,10 +105,28 @@ for (denom in denom.vec) {
       # exit contraint
       if (matching.rate == matching.rate.new) {
         break
+        if (matching.rate == 100) {
+          break
+        }
       } else {
         matching.rate <- matching.rate.new
         print(paste(f["name"], matching.rate))
       }
+      
+      if (!is.null(rate)) {
+        matching.rate
+      }
+      if (loop > 100 && is.null(rate)) {
+        rate.vec <- append(rate.vec, matching.rate)
+        if (length(rate.vec) == 2) {
+          rate <- max(rate.vec)
+        }
+      } else {
+        if (matching.rate == rate) {
+          break
+        }
+      }
+      
     }
     
     #######

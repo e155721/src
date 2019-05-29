@@ -12,7 +12,7 @@ registerDoParallel(detectCores())
 filesPath <- GetPathList()
 
 E <- 1
-denom.vec <- c(10, 100, 1000, 10000, 100000)
+denom.vec <- c(1, 10, 100, 1000, 10000, 100000)
 for (denom in denom.vec) {
   
   # initialize epsilon
@@ -102,22 +102,39 @@ for (denom in denom.vec) {
       # exit contraint
       if (matching.rate == matching.rate.new) {
         break
+        if (matching.rate == 100) {
+          break
+        }
       } else {
         matching.rate <- matching.rate.new
         print(paste(f["name"], matching.rate))
       }
+      
+      if (!is.null(rate)) {
+        matching.rate
+      }
+      if (loop > 100 && is.null(rate)) {
+        rate.vec <- append(rate.vec, matching.rate)
+        if (length(rate.vec) == 2) {
+          rate <- max(rate.vec)
+        }
+      } else {
+        if (matching.rate == rate) {
+          break
+        }
+      }
+      
+      #######
+      # output gold standard
+      OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
+      # output pairwise
+      OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
+      
+      # output the matching rate
+      sink(ansrate.file, append = T)
+      rlt <- paste(f["name"], matching.rate, sep = " ")
+      print(rlt, quote = F)
+      sink()
     }
-    
-    #######
-    # output gold standard
-    OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
-    # output pairwise
-    OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
-    
-    # output the matching rate
-    sink(ansrate.file, append = T)
-    rlt <- paste(f["name"], matching.rate, sep = " ")
-    print(rlt, quote = F)
-    sink()
   }
 }
