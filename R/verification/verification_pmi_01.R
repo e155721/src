@@ -51,8 +51,8 @@ for (denom in denom.vec) {
     s.old <- s
     
     matching.rate.new <- 0
-    loop <- 1
-    rate <- 0        
+    loop <- 0
+    rate <- NULL        
     rate.vec <- c()
     while (1) {
       # calculating PMI
@@ -102,7 +102,7 @@ for (denom in denom.vec) {
       # calculating the matching rate
       matching.rate.new <- VerifAcc(gold.aln, psa.aln)
       
-      # exit contraint
+      # exit condition
       if (matching.rate == matching.rate.new) {
         break
       } else {
@@ -110,20 +110,26 @@ for (denom in denom.vec) {
         print(paste(f["name"], matching.rate))
       }
       
+      # breaking infinit loop
       if (!is.null(rate)) {
-        matching.rate
-      }
-      if (loop > 100 && is.null(rate)) {
-        rate.vec <- append(rate.vec, matching.rate)
-        if (length(rate.vec) == 2) {
-          rate <- max(rate.vec)
-        }
-      } else {
         if (matching.rate == rate) {
           break
+        } else {
+          loop <- loop+1
         }
       }
       
+      if (loop == 3) {
+        rate <- NULL
+        rate.vec <- c()
+        loop <- 0
+      }
+      
+      rate.vec <- append(rate.vec, matching.rate)
+      rate <- max(rate.vec)
+      #print(paste("match:", matching.rate))
+      #print(paste("rate :", rate))
+      #cat("\n")
     }
     
     #######
