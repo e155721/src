@@ -105,9 +105,6 @@ for (denom in denom.vec) {
       # exit contraint
       if (matching.rate == matching.rate.new) {
         break
-        if (matching.rate == 100) {
-          break
-        }
       } else {
         matching.rate <- matching.rate.new
         print(paste(f["name"], matching.rate))
