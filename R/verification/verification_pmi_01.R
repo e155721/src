@@ -11,12 +11,11 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-E <- 1
 denom.vec <- c(1, 10, 100, 1000, 10000, 100000)
 for (denom in denom.vec) {
   
   # initialize epsilon
-  E <- E/denom
+  E <- 1/denom
   print(E)
   
   # matchingrate path
@@ -88,8 +87,6 @@ for (denom in denom.vec) {
       }
       
       # updating CV penalties
-      # s[1:81, 82:118] <- 10+maxpmi
-      # s[82:118, 1:81] <- 10+maxpmi
       s[1:81, 82:118] <- Inf
       s[82:118, 1:81] <- Inf
       
@@ -118,18 +115,17 @@ for (denom in denom.vec) {
           loop <- loop+1
         }
       }
-      
       if (loop == 3) {
         rate <- NULL
         rate.vec <- c()
         loop <- 0
       }
-      
       rate.vec <- append(rate.vec, matching.rate)
       rate <- max(rate.vec)
       #print(paste("match:", matching.rate))
       #print(paste("rate :", rate))
       #cat("\n")
+      
     }
     
     #######
