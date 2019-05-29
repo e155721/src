@@ -114,11 +114,11 @@ for (denom in denom.vec) {
         } else {
           loop <- loop+1
         }
-      }
-      if (loop == 3) {
-        rate <- NULL
-        rate.vec <- c()
-        loop <- 0
+        if (loop == 3) {
+          rate <- NULL
+          rate.vec <- c()
+          loop <- 0
+        }
       }
       rate.vec <- append(rate.vec, matching.rate)
       rate <- max(rate.vec)
