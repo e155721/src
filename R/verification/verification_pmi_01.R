@@ -12,7 +12,7 @@ registerDoParallel(detectCores())
 filesPath <- GetPathList()
 
 E <- 1
-denom.vec <- c(10, 100, 100, 1000, 10000, 100000)
+denom.vec <- c(10, 100, 1000, 10000, 100000)
 for (denom in denom.vec) {
   
   # initialize epsilon
@@ -104,6 +104,7 @@ for (denom in denom.vec) {
         break
       } else {
         matching.rate <- matching.rate.new
+        print(matching.rate)
       }
     }
     
