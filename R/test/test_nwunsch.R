@@ -1,21 +1,24 @@
 source("needleman_wunsch/NeedlemanWunsch.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("data_processing/MakeWordList.R")
+source("verification/verif_lib/MakeInputSeq.R")
 
-wordList <- MakeWordList("../../Alignment/input_data/002.input")
-seq1 <- wordList[[1]]
-seq2 <- wordList[[2]]
-seq2 <- wordList[[3]]
+gold.list <- MakeWordList("../../Alignment/org_data/002.org")
+input.list <- MakeInputSeq(gold.list)
 
-scoringMatrix <- MakeFeatureMatrix(-10, -3)
+seq1 <- gold.list[[1]]
+seq2 <- gold.list[[2]]
+seq2 <- gold.list[[3]]
+
+s <- MakeFeatureMatrix(-Inf, -3)
 p <- -3
 
-wl.len <- length(wordList)
-seq1 <- NeedlemanWunsch(wordList[[1]], wordList[[2]], s = scoringMatrix)
-NeedlemanWunsch(seq1$multi, wordList[[3]], s = scoringMatrix)
+wl.len <- length(gold.list)
+seq1 <- NeedlemanWunsch(input.list[[1]], input.list[[2]], s)
+NeedlemanWunsch(seq1$multi, input.list[[3]], s)
 
 for (i in 3:wl.len) {
-  seq1 <- NeedlemanWunsch(seq1$multi, wordList[[i]], s = scoringMatrix)
+  seq1 <- NeedlemanWunsch(seq1$multi, input.list[[i]], s)
   print(seq1$multi)
 }
 print(seq1$score)

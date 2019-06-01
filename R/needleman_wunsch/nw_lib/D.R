@@ -1,3 +1,5 @@
+source("needleman_wunsch/nw_lib/SP.R")
+
 library(R6)
 
 D <-

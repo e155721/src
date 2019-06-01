@@ -1,4 +1,5 @@
-source("needleman_wunsch/nw_lib/functions.R")
+source("needleman_wunsch/nw_lib/D.R")
+source("needleman_wunsch/nw_lib/SP.R")
 
 NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
 {
@@ -36,13 +37,84 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
       d1 <- D$D1(mat, i, j)
       d2 <- D$D2(mat, i, j)
       d3 <- D$D3(mat, i, j)
-      mat[i, j, 1:2] <- MaxD(d1, d2, d3, lenSeq1, lenSeq2, fmin)
+      
+      d <- c(NA, NA)
+      if (fmin) {
+        d[1] <- min(d1, d2, d3)
+      } else {
+        d[1] <- max(d1, d2, d3)
+      }
+      
+      if (lenSeq1 <= lenSeq2) {
+        if (d[1] == d3) {
+          d[2] <- -1 # (-1,0)
+        } else if (d[1] == d2) {
+          d[2] <- 1 # (0,1)
+        } else if (d[1] == d1) {
+          d[2] <- 0 # (0,0)
+        }
+      }
+      else if (lenSeq2 < lenSeq1) {
+        if (d[1] == d2) {
+          d[2] <- 1 # (0,1)
+        } else if (d[1] == d3) {
+          d[2] <- -1 # (-1,0)
+        } else if (d[1] == d1) {
+          d[2] <- 0 # (0,0)
+        }
+      }
+      mat[i, j, 1:2] <-d
+      
     }
   }
   
   # trace back
-  align <- TraceBack(mat, seq1, seq2, g1, g2)
+  trace <- c() 
+  i <- lenSeq1
+  j <- lenSeq2
   
+  while (TRUE) {
+    if (i == 1 && j == 1) break
+    trace <- append(trace, mat[i, j, 2])
+    path <- mat[i, j, 2]
+    if (path == 0) {
+      i <- i - 1
+      j <- j - 1
+    } else if (path == 1) {
+      i <- i - 1
+    } else if (path == -1){
+      j <- j - 1
+    }
+  }
+  trace <- rev(trace)
+  
+  # make alignment
+  align1 <- matrix(seq1[, 1], nrow = dim(seq1)[1])
+  align2 <- matrix(seq2[, 1], nrow = dim(seq2)[1])
+  
+  i <- j <- 2
+  for (t in trace) {
+    if(t == 0) {
+      align1 <- cbind(align1, seq1[, i])
+      align2 <- cbind(align2, seq2[, j])
+      i <- i + 1
+      j <- j + 1
+    } else if(t == 1) {
+      align1 <- cbind(align1, seq1[, i])
+      align2 <- cbind(align2, g2)
+      i <- i + 1
+    } else {
+      align1 <- cbind(align1, g1)
+      align2 <- cbind(align2, seq2[, j])
+      j <- j + 1
+    }
+  }
+  
+  align <- list(NA, NA)
+  align[[1]] <- align1
+  align[[2]] <- align2
+  
+  # return
   rlt <- list(NA, NA, NA, NA)
   names(rlt) <- c("seq1", "seq2", "multi", "score")
   rlt[["seq1"]] <- align[[1]]
