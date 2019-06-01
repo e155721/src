@@ -1,20 +1,21 @@
-VerifAcc <- function(gold.aln, psa.aln)
+VerifAcc <- function(x, y)
 {
-  regions <- length(gold.aln)
+  # countting the number of matched alignments
+  N <- length(x)
   match <- 0  
   i <- 1
-  while (i <= regions) {
-    gold <- paste(gold.aln[[i]][1, -1], gold.aln[[i+1]][1, -1], sep = "", collapse = "")
-    psa <- paste(psa.aln[[i]][1, -1], psa.aln[[i+1]][1, -1], sep = "", collapse = "")
+  while (i <= N) {
+    x.aln <- paste(x[[i]][1, ], x[[i+1]][1, ], collapse = "")
+    y.aln <- paste(y[[i]][1, ], y[[i+1]][1, ], collapse = "")
     i <- i+2
-    # counting correct alignment
-    if (gold == psa) {
+    if (x.aln == y.aln) {
       match <- match+1
     }
   }
   
-  npairs <- regions/2
-  matching.rate <- match / npairs * 100
+  # calculating the matching rate
+  npairs <- N/2
+  matching.rate <- (match/npairs)*100
   
   return(matching.rate)
 }
