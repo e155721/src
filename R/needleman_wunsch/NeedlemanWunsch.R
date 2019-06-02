@@ -63,7 +63,7 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
           d[2] <- 0 # (0,0)
         }
       }
-      mat[i, j, 1:2] <-d
+      mat[i, j, 1:2] <- d
       
     }
   }
