@@ -63,7 +63,7 @@ pairwise <- foreach (p = p.vec) %do% {
     # output pairwise
     OutputAlignment(f["name"], output.dir.sub, ".aln", psa.aln)
     # output match or mismatch
-    OutputMatchedCheck(f["name"], output.dir.sub, ".check", psa.aln, gold.aln)
+    OutputAlignmentCheck(f["name"], output.dir.sub, ".check", psa.aln, gold.aln)
         
     # output the matching rate
     sink(ansrate.file, append = T)
