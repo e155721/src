@@ -1,4 +1,4 @@
-OutputMatchedCheck <- function(f, output.path, ext, psa)
+OutputAlignment <- function(f, output.path, ext, psa)
 {
   # output alignments
   N <- length(psa)
