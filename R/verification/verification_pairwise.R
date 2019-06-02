@@ -3,6 +3,7 @@ source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeFeatureMatrix.R")
 source("verification/verif_lib/verification_func.R")
 source("verification/verif_lib/MakeInputSeq.R")
+source("verification/verif_lib/OutputAlignmentCheck.R")
 
 library(foreach)
 library(doParallel)
@@ -61,7 +62,9 @@ pairwise <- foreach (p = p.vec) %do% {
     OutputAlignment(f["name"], output.dir.sub, ".lg", gold.aln)
     # output pairwise
     OutputAlignment(f["name"], output.dir.sub, ".aln", psa.aln)
-    
+    # output match or mismatch
+    OutputMatchedCheck(f["name"], output.dir.sub, ".check", psa.aln, gold.aln)
+        
     # output the matching rate
     sink(ansrate.file, append = T)
     rlt <- paste(f["name"], matching.rate, sep = " ")
