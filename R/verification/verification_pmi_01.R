@@ -134,7 +134,7 @@ for (denom in denom.vec) {
     # output pairwise
     OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
     # output match or mismatch
-    OutputAlignmentCheck(f["name"], output.dir.sub, ".check", psa.aln, gold.aln)
+    OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
         
     # output the matching rate
     sink(ansrate.file, append = T)

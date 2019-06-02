@@ -45,7 +45,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   # output match or mismatch
   OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
   # output match or mismatch
-  OutputAlignmentCheck(f["name"], output.dir.sub, ".check", psa.aln, gold.aln)
+  OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
     
   # output the matching rate
   sink(ansrate.file, append = T)
