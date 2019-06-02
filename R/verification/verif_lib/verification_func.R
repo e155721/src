@@ -9,6 +9,8 @@ LoadVerifFunc <- function()
   source((paste(lib.path, "VerifAcc.R", sep = "")))
   source((paste(lib.path, "OutputAlignment.R", sep = "")))
   source((paste(lib.path, "PMI.R", sep = "")))
+  source((paste(lib.path, "MakeInputSeq.R", sep = "")))
+  source((paste(lib.path, "OutputAlignmentCheck.R", sep = "")))
   
   return(0)
 }

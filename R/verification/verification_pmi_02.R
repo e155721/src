@@ -2,7 +2,6 @@ source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeEditDistance.R")
 source("verification/verif_lib/verification_func.R")
-source("verification/verif_lib/MakeInputSeq.R")
 
 library(foreach)
 library(doParallel)
