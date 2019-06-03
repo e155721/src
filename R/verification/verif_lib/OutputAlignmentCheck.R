@@ -7,7 +7,7 @@ OutputAlignmentCheck <- function(f, output.path, ext, x, y)
   while (i <= N) {
     x.aln <- paste(x[[i]][1, -1], x[[i+1]][1, -1], collapse = "")
     y.aln <- paste(y[[i]][1, -1], y[[i+1]][1, -1], collapse = "")
-    region <- paste(x[[i]][1, 1], y[[i]][1, 1], sep = "/" )
+    region <- paste(x[[i]][1, 1], x[[i+1]][1, 1], sep = "/" )
     
     if (x.aln == y.aln) {
       sink(paste(output.path, gsub("\\..*$", "", f), ext, sep = ""), append = T)
