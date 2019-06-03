@@ -11,9 +11,9 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-denom.vec <- c(1, 10, 100, 1000, 10000, 100000)
-for (denom in denom.vec) {
-  
+denom <- 1
+while (1) {
+  denom <- denom*10
   # initialize epsilon
   E <- 1/denom
   print(E)
@@ -135,7 +135,7 @@ for (denom in denom.vec) {
     OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
     # output match or mismatch
     OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
-        
+    
     # output the matching rate
     sink(ansrate.file, append = T)
     rlt <- paste(f["name"], matching.rate, sep = " ")
