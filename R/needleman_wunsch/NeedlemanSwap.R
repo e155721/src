@@ -1,7 +1,7 @@
 source("needleman_wunsch/nw_lib/D.R")
 source("needleman_wunsch/nw_lib/SP.R")
 
-NeedlemanSwap <- function(seq1, seq2, s, fmin=F)
+NeedlemanSwap <- function(seq1, seq2, s)
 {
   # get the lengths of sequences
   lenSeq1 <- dim(seq1)[2]
@@ -40,16 +40,11 @@ NeedlemanSwap <- function(seq1, seq2, s, fmin=F)
       d4 <- D$D4(mat, i, j)
       
       d <- c(NA, NA)
-      
-      if (fmin) {
-        if ((i>2) && (j>2) && (i==j)
-            && seq1[i]==seq2[j-1] && seq1[i-1]==seq2[j]) {
-          d[1] <- min(d1, d2, d3, d4)
-        } else {
-          d[1] <- min(d1, d2, d3)
-        }
+      if ((i>2) && (j>2) && (i==j)
+          && seq1[i]==seq2[j-1] && seq1[i-1]==seq2[j]) {
+        d[1] <- min(d1, d2, d3, d4)
       } else {
-        d[1] <- max(d1, d2, d3, d4)
+        d[1] <- min(d1, d2, d3)
       }
       
       if (lenSeq1 <= lenSeq2) {
@@ -60,6 +55,7 @@ NeedlemanSwap <- function(seq1, seq2, s, fmin=F)
         } else if (d[1] == d1) {
           d[2] <- 0 # (0,0)
         } else if ((d[1] == d4)) {
+          print("swap")
           d[2] <- -2
         }
       }
@@ -71,6 +67,7 @@ NeedlemanSwap <- function(seq1, seq2, s, fmin=F)
         } else if (d[1] == d1) {
           d[2] <- 0 # (0,0)
         } else if ((d[1] == d4)) {
+          print("swap")
           d[2] <- -2
         }
       }

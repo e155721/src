@@ -1,7 +1,7 @@
 source("data_processing/DelGap.R")
 source("needleman_wunsch/NeedlemanSwap.R")
 
-MakeSwap <- function(word.list, s, fmin=F)
+MakeSwap <- function(word.list, s)
 {
   regions <- length(word.list)
   
@@ -14,7 +14,7 @@ MakeSwap <- function(word.list, s, fmin=F)
     # the start of the alignment for each the region pair
     for (l in m:regions) {
       psa <- NeedlemanSwap(as.matrix(word.list[[k]], drop = F),
-                             as.matrix(word.list[[l]], drop = F), s, fmin)
+                             as.matrix(word.list[[l]], drop = F), s)
       psa.aln[[n]] <- psa$seq1
       psa.aln[[n+1]] <- psa$seq2
       n <- n+2
