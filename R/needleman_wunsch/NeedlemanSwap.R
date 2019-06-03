@@ -124,8 +124,12 @@ NeedlemanSwap <- function(seq1, seq2, s, fmin=F)
     } else if (t == -2) {
       align1 <- cbind(align1, seq1[, i])
       align2 <- cbind(align2, seq2[, j])
-      i <- i + 2
-      j <- j + 2
+      i <- i + 1
+      j <- j + 1
+      align1 <- cbind(align1, seq1[, i])
+      align2 <- cbind(align2, seq2[, j])
+      i <- i + 1
+      j <- j + 1
     }
   }
   
