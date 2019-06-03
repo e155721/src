@@ -17,7 +17,7 @@ do
     i=1
     for r in $regions
     do
-        sed -i.tmp "s/$r/$regionsName[$i]/" "$f"
+        sed -i.tmp "s/$r/$regionsName[$i]/g" "$f"
         i=$((i+1))
     done
 done
