@@ -58,11 +58,17 @@ D <-
             D4 = function(x, i, j)
             {
               # horizontally gap
-              #prof1 <- as.matrix(private$seq1[, i])
-              #prof2 <- as.matrix(private$seq2[, j])
-              #sp <- SP(prof1, prof2, private$s)
-              #d4 <- x[i-2, j-2, 1] + sp
-              d4 <- x[i-2, j-2, 1] + 0.999
+              # cost for seq1[i] to seq2[j-1]
+              prof1 <- as.matrix(private$seq1[, i])
+              prof2 <- as.matrix(private$seq2[, j-1])
+              sp1 <- SP(prof1, prof2, private$s)*2
+              
+              # cost for seq1[i-1] to seq2[j]
+              prof1 <- as.matrix(private$seq1[, i-1])
+              prof2 <- as.matrix(private$seq2[, j])
+              sp2 <- SP(prof1, prof2, private$s)*2
+              
+              d4 <- x[i-2, j-2, 1] + 0.999 + sp1 + sp2
               
               return(d4)
             }

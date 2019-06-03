@@ -37,11 +37,10 @@ NeedlemanSwap <- function(seq1, seq2, s)
       d1 <- D$D1(mat, i, j)
       d2 <- D$D2(mat, i, j)
       d3 <- D$D3(mat, i, j)
-      d4 <- D$D4(mat, i, j)
       
       d <- c(NA, NA)
-      if ((i>2) && (j>2) && (i==j)
-          && seq1[i]==seq2[j-1] && seq1[i-1]==seq2[j]) {
+      if ((i>2) && (j>2) && (i==j)) {
+        d4 <- D$D4(mat, i, j)
         d[1] <- min(d1, d2, d3, d4)
       } else {
         d[1] <- min(d1, d2, d3)
@@ -55,7 +54,6 @@ NeedlemanSwap <- function(seq1, seq2, s)
         } else if (d[1] == d1) {
           d[2] <- 0 # (0,0)
         } else if ((d[1] == d4)) {
-          print("swap")
           d[2] <- -2
         }
       }
@@ -67,7 +65,6 @@ NeedlemanSwap <- function(seq1, seq2, s)
         } else if (d[1] == d1) {
           d[2] <- 0 # (0,0)
         } else if ((d[1] == d4)) {
-          print("swap")
           d[2] <- -2
         }
       }
