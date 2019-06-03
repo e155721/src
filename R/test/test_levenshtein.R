@@ -12,4 +12,4 @@ seq2 <- input.list[[2]]
 s <- MakeEditDistance(Inf)
 
 wl.len <- length(input.list)
-NeedlemanWunsch(input.list[[1]], input.list[[2]], s, fmin = T)
+NeedlemanWunsch(seq1, seq2, s, fmin = T)
