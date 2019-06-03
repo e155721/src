@@ -42,11 +42,11 @@ NeedlemanSwap <- function(seq1, seq2, s, fmin=F)
       d <- c(NA, NA)
       
       if (fmin) {
-        if ((i>2) && (j>2) 
+        if ((i>2) && (j>2) && (i==j)
             && seq1[i]==seq2[j-1] && seq1[i-1]==seq2[j]) {
           d[1] <- min(d1, d2, d3, d4)
         } else {
-          d[1] <- min(d1, d2, d3, d4)
+          d[1] <- min(d1, d2, d3)
         }
       } else {
         d[1] <- max(d1, d2, d3, d4)
