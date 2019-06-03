@@ -2,6 +2,7 @@ source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeEditDistance.R")
 source("verification/verif_lib/verification_func.R")
+source("verification/verif_lib/MakeSwap.R")
 
 library(foreach)
 library(doParallel)
@@ -33,7 +34,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   gold.aln <- MakeGoldStandard(gold.list)
   
   # making the pairwise alignment in all regions
-  psa.aln <- MakePairwise(word.list, s, fmin = T)
+  psa.aln <- MakeSwap(word.list, s, fmin = T)
   
   # calculating the matching rate
   matching.rate <- VerifAcc(gold.aln, psa.aln)
