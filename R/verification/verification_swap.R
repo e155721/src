@@ -14,7 +14,7 @@ filesPath <- GetPathList()
 ansrate.file <- "../../Alignment/ansrate_swap.txt"
 
 # result path
-output.dir <- paste("../../Alignment/pairwise_swap", format(Sys.Date()), "/", sep = "")
+output.dir <- paste("../../Alignment/pairwise_swap_", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
