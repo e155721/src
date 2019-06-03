@@ -1,4 +1,4 @@
-source("needleman_wunsch/NeedlemanWunsch.R")
+source("needleman_wunsch/NeedlemanSwap.R")
 source("needleman_wunsch/MakeEditDistance.R")
 source("data_processing/MakeWordList.R")
 source("verification/verif_lib/MakeInputSeq.R")
@@ -12,4 +12,4 @@ seq2 <- input.list[[2]]
 s <- MakeEditDistance(Inf)
 
 wl.len <- length(input.list)
-NeedlemanWunsch(input.list[[1]], input.list[[2]], s, fmin = T)
+NeedlemanSwap(input.list[[1]], input.list[[2]], s, fmin = T)
