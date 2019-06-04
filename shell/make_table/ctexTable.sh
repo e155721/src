@@ -35,4 +35,4 @@ done
 
 rtex
 
-/Users/e155721/OkazakiLab/Experiment/src/shell/gpu2org.sh pdf
+# /Users/e155721/OkazakiLab/Experiment/src/shell/gpu2org.sh pdf

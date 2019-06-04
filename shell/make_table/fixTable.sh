@@ -46,5 +46,5 @@ done
 
 rm *.tmp
 
-/Users/e155721/OkazakiLab/Experiment/src/shell/gpu2orgInFile.sh tex
-/Users/e155721/OkazakiLab/Experiment/src/shell/regSym2regNam.sh tex
+# /Users/e155721/OkazakiLab/Experiment/src/shell/gpu2orgInFile.sh tex
+# /Users/e155721/OkazakiLab/Experiment/src/shell/regSym2regNam.sh tex
