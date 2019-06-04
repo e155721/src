@@ -78,7 +78,7 @@ MakeTable <- function(file1, file2)
   
   # output tex file
   sink(gsub("\\..*$", 
-            paste("-", (align.col-2), "-", (nw.col-2), "-", lg.col, "\\.tex", sep = ""),
+            paste("_", (align.col-2), "-", (nw.col-2), "-", lg.col, "\\.tex", sep = ""),
             file1))
   print(xtable(align.mat, align = align))
   sink()
