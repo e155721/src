@@ -2,6 +2,7 @@ source("data_processing/MakeWordList.R")
 source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeEditDistance.R")
 source("verification/verif_lib/verification_func.R")
+source("verification/verif_lib/MakeInputSeq.R")
 
 library(foreach)
 library(doParallel)
@@ -10,11 +11,14 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
+# epsilon size
+E <- 0.01
+
 # matchingrate path
-ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), ".txt", sep = "")
+ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), "_01_", "E-", E, ".txt", sep = "")
 
 # result path
-output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "/", sep = "")
+output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "_01_", "E-", E, "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
@@ -38,15 +42,13 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   # calculating the matching rate
   matching.rate <- VerifAcc(gold.aln, psa.aln)
   
-  #######
-  # print the number of current matched
-  print(paste("base matched:", matching.rate))
-  
   # store the org scoring matrix
   s.old <- s
   
   matching.rate.new <- 0
-  loop <- 1
+  loop <- 0
+  rate <- NULL        
+  rate.vec <- c()
   while (1) {
     # calculating PMI
     newcorpus <- MakeCorpus(psa.aln)
@@ -55,14 +57,16 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     V <- length(v.vec)
     N <- length(newcorpus)
     maxpmi <- 0
+    E <- 1
     for (i in 1:V) {
       for (j in 1:V) {
         a <- v.vec[i]
         b <- v.vec[j]
         if (a!=b) {
-          p1 <- (co.mat[a, b]+1)*(N+V)
-          p2 <- (g(a, newcorpus)+1)*(g(b, newcorpus)+1)
-          pmi <- log2(p1/p2)
+          p.xy <- (co.mat[a, b]/N)+E
+          p.x <- (g(a, newcorpus)/N)
+          p.y <- (g(b, newcorpus)/N)
+          pmi <- log2(p.xy/(p.x*p.y))
           s[a, b] <- pmi
           maxpmi <- max(maxpmi, pmi)
         }
@@ -79,8 +83,6 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     }
     
     # updating CV penalties
-    # s[1:81, 82:118] <- 10+maxpmi
-    # s[82:118, 1:81] <- 10+maxpmi
     s[1:81, 82:118] <- Inf
     s[82:118, 1:81] <- Inf
     
@@ -93,19 +95,33 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     # calculating the matching rate
     matching.rate.new <- VerifAcc(gold.aln, psa.aln)
     
-    # exit contraint
+    # exit condition
     if (matching.rate == matching.rate.new) {
       break
     } else {
       matching.rate <- matching.rate.new
+      print(paste(f["name"], matching.rate))
     }
     
-    # print the number of loop
-    print(paste("loop:", loop))
-    loop <- loop+1
+    # breaking infinit loop
+    if (!is.null(rate)) {
+      if (matching.rate == rate) {
+        break
+      } else {
+        loop <- loop+1
+      }
+      if (loop == 3) {
+        rate <- NULL
+        rate.vec <- c()
+        loop <- 0
+      }
+    }
+    rate.vec <- append(rate.vec, matching.rate)
+    rate <- max(rate.vec)
+    #print(paste("match:", matching.rate))
+    #print(paste("rate :", rate))
+    #cat("\n")
     
-    # print the number of current matched
-    print(paste("new matched", matching.rate.new))
   }
   
   #######
@@ -115,7 +131,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
   # output match or mismatch
   OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
-    
+  
   # output the matching rate
   sink(ansrate.file, append = T)
   rlt <- paste(f["name"], matching.rate, sep = " ")
