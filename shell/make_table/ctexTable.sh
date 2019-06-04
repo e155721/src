@@ -27,8 +27,12 @@ do
 \end{document}
 EOF
 
-    ctex
-    ctex
+    platex "$f"
+    dvipdfmx "$f"
+
+    platex "$f"
+    dvipdfmx "$f"
+
     rm "$f"
 
 done
