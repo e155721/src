@@ -9,34 +9,16 @@ cd "$dir"
 
 for f in $files
 do
-
-    cat >"$f" <<EOF
-\documentclass[a4j]{jarticle}
-\usepackage{longtable}
-
-\author{}
-\date{}
-\title{}
-
-% "$f:r"
-\begin{document}
-\pagestyle{empty}
-
-\input{../"$f"}
-
-\end{document}
-EOF
+    mv ../"$f" .
 
     platex "$f"
-    dvipdfmx "$f"
+    dvipdfmx "$f:r.dvi"
 
     platex "$f"
-    dvipdfmx "$f"
+    dvipdfmx "$f:r.dvi"
 
     rm "$f"
 
 done
 
 rtex
-
-# /Users/e155721/OkazakiLab/Experiment/src/shell/gpu2org.sh pdf

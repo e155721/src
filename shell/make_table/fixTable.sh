@@ -23,21 +23,45 @@ do
     # change tabular to longtable
     sed -i.tmp 's/tabular/longtable/' "$f"
 
-    align="$(echo $f:r | cut -f2 -d"-")"
-    aln="$(echo $f:r | cut -f3 -d"-")"
-    lg="$(echo $f:r | cut -f4 -d"-")"
-
+    # extract word and output file name
+    word="$(echo $f:r | cut -f1 -d"_")"
     out="$(echo $f | sed 's/_.*-.'//)"
+
+    # extract table information
+    tb_info="$(echo $f:r | cut -f2 -d"_")"
+    align="$(echo $tb_info:r | cut -f1 -d"-")"
+    aln="$(echo $tb_info:r | cut -f2 -d"-")"
+    lg="$(echo $tb_info:r | cut -f3 -d"-")"
 
     line=$(<"$f" grep -n "longtable" | head -n1 | cut -f1 -d":")
     sed -i.tmp "$((line+1)),$((line+3))d" "$f"
+
+    # rewrite to longtable
     cat <<EOF | sed -i.tmp "${line}r /dev/stdin" "$f"
-     \multicolumn{$align}{c}{$out} \\\\
-     \hline
-     & \multicolumn{1}{c}{Region Name}
-     & \multicolumn{$aln}{c|}{$ALN_TYP}
-     & \multicolumn{$lg}{c}{Linguists} \\\\
-     \hline
+\multicolumn{$align}{c}{$word} \\\\
+\hline
+& \multicolumn{1}{c}{Region Name}
+& \multicolumn{$aln}{c|}{$ALN_TYP}
+& \multicolumn{$lg}{c}{Linguists} \\\\
+\hline
+EOF
+
+    # begin TeX
+    cat <<EOF | sed -i.tmp "$3r /dev/stdin" "$f"
+\documentclass[a4j]{jarticle}
+\usepackage{longtable}
+\author{}
+\date{}
+\title{}
+\begin{document}
+\pagestyle{empty}
+
+EOF
+
+    # end TeX
+    line=($(wc -l $f))
+    cat <<EOF | sed -i.tmp "${line[1]}r /dev/stdin" "$f"
+\end{document}
 EOF
 
     sed -i.tmp 's/\-/$\-$/g' "$f"
