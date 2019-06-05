@@ -3,6 +3,7 @@ source("data_processing/GetPathList.R")
 source("needleman_wunsch/MakeEditDistance.R")
 source("verification/verif_lib/verification_func.R")
 source("verification/verif_lib/MakeInputSeq.R")
+source("verification/verif_lib/MakeEDPairwise.R")
 
 library(foreach)
 library(doParallel)
@@ -11,22 +12,21 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-denom <- 1
-while (1) {
-  denom <- denom*10
-  # initialize epsilon
+denom.vec <- c(10, 100, 1000, 10000, 100000)
+for (denom in denom.vec) {
+  
+  # epsilon size
   E <- 1/denom
-  print(E)
   
   # matchingrate path
-  ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), "_01_", E, ".txt", sep = "")
+  ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), "_E-", E*denom*denom, ".txt", sep = "")
   
   # result path
-  output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "_01_", E, "/", sep = "")
+  output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "_E-", E*denom*denom, "/", sep = "")
   if (!dir.exists(output.dir)) {
     dir.create(output.dir)
   }
-  
+
   # conduct the alignment for each files
   foreach.rlt <- foreach (f = filesPath) %dopar% {
     
@@ -41,7 +41,9 @@ while (1) {
     gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.aln <- MakePairwise(input.list, s, fmin = T)
+    psa.rlt <- MakeEDPairwise(input.list, s, fmin = T)
+    psa.aln <- psa.rlt$psa
+    ed <- psa.rlt$ed
     
     # calculating the matching rate
     matching.rate <- VerifAcc(gold.aln, psa.aln)
@@ -49,10 +51,10 @@ while (1) {
     # store the org scoring matrix
     s.old <- s
     
-    matching.rate.new <- 0
+    ed.new <- 0
     loop <- 0
-    rate <- NULL        
-    rate.vec <- c()
+    sum.ed <- NULL        
+    sum.ed.vec <- c()
     while (1) {
       # calculating PMI
       newcorpus <- MakeCorpus(psa.aln)
@@ -94,34 +96,36 @@ while (1) {
       s.old <- s
       
       # making the pairwise alignment in all regions
-      psa.aln <- MakePairwise(input.list, s, fmin = T)
+      psa.rlt <- MakeEDPairwise(input.list, s, fmin = T)
+      psa.aln <- psa.rlt$psa
+      ed.new <- psa.rlt$ed
       
       # calculating the matching rate
-      matching.rate.new <- VerifAcc(gold.aln, psa.aln)
+      matching.rate <- VerifAcc(gold.aln, psa.aln)
       
       # exit condition
-      if (matching.rate == matching.rate.new) {
+      if (ed == ed.new) {
         break
       } else {
-        matching.rate <- matching.rate.new
-        print(paste(f["name"], matching.rate))
+        ed <- ed.new
+        print(paste(f["name"], ed))
       }
       
       # breaking infinit loop
-      if (!is.null(rate)) {
-        if (matching.rate == rate) {
+      if (!is.null(sum.ed)) {
+        if (ed == sum.ed) {
           break
         } else {
           loop <- loop+1
         }
         if (loop == 3) {
-          rate <- NULL
-          rate.vec <- c()
+          sum.ed <- NULL
+          sum.ed.vec <- c()
           loop <- 0
         }
       }
-      rate.vec <- append(rate.vec, matching.rate)
-      rate <- max(rate.vec)
+      sum.ed.vec <- append(sum.ed, ed)
+      sum.ed <- min(sum.ed.vec)
       #print(paste("match:", matching.rate))
       #print(paste("rate :", rate))
       #cat("\n")
