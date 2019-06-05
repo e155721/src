@@ -1,24 +1,20 @@
 #!/bin/zsh
 
-
-files=(*.tex)
-
 dir="table"
-mkdir "$dir"
-cd "$dir"
 
-for f in $files
+for f in *.tex
 do
-    mv ../"$f" .
 
     platex "$f"
     dvipdfmx "$f:r.dvi"
 
     platex "$f"
     dvipdfmx "$f:r.dvi"
-
-    rm "$f"
 
 done
 
+mkdir "$dir"
+mv *.pdf "$dir"
+
+rm *.tex
 rtex
