@@ -15,10 +15,10 @@ filesPath <- GetPathList()
 E <- 0.01
 
 # matchingrate path
-ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), "_01_", "E-", E, ".txt", sep = "")
+ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), ".txt", sep = "")
 
 # result path
-output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "_01_", "E-", E, "/", sep = "")
+output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
