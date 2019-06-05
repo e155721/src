@@ -1,6 +1,10 @@
 library("xtable")
 library("R.utils")
 
+library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
+
 source("data_processing/MakeWordList.R")
 source("data_processing/list2mat.R")
 
@@ -57,10 +61,10 @@ MakeTable <- function(file1, file2)
   
   # get the num of col
   align.col <- dim(align.mat)[2]
-
+  
   nw.col <- dim(nw.mat)[2]
   nw.col <- nw.col-1
-
+  
   lg.col <- dim(lg.mat)[2]
   lg.col <- lg.col
   
@@ -94,7 +98,7 @@ ExeMakeTable <- function(dir)
   files.lg <- list.files(dir, ".lg")
   
   len <- length(files.aln)
-  for (i in 1:len) {
+  foreach (i = 1:len) %dopar% {
     file1 <- files.aln[[i]]
     file2 <- files.lg[[i]]
     
