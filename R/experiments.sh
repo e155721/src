@@ -1,4 +1,4 @@
-1;95;0c#!/bin/sh
+#!/bin/sh
 
 Rscript verification/verification_pairwise.R
 Rscript verification/verification_levenshtein.R
