@@ -16,5 +16,4 @@ done
 mkdir "$dir"
 mv *.pdf "$dir"
 
-rm *.tex
 rtex
