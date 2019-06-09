@@ -28,16 +28,31 @@ UpperAndLowerThan <- function(file1, file2, output)
     # output the comparing results
     if (tb1.rate > tb2.rate) {
       sink(out.upper, append = T)
-      print(paste(region, tb1.rate, tb2.rate))
+      print(paste(region, tb1.rate, tb2.rate), quote = F)
       sink()
     } 
     else if (tb1.rate < tb2.rate) {
       sink(out.lower, append = T)
-      print(paste(region, tb1.rate, tb2.rate))
+      print(paste(region, tb1.rate, tb2.rate), quote = F)
       sink()
     }
     i <- i+1
   }
+  
+  return(0)
+}
+
+library(xtable)
+MakeCompTB <- function(file, output, ext)
+{
+  tb <- read.table(file)
+  tb <- as.matrix(tb)[, -1]
+  tb <- t(t(tb))
+  output <- paste(output, ext, sep = ".")
+  
+  sink(output)  
+  print(xtable(tb))
+  sink()
   
   return(0)
 }
