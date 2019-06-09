@@ -39,7 +39,7 @@ pairwise <- foreach (p = p.vec) %do% {
   
   # conduct the alignment for each files
   foreach (f = filesPath) %dopar% {
-            
+    
     # make the word list
     gold.list <- MakeWordList(f["input"])
     word.list <- MakeInputSeq(gold.list)
@@ -62,7 +62,7 @@ pairwise <- foreach (p = p.vec) %do% {
     OutputAlignment(f["name"], output.dir.sub, ".aln", psa.aln)
     # output match or mismatch
     OutputAlignmentCheck(f["name"], output.dir.sub, ".check", psa.aln, gold.aln)
-        
+    
     # output the matching rate
     sink(ansrate.file, append = T)
     rlt <- paste(f["name"], matching.rate, sep = " ")

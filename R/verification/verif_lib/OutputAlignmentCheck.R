@@ -7,7 +7,7 @@ OutputAlignmentCheck <- function(f, output.path, ext, x, y)
   while (i <= N) {
     x.aln <- paste(x[[i]], x[[i+1]], collapse = "")
     y.aln <- paste(y[[i]], y[[i+1]], collapse = "")
-    region <- paste(x[[i]], x[[i+1]][1, 1], sep = "/" )
+    region <- paste(x[[i]][1, 1], x[[i+1]][1, 1], sep = "/" )
     
     if (x.aln == y.aln) {
       sink(paste(output.path, gsub("\\..*$", "", f), ext, sep = ""), append = T)
@@ -16,7 +16,7 @@ OutputAlignmentCheck <- function(f, output.path, ext, x, y)
       sink()
     } else {
       sink(paste(output.path, gsub("\\..*$", "", f), ext, sep = ""), append = T)
-      print(paste("Mis", i, region))
+      print(paste("Mis:", i, region))
       cat ("\n")
       sink()
     }
