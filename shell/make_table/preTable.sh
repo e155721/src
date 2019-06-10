@@ -7,13 +7,12 @@ files+=($lg)
 
 for f in $files
 do
-    <"$f" cut -f2- -d" " >"$f".tmp
-    mv "$f".tmp "$f"
+    <"$f" sed 's/\[1\]//' >"$f:r.txt"
 done
 
 for f in $files
 do
-    sed -i.tmp 's/"//g' "$f"
+    sed -i.tmp 's/^.*\][ ]//' "$f"
 done
 
 rm *.tmp
