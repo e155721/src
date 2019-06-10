@@ -6,8 +6,10 @@ OutputAlignment <- function(f, output.path, ext, psa)
   while (i <= N) {
     # by The Needleman-Wunsch
     sink(paste(output.path, gsub("\\..*$", "", f), ext, sep = ""), append = T)
-    print(paste(psa[[i]], collapse = " "))
-    print(paste(psa[[i+1]], collapse = " "))
+    cat(paste(i, " "))
+    print(paste(psa[[i]], collapse = " "), quote = F)
+    cat(paste(i+1, " "))
+    print(paste(psa[[i+1]], collapse = " "), quote = F)
     cat("\n")
     sink()
     i <- i+2
