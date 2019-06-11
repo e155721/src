@@ -5,7 +5,7 @@ lg=(*.lg)
 files+=($aln)
 files+=($lg)
 
-for f in $files
+for f in $aln
 do
     <"$f" sed 's/\[1\]//' >"$f:r.txt"
 done
