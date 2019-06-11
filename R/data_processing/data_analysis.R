@@ -43,12 +43,12 @@ UpperAndLowerThan <- function(file1, file2, output)
 }
 
 library(xtable)
-MakeCompTB <- function(file, output, ext)
+MakeCompTB <- function(file)
 {
   tb <- read.table(file)
   tb <- as.matrix(tb)[, -1]
   tb <- t(t(tb))
-  output <- paste(output, ext, sep = ".")
+  output <- gsub("\\..*$", ".tex", file)
   
   sink(output)  
   print(xtable(tb))
