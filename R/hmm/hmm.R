@@ -8,8 +8,8 @@ q <- function(i, Q, S, A, B)
   j <- sample(Q, size = 1, replace = F, prob = a)
   # cat(s)
   # cat(" ")
-  ab <- list(j, s)
-  return(ab)
+  o <- list(j, s)
+  return(o)
 }
 
 HMM <- function(U, Q, S, pi, A, B)
@@ -17,9 +17,9 @@ HMM <- function(U, Q, S, pi, A, B)
   O <- c(NULL)
   i <- sample(Q, size = 1, replace = F, prob = pi)
   for (t in 1:U) {
-    ab <- q(i, Q, S, A, B)
-    i <- ab[[1]]
-    O <- append(O, ab[[2]])
+    o <- q(i, Q, S, A, B)
+    i <- o[[1]]
+    O <- append(O, o[[2]])
   }
   return(O)
 }
@@ -34,9 +34,16 @@ S <- c("A", "B", "C")
 # number of outputs symbols
 K <- length(S)
 
+# initial probability
 pi <- rdirichlet(1, matrix(1,1,N))
-A <- matrix(c(.4,.3,.6,.7),N,N)
-B <- matrix(c(.5,.2,.5,.8),N,K)
+
+# transition and emission probability
+A <- matrix(0, N, N)
+B <- matrix(0, N, K)
+for (i in 1:N) {
+  A[i, ] <- rdirichlet(1, c(1,1,N))
+  B[i, ]<- rdirichlet(1, c(1,1,N))
+}
 
 # max time
 U <- 100
