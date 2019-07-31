@@ -71,9 +71,24 @@ K <- dim(S)[2]
 pi <- rdirichlet(1, matrix(1,1,N))
 # transition proboility
 A <- matrix(0, N, N)
-for (i in 1:N) {
-  A[i, ] <- rdirichlet(1, matrix(1,1,N))
-}
+tr.vec <- rdirichlet(1, matrix(1,1,5))
+epsilon <- tr.vec[1]
+lambda <- tr.vec[2]
+delta <- tr.vec[3]
+tau.xy <- tr.vec[4]
+tau.m <- tr.vec[5]
+# M
+A[1, 1] <- 1-2*delta-tau.m
+A[1, 2:3] <- delta
+A[1, 4] <- tau.m
+# XY
+A[2:3, 1] <- 1-epsilon-lambda-tau.xy
+A[2:3, 2] <- epsilon
+A[2:3, 3] <- lambda
+A[2:3, 4] <- tau.xy
+# End
+A[4, ] <- 0
+
 # output proboility
 B <- matrix(0, N, K)
 B[1, (K.base+1):K] <- rdirichlet(1, matrix(1,1,(K-K.base)))
