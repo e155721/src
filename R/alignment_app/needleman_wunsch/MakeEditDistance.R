@@ -1,11 +1,11 @@
 MakeEditDistance <- function(s5 = NA)
 {
 
-  cSymFile <- "../../data/symbols/consonants"
-  vSymFile <- "../../data/symbols/vowels"
-
-  cValFile <- "../../data/features/consonants_values"
-  vValFile <- "../../data/features/vowels_values"
+  cSymFile <- "pf_data/symbols/consonants"
+  vSymFile <- "pf_data/symbols/vowels"
+  
+  cValFile <- "pf_data/features/consonants_values"
+  vValFile <- "pf_data/features/vowels_values"
 
   ######
   # make consonant array
