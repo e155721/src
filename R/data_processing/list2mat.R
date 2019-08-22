@@ -8,7 +8,7 @@ list2mat <- function(x.list)
   }
   ncol <- max(unlist(ncol))
   
-  x.mat <- matrix(NA, nrow, ncol)
+  x.mat <- matrix(" ", nrow, ncol)
   for (i in 1:nrow) {
     x.mat[i, 1:length(x.list[[i]])] <- x.list[[i]]
   }
