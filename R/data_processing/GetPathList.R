@@ -1,18 +1,24 @@
-GetPathList <- function(inputDir = "../../Alignment/org_data/")
-{
-  # input files
-  inputFiles <- list.files(inputDir)
-  inputPaths <- paste(inputDir, inputFiles, sep = "/")
+GetPathList <- function(dir = "../../Alignment/org_data/") {
+  # Gets the files path list from a specified directory.
+  # 
+  # Args:
+  #  dir: A character string which the path of the directory you want to get the path of files.
+  # 
+  # Returns:
+  #  The list of path of files.
+  
+  input.files <- list.files(dir)
+  input.paths <- paste(dir, input.files, sep = "/")
   
   # make the list of file paths
-  pathList <- list()
-  numOfFiles <- length(inputFiles)
-  for (i in 1:numOfFiles) {
-    pathList[[i]] <- c(NA, NA)
-    names(pathList[[i]]) <- c("input", "name")
-    pathList[[i]]["input"] <- inputPaths[[i]]
-    pathList[[i]]["name"] <- inputFiles[[i]]
+  path.list <- list()
+  num.files <- length(input.files)
+  for (i in 1:num.files) {
+    path.list[[i]] <- c(NA, NA)
+    names(path.list[[i]]) <- c("input", "name")
+    path.list[[i]]["input"] <- input.paths[[i]]
+    path.list[[i]]["name"] <- input.files[[i]]
   }
   
-  return(pathList)
+  return(path.list)
 }
