@@ -8,11 +8,10 @@ library(doParallel)
 registerDoParallel(detectCores())
 
 # get the all of files path
-filesPath <- GetPathList()
+path.list <- GetPathList()
 
 p.vec <- -3
 digits <- 2
-lenp.vec <- length(p.vec)
 
 pairwise <- foreach (p = p.vec) %do% {
   
@@ -38,7 +37,7 @@ pairwise <- foreach (p = p.vec) %do% {
   }
   
   # conduct the alignment for each files
-  foreach (f = filesPath) %dopar% {
+  foreach (f = path.list) %dopar% {
     
     # make the word list
     gold.list <- MakeWordList(f["input"])
