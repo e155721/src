@@ -1,5 +1,11 @@
-MakeWordList <- function(file)
-{
+MakeWordList <- function(file) {
+  # Makes the word list from the specified file.
+  #
+  # Args:
+  #   file: The path of the file which is to make the word list.
+  #
+  # Returns:
+  #   The word list.
   x <- read.table(file)
   N <- dim(x)[1]
   word.list <- list()
