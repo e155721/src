@@ -1,19 +1,11 @@
-source("data_processing/DelGap.R")
-source("needleman_wunsch/NeedlemanWunsch.R")
+source("lib/load_nwunsch.R")
 
-MakeEDPairwise <- function(word.list, s, fmin=F)
+MakePairwise <- function(word.list, s, fmin=F)
 {
   regions <- length(word.list)
   
   # pairwise alignments
   psa.aln <- list()
-  
-  # edit distance
-  ed <- 0
-  
-  # return
-  psa.rlt <- list(NA, NA)
-  names(psa.rlt) <- c("psa", "ed")
   
   m <- 2  
   n <- 1
@@ -24,15 +16,12 @@ MakeEDPairwise <- function(word.list, s, fmin=F)
                              as.matrix(word.list[[l]], drop = F), s, fmin)
       psa.aln[[n]] <- psa$seq1
       psa.aln[[n+1]] <- psa$seq2
-      ed <- ed+psa$score
-      n <- n+2
+      psa.aln[[n+2]] <- " "
+      n <- n+3
     }
     # the end of the aligne for each the region pair
     m <- m + 1
   }
   
-  psa.rlt$psa <- psa.aln
-  psa.rlt$ed <- ed
-  
-  return(psa.rlt)
+  return(psa.aln)
 }

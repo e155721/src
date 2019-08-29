@@ -1,7 +1,7 @@
-source("needleman_wunsch/nw_lib/D.R")
-source("needleman_wunsch/nw_lib/SP.R")
+# source("needleman_wunsch/nw_lib/D.R")
+# source("needleman_wunsch/nw_lib/SP.R")
 
-NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
+NeedlemanSwap <- function(seq1, seq2, s)
 {
   # get the lengths of sequences
   lenSeq1 <- dim(seq1)[2]
@@ -39,10 +39,11 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
       d3 <- D$D3(mat, i, j)
       
       d <- c(NA, NA)
-      if (fmin) {
-        d[1] <- min(d1, d2, d3)
+      if ((i>2) && (j>2) && (i==j)) {
+        d4 <- D$D4(mat, i, j)
+        d[1] <- min(d1, d2, d3, d4)
       } else {
-        d[1] <- max(d1, d2, d3)
+        d[1] <- min(d1, d2, d3)
       }
       
       if (lenSeq1 <= lenSeq2) {
@@ -52,6 +53,8 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
           d[2] <- 1 # (0,1)
         } else if (d[1] == d1) {
           d[2] <- 0 # (0,0)
+        } else if ((d[1] == d4)) {
+          d[2] <- -2
         }
       }
       else if (lenSeq2 < lenSeq1) {
@@ -61,6 +64,8 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
           d[2] <- -1 # (-1,0)
         } else if (d[1] == d1) {
           d[2] <- 0 # (0,0)
+        } else if ((d[1] == d4)) {
+          d[2] <- -2
         }
       }
       mat[i, j, 1:2] <- d
@@ -82,8 +87,11 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
       j <- j - 1
     } else if (path == 1) {
       i <- i - 1
-    } else if (path == -1){
+    } else if (path == -1) {
       j <- j - 1
+    } else if (path == -2) {
+      i <- i - 2
+      j <- j - 2
     }
   }
   trace <- rev(trace)
@@ -94,18 +102,27 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
   
   i <- j <- 2
   for (t in trace) {
-    if(t == 0) {
+    if (t == 0) {
       align1 <- cbind(align1, seq1[, i])
       align2 <- cbind(align2, seq2[, j])
       i <- i + 1
       j <- j + 1
-    } else if(t == 1) {
+    } else if (t == 1) {
       align1 <- cbind(align1, seq1[, i])
       align2 <- cbind(align2, g2)
       i <- i + 1
-    } else {
+    } else if (t == -1) {
       align1 <- cbind(align1, g1)
       align2 <- cbind(align2, seq2[, j])
+      j <- j + 1
+    } else if (t == -2) {
+      align1 <- cbind(align1, seq1[, i])
+      align2 <- cbind(align2, seq2[, j])
+      i <- i + 1
+      j <- j + 1
+      align1 <- cbind(align1, seq1[, i])
+      align2 <- cbind(align2, seq2[, j])
+      i <- i + 1
       j <- j + 1
     }
   }

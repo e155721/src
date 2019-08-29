@@ -7,7 +7,7 @@ VerifAcc <- function(x, y)
   while (i <= N) {
     x.aln <- paste(x[[i]][1, ], x[[i+1]][1, ], collapse = "")
     y.aln <- paste(y[[i]][1, ], y[[i+1]][1, ], collapse = "")
-    i <- i+2
+    i <- i+3
     if (x.aln == y.aln) {
       match <- match+1
     }

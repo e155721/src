@@ -12,7 +12,7 @@ OutputAlignment <- function(f, output.path, ext, psa)
     print(paste(psa[[i+1]], collapse = " "), quote = F)
     cat("\n")
     sink()
-    i <- i+2
+    i <- i+3
   }
   
   return(0)

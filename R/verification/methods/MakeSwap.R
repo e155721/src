@@ -1,5 +1,4 @@
-source("data_processing/DelGap.R")
-source("needleman_wunsch/NeedlemanSwap.R")
+source("lib/load_nwunsch.R")
 
 MakeSwap <- function(word.list, s)
 {

@@ -1,5 +1,5 @@
 source("data_processing/DelGap.R")
-source("needleman_wunsch/NeedlemanWunsch.R")
+source("lib/load_nwunsch.R")
 
 MakeGoldStandard <- function(gold.list)
 {
@@ -17,7 +17,7 @@ MakeGoldStandard <- function(gold.list)
       gold.mat <- DelGap(rbind(gold.list[[k]], gold.list[[l]]))
       gold.aln[[n]] <- gold.mat[1, , drop = F]
       gold.aln[[n+1]] <- gold.mat[2, , drop = F]
-      n <- n+2
+      n <- n+3
     }
     # the end of the aligne for each the region pair
     m <- m+1
