@@ -18,7 +18,7 @@ q <- function(Q, i, S, A, B) {
   s <- sample(S, size = 1, replace = F, prob = b)
   next.val <- list(j, s)
   names(next.val) <- c("i", "o")
-  
+
   return(next.val)
 }
 
@@ -37,12 +37,12 @@ HMM <- function(Q, pi, S, A, B, FT) {
   #   The vector of symbol series which it was calculated following the HMM's parameters.
   i <- sample(Q, size = 1, replace = F, prob = pi)
   O <- c(NULL)
-  
+
   for (t in 1:FT) {
     next.val <- q(Q, i, S, A, B)
     i <- next.val$i
     O <- append(O, next.val$o)
   }
-  
+
   return(O)
 }
