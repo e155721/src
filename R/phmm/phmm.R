@@ -61,7 +61,8 @@ PHMM <- function(pi, Q, S, A, B, FT) {
   #
   # Returns:
   #   The matrix of symbol pair series which it was calculated following the PHMM's parameters.
-  i <- sample(Q, size = 1, replace = F, prob = pi)
+  MXY <- Q[-4]
+  i <- sample(MXY, size = 1, replace = F, prob = pi)
   K <- dim(S)[2]
   O <- matrix(NA, 2, 0)
   

@@ -3,12 +3,7 @@ N <- length(Q)  # number of states
 S <- c("A", "B", "C", "-")  # set of emission symbols
 K <- length(S)  # number of emission symbols
 S.pair <- t(permutations(n=K, r=2, v=S, repeats.allowed = T))  # set of emission symbol pairs
-# number of output symbols
-K.pair <- dim(S.pair)[2]
-
-# initial proboility
-pi <- as.vector(rdirichlet(1, matrix(1,1,N-1)))
-pi[N] <- 0
+K.pair <- dim(S.pair)[2]  # number of emission symbol pairs.
 
 # transition proboility
 A <- matrix(0, N, N)
@@ -19,6 +14,9 @@ lambda <- par.vec[2]
 delta <- par.vec[3]
 tau.xy <- par.vec[4]
 tau.m <- par.vec[5]
+
+pi <- c(1-2*delta-tau.m, delta, delta)  # initial proboility
+
 # M
 A["M", "M"] <- 1-2*delta-tau.m
 A["M", "X"] <- delta
