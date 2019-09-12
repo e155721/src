@@ -8,7 +8,7 @@ n <- length(O1)
 m <- length(O2)
 
 # Removes the gaps and the valujes of NA from the two observation sequences.
-Sig <- unique(append(O1, O2))[-1]  # removing NA
+Sig <- unique(append(O1[-1], O2[-1]))
 gap <- grep("-", Sig)
 if (sum(gap) != 0) {
   Sig <- Sig[-gap]  # removing gaps
