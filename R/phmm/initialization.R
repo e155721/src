@@ -20,19 +20,19 @@ Asign2A <- function(params, S) {
   tau.XY <- params["tau.XY"]
   m.m <- 1-2*delta-tau.M
   xy.m <- 1-epsilon-lambda-tau.XY
-  
+
   N <- length(S)
   A <- matrix(0, N, N, dimnames = list(S, S))
   A["M", "M"] <- m.m
   A["M", "X"] <- A["M", "Y"] <- delta
   A["M", "End"] <- tau.M
-  
+
   A["X", "X"] <- A["Y", "Y"] <- epsilon
   A["X", "Y"] <- A["Y", "X"] <- lambda
   A["X", "End"] <- A["Y", "End"] <- tau.XY
   A["X", "M"] <- A["Y", "M"] <- xy.m
-  
-  return(A)  
+
+  return(A)
 }
 
 wl <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org")
