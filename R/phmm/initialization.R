@@ -1,18 +1,32 @@
 library(MCMCpack)
 library(gtools)
 
-# O1 <- c(NA, "k", "u", "b")
-# O2 <- c(NA, "k", "u", "b", "i")
+source("lib/load_data_processing.R")
+source("lib/load_verif_lib.R")
+
+wl <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org")
+wl <- MakeGoldStandard(wl)
+wl <- MakeInputSeq(wl)
+
+wl.o <- list()
+len <- length(wl)
+j <- 1
+for (i in 1:len) {
+  if (!is.null(wl[[i]])) {
+    wl.o[[j]] <- wl[[i]]
+    j <- j + 1
+  }
+}
+
+O1 <- wl.o[[1]]
+O2 <- wl.o[[2]]
 
 n <- length(O1)
 m <- length(O2)
 
 # Removes the gaps and the valujes of NA from the two observation sequences.
-Sig <- unique(append(O1[-1], O2[-1]))
-gap <- grep("-", Sig)
-if (sum(gap) != 0) {
-  Sig <- Sig[-gap]  # removing gaps
-}
+Sig <- unique(as.vector(list2mat(wl.o)[, -1]))
+Sig <- Sig[Sig!=" "]
 
 S <- c("M","X","Y","End")  # set of states
 N <- 3  # number of emission states
