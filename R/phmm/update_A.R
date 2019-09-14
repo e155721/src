@@ -1,8 +1,10 @@
-A.h <- matrix(0, N+1, N+1, dimnames = list(S, S))
+A_ <- matrix(0, N+1, N+1, dimnames = list(S, S))
 
-delta.h <- 0
-epsilon.h <- 0
-lambda.h <- 0
+U <- length(O1) - 1
+V <- length(O2) - 1
+
+num <- 0
+den <- 0
 
 I <- c("M", "X", "X")
 J <- c("X", "X", "Y")
@@ -11,8 +13,6 @@ for (s in 1:N) {
   
   i <- I[s]
   j <- J[s]
-  
-  print(paste(i, j))
   
   if (j=="M") {
     U.h <- U-1
@@ -28,30 +28,62 @@ for (s in 1:N) {
   
   for (u in 2:U.h) {
     for (v in 2:V.h) {
-      if (i=="M" && j=="X") {
-        # a.ij <- a.ij + Xi.uv(u, v, i, j, list.f, list.b, A)
-        delta.h <- delta.h + Xi.uv(u, v, i, j, list.f, list.b, A)
-      }
-      else if (i=="X" && j=="X") {
-        epsilon.h <- epsilon.h + Xi.uv(u, v, i, j, list.f, list.b, A)
-      }
-      else if (i=="X" && j=="Y") {
-        lambda.h <- lambda.h + Xi.uv(u, v, i, j, list.f, list.b, A)
+      num <- num + Xi(u, v, i, j, O1, O2, f.var, b.var, A)
+    }
+  }
+  
+  
+  if (1) {
+    for (u in 2:U.h) {
+      for (v in 2:V.h) {
+        for (j_ in J) {
+          den <- den + Xi(u, v, i, j_, O1, O2, f.var, b.var, A)
+        }
       }
     }
   }
+  
+  a.ij_ <- num / den
+  if (is.na(a.ij_)) {
+    a.ij_ <- 0
+  } 
+  else if (is.infinite(a.ij_)) {
+    a.ij_<- 0
+  } else {
+    # no operation
+  }
+  
+  if (i=="M" && j=="X") {
+    delta_ <- a.ij_
+  }
+  else if (i=="X" && j=="X") {
+    epsilon_ <- a.ij_
+  }
+  else if (i=="X" && j=="Y") {
+    lambda_ <- a.ij_
+  }
+  
 }
 
-tau.M.h <- 1-2*delta.h
-tau.XY.h <- 1-epsilon.h-lambda.h
+tau.M_ <- 1-2*delta_
+tau.XY_ <- 1-epsilon_-lambda_
 
-A.h["M", "End"] <- 1-2*delta.h
-A.h["M", "M"] <- 1-2*delta.h-tau.M.h
-A.h["M", "X"] <- A.h["M", "Y"] <- delta.h
+A_["M", "M"] <- 1-2*delta_-tau.M_
+A_["M", "X"] <- A_["M", "Y"] <- delta_
+A_["M", "End"] <- tau.M_
 
-A.h["X", "X"] <- A.h["Y", "Y"] <- epsilon.h
-A.h["X", "Y"] <- A.h["Y", "X"] <- lambda.h
-A.h["X", "End"] <- A.h["Y", "End"] <- 1-epsilon.h-lambda.h
-A.h["X", "M"] <- A.h["Y", "M"] <- 1-epsilon.h-lambda.h-tau.XY.h
+A_["X", "X"] <- A_["Y", "Y"] <- epsilon_
+A_["X", "Y"] <- A_["Y", "X"] <- lambda_
+A_["X", "End"] <- A_["Y", "End"] <- 1-epsilon_-lambda_
+A_["X", "M"] <- A_["Y", "M"] <- 1-epsilon_-lambda_-tau.XY_
 
-A.h["End", ] <- 0
+A_["End", ] <- 0
+
+params$epsilon <- epsilon_
+params$lambda <- lambda_
+params$delta <- delta_
+params$tau.XY <- tau.XY_
+params$tau.M <- tau.M_
+
+pi <- c(1-2*params$delta-params$tau.M, params$delta, params$delta, 0)
+A <- A_
