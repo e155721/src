@@ -26,7 +26,7 @@ Sig <- unique(as.vector(list2mat(wl.o)[, -1]))
 Sig <- Sig[Sig!=" "]
 
 S <- c("M","X","Y","End")  # set of states
-N <- 3  # number of emission states
+N <- length(S)  # number of emission states
 M <- length(Sig)  # number of emission symbols
 
 # Initializes matrix which is symbol pairs emission probability.
@@ -38,19 +38,20 @@ names(q.x) <- Sig
 names(q.y) <- Sig
 
 # transition proboility
-params <- as.list(rdirichlet(1, matrix(1,1,5)))
-names(params) <- c("epsilon", "lambda", "delta", "tau.XY", "tau.M")
+params <- as.vector(rdirichlet(1, matrix(1,1,5)))
+names(params) <- c("delta", "epsilon", "lambda", "tau.XY", "tau.M")
 
-A <- matrix(NA, N+1, N+1, dimnames = list(S, S))
-A["M", "M"] <- 1-2*params$delta-params$tau.M
-A["M", "X"] <- A["M", "Y"] <- params$delta
-A["M", "End"] <- params$tau.M
+A <- matrix(NA, N, N, dimnames = list(S, S))
+A["M", "M"] <- 1-2*params["delta"]-params["tau.M"]
+A["M", "X"] <- A["M", "Y"] <- params["delta"]
+A["M", "End"] <- params["tau.M"]
 
-A["X", "X"] <- A["Y", "Y"] <- params$epsilon
-A["X", "Y"] <- A["Y", "X"] <- params$lambda
-A["X", "End"] <- A["Y", "End"] <- params$tau.XY
-A["X", "M"] <- A["Y", "M"] <- 1-params$epsilon-params$lambda-params$tau.XY
+A["X", "X"] <- A["Y", "Y"] <- params["epsilon"]
+A["X", "Y"] <- A["Y", "X"] <- params["lambda"]
+A["X", "End"] <- A["Y", "End"] <- params["tau.XY"]
+A["X", "M"] <- A["Y", "M"] <- 1-params["epsilon"]-params["lambda"]-params["tau.XY"]
+
 A["End", ] <- 0
 
-pi <- c(1-2*params$delta-params$tau.M, params$delta, params$delta, 0)  # initial probability
+pi <- c(1-2*params["delta"]-params["tau.M"], params["delta"], params["delta"], 0)  # initial probability
 names(pi) <- S

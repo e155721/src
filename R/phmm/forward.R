@@ -11,11 +11,14 @@ Forward <- function(O1, O2, params) {
   n <- length(O1)-1
   m <- length(O2)-1
   
-  m.m <- 1-2*params$delta-params$tau.M
-  xy.m <- 1-params$epsilon-params$lambda-params$tau.XY
-  epsilon <- params$epsilon
-  lambda <- params$lambda
-  delta <- params$delta  
+  delta <- params["delta"]
+  epsilon <- params["epsilon"]
+  lambda <- params["lambda"]
+  tau.M <- params["tau.M"]
+  tau.XY <- params["tau.XY"]
+  
+  m.m <- 1-2*delta-tau.M
+  xy.m <- 1-epsilon-lambda-tau.XY
   
   # Initialization
   f.M <- matrix(0, n+1, m+1)
