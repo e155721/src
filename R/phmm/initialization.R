@@ -18,11 +18,8 @@ for (i in 1:len) {
   }
 }
 
-O1 <- wl.o[[1]]
-O2 <- wl.o[[2]]
-
-n <- length(O1)
-m <- length(O2)
+O1 <- append(wl.o[[1]], NA)
+O2 <- append(wl.o[[2]], NA)
 
 # Removes the gaps and the valujes of NA from the two observation sequences.
 Sig <- unique(as.vector(list2mat(wl.o)[, -1]))
@@ -41,23 +38,19 @@ names(q.x) <- Sig
 names(q.y) <- Sig
 
 # transition proboility
-parameters <- rdirichlet(1, matrix(1,1,5))
-epsilon <- parameters[1]
-lambda <- parameters[2]
-delta <- parameters[3]
-tau.XY <- parameters[4]
-tau.M <- parameters[5]
+params <- as.list(rdirichlet(1, matrix(1,1,5)))
+names(params) <- c("epsilon", "lambda", "delta", "tau.XY", "tau.M")
 
 A <- matrix(NA, N+1, N+1, dimnames = list(S, S))
-A["M", "M"] <- 1-2*delta-tau.M
-A["M", "X"] <- A["M", "Y"] <- delta
-A["M", "End"] <- tau.M
+A["M", "M"] <- 1-2*params$delta-params$tau.M
+A["M", "X"] <- A["M", "Y"] <- params$delta
+A["M", "End"] <- params$tau.M
 
-A["X", "X"] <- A["Y", "Y"] <- epsilon
-A["X", "Y"] <- A["Y", "X"] <- lambda
-A["X", "End"] <- A["Y", "End"] <- tau.XY
-A["X", "M"] <- A["Y", "M"] <- 1-epsilon-lambda-tau.XY
+A["X", "X"] <- A["Y", "Y"] <- params$epsilon
+A["X", "Y"] <- A["Y", "X"] <- params$lambda
+A["X", "End"] <- A["Y", "End"] <- params$tau.XY
+A["X", "M"] <- A["Y", "M"] <- 1-params$epsilon-params$lambda-params$tau.XY
 A["End", ] <- 0
 
-pi <- c(1-2*delta-tau.M, delta, delta, 0)  # initial probability
+pi <- c(1-2*params$delta-params$tau.M, params$delta, params$delta, 0)  # initial probability
 names(pi) <- S
