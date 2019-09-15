@@ -1,53 +1,60 @@
-source("data_processing/DelGap.R")
-source("needleman_wunsch/NeedlemanWunsch.R")
+source("lib/load_data_processing.R")
+source("lib/load_nwunsch.R")
 
-ProgressiveAlignment <- function(wordList, s)
-{
-  lenWordList <- length(wordList)
-  distMat <- matrix(NA, lenWordList, lenWordList)
+ProgressiveAlignment <- function(word.list, s) {
+  # Computes the multiple alignment using progressive method.
+  #
+  # Args:
+  #   word.list: The list of sequences.
+  #   s: The scoring matrix.
+  #
+  # Returns:
+  #   The multiple alignment using progressive method.
+  N <- length(word.list)  # number of sequences
+  dist.mat <- matrix(NA, N, N)
   
-  for (j in 1:(lenWordList-1)) {
-    # the start of the alignment for each the region pair
-    for (i in 1:lenWordList) {
-      align <- NeedlemanWunsch(wordList[[i]], wordList[[j]], s)
-      distMat[i, j] <- align$score
+  # Computes the pairwise alignment score for each regions pair.
+  for (j in 1:(N-1)) {
+    for (i in 1:N) {
+      psa <- NeedlemanWunsch(word.list[[i]], word.list[[j]], s)
+      dist.mat[i, j] <- psa$score
     }
   }
   
-  # make guide tree  
-  aln.d <- dist(distMat)
-  aln.hc <- hclust(aln.d, "average")
-  gtree <- aln.hc$merge
+  # Makes the guide tree.
+  psa.d <- dist(dist.mat)
+  psa.hc <- hclust(psa.d, "average")
+  gtree <- psa.hc$merge
   
-  # progressive alignment
-  progressive <- list()
+  # --> START OF PROGRESSIVE ALIGNMENT
+  pa <- list()
   len <- dim(gtree)[1]
   for (i in 1:len) {
     flg <- sum(gtree[i, ] < 0)
     if (flg == 2) {
       seq1 <- gtree[i, 1] * -1
       seq2 <- gtree[i, 2] * -1
-      aln <- NeedlemanWunsch(wordList[[seq1]], wordList[[seq2]], s)
-      progressive[[i]] <- DelGap(aln$multi)
+      psa <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s)
+      pa[[i]] <- DelGap(psa$multi)
     } 
     else if(flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
-      aln <- NeedlemanWunsch(progressive[[clt]], wordList[[seq2]], s)
-      progressive[[i]] <- DelGap(aln$multi)
+      psa <- NeedlemanWunsch(pa[[clt]], word.list[[seq2]], s)
+      pa[[i]] <- DelGap(psa$multi)
     } else {
       clt1 <- gtree[i, 1]
       clt2 <- gtree[i, 2]
-      aln <- NeedlemanWunsch(progressive[[clt1]], progressive[[clt2]], s)
-      progressive[[i]] <- DelGap(aln$multi)
+      psa <- NeedlemanWunsch(pa[[clt1]], pa[[clt2]], s)
+      pa[[i]] <- DelGap(psa$multi)
     }
   }
+  # --> END OF PROGRESSIVE ALIGNMENT
   
-  # return
-  paRlt <- list(NA, NA)
-  names(paRlt) <- c("multi", "gtree")
-  paRlt$multi <- tail(progressive, n = 1)[[1]]
-  paRlt$gtree <- gtree
-  paRlt$score <- aln$score
-  return(paRlt)
+  # Returns the list of progressive alignment results.
+  msa <- list()
+  msa$aln <- tail(pa, n = 1)[[1]]
+  msa$score <- psa$score
+  msa$gtree <- gtree
+  return(msa)
 }

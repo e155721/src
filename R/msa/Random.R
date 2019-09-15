@@ -1,50 +1,57 @@
 source("msa/ProgressiveAlignment.R")
-source("data_processing/DelGap.R")
-source("needleman_wunsch/NeedlemanWunsch.R")
+source("lib/load_data_processing.R")
+source("lib/load_nwunsch.R")
 
-Random <- function(wordList, s)
-{
-  ## progressive alignmen
-  paRlt <- ProgressiveAlignment(wordList, s)
-  pa <- paRlt$multi
-  beforeScore <- paRlt$score
+Random <- function(word.list, s) {
+  # Computes the multiple alignment using progressive method.
+  #
+  # Args:
+  #   word.list: The list of sequences.
+  #   s: The scoring matrix.
+  #
+  # Returns:
+  #   The multiple alignment using random method.
+  N <- length(word.list)  # number of sequences
+  # Computes the initial multiple alignment using the progressive method.
+  msa.tmp <- ProgressiveAlignment(word.list, s)
+  msa <- msa.tmp$aln
+  score <- msa.tmp$score
   
-  ## iterative refinement
   # number of sequences
-  M <- dim(pa)[1]
-  N <- dim(pa)[2]
-  # exit condition
-  count <- 0
-  max <- 2*M*M
+  N <- dim(msa)[1]
   
+  count <- 0  # loop counter
+  max <- 2 * N * N  # number of max iteration
+  
+  # --> START OF ITERATION
   i <- 0
   while (1) {
     
-    # exit condition  
-    if (i == M) break
-    if (count == max) break
+    # Determines the exit condition.
+    if ((i == N) || (count == max))
+      break
     
-    # separate msa
-    R <- floor(runif(1, min=2, max=M+1))
-    seq1 <- matrix(pa[1:R-1, ], R-1, N)
-    seq2 <- matrix(pa[R:M, ], M-(R-1), N)
+    # Separates the MSA at random point.
+    R <- floor(runif(1, min=2, max=N+1))
+    seq1 <- msa[1:(R - 1), , drop=F]
+    seq2 <- msa[R:N, , drop=F]
+        
+    # Computes the new MSA.
+    msa.tmp <- NeedlemanWunsch(seq1, seq2, s)
+    msa.new <- DelGap(msa.tmp$multi)
+    score.new <- msa.tmp$score
     
-    # new pairwise alignment
-    aln <- NeedlemanWunsch(seq1, seq2, s)
-    newPa <- DelGap(aln$multi)
-    afterScore <- aln$score
-    
-    # refine score
-    if (afterScore > beforeScore) {
+    # Refines alignment score.
+    if (score.new > score) {
       count <- count + 1
-      pa <- newPa
-      N <- dim(pa)[2]
-      beforeScore <- afterScore
+      msa <- msa.new
+      score <- score.new
     } else {
       i <- i + 1
     }
     
   }
-  
-  return(pa)
+  # END OF ITERATION <--
+    
+  return(msa)
 }

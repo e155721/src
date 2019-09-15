@@ -1,65 +1,66 @@
-source("msa/ProgressiveAlignment.R")
-source("data_processing/DelGap.R")
-source("needleman_wunsch/NeedlemanWunsch.R")
-
 library(foreach)
 library(doParallel)
 registerDoParallel(detectCores())
 
-BestFirst <- function(wordList, s)
-{
-  ## progressive alignmen
-  paRlt <- ProgressiveAlignment(wordList, s)
-  pa <- paRlt$multi
-  beforeScore <- paRlt$score
+source("msa/ProgressiveAlignment.R")
+source("lib/load_data_processing.R")
+source("lib/load_nwunsch.R")
+
+BestFirst <- function(wordList, s) {
+  # Computes the multiple alignment using progressive method.
+  #
+  # Args:
+  #   word.list: The list of sequences.
+  #   s: The scoring matrix.
+  #
+  # Returns:
+  #   The multiple alignment using best first method.
+  N <- length(word.list)  # number of sequences
   
-  ## iterative refinement
-  # number of sequences
-  N <- dim(pa)[1]
-  # exit condition
-  count <- 0
-  max <- 2 * N * N
-  scoreVec <- c()
-  paList <- list()
+  # Computes the initial multiple alignment using the progressive method.
+  msa.tmp <- ProgressiveAlignment(wordList, s)
+  msa <- msa.tmp$aln
+  score <- msa.tmp$score
   
+  N <- dim(msa)[1]  # number of sequences
+  count <- 0  # loop counter
+  max <- 2 * N * N  # max iteration
+  
+  # --> START OF ITERATION
   while (1) {
-    # exit condition
+    
+    # Determines the exit condition.
     if (count == max) {
       break
     }
     
-    aln.list <- foreach (i = 1:N) %dopar% {
-      # remove ith sequence
-      seq1 <- pa[drop = F, i, ]
-      seq2 <- pa[drop = F, -i, ]
-      
-      # new pairwise alignment
-      #aln <- NeedlemanWunsch(seq1, seq2, p, p, s)
+    # Makes the multiple alignment.
+    msa.new <- foreach (i = 1:N) %dopar% {
+      # Removes the ith sequence.
+      seq1 <- msa[drop = F, i, ]
+      seq2 <- msa[drop = F, -i, ]
       NeedlemanWunsch(seq1, seq2, s)
-      # scoreVec[i] <- aln$score
-      # paList[[i]] <- DelGap(aln$multi)
     }
     
-    for (i in 1:N) {
-      #scoreVec <- unlist(aln.list$score)
-      #paList <- DelGap(aln.list$multi)
-      scoreVec[i] <- aln.list[[i]]$score
-      paList[[i]] <- DelGap(aln.list[[i]]$multi)
-    }
+    score.vec <- c()
+    for (i in 1:N)
+      score.vec[i] <- msa.new[[i]]$score
     
-    scoreInd <- grep(scoreVec, pattern = max(scoreVec))
-    scoreInd <- head(scoreInd, n = 1)
-    afterScore <- scoreVec[scoreInd]
+    score.max <- grep(score.vec, pattern = max(score.vec))
+    score.max <- score.max[1]
+    score.new <- score.vec[score.max]
     
-    # refine score
-    if (afterScore > beforeScore) {
+    # Refines the alignment score.
+    if (score.new > score) {
       count <- count + 1
-      pa <- DelGap(paList[[scoreInd]])
-      beforeScore <- afterScore
+      msa <- DelGap(msa.new[[score.max]]$multi)
+      score <- score.new
     } else {
       break
     }
+    
   }
-  
-  return(pa)
+  # END OF ITERATION <--
+    
+  return(msa)
 }
