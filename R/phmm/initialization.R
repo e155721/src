@@ -21,7 +21,8 @@ Asign2A <- function(params, S) {
   m.m <- 1-2*delta-tau.M
   xy.m <- 1-epsilon-lambda-tau.XY
 
-  N <- length(S)
+  N <- length(S) + 1  # number of emission states and a silent state
+  S <- append(S, "End")
   A <- matrix(0, N, N, dimnames = list(S, S))
   A["M", "M"] <- m.m
   A["M", "X"] <- A["M", "Y"] <- delta
@@ -33,6 +34,21 @@ Asign2A <- function(params, S) {
   A["X", "M"] <- A["Y", "M"] <- xy.m
 
   return(A)
+}
+
+Assign2E <- function(Sig) {
+
+  M <- length(Sig)
+
+  # Initializes matrix which is symbol pairs emission probability.
+  p.xy <- matrix(rdirichlet(1, matrix(1,1,M*M)), M, M, dimnames = list(Sig, Sig))
+  q.x <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
+  q.y <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
+
+  E <- list(p.xy, q.x, q.y)
+  names(E) <- c("M", "X", "Y")
+
+  return(E)
 }
 
 wl <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org")
@@ -52,27 +68,32 @@ for (i in 1:len) {
 O1 <- append(wl.o[[1]], NA)
 O2 <- append(wl.o[[2]], NA)
 
+U <- length(O1) - 1
+V <- length(O2) - 1
+
 # Removes the gaps and the valujes of NA from the two observation sequences.
 Sig <- unique(as.vector(list2mat(wl.o)[, -1]))
-Sig <- Sig[Sig!=" "]
+Sig <- Sig[Sig != " "]
 
-S <- c("M","X","Y","End")  # set of states
+S <- c("M","X","Y")  # set of emission states
 N <- length(S)  # number of emission states
 M <- length(Sig)  # number of emission symbols
 
-# Initializes matrix which is symbol pairs emission probability.
-p.xy <- matrix(rdirichlet(1, matrix(1,1,M*M)), M, M, dimnames = list(Sig, Sig))
-q.x <- as.vector(rdirichlet(1, matrix(1,1,M)))
-q.y <- as.vector(rdirichlet(1, matrix(1,1,M)))
-
-names(q.x) <- Sig
-names(q.y) <- Sig
-
 # transition proboility
-params <- as.vector(rdirichlet(1, matrix(1,1,5)))
-names(params) <- c("delta", "epsilon", "lambda", "tau.XY", "tau.M")
+params1 <- as.vector(rdirichlet(1, matrix(1,1,3)))[2:3]
+params2 <- as.vector(rdirichlet(1, matrix(1,1,4)))[2:4]
 
-A <- Asign2A(params, S)
+params1.name <- c("delta", "tau.M")
+params2.name <- c("epsilon", "lambda", "tau.XY")
 
-pi <- c(1-2*params["delta"]-params["tau.M"], params["delta"], params["delta"], 0)  # initial probability
-names(pi) <- S
+names(params1) <- params1.name
+params1["delta"] <- params1["delta"] / 2
+names(params2) <- params2.name
+
+params <- append(params1, params2)
+
+A <- Assign2A(params, S)
+E <- Assign2E(Sig)
+
+pi <- matrix(c(1 - 2 * params["delta"] - params["tau.M"], params["delta"], params["delta"]), 1, length(S))  # initial probability
+dimnames(pi) <- list(NULL, S)

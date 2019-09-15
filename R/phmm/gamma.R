@@ -1,13 +1,20 @@
-Gamma.uv <- function(i, u, v, list.f, list.b) {
+Gamma <- function(i, u, v, f.var, b.var) {
+  # Computes the visited probability of state i at u and v.
+  #
+  # Args:
+  #   i: The value of state.
+  #   u, v: The values of positions on both of the observation sequences.
+  #   f.var, b.var: The list of distance matrices by the forward-backward algorithm.
+  # Returns:
+  #   The value of visited probability of state i at u and v.
+  num <- f.var[[i]][u, v] * b.var[[i]][u, v]
   
-  fb.i <- list.f[[i]][u, v] * list.b[[i]][u, v]
-  
-  fb.j <- 0
+  den <- 0
   for (j in 1:N) {
-    fb.j <- fb.j + list.f[[j]][u, v] * list.b[[j]][u, v]
+    den <- den + f.var[[j]][u, v] * b.var[[j]][u, v]
   }
   
-  gamma <- fb.i / fb.j
+  gamma <- num / den
   if (is.na(gamma)) {
     return(0)
   } 

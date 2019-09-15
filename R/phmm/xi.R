@@ -1,4 +1,4 @@
-Xi <- function(u, v, i, j, O1, O2, f.var, b.var, A) {
+Xi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
   # Computes the transition probability from state i to j at u and j.
   #
   # Args:
@@ -10,10 +10,14 @@ Xi <- function(u, v, i, j, O1, O2, f.var, b.var, A) {
   #
   # Returns:
   #   The value of the transition probability from state i to j at u and j.
+  p.xy <- E$M
+  q.x <- E$X
+  q.y <- E$Y
+  
   switch(j,
          "M" = e.j <- p.xy[O1[u+1], O2[v+1]],
-         "X" = e.j <- q.x[O1[u+1]],
-         "Y" = e.j <- q.y[O2[v+1]]
+         "X" = e.j <- q.x[1, O1[u+1]],
+         "Y" = e.j <- q.y[1, O2[v+1]]
   )
   
   switch(j,
@@ -42,7 +46,7 @@ Xi <- function(u, v, i, j, O1, O2, f.var, b.var, A) {
   return(xi)  
 }
 
-ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A) {
+ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
   # Computes the new transition parameters about word w.
   #
   # Args:
@@ -54,8 +58,6 @@ ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A) {
   #
   # Returns:
   #   The value of the new parameters about word w.
-  U <- length(O1) - 1
-  V <- length(O2) - 1
   
   I <- c("M", "X", "X")
   J <- c("X", "X", "Y")
@@ -81,14 +83,14 @@ ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A) {
     den <- 0
     for (u in 2:U_) {
       for (v in 2:V_) {
-        num <- num + Xi(u, v, i, j, O1, O2, f.var, b.var, A)
+        num <- num + Xi(u, v, i, j, O1, O2, f.var, b.var, A, E)
       }
     }
     
     for (u in 2:U_) {
       for (v in 2:V_) {
         for (j_ in J) {
-          den <- den + Xi(u, v, i, j_, O1, O2, f.var, b.var, A)
+          den <- den + Xi(u, v, i, j_, O1, O2, f.var, b.var, A, E)
         }
       }
     }
@@ -118,9 +120,20 @@ ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A) {
   tau.M_ <- 1-2*delta_
   tau.XY_ <- 1-epsilon_-lambda_
   
-  params_ <- c(epsilon_, lambda_, delta_, tau.XY_, tau.M_)
-  params_ <- params_ / sum(params_)  # normalization
-  names(params_) <- c("delta", "epsilon", "lambda", "tau.XY", "tau.M")
+  params1 <- c(1-2*delta_-tau.M_, 2*delta_, tau.M_)
+  params1 <- params1 / sum(params1)
+  params1 <- params1[-1]
+  names(params1) <- params1.name
+  params1["delta"] <- params1["delta"]/2
+  
+  params2 <- c(1-epsilon_-lambda_-tau.XY_, epsilon_, lambda_, tau.XY_)
+  params2 <- params2 / sum(params2)
+  params2 <- params2[-1]
+  names(params2) <- params2.name
+  
+  params_ <- append(params1, params2)
+  names(params_) <- params.name
   
   return(params_)
 }
+
