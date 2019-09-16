@@ -1,11 +1,17 @@
 library(shiny)
-source("execution_pairwise.R")
-source("execution_levenshtein.R")
-source("data_processing/GetPathList.R")
-source("data_processing/list2mat.R")
+
+source("lib/load_data_processing.R")
+source("lib/load_scoring_matrix.R")
+source("lib/load_nwunsch.R")
+
+source("msa/RemoveFirst.R")
+source("msa/BestFirst.R")
+source("msa/Random.R")
 
 path.list <- GetPathList("data")
 file.vec <- list2mat(path.list)[, 2]
+
+methods <- c("Remove First", "Best First", "Random")
 
 ui <- fluidPage(
   titlePanel("発音記号列のアラインメント"),
@@ -18,8 +24,7 @@ ui <- fluidPage(
                   choices = c(file.vec)),
       selectInput("method", 
                   label = "アラインメント手法の選択",
-                  choices = c("Phoneme Feature",
-                              "Levenshtein")),
+                  choices = methods),
       actionButton("alignment", "アラインメント")
       
     ),

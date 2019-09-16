@@ -1,7 +1,8 @@
 server <- function(input, output, session) {
   
-  push <- -1  
+  s <- MakeFeatureMatrix(-Inf, -3)
   
+  push <- -1  
   observeEvent(input$alignment, {
     push <<- input$alignment
   })
@@ -9,9 +10,14 @@ server <- function(input, output, session) {
   output$table <- renderTable({
     if (input$alignment == push) {
       push <<- -1
+      word.list <- MakeWordList(paste("data", input$word, sep = "/"))
+      word.list <- MakeInputSeq(word.list)
       switch (input$method,
-              "Phoneme Feature" = PF(input$word),
-              "Levenshtein" = LV(input$word))
+              "Remove First" = RemoveFirst(word.list, s),
+              "Best First" = BestFirst(word.list, s),
+              "Random" = Random(word.list, s))
+    } else {
+      # no operation
     }
   })
   

@@ -1,9 +1,9 @@
-source("data_processing/MakeWordList.R")
-source("data_processing/GetPathList.R")
-source("needleman_wunsch/MakeEditDistance.R")
-source("verification/verif_lib/verification_func.R")
-source("verification/verif_lib/MakeInputSeq.R")
-source("verification/verif_lib/MakeEDPairwise.R")
+source("lib/load_data_processing.R")
+source("lib/load_verif_lib.R")
+source("lib/load_scoring_matrix.R")
+source("verification/methods/MakeEDPairwise.R")
+source("verification/methods/MakeCorpus.R")
+source("verification/methods/PMI.R")
 
 library(foreach)
 library(doParallel)
@@ -41,7 +41,7 @@ for (denom in denom.vec) {
     gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.rlt <- MakeEDPairwise(input.list, s, fmin = T)
+    psa.rlt <- MakeEDPairwise(input.list, s, select.min = T)
     psa.aln <- psa.rlt$psa
     ed <- psa.rlt$ed
     
@@ -96,7 +96,7 @@ for (denom in denom.vec) {
       s.old <- s
       
       # making the pairwise alignment in all regions
-      psa.rlt <- MakeEDPairwise(input.list, s, fmin = T)
+      psa.rlt <- MakeEDPairwise(input.list, s, select.min = T)
       psa.aln <- psa.rlt$psa
       ed.new <- psa.rlt$ed
       
