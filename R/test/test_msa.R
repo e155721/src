@@ -1,28 +1,12 @@
-source("data_processing/MakeWordList.R")
-source("needleman_wunsch/MakeFeatureMatrix.R")
-source("msa/ProgressiveAlignment.R")
-source("msa/RemoveFirst.R")
-source("msa/BestFirst.R")
-source("msa/Random.R")
+source("lib/load_verif_lib.R")
+source("lib/load_scoring_matrix.R")
 
-test <- function(file, method)
-{
-  wordList <- MakeWordList(file)
-  p <- -3
-  s <- MakeFeatureMatrix(-10, p)
-  
-  switch(method,
-         "pa" = msa <- ProgressiveAlignment(wordList, s),
-         "rf" = msa <- RemoveFirst(wordList, s),
-         "bf" = msa <- BestFirst(wordList, s),
-         "rd" = msa <- Random(wordList, s)
-  )
-  
-  return(msa)
-}
+word.list <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org")
+word.list <- MakeInputSeq(word.list)
 
-scoringMatrix <- MakeFeatureMatrix(-10, -3)
-p <- -3
+s <- MakeFeatureMatrix(-Inf, -3)
+s["-", "-"] <- 0
 
-file <- "../../Alignment/input_data/002.input"
-test(file, "bf")
+RemoveFirst(word.list ,s)
+BestFirst(word.list ,s)
+Random(word.list, s)
