@@ -53,7 +53,7 @@ BestFirst <- function(wordList, s) {
     # Refines the alignment score.
     if (score.new > score) {
       count <- count + 1
-      msa <- DelGap(msa.new[[score.max]]$multi)
+      msa <- DelGap(msa.new[[score.max]]$aln)
       score <- score.new
     } else {
       break

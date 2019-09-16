@@ -38,7 +38,7 @@ Random <- function(word.list, s) {
         
     # Computes the new MSA.
     msa.tmp <- NeedlemanWunsch(seq1, seq2, s)
-    msa.new <- DelGap(msa.tmp$multi)
+    msa.new <- DelGap(msa.tmp$aln)
     score.new <- msa.tmp$score
     
     # Refines alignment score.

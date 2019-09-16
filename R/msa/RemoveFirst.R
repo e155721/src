@@ -36,7 +36,7 @@ RemoveFirst <- function(word.list, s) {
 
     # Makes the new multiple alignment.
     msa.tmp<- NeedlemanWunsch(seq1, seq2, s)
-    msa.new <- DelGap(msa.tmp$multi)
+    msa.new <- DelGap(msa.tmp$aln)
     score.new <- msa.tmp$score
     
     # Refines the alignment score.

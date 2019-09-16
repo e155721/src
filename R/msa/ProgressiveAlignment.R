@@ -35,18 +35,18 @@ ProgressiveAlignment <- function(word.list, s) {
       seq1 <- gtree[i, 1] * -1
       seq2 <- gtree[i, 2] * -1
       psa <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s)
-      pa[[i]] <- DelGap(psa$multi)
+      pa[[i]] <- DelGap(psa$aln)
     } 
     else if(flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
       psa <- NeedlemanWunsch(pa[[clt]], word.list[[seq2]], s)
-      pa[[i]] <- DelGap(psa$multi)
+      pa[[i]] <- DelGap(psa$aln)
     } else {
       clt1 <- gtree[i, 1]
       clt2 <- gtree[i, 2]
       psa <- NeedlemanWunsch(pa[[clt1]], pa[[clt2]], s)
-      pa[[i]] <- DelGap(psa$multi)
+      pa[[i]] <- DelGap(psa$aln)
     }
   }
   # --> END OF PROGRESSIVE ALIGNMENT

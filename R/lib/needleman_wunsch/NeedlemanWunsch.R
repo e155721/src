@@ -115,14 +115,13 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
   align[[2]] <- align2
   
   # return
-  rlt <- list(NA, NA, NA, NA)
-  names(rlt) <- c("seq1", "seq2", "multi", "score")
-  rlt[["seq1"]] <- align[[1]]
-  rlt[["seq2"]] <- align[[2]]
-  rlt[["multi"]] <- rbind(align[[1]], align[[2]])
-  rlt[["score"]] <- mat[lenSeq1, lenSeq2, 1]
+  psa <- list()
+  psa$seq1 <- align[[1]]
+  psa$seq2 <- align[[2]]
+  psa$aln <- rbind(align[[1]], align[[2]])
+  psa$score <- mat[lenSeq1, lenSeq2, 1]
   
-  return(rlt)
+  return(psa)
 }
 
 SP <- function(prof1, prof2, s)
