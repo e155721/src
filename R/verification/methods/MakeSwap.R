@@ -1,4 +1,4 @@
-source("lib/load_nwunsch.R")
+source("verification/methods/NeedlemanSwap.R")
 
 MakeSwap <- function(word.list, s)
 {
@@ -16,7 +16,7 @@ MakeSwap <- function(word.list, s)
                              as.matrix(word.list[[l]], drop = F), s)
       psa.aln[[n]] <- psa$seq1
       psa.aln[[n+1]] <- psa$seq2
-      n <- n+2
+      n <- n+3
     }
     # the end of the aligne for each the region pair
     m <- m + 1

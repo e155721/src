@@ -1,7 +1,7 @@
 # source("needleman_wunsch/nw_lib/D.R")
 # source("needleman_wunsch/nw_lib/SP.R")
 
-NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
+NeedlemanWunsch <- function(seq1, seq2, s, select.min=F)
 {
   # get the lengths of sequences
   lenSeq1 <- dim(seq1)[2]
@@ -39,7 +39,7 @@ NeedlemanWunsch <- function(seq1, seq2, s, fmin=F)
       d3 <- D$D3(mat, i, j)
       
       d <- c(NA, NA)
-      if (fmin) {
+      if (select.min) {
         d[1] <- min(d1, d2, d3)
       } else {
         d[1] <- max(d1, d2, d3)
@@ -194,24 +194,6 @@ D <-
               d3 <- x[i, j-1, 1] + sp
               
               return(d3)
-            },
-            
-            D4 = function(x, i, j)
-            {
-              # horizontally gap
-              # cost for seq1[i] to seq2[j-1]
-              prof1 <- as.matrix(private$seq1[, i])
-              prof2 <- as.matrix(private$seq2[, j-1])
-              sp1 <- SP(prof1, prof2, private$s)*2
-              
-              # cost for seq1[i-1] to seq2[j]
-              prof1 <- as.matrix(private$seq1[, i-1])
-              prof2 <- as.matrix(private$seq2[, j])
-              sp2 <- SP(prof1, prof2, private$s)*2
-              
-              d4 <- x[i-2, j-2, 1] + 0.999 + sp1 + sp2
-              
-              return(d4)
             }
           )
   )

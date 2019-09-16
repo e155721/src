@@ -41,7 +41,7 @@ for (denom in denom.vec) {
     gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.rlt <- MakeEDPairwise(input.list, s, fmin = T)
+    psa.rlt <- MakeEDPairwise(input.list, s, select.min = T)
     psa.aln <- psa.rlt$psa
     ed <- psa.rlt$ed
     
@@ -96,7 +96,7 @@ for (denom in denom.vec) {
       s.old <- s
       
       # making the pairwise alignment in all regions
-      psa.rlt <- MakeEDPairwise(input.list, s, fmin = T)
+      psa.rlt <- MakeEDPairwise(input.list, s, select.min = T)
       psa.aln <- psa.rlt$psa
       ed.new <- psa.rlt$ed
       
