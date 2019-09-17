@@ -6,7 +6,13 @@ MakeWordList <- function(file) {
   #
   # Returns:
   #   The word list.
-  x <- read.table(file)
+  
+  # Reads from csv file
+  x <- read.csv(file)
+  # Extracts from column 2 for the end of the row.
+  # Because, the first clomun has line number.
+  x <- x[, 2:dim(x)[2]]
+  #x <- read.table(file)
   N <- dim(x)[1]
   word.list <- list()
   for (i in 1:N) {
