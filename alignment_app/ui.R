@@ -20,14 +20,17 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      selectInput("word",
-                  label = "入力ファイルの選択",
-                  choices = c(file.vec)),
+      if (0) {
+        selectInput("word",
+                    label = "入力ファイルの選択",
+                    choices = c(file.vec))
+      },
+      fileInput("file1", "Choose File", multiple = F),
       selectInput("method", 
                   label = "アラインメント手法の選択",
                   choices = methods),
-      fileInput("file1", "Choose File", multiple = F),
-      actionButton("alignment", "アラインメント")
+      actionButton("alignment", "アラインメント"),
+      downloadButton("download", "ダウンロード")
       
     ),
     
