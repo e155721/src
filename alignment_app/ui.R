@@ -3,6 +3,7 @@ library(shiny)
 source("lib/load_data_processing.R")
 source("lib/load_scoring_matrix.R")
 source("lib/load_nwunsch.R")
+source("lib/load_verif_lib.R")
 
 source("msa/RemoveFirst.R")
 source("msa/BestFirst.R")
@@ -25,6 +26,7 @@ ui <- fluidPage(
       selectInput("method", 
                   label = "アラインメント手法の選択",
                   choices = methods),
+      fileInput("file1", "Choose File", multiple = F),
       actionButton("alignment", "アラインメント")
       
     ),

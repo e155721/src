@@ -10,7 +10,14 @@ server <- function(input, output, session) {
   output$table <- renderTable({
     if (input$alignment == push) {
       push <<- -1
-      word.list <- MakeWordList(paste("data", input$word, sep = "/"))
+      
+      if(is.null(input$file1)) {
+        return(NULL) 
+      } else {
+        word.list <- MakeWordList(input$file1$datapath)
+      }
+      
+      #word.list <- MakeWordList(paste("data", input$word, sep = "/"))
       word.list <- MakeInputSeq(word.list)
       switch (input$method,
               "Remove First" = RemoveFirst(word.list, s),

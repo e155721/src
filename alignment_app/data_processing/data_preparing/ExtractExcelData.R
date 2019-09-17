@@ -61,7 +61,11 @@ ExtractExcelData <- function(input_path = "../../Data/fix_test_data.xlsm",
     #sheet <- transform(sheet, Regions = regions)
     #setcolorder(sheet, "Regions")
     sheet <- FormatData(sheet)
-    write.table(sheet, paste(output_path, sheet_names[i], ".org", sep = ""))
+    
+    # Writes to csv file.
+    write.csv(sheet, paste(output_path, sheet_names[i], ".csv", sep = ""))
+    #write.table(sheet, paste(output_path, sheet_names[i], ".org", sep = ""))
+    
     # write.table(sheet, paste(output_path, formatC(k, width = 3, flag = 0), ".org", sep = ""))
     k <- k + 1
   }
