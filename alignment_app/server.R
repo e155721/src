@@ -12,7 +12,7 @@ server <- function(input, output, session) {
     if (input$alignment == push) {
       push <<- -1
       #word.list <- MakeWordList(paste("data", input$word, sep = "/"))
-      word.list <- MakeWordList(input$file1$datapath)
+      word.list <- MakeWordList(input$word.file$datapath)
       word.list <- MakeInputSeq(word.list)
       aln <<- switch (input$method,
                       "Remove First" = RemoveFirst(word.list, s),
@@ -25,7 +25,7 @@ server <- function(input, output, session) {
   
   output$download <- downloadHandler(
     filename = function() {
-      paste(input$file1$name, ".csv", sep = "")
+      paste(input$word.file$name, ".csv", sep = "")
     },
     content = function(file) {
       write.csv(aln, file, row.names = F)

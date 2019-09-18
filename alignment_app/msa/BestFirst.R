@@ -6,7 +6,7 @@ source("msa/ProgressiveAlignment.R")
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-BestFirst <- function(wordList, s) {
+BestFirst <- function(word.list, s) {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -18,7 +18,7 @@ BestFirst <- function(wordList, s) {
   N <- length(word.list)  # number of sequences
   
   # Computes the initial multiple alignment using the progressive method.
-  msa.tmp <- ProgressiveAlignment(wordList, s)
+  msa.tmp <- ProgressiveAlignment(word.list, s)
   msa <- msa.tmp$aln
   score <- msa.tmp$score
   

@@ -12,10 +12,8 @@ source("msa/Random.R")
 path.list <- GetPathList("data")
 file.vec <- list2mat(path.list)[, 2]
 
-methods <- c("Remove First", "Best First", "Random")
-
 ui <- fluidPage(
-  titlePanel("発音記号列のアラインメント"),
+  titlePanel("発音記号列アラインメントツール"),
   
   sidebarLayout(
     sidebarPanel(
@@ -25,10 +23,11 @@ ui <- fluidPage(
                     label = "入力ファイルの選択",
                     choices = c(file.vec))
       },
-      fileInput("file1", "Choose File", multiple = F),
+      fileInput("word.file", "入力ファイルを選択してください", 
+                multiple = F, buttonLabel = "選択", placeholder = "ファイルが選択されていません"),
       selectInput("method", 
                   label = "アラインメント手法の選択",
-                  choices = methods),
+                  choices = c("Remove First", "Best First", "Random")),
       actionButton("alignment", "アラインメント"),
       downloadButton("download", "ダウンロード")
       
