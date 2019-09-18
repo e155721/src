@@ -5,7 +5,7 @@
 
 # remove files that there have the word of original form
 
-for f in *.org
+for f in *.csv
 do
     l=($(grep -v "\-9" $f | wc -l))
     [ $l[1] -le 2 ] && rm $f
