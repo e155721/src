@@ -24,7 +24,7 @@ ui <- fluidPage(
                     choices = c(file.vec))
       },
       fileInput("word.file", "入力ファイルを選択してください", 
-                multiple = F, buttonLabel = "選択", placeholder = "ファイルが選択されていません"),
+                multiple = T, buttonLabel = "選択", placeholder = "ファイルが選択されていません"),
       selectInput("method", 
                   label = "アラインメント手法の選択",
                   choices = c("Remove First", "Best First", "Random")),
