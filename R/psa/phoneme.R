@@ -6,5 +6,6 @@ source("verification/methods/MakePairwise.R")
 Phoneme <- function(word.list, s) {
   # making the pairwise alignment in all regions
   psa.aln <- MakePairwise(word.list, s)
+  psa.aln <- list2mat(psa.aln)
   return(psa.aln)
 }

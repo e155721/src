@@ -97,5 +97,6 @@ PmiWeighted <- function(word.list) {
     sum.ed <- min(sum.ed.vec)
   }
   
+  psa.aln <- list2mat(psa.aln)
   return(psa.aln)
 }

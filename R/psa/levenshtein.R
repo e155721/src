@@ -7,5 +7,6 @@ Levenshtein <- function(word.list) {
   # making the pairwise alignment in all regions
   s <- MakeEditDistance(Inf)
   psa.aln <- MakePairwise(word.list, s, select.min = T)
+  psa.aln <- list2mat(psa.aln)
   return(psa.aln)
 }
