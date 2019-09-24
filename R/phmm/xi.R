@@ -132,7 +132,7 @@ ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
   names(params2) <- params2.name
   
   params_ <- append(params1, params2)
-  names(params_) <- params.name
+  names(params_) <- c(params1.name, params2.name)
   
   return(params_)
 }
