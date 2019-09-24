@@ -1,15 +1,22 @@
-Xi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
+Xi <- function(u, v, i, j, O, fb, A, E) {
   # Computes the transition probability from state i to j at u and j.
   #
   # Args:
   #   u, v: The values of positions on both of the observation sequences.
   #   i, j: The values of states.
-  #   O1, O2: The vectors of observation sequences which these have length of U and V respectively.
-  #   f.var, b.var: The list of distance matrices by the forward-backward algorithm.
+  #   O: The list of the observation sequences and the lengths.
+  #   fb: The list of the forward-backward algorithm.
   #   A: The matrix of transition probability.
+  #   E: The list of the emission probability matrices.
   #
   # Returns:
   #   The value of the transition probability from state i to j at u and j.
+  O1 <- O$O1
+  O2 <- O$O2
+  
+  f.var <- fb$forward
+  b.var <- fb$backward
+  
   p.xy <- E$M
   q.x <- E$X
   q.y <- E$Y
@@ -46,18 +53,23 @@ Xi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
   return(xi)  
 }
 
-ExeXi <- function(O1, O2, f.var, b.var, A, E) {
+ExeXi <- function(O, fb, A, E) {
   # Computes the new transition parameters about word w.
   #
   # Args:
   #   u, v: The values of positions on both of the observation sequences.
   #   i, j: The values of states.
-  #   O1, O2: The vectors of observation sequences which these have length of U and V respectively.
-  #   f.var, b.var: The list of distance matrices by the forward-backward algorithm.
+  #   O: The list of the observation sequences and the lengths.
+  #   fb: The list of the forward-backward algorithm.
   #   A: The matrix of transition probability.
+  #   E: The list of the emission probability matrices.
   #
   # Returns:
   #   The value of the new parameters about word w.
+  O1 <- O$O1
+  O2 <- O$O2
+  U <- O$U
+  V <- O$V
   
   I <- c("M", "X", "X")
   J <- c("X", "X", "Y")
@@ -82,7 +94,7 @@ ExeXi <- function(O1, O2, f.var, b.var, A, E) {
     num <- 0
     for (u in 2:U_) {
       for (v in 2:V_) {
-        num <- num + Xi(u, v, i, j, O1, O2, f.var, b.var, A, E)
+        num <- num + Xi(u, v, i, j, O, fb, A, E)
       }
     }
     
@@ -90,7 +102,7 @@ ExeXi <- function(O1, O2, f.var, b.var, A, E) {
     for (u in 2:U_) {
       for (v in 2:V_) {
         for (j_ in J) {
-          den <- den + Xi(u, v, i, j_, O1, O2, f.var, b.var, A, E)
+          den <- den + Xi(u, v, i, j_, O, fb, A, E)
         }
       }
     }

@@ -71,6 +71,9 @@ O2 <- append(wl.o[[2]], NA)
 U <- length(O1) - 2
 V <- length(O2) - 2
 
+O <- list(O1, O2, U, V)
+names(O) <- c("O1", "O2", "U", "V")
+
 # Removes the gaps and the valujes of NA from the two observation sequences.
 Sig <- unique(as.vector(list2mat(wl.o)[, -1]))
 Sig <- Sig[Sig != " "]

@@ -1,13 +1,17 @@
-Forward <- function(O1, O2, params, E) {
+Forward <- function(O, params, E) {
   # Computes the likelihood using forward algorithm.
   # 
   # Args:
-  #   O1: The vector of an observation sequence which it has length of n.
-  #   O2: The vector of an observation sequence which it has length of m.
+  #   O: The list of the observation sequences and the lengths.
   #   params: The list of the parameters.
   #
   # Returns:
   #   The list of the distance matrices in each state.
+  O1 <- O$O1
+  O2 <- O$O2
+  U <- O$U
+  V <- O$V
+  
   delta <- params["delta"]
   tau.M <- params["tau.M"]
   epsilon <- params["epsilon"]
