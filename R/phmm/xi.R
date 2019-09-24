@@ -71,8 +71,8 @@ ExeXi <- function(O, fb, A, E) {
   U <- O$U
   V <- O$V
   
-  I <- c("M", "X", "X")
-  J <- c("X", "X", "Y")
+  I <- c("M", "M", "X", "X", "X")
+  J <- c("M", "X", "M", "X", "Y")
   
   for (s in 1:length(I)) {
     
@@ -117,7 +117,13 @@ ExeXi <- function(O, fb, A, E) {
       # no operation
     }
     
-    if (i=="M" && j=="X") {
+    if (i=="M" && j=="M") {
+      m.m <- a.ij_      
+    }
+    else if (i=="X" && j=="M") {
+      xy.m <- a.ij_
+    }
+    else if (i=="M" && j=="X") {
       delta_ <- a.ij_
     }
     else if (i=="X" && j=="X") {
@@ -129,8 +135,8 @@ ExeXi <- function(O, fb, A, E) {
     
   }
   
-  tau.M_ <- 1-2*delta_
-  tau.XY_ <- 1-epsilon_-lambda_
+  tau.M_ <- 1-2*delta_-m.m
+  tau.XY_ <- 1-epsilon_-lambda_-xy.m
   
   params1 <- c(1-2*delta_-tau.M_, 2*delta_, tau.M_)
   params1 <- params1 / sum(params1)
@@ -139,7 +145,7 @@ ExeXi <- function(O, fb, A, E) {
   params2 <- c(1-epsilon_-lambda_-tau.XY_, epsilon_, lambda_, tau.XY_)
   params2 <- params2 / sum(params2)
   params2 <- params2[-1]
-    
+  
   params_ <- c(params1, params2)
   names(params_) <- c(params.name)
   params_["delta"] <- params_["delta"] / 2
