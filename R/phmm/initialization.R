@@ -80,17 +80,13 @@ N <- length(S)  # number of emission states
 M <- length(Sig)  # number of emission symbols
 
 # transition proboility
+params.name <- c("delta", "tau.M", "epsilon", "lambda", "tau.XY")
 params1 <- as.vector(rdirichlet(1, matrix(1,1,3)))[2:3]
 params2 <- as.vector(rdirichlet(1, matrix(1,1,4)))[2:4]
 
-params1.name <- c("delta", "tau.M")
-params2.name <- c("epsilon", "lambda", "tau.XY")
-
-names(params1) <- params1.name
-params1["delta"] <- params1["delta"] / 2
-names(params2) <- params2.name
-
-params <- append(params1, params2)
+params <- c(params1, params2)
+names(params) <- params.name
+params["delta"] <- params["delta"] / 2
 
 A <- Assign2A(params, S)
 E <- Assign2E(Sig)

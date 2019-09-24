@@ -123,16 +123,14 @@ ExeXi <- function(O1, O2, f.var, b.var, A, E) {
   params1 <- c(1-2*delta_-tau.M_, 2*delta_, tau.M_)
   params1 <- params1 / sum(params1)
   params1 <- params1[-1]
-  names(params1) <- params1.name
-  params1["delta"] <- params1["delta"]/2
   
   params2 <- c(1-epsilon_-lambda_-tau.XY_, epsilon_, lambda_, tau.XY_)
   params2 <- params2 / sum(params2)
   params2 <- params2[-1]
-  names(params2) <- params2.name
-  
-  params_ <- append(params1, params2)
-  names(params_) <- c(params1.name, params2.name)
+    
+  params_ <- c(params1, params2)
+  names(params_) <- c(params.name)
+  params_["delta"] <- params_["delta"] / 2
   
   return(params_)
 }

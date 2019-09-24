@@ -1,3 +1,8 @@
+source("phmm/initialization.R")
+source("phmm/forward.R")
+source("phmm/backward.R")
+source("phmm/xi.R")
+
 f.var <- Forward(O1, O2, params, E)
 b.var <- Backward(O1, O2, params, E)
 
