@@ -46,7 +46,7 @@ Xi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
   return(xi)  
 }
 
-ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
+ExeXi <- function(O1, O2, f.var, b.var, A, E) {
   # Computes the new transition parameters about word w.
   #
   # Args:
@@ -80,13 +80,13 @@ ExeXi <- function(u, v, i, j, O1, O2, f.var, b.var, A, E) {
     }
     
     num <- 0
-    den <- 0
     for (u in 2:U_) {
       for (v in 2:V_) {
         num <- num + Xi(u, v, i, j, O1, O2, f.var, b.var, A, E)
       }
     }
     
+    den <- 0
     for (u in 2:U_) {
       for (v in 2:V_) {
         for (j_ in J) {

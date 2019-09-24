@@ -68,8 +68,8 @@ for (i in 1:len) {
 O1 <- append(wl.o[[1]], NA)
 O2 <- append(wl.o[[2]], NA)
 
-U <- length(O1) - 1
-V <- length(O2) - 1
+U <- length(O1) - 2
+V <- length(O2) - 2
 
 # Removes the gaps and the valujes of NA from the two observation sequences.
 Sig <- unique(as.vector(list2mat(wl.o)[, -1]))
