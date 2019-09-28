@@ -4,7 +4,7 @@ library(gtools)
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 
-Asign2A <- function(params, S) {
+Assign2A <- function(params, S) {
   # Assignes the parameters to the matrix.
   #
   # Args:
@@ -36,19 +36,27 @@ Asign2A <- function(params, S) {
   return(A)
 }
 
-Assign2E <- function(Sig) {
+CalcL <- function(O, fb) {
+  # Computes the likelihood.
+  #
+  # Args:
+  #   O: The list of the observation sequences and the lengths.
+  #   fb: The list of the forward-backward algorithm.
+  #
+  # Returns:
+  # The likelihood.
+  f.var <- fb$forward
+  b.var <- fb$backward
 
-  M <- length(Sig)
+  U <- O$U
+  V <- O$V
 
-  # Initializes matrix which is symbol pairs emission probability.
-  p.xy <- matrix(rdirichlet(1, matrix(1,1,M*M)), M, M, dimnames = list(Sig, Sig))
-  q.x <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
-  q.y <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
+  L <- 0
+  for (k in S) {
+    L <- L + f.var[[k]][U, V] * b.var[[k]][U, V]
+  }
 
-  E <- list(p.xy, q.x, q.y)
-  names(E) <- c("M", "X", "Y")
-
-  return(E)
+  return(L)
 }
 
 wl <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org")
@@ -92,7 +100,14 @@ names(params) <- params.name
 params["delta"] <- params["delta"] / 2
 
 A <- Assign2A(params, S)
-E <- Assign2E(Sig)
+
+# Initializes matrix which is symbol pairs emission probability.
+p.xy <- matrix(rdirichlet(1, matrix(1,1,M*M)), M, M, dimnames = list(Sig, Sig))
+q.x <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
+q.y <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
+
+E <- list(p.xy, q.x, q.y)
+names(E) <- c("M", "X", "Y")
 
 pi <- matrix(c(1 - 2 * params["delta"] - params["tau.M"], params["delta"], params["delta"]), 1, length(S))  # initial probability
 dimnames(pi) <- list(NULL, S)

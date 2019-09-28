@@ -2,6 +2,7 @@ source("phmm/initialization.R")
 source("phmm/forward.R")
 source("phmm/backward.R")
 source("phmm/xi.R")
+source("phmm/gamma.R")
 
 # for each word
 fb <- list()
