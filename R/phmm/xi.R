@@ -40,17 +40,13 @@ Xi <- function(u, v, i, j, O, fb, A, E) {
     den <- den + f.var[[k]][u, v] * b.var[[k]][u, v]
   }
   
-  xi <- num / den
-  if (is.na(xi)) {
-    return(0)
-  } 
-  else if (is.infinite(xi)) {
+  if (den == 0) {
     return(0)
   } else {
+    xi <- num / den
     return(xi)
   }
   
-  return(xi)  
 }
 
 ExeXi <- function(O, fb, A, E) {
