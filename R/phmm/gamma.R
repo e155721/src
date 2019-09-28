@@ -88,7 +88,7 @@ ExeGamma <- function(O, fb) {
   q.y_ <- q.y_ / sum(q.y_)
   
   E_ <- list(p.xy_, q.x_, q.y_)
-  names(E_) <- c(S)
+  names(E_) <- S
   
   return(E_)    
 }

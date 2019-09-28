@@ -59,6 +59,26 @@ CalcL <- function(O, fb) {
   return(L)
 }
 
+AssignConst <- function(name, value) {
+  # Makes the variable as a constant.
+  #
+  # Args:
+  #   name: The constant name.
+  #   value: The constant value.
+  #
+  # Returns:
+  #   The constant value.
+  obj.exist <- sum(ls(envir = .GlobalEnv) == name)
+  if (obj.exist == 1) {
+    unlockBinding(name, .GlobalEnv)
+  }
+  
+  assign(name, value, .GlobalEnv)
+  lockBinding(name, .GlobalEnv)
+  
+  return(0)
+}
+
 wl <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org")
 wl <- MakeGoldStandard(wl)
 wl <- MakeInputSeq(wl)
@@ -86,9 +106,9 @@ names(O) <- c("O1", "O2", "U", "V")
 Sig <- unique(as.vector(list2mat(wl.o)[, -1]))
 Sig <- Sig[Sig != " "]
 
-S <- c("M","X","Y")  # set of emission states
-N <- length(S)  # number of emission states
-M <- length(Sig)  # number of emission symbols
+AssignConst("S", c("M", "X", "Y"))  # set of emission states
+AssignConst("N", length(S))  # number of emission states
+AssignConst("M", length(Sig))  # number of emission symbols
 
 # transition proboility
 params.name <- c("delta", "tau.M", "epsilon", "lambda", "tau.XY")
@@ -107,7 +127,7 @@ q.x <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
 q.y <- matrix(rdirichlet(1, matrix(1,1,M)), 1, M, dimnames = list("-", Sig))
 
 E <- list(p.xy, q.x, q.y)
-names(E) <- c("M", "X", "Y")
+names(E) <- S
 
 pi <- matrix(c(1 - 2 * params["delta"] - params["tau.M"], params["delta"], params["delta"]), 1, length(S))  # initial probability
 dimnames(pi) <- list(NULL, S)
