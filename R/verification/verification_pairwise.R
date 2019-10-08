@@ -50,7 +50,7 @@ pairwise <- foreach (p = p.vec) %do% {
     gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.aln <- MakePairwise(word.list, s)
+    psa.aln <- MakePairwise(word.list, s)$psa
     
     # calculating the matching rate
     matching.rate <- VerifAcc(gold.aln, psa.aln)

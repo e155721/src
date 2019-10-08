@@ -1,7 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
-source("verification/methods/MakeEDPairwise.R")
+source("verification/methods/MakePairwise.R")
 source("verification/methods/MakeCorpus.R")
 source("verification/methods/PMI.R")
 
@@ -26,7 +26,7 @@ for (denom in denom.vec) {
   if (!dir.exists(output.dir)) {
     dir.create(output.dir)
   }
-
+  
   # conduct the alignment for each files
   foreach.rlt <- foreach (f = filesPath) %dopar% {
     
@@ -41,9 +41,9 @@ for (denom in denom.vec) {
     gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.rlt <- MakeEDPairwise(input.list, s, select.min = T)
+    psa.rlt <- MakePairwise(input.list, s, select.min = T)
     psa.aln <- psa.rlt$psa
-    ed <- psa.rlt$ed
+    as <- psa.rlt$as
     
     # calculating the matching rate
     matching.rate <- VerifAcc(gold.aln, psa.aln)
@@ -51,10 +51,10 @@ for (denom in denom.vec) {
     # store the org scoring matrix
     s.old <- s
     
-    ed.new <- 0
+    as.new <- 0
     loop <- 0
-    sum.ed <- NULL        
-    sum.ed.vec <- c()
+    sum.as <- NULL        
+    sum.as.vec <- c()
     while (1) {
       # calculating PMI
       newcorpus <- MakeCorpus(psa.aln)
@@ -96,36 +96,36 @@ for (denom in denom.vec) {
       s.old <- s
       
       # making the pairwise alignment in all regions
-      psa.rlt <- MakeEDPairwise(input.list, s, select.min = T)
+      psa.rlt <- MakePairwise(input.list, s, select.min = T)
       psa.aln <- psa.rlt$psa
-      ed.new <- psa.rlt$ed
+      as.new <- psa.rlt$as
       
       # calculating the matching rate
       matching.rate <- VerifAcc(gold.aln, psa.aln)
       
       # exit condition
-      if (ed == ed.new) {
+      if (as == as.new) {
         break
       } else {
-        ed <- ed.new
-        print(paste(f["name"], ed))
+        as <- as.new
+        print(paste(f["name"], as))
       }
       
       # breaking infinit loop
-      if (!is.null(sum.ed)) {
-        if (ed == sum.ed) {
+      if (!is.null(sum.as)) {
+        if (as == sum.as) {
           break
         } else {
           loop <- loop+1
         }
         if (loop == 3) {
-          sum.ed <- NULL
-          sum.ed.vec <- c()
+          sum.as <- NULL
+          sum.as.vec <- c()
           loop <- 0
         }
       }
-      sum.ed.vec <- append(sum.ed, ed)
-      sum.ed <- min(sum.ed.vec)
+      sum.as.vec <- append(sum.as, as)
+      sum.as <- min(sum.as.vec)
       #print(paste("match:", matching.rate))
       #print(paste("rate :", rate))
       #cat("\n")

@@ -7,6 +7,13 @@ MakePairwise <- function(word.list, s, select.min=F)
   # pairwise alignments
   psa.aln <- list()
   
+  # alignment score
+  as <- 0
+  
+  # return
+  psa.rlt <- list(NA, NA)
+  names(psa.rlt) <- c("psa", "as")
+  
   m <- 2  
   n <- 1
   for (k in 1:(regions-1)) {
@@ -16,11 +23,15 @@ MakePairwise <- function(word.list, s, select.min=F)
                              as.matrix(word.list[[l]], drop = F), s, select.min)
       psa.aln[[n]] <- psa$seq1
       psa.aln[[n+1]] <- psa$seq2
+      as <- as+psa$score
       n <- n+2
     }
     # the end of the aligne for each the region pair
     m <- m + 1
   }
   
-  return(psa.aln)
+  psa.rlt$psa <- psa.aln
+  psa.rlt$as <- as
+  
+  return(psa.rlt)
 }
