@@ -16,8 +16,7 @@ MakePairwise <- function(word.list, s, select.min=F)
                              as.matrix(word.list[[l]], drop = F), s, select.min)
       psa.aln[[n]] <- psa$seq1
       psa.aln[[n+1]] <- psa$seq2
-      psa.aln[[n+2]] <- " "
-      n <- n+3
+      n <- n+2
     }
     # the end of the aligne for each the region pair
     m <- m + 1
