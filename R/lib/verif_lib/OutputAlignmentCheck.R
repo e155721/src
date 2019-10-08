@@ -20,7 +20,7 @@ OutputAlignmentCheck <- function(f, output.path, ext, x, y)
       cat ("\n")
       sink()
     }
-    i <- i+3
+    i <- i+2
   }
   
   return(0)

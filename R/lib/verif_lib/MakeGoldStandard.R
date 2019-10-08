@@ -17,7 +17,7 @@ MakeGoldStandard <- function(gold.list)
       gold.mat <- DelGap(rbind(gold.list[[k]], gold.list[[l]]))
       gold.aln[[n]] <- gold.mat[1, , drop = F]
       gold.aln[[n+1]] <- gold.mat[2, , drop = F]
-      n <- n+3
+      n <- n+2
     }
     # the end of the aligne for each the region pair
     m <- m+1
