@@ -13,6 +13,7 @@ registerDoParallel(detectCores())
 filesPath <- GetPathList()
 
 PF <- F
+out <- NULL
 
 #denom.vec <- c(10, 100, 1000, 10000, 100000)
 denom.vec <- 1000
@@ -22,10 +23,10 @@ for (denom in denom.vec) {
   E <- 1/denom
   
   # matchingrate path
-  ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), "_E-", E*denom*denom, ".txt", sep = "")
+  ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), "_E-", E*denom*denom, out, ".txt", sep = "")
   
   # result path
-  output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "_E-", E*denom*denom, "/", sep = "")
+  output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "_E-", E*denom*denom, out, "/", sep = "")
   if (!dir.exists(output.dir)) {
     dir.create(output.dir)
   }
@@ -60,9 +61,11 @@ for (denom in denom.vec) {
     s.old <- s
     
     as.new <- 0
-    loop <- 0
+    loop <- 1
     sum.as <- NULL        
     sum.as.vec <- c()
+    psa.tmp <- list()
+    as.tmp <- NULL
     while (1) {
       # calculating PMI
       newcorpus <- MakeCorpus(psa.aln)
@@ -117,6 +120,9 @@ for (denom in denom.vec) {
       psa.aln <- psa.rlt$psa
       as.new <- psa.rlt$as
       
+      psa.tmp[[loop]] <- psa.aln
+      as.tmp <- c(as.tmp, as.new)
+      
       # calculating the matching rate
       matching.rate <- VerifAcc(gold.aln, psa.aln)
       
@@ -128,19 +134,37 @@ for (denom in denom.vec) {
         print(paste(f["name"], as))
       }
       
+      if (loop == 100) {
+        print(length(psa.tmp))
+        psa.tmp <- tail(psa.tmp, 2)
+        as.tmp <- tail(as.tmp, 2)
+        
+        as.min <- which(as.tmp == min(as.tmp))
+        psa.aln <- psa.tmp[[as.min]]
+        
+        loop <- 1
+        #print(paste(f["name"], as))
+        break 
+      } else {
+        loop <- loop + 1
+      }
+      
       # breaking infinit loop
-      if (!is.null(sum.as)) {
-        if (as == sum.as) {
-          break
-        } else {
-          loop <- loop+1
-        }
-        if (loop == 3) {
-          sum.as <- NULL
-          sum.as.vec <- c()
-          loop <- 0
+      if (0) {
+        if (!is.null(sum.as)) {
+          if (as == sum.as) {
+            break
+          } else {
+            loop <- loop+1
+          }
+          if (loop == 3) {
+            sum.as <- NULL
+            sum.as.vec <- c()
+            loop <- 0
+          }
         }
       }
+      
       sum.as.vec <- append(sum.as, as)
       sum.as <- min(sum.as.vec)
       #print(paste("match:", matching.rate))
