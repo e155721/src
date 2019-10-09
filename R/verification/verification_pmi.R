@@ -12,7 +12,10 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-denom.vec <- c(10, 100, 1000, 10000, 100000)
+PF <- F
+
+#denom.vec <- c(10, 100, 1000, 10000, 100000)
+denom.vec <- 1000
 for (denom in denom.vec) {
   
   # epsilon size
@@ -34,14 +37,19 @@ for (denom in denom.vec) {
     gold.list <- MakeWordList(f["input"])
     input.list <- MakeInputSeq(gold.list)
     
-    # make scoring matrix
-    s <- MakeEditDistance(Inf)
-    
     # making the gold standard alignments
     gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.rlt <- MakePairwise(input.list, s, select.min = T)
+    
+    if (PF) {
+      # Makes the initial alignment using phoneme features.
+      s <- MakeFeatureMatrix(-Inf, -3)
+      psa.rlt <- MakePairwise(input.list, s, select.min = F)
+    } else {
+      s <- MakeEditDistance(Inf)  # make scoring matrix
+      psa.rlt <- MakePairwise(input.list, s, select.min = T)
+    }
     psa.aln <- psa.rlt$psa
     as <- psa.rlt$as
     
@@ -83,20 +91,29 @@ for (denom in denom.vec) {
       for (a in v.vec) {
         for (b in v.vec) {
           if (a != b) {
-            s[a, b] <- 0-s[a, b]+maxpmi
+            if (PF) {
+              # no operations
+            } else {
+              s[a, b] <- 0-s[a, b]+maxpmi
+            }
           }
         }
       }
       
       # updating CV penalties
-      s[1:81, 82:118] <- Inf
-      s[82:118, 1:81] <- Inf
       
-      # updating old scoring matrix
+      if (PF) {
+        s[1:81, 82:118] <- -Inf
+        s[82:118, 1:81] <- -Inf
+        psa.rlt <- MakePairwise(input.list, s, select.min = F)
+      } else {
+        s[1:81, 82:118] <- Inf
+        s[82:118, 1:81] <- Inf
+        psa.rlt <- MakePairwise(input.list, s, select.min = T)
+      }
+      
+      # updating old scoring matrix and alignment
       s.old <- s
-      
-      # making the pairwise alignment in all regions
-      psa.rlt <- MakePairwise(input.list, s, select.min = T)
       psa.aln <- psa.rlt$psa
       as.new <- psa.rlt$as
       
