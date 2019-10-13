@@ -1,21 +1,18 @@
-VerifAcc <- function(x, y)
+VerifAcc <- function(psa, gold)
 {
   # countting the number of matched alignments
-  N <- length(x)
+  N <- length(psa)
   match <- 0  
-  i <- 1
-  while (i <= N) {
-    x.aln <- paste(x[[i]][1, ], x[[i+1]][1, ], collapse = "")
-    y.aln <- paste(y[[i]][1, ], y[[i+1]][1, ], collapse = "")
-    i <- i+2
-    if (x.aln == y.aln) {
+  for (i in 1:N) {
+    psa.aln <- paste(psa[[i]]$aln, collapse = "")
+    gold.aln <- paste(gold[[i]], collapse = "")
+    if (psa.aln == gold.aln) {
       match <- match+1
     }
   }
   
   # calculating the matching rate
-  npairs <- N/2
-  matching.rate <- (match/npairs)*100
+  matching.rate <- (match/N)*100
   
   return(matching.rate)
 }

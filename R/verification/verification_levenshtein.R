@@ -23,7 +23,7 @@ if (!dir.exists(output.dir)) {
 s <- MakeEditDistance(Inf)
 
 # conduct the alignment for each files
-foreach.rlt <- foreach (f = filesPath) %dopar% {
+foreach (f = filesPath) %dopar% {
   
   # make the word list
   gold.list <- MakeWordList(f["input"])
@@ -33,21 +33,25 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   gold.aln <- MakeGoldStandard(gold.list)
   
   # making the pairwise alignment in all regions
-  psa.aln <- MakePairwise(word.list, s, select.min = T)$psa
+  psa.aln <- MakePairwise(word.list, s, select.min = T)
+  print(f["name"])
   
   # calculating the matching rate
-  matching.rate <- VerifAcc(gold.aln, psa.aln)
+  matching.rate <- VerifAcc(psa.aln, gold.aln)
   
-  # output gold standard
-  OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
-  # output pairwise
-  OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
-  # output match or mismatch
-  OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
+  if (0) {  
+    # output gold standard
+    OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
+    # output pairwise
+    OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
+    # output match or mismatch
+    OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
     
-  # output the matching rate
-  sink(ansrate.file, append = T)
-  rlt <- paste(f["name"], matching.rate, sep = " ")
-  print(rlt, quote = F)
-  sink()
+    # output the matching rate
+    sink(ansrate.file, append = T)
+    rlt <- paste(f["name"], matching.rate, sep = " ")
+    print(rlt, quote = F)
+    sink()
+  }
+  
 }

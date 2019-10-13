@@ -7,7 +7,7 @@ MakePairwise <- function(word.list, s, select.min=F)
   reg.comb <- combn(1:regions, 2)
   N <- dim(reg.comb)[2]
   
-  psa.list <- foreach (j = 1:N) %dopar% {
+  psa.list <- foreach (j = 1:N) %do% {
     i <- reg.comb[, j]
     psa <- NeedlemanWunsch(as.matrix(word.list[[i[1]]], drop = F),
                            as.matrix(word.list[[i[2]]], drop = F), s, select.min)
