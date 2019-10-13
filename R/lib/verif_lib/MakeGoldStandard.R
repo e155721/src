@@ -9,10 +9,14 @@ MakeGoldStandard <- function(gold.list)
   N <- dim(reg.comb)[2]
   
   gold.aln <- list()
+  gold.tmp <- list()
   psa.list <- foreach (j = 1:N) %do% {
     i <- reg.comb[, j]
     gold.mat <- DelGap(rbind(gold.list[[i[1]]], gold.list[[i[2]]]))
-    gold.aln[[j]] <- gold.mat
+    gold.tmp$seq1 <- gold.mat[1, , drop=F]
+    gold.tmp$seq2 <- gold.mat[2, , drop=F]
+    gold.tmp$aln <- gold.mat
+    gold.aln[[j]] <- gold.tmp
   }
   
   return(gold.aln)  

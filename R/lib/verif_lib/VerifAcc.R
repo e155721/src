@@ -5,7 +5,7 @@ VerifAcc <- function(psa, gold)
   match <- 0  
   for (i in 1:N) {
     psa.aln <- paste(psa[[i]]$aln, collapse = "")
-    gold.aln <- paste(gold[[i]], collapse = "")
+    gold.aln <- paste(gold[[i]]$aln, collapse = "")
     if (psa.aln == gold.aln) {
       match <- match+1
     }

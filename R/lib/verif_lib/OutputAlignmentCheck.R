@@ -1,15 +1,14 @@
-OutputAlignmentCheck <- function(f, output.path, ext, x, y)
+OutputAlignmentCheck <- function(f, output.path, ext, psa, gold)
 {
   # countting the number of matched alignments
-  N <- length(x)
+  N <- length(psa)
   match <- 0  
-  i <- 1
-  while (i <= N) {
-    x.aln <- paste(x[[i]], x[[i+1]], collapse = "")
-    y.aln <- paste(y[[i]], y[[i+1]], collapse = "")
-    region <- paste(x[[i]][1, 1], x[[i+1]][1, 1], sep = "/" )
+  for (i in 1:N) {
+    psa.aln <- paste(psa[[i]]$aln, collapse = "")
+    gold.aln <- paste(gold[[i]]$aln, collapse = "")
+    region <- paste(psa[[i]]$seq1[1, 1], psa[[i]]$seq2[1, 1], sep = "/" )
     
-    if (x.aln == y.aln) {
+    if (psa.aln == gold.aln) {
       sink(paste(output.path, gsub("\\..*$", "", f), ext, sep = ""), append = T)
       print(paste("Match:", i, region))
       cat ("\n")
@@ -20,7 +19,6 @@ OutputAlignmentCheck <- function(f, output.path, ext, x, y)
       cat ("\n")
       sink()
     }
-    i <- i+2
   }
   
   return(0)

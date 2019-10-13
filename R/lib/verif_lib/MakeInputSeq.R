@@ -1,14 +1,14 @@
-MakeInputSeq <- function(gold.seq)
+MakeInputSeq <- function(gold.list)
 {
   input.seq <- list()
   
-  N <- length(gold.seq)
+  N <- length(gold.list)
   for (i in 1:N) {
-    gap.exist <- sum(gold.seq[[i]]=="-")
+    gap.exist <- sum(gold.list[[i]]=="-")
     if (gap.exist != 0) {
-      input.seq[[i]] <- gold.seq[[i]][1, -which(gold.seq[[i]]=="-"), drop=F]
+      input.seq[[i]] <- gold.list[[i]][1, -which(gold.list[[i]]=="-"), drop=F]
     } else {
-      input.seq[[i]] <- gold.seq[[i]]
+      input.seq[[i]] <- gold.list[[i]]
     }
   }
   return(input.seq)
