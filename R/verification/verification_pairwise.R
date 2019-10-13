@@ -13,7 +13,7 @@ path.list <- GetPathList()
 p.vec <- -3
 digits <- 2
 
-pairwise <- foreach (p = p.vec) %do% {
+pairwise <- foreach (p = p.vec) %dopar% {
   
   ansrate.dir <- paste("../../Alignment/ansrate_", format(Sys.Date()), "/", sep = "")
   if (!dir.exists(ansrate.dir)) {
@@ -50,10 +50,10 @@ pairwise <- foreach (p = p.vec) %do% {
     gold.aln <- MakeGoldStandard(gold.list)
     
     # making the pairwise alignment in all regions
-    psa.aln <- MakePairwise(word.list, s)$psa
+    psa.aln <- MakePairwise(word.list, s)
     
     # calculating the matching rate
-    matching.rate <- VerifAcc(gold.aln, psa.aln)
+    matching.rate <- VerifAcc(psa.aln, gold.aln)
     
     # output gold standard
     OutputAlignment(f["name"], output.dir.sub, ".lg", gold.aln)

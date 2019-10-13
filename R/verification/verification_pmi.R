@@ -42,17 +42,20 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   if (PF) {
     # Makes the initial alignment using phoneme features.
     s <- MakeFeatureMatrix(-Inf, -3)
-    psa.rlt <- MakePairwise(input.list, s, select.min = F)
+    psa.aln <- MakePairwise(input.list, s, select.min = F)
   } else {
     s <- MakeEditDistance(Inf)  # make scoring matrix
-    psa.rlt <- MakePairwise(input.list, s, select.min = T)
+    psa.aln <- MakePairwise(input.list, s, select.min = T)
   }
-  psa.aln <- psa.rlt$psa
-  as <- psa.rlt$as
-  
+
+  as <- 0
+  N <- length(psa.aln)
+  for (i in 1:N)
+    as <- as + psa.aln[[i]]$score
+    
   # calculating the matching rate
-  matching.rate <- VerifAcc(gold.aln, psa.aln)
-  
+  matching.rate <- VerifAcc(psa.aln, gold.aln)
+
   as.new <- 0
   loop <- 1
   psa.tmp <- list()
@@ -81,7 +84,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       }
     }
     maxpmi <- max(maxpmi)[1]
-    
+
     for (a in v.vec) {
       for (b in v.vec) {
         if (a != b) {
@@ -93,29 +96,29 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
         }
       }
     }
-    
     # updating CV penalties
-    
     if (PF) {
       s[1:81, 82:118] <- -Inf
       s[82:118, 1:81] <- -Inf
-      psa.rlt <- MakePairwise(input.list, s, select.min = F)
+      psa.aln <- MakePairwise(input.list, s, select.min = F)
     } else {
       s[1:81, 82:118] <- Inf
       s[82:118, 1:81] <- Inf
-      psa.rlt <- MakePairwise(input.list, s, select.min = T)
+      psa.aln <- MakePairwise(input.list, s, select.min = T)
     }
-    
+
     # updating old scoring matrix and alignment
-    psa.aln <- psa.rlt$psa
-    as.new <- psa.rlt$as
-    
+    as.new <- 0
+    N <- length(psa.aln)
+    for (i in 1:N)
+      as.new <- as.new + psa.aln[[i]]$score
+
     psa.tmp[[loop]] <- psa.aln
     as.tmp <- c(as.tmp, as.new)
-    
+
     # calculating the matching rate
-    matching.rate <- VerifAcc(gold.aln, psa.aln)
-    
+    matching.rate <- VerifAcc(psa.aln, gold.aln)
+
     # exit condition
     if (as == as.new) {
       break
@@ -123,7 +126,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       as <- as.new
       print(paste(f["name"], as))
     }
-    
+
     if (loop == 100) {
       print(length(psa.tmp))
       psa.tmp <- tail(psa.tmp, 2)

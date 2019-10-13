@@ -36,7 +36,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   psa.aln <- MakeSwap(word.list, s)
   
   # calculating the matching rate
-  matching.rate <- VerifAcc(gold.aln, psa.aln)
+  matching.rate <- VerifAcc(psa.aln, gold.aln)
   
   # output gold standard
   OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
