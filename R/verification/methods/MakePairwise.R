@@ -2,36 +2,16 @@ source("lib/load_nwunsch.R")
 
 MakePairwise <- function(word.list, s, select.min=F)
 {
+
   regions <- length(word.list)
+  reg.comb <- combn(1:regions, 2)
+  N <- dim(reg.comb)[2]
   
-  # pairwise alignments
-  psa.aln <- list()
-  
-  # alignment score
-  as <- 0
-  
-  # return
-  psa.rlt <- list(NA, NA)
-  names(psa.rlt) <- c("psa", "as")
-  
-  m <- 2  
-  n <- 1
-  for (k in 1:(regions-1)) {
-    # the start of the alignment for each the region pair
-    for (l in m:regions) {
-      psa <- NeedlemanWunsch(as.matrix(word.list[[k]], drop = F),
-                             as.matrix(word.list[[l]], drop = F), s, select.min)
-      psa.aln[[n]] <- psa$seq1
-      psa.aln[[n+1]] <- psa$seq2
-      as <- as+psa$score
-      n <- n+2
-    }
-    # the end of the aligne for each the region pair
-    m <- m + 1
+  psa.list <- foreach (j = 1:N) %dopar% {
+    i <- reg.comb[, j]
+    psa <- NeedlemanWunsch(as.matrix(word.list[[i[1]]], drop = F),
+                           as.matrix(word.list[[i[2]]], drop = F), s, select.min)
   }
   
-  psa.rlt$psa <- psa.aln
-  psa.rlt$as <- as
-  
-  return(psa.rlt)
+  return(psa.list)
 }
