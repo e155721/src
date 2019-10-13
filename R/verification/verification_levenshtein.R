@@ -33,7 +33,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   gold.aln <- MakeGoldStandard(gold.list)
   
   # making the pairwise alignment in all regions
-  psa.aln <- MakePairwise(word.list, s, select.min = T)
+  psa.aln <- MakePairwise(word.list, s, select.min = T)$psa
   
   # calculating the matching rate
   matching.rate <- VerifAcc(gold.aln, psa.aln)
