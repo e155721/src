@@ -15,176 +15,147 @@ filesPath <- GetPathList()
 PF <- F
 out <- NULL
 
-#denom.vec <- c(10, 100, 1000, 10000, 100000)
-denom.vec <- 1000
-for (denom in denom.vec) {
+# epsilon size
+E <- 1/1000
+
+# matchingrate path
+ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), out, ".txt", sep = "")
+
+# result path
+output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), out, "/", sep = "")
+if (!dir.exists(output.dir)) {
+  dir.create(output.dir)
+}
+
+# conduct the alignment for each files
+foreach.rlt <- foreach (f = filesPath) %dopar% {
   
-  # epsilon size
-  E <- 1/denom
+  # make the word list
+  gold.list <- MakeWordList(f["input"])
+  input.list <- MakeInputSeq(gold.list)
   
-  # matchingrate path
-  ansrate.file <- paste("../../Alignment/ansrate_pmi_", format(Sys.Date()), "_E-", E*denom*denom, out, ".txt", sep = "")
+  # making the gold standard alignments
+  gold.aln <- MakeGoldStandard(gold.list)
   
-  # result path
-  output.dir <- paste("../../Alignment/pairwise_pmi_", format(Sys.Date()), "_E-", E*denom*denom, out, "/", sep = "")
-  if (!dir.exists(output.dir)) {
-    dir.create(output.dir)
+  # making the pairwise alignment in all regions
+  
+  if (PF) {
+    # Makes the initial alignment using phoneme features.
+    s <- MakeFeatureMatrix(-Inf, -3)
+    psa.rlt <- MakePairwise(input.list, s, select.min = F)
+  } else {
+    s <- MakeEditDistance(Inf)  # make scoring matrix
+    psa.rlt <- MakePairwise(input.list, s, select.min = T)
   }
+  psa.aln <- psa.rlt$psa
+  as <- psa.rlt$as
   
-  # conduct the alignment for each files
-  foreach.rlt <- foreach (f = filesPath) %dopar% {
+  # calculating the matching rate
+  matching.rate <- VerifAcc(gold.aln, psa.aln)
+  
+  as.new <- 0
+  loop <- 1
+  psa.tmp <- list()
+  as.tmp <- NULL
+  while (1) {
+    # calculating PMI
+    newcorpus <- MakeCorpus(psa.aln)
+    co.mat <- MakeCoMat(newcorpus)
+    v.vec <- dimnames(co.mat)[[1]]
+    V <- length(v.vec)
+    N <- length(newcorpus)
+    maxpmi <- 0
+    E <- 1
+    for (i in 1:V) {
+      for (j in 1:V) {
+        a <- v.vec[i]
+        b <- v.vec[j]
+        if (a!=b) {
+          p.xy <- (co.mat[a, b]/N)+E
+          p.x <- (g(a, newcorpus)/N)
+          p.y <- (g(b, newcorpus)/N)
+          pmi <- log2(p.xy/(p.x*p.y))
+          s[a, b] <- pmi
+          maxpmi <- max(maxpmi, pmi)
+        }
+      }
+    }
+    maxpmi <- max(maxpmi)[1]
     
-    # make the word list
-    gold.list <- MakeWordList(f["input"])
-    input.list <- MakeInputSeq(gold.list)
+    for (a in v.vec) {
+      for (b in v.vec) {
+        if (a != b) {
+          if (PF) {
+            # no operations
+          } else {
+            s[a, b] <- 0-s[a, b]+maxpmi
+          }
+        }
+      }
+    }
     
-    # making the gold standard alignments
-    gold.aln <- MakeGoldStandard(gold.list)
-    
-    # making the pairwise alignment in all regions
+    # updating CV penalties
     
     if (PF) {
-      # Makes the initial alignment using phoneme features.
-      s <- MakeFeatureMatrix(-Inf, -3)
+      s[1:81, 82:118] <- -Inf
+      s[82:118, 1:81] <- -Inf
       psa.rlt <- MakePairwise(input.list, s, select.min = F)
     } else {
-      s <- MakeEditDistance(Inf)  # make scoring matrix
+      s[1:81, 82:118] <- Inf
+      s[82:118, 1:81] <- Inf
       psa.rlt <- MakePairwise(input.list, s, select.min = T)
     }
+    
+    # updating old scoring matrix and alignment
     psa.aln <- psa.rlt$psa
-    as <- psa.rlt$as
+    as.new <- psa.rlt$as
+    
+    psa.tmp[[loop]] <- psa.aln
+    as.tmp <- c(as.tmp, as.new)
     
     # calculating the matching rate
     matching.rate <- VerifAcc(gold.aln, psa.aln)
     
-    # store the org scoring matrix
-    s.old <- s
-    
-    as.new <- 0
-    loop <- 1
-    sum.as <- NULL        
-    sum.as.vec <- c()
-    psa.tmp <- list()
-    as.tmp <- NULL
-    while (1) {
-      # calculating PMI
-      newcorpus <- MakeCorpus(psa.aln)
-      co.mat <- MakeCoMat(newcorpus)
-      v.vec <- dimnames(co.mat)[[1]]
-      V <- length(v.vec)
-      N <- length(newcorpus)
-      maxpmi <- 0
-      E <- 1
-      for (i in 1:V) {
-        for (j in 1:V) {
-          a <- v.vec[i]
-          b <- v.vec[j]
-          if (a!=b) {
-            p.xy <- (co.mat[a, b]/N)+E
-            p.x <- (g(a, newcorpus)/N)
-            p.y <- (g(b, newcorpus)/N)
-            pmi <- log2(p.xy/(p.x*p.y))
-            s[a, b] <- pmi
-            maxpmi <- max(maxpmi, pmi)
-          }
-        }
-      }
-      maxpmi <- max(maxpmi)[1]
-      
-      for (a in v.vec) {
-        for (b in v.vec) {
-          if (a != b) {
-            if (PF) {
-              # no operations
-            } else {
-              s[a, b] <- 0-s[a, b]+maxpmi
-            }
-          }
-        }
-      }
-      
-      # updating CV penalties
-      
-      if (PF) {
-        s[1:81, 82:118] <- -Inf
-        s[82:118, 1:81] <- -Inf
-        psa.rlt <- MakePairwise(input.list, s, select.min = F)
-      } else {
-        s[1:81, 82:118] <- Inf
-        s[82:118, 1:81] <- Inf
-        psa.rlt <- MakePairwise(input.list, s, select.min = T)
-      }
-      
-      # updating old scoring matrix and alignment
-      s.old <- s
-      psa.aln <- psa.rlt$psa
-      as.new <- psa.rlt$as
-      
-      psa.tmp[[loop]] <- psa.aln
-      as.tmp <- c(as.tmp, as.new)
-      
-      # calculating the matching rate
-      matching.rate <- VerifAcc(gold.aln, psa.aln)
-      
-      # exit condition
-      if (as == as.new) {
-        break
-      } else {
-        as <- as.new
-        print(paste(f["name"], as))
-      }
-      
-      if (loop == 100) {
-        print(length(psa.tmp))
-        psa.tmp <- tail(psa.tmp, 2)
-        as.tmp <- tail(as.tmp, 2)
-        
-        as.min <- which(as.tmp == min(as.tmp))
-        psa.aln <- psa.tmp[[as.min]]
-        
-        loop <- 1
-        #print(paste(f["name"], as))
-        break 
-      } else {
-        loop <- loop + 1
-      }
-      
-      # breaking infinit loop
-      if (0) {
-        if (!is.null(sum.as)) {
-          if (as == sum.as) {
-            break
-          } else {
-            loop <- loop+1
-          }
-          if (loop == 3) {
-            sum.as <- NULL
-            sum.as.vec <- c()
-            loop <- 0
-          }
-        }
-      }
-      
-      sum.as.vec <- append(sum.as, as)
-      sum.as <- min(sum.as.vec)
-      #print(paste("match:", matching.rate))
-      #print(paste("rate :", rate))
-      #cat("\n")
-      
+    # exit condition
+    if (as == as.new) {
+      break
+    } else {
+      as <- as.new
+      print(paste(f["name"], as))
     }
     
-    #######
-    # output gold standard
-    OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
-    # output pairwise
-    OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
-    # output match or mismatch
-    OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
+    if (loop == 100) {
+      print(length(psa.tmp))
+      psa.tmp <- tail(psa.tmp, 2)
+      as.tmp <- tail(as.tmp, 2)
+      
+      as.min <- which(as.tmp == min(as.tmp))
+      psa.aln <- psa.tmp[[as.min]]
+      
+      loop <- 1
+      #print(paste(f["name"], as))
+      break 
+    } else {
+      loop <- loop + 1
+    }
+
+    #print(paste("match:", matching.rate))
+    #print(paste("rate :", rate))
+    #cat("\n")
     
-    # output the matching rate
-    sink(ansrate.file, append = T)
-    rlt <- paste(f["name"], matching.rate, sep = " ")
-    print(rlt, quote = F)
-    sink()
   }
+  
+  #######
+  # output gold standard
+  OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
+  # output pairwise
+  OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
+  # output match or mismatch
+  OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
+  
+  # output the matching rate
+  sink(ansrate.file, append = T)
+  rlt <- paste(f["name"], matching.rate, sep = " ")
+  print(rlt, quote = F)
+  sink()
 }
