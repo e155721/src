@@ -42,60 +42,16 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   if (PF) {
     # Makes the initial alignment using phoneme features.
     s <- MakeFeatureMatrix(-Inf, -3)
-    psa.aln <- MakePairwise(input.list, s, select.min = F)
   } else {
     s <- MakeEditDistance(Inf)  # make scoring matrix
-    psa.aln <- MakePairwise(input.list, s, select.min = T)
   }
 
   as <- 0
-  N <- length(psa.aln)
-  for (i in 1:N)
-    as <- as + psa.aln[[i]]$score
-    
-  # calculating the matching rate
-  matching.rate <- VerifAcc(psa.aln, gold.aln)
-
   as.new <- 0
   loop <- 1
   psa.tmp <- list()
   as.tmp <- NULL
   while (1) {
-    # calculating PMI
-    newcorpus <- MakeCorpus(psa.aln)
-    co.mat <- MakeCoMat(newcorpus)
-    v.vec <- dimnames(co.mat)[[1]]
-    V <- length(v.vec)
-    N <- length(newcorpus)
-    maxpmi <- 0
-    E <- 1
-    for (i in 1:V) {
-      for (j in 1:V) {
-        a <- v.vec[i]
-        b <- v.vec[j]
-        if (a!=b) {
-          p.xy <- (co.mat[a, b]/N)+E
-          p.x <- (g(a, newcorpus)/N)
-          p.y <- (g(b, newcorpus)/N)
-          pmi <- log2(p.xy/(p.x*p.y))
-          s[a, b] <- pmi
-          maxpmi <- max(maxpmi, pmi)
-        }
-      }
-    }
-    maxpmi <- max(maxpmi)[1]
-
-    for (a in v.vec) {
-      for (b in v.vec) {
-        if (a != b) {
-          if (PF) {
-            # no operations
-          } else {
-            s[a, b] <- 0-s[a, b]+maxpmi
-          }
-        }
-      }
-    }
     # updating CV penalties
     if (PF) {
       s[1:81, 82:118] <- -Inf
@@ -106,19 +62,19 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       s[82:118, 1:81] <- Inf
       psa.aln <- MakePairwise(input.list, s, select.min = T)
     }
-
+    
     # updating old scoring matrix and alignment
     as.new <- 0
     N <- length(psa.aln)
     for (i in 1:N)
       as.new <- as.new + psa.aln[[i]]$score
-
+    
     psa.tmp[[loop]] <- psa.aln
     as.tmp <- c(as.tmp, as.new)
-
+    
     # calculating the matching rate
     matching.rate <- VerifAcc(psa.aln, gold.aln)
-
+    
     # exit condition
     if (as == as.new) {
       break
@@ -126,7 +82,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       as <- as.new
       print(paste(f["name"], as))
     }
-
+    
     if (loop == 100) {
       print(length(psa.tmp))
       psa.tmp <- tail(psa.tmp, 2)
@@ -140,6 +96,42 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       break 
     } else {
       loop <- loop + 1
+    }
+    
+    # calculating PMI
+    newcorpus <- MakeCorpus(psa.aln)
+    co.mat <- MakeCoMat(newcorpus)
+    v.vec <- dimnames(co.mat)[[1]]
+    V <- length(v.vec)
+    N <- length(newcorpus)
+    pmi.max <- 0
+    E <- 1
+    for (i in 1:V) {
+      for (j in 1:V) {
+        a <- v.vec[i]
+        b <- v.vec[j]
+        if (a!=b) {
+          p.xy <- (co.mat[a, b]/N)+E
+          p.x <- (g(a, newcorpus)/N)
+          p.y <- (g(b, newcorpus)/N)
+          pmi <- log2(p.xy/(p.x*p.y))
+          s[a, b] <- pmi
+          pmi.max <- max(pmi.max, pmi)
+        }
+      }
+    }
+    pmi.max <- max(pmi.max)[1]
+
+    for (a in v.vec) {
+      for (b in v.vec) {
+        if (a != b) {
+          if (PF) {
+            # no operations
+          } else {
+            s[a, b] <- 0-s[a, b]+pmi.max
+          }
+        }
+      }
     }
 
     #print(paste("match:", matching.rate))
