@@ -37,17 +37,14 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   # making the gold standard alignments
   gold.aln <- MakeGoldStandard(gold.list)
   
-  # making the pairwise alignment in all regions
-  
+  # Makes the scoring matrix.
   if (PF) {
-    # Makes the initial alignment using phoneme features.
     s <- MakeFeatureMatrix(-Inf, -3)
   } else {
     s <- MakeEditDistance(Inf)  # make scoring matrix
   }
-
+  
   as <- 0
-  as.new <- 0
   loop <- 1
   psa.tmp <- list()
   as.tmp <- NULL
@@ -82,8 +79,8 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       as <- as.new
       print(paste(f["name"], as))
     }
-    
-    if (loop == 100) {
+
+    if (loop == 21) {
       print(length(psa.tmp))
       psa.tmp <- tail(psa.tmp, 2)
       as.tmp <- tail(as.tmp, 2)
@@ -97,7 +94,6 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     } else {
       loop <- loop + 1
     }
-    
     # calculating PMI
     newcorpus <- MakeCorpus(psa.aln)
     co.mat <- MakeCoMat(newcorpus)
@@ -110,18 +106,27 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       for (j in 1:V) {
         a <- v.vec[i]
         b <- v.vec[j]
-        if (a!=b) {
+        if (PF) {
           p.xy <- (co.mat[a, b]/N)+E
           p.x <- (g(a, newcorpus)/N)
           p.y <- (g(b, newcorpus)/N)
           pmi <- log2(p.xy/(p.x*p.y))
           s[a, b] <- pmi
           pmi.max <- max(pmi.max, pmi)
+        } else {
+          if (a!=b) {
+            p.xy <- (co.mat[a, b]/N)+E
+            p.x <- (g(a, newcorpus)/N)
+            p.y <- (g(b, newcorpus)/N)
+            pmi <- log2(p.xy/(p.x*p.y))
+            s[a, b] <- pmi
+            pmi.max <- max(pmi.max, pmi)
+          }
         }
       }
     }
     pmi.max <- max(pmi.max)[1]
-
+    
     for (a in v.vec) {
       for (b in v.vec) {
         if (a != b) {
@@ -133,7 +138,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
         }
       }
     }
-
+    
     #print(paste("match:", matching.rate))
     #print(paste("rate :", rate))
     #cat("\n")
