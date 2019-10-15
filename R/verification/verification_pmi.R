@@ -12,7 +12,7 @@ registerDoParallel(detectCores())
 # get the all of files path
 filesPath <- GetPathList()
 
-PF <- F
+PF <- T
 out <- NULL
 
 # epsilon size
@@ -79,7 +79,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       as <- as.new
       print(paste(f["name"], as))
     }
-
+    
     if (loop == 21) {
       print(length(psa.tmp))
       psa.tmp <- tail(psa.tmp, 2)
@@ -99,7 +99,11 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     co.mat <- MakeCoMat(newcorpus)
     v.vec <- dimnames(co.mat)[[1]]
     V <- length(v.vec)
-    N <- length(newcorpus)
+    if (PF) {
+      N <- sum(newcorpus != "-")
+    } else {
+      N <- length(newcorpus)  
+    }
     pmi.max <- 0
     E <- 1
     for (i in 1:V) {
@@ -107,12 +111,14 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
         a <- v.vec[i]
         b <- v.vec[j]
         if (PF) {
-          p.xy <- (co.mat[a, b]/N)+E
-          p.x <- (g(a, newcorpus)/N)
-          p.y <- (g(b, newcorpus)/N)
-          pmi <- log2(p.xy/(p.x*p.y))
-          s[a, b] <- pmi
-          pmi.max <- max(pmi.max, pmi)
+          if ((a!="-") && (b!="-")) {
+            p.xy <- (co.mat[a, b]/N)+E
+            p.x <- (g(a, newcorpus)/N)
+            p.y <- (g(b, newcorpus)/N)
+            pmi <- log2(p.xy/(p.x*p.y))
+            s[a, b] <- pmi
+            pmi.max <- max(pmi.max, pmi)
+          }
         } else {
           if (a!=b) {
             p.xy <- (co.mat[a, b]/N)+E
