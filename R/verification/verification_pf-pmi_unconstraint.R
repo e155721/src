@@ -15,16 +15,16 @@ filesPath <- GetPathList()
 out <- NULL
 kMaxLoop <- 10
 
-for (out in -1:-10) {
+for (out in -1:-100) {
   
   # epsilon size
   E <- 1/1000
   
   # matchingrate path
-  ansrate.file <- paste("../../Alignment/ansrate_pf-pmi_constraint_", format(Sys.Date()), out, ".txt", sep = "")
+  ansrate.file <- paste("../../Alignment/ansrate_pf-pmi_unconstraint_", format(Sys.Date()), out, ".txt", sep = "")
   
   # result path
-  output.dir <- paste("../../Alignment/pairwise_pf-pmi_constraint_", format(Sys.Date()), out, "/", sep = "")
+  output.dir <- paste("../../Alignment/pairwise_pf-pmi_unconstraint_", format(Sys.Date()), out, "/", sep = "")
   if (!dir.exists(output.dir)) {
     dir.create(output.dir)
   }
@@ -99,15 +99,15 @@ for (out in -1:-10) {
         for (j in 1:V) {
           a <- v.vec[i]
           b <- v.vec[j]
-          if (a != b) {
-            if ((a!="-") && (b!="-")) {
-              p.xy <- (co.mat[a, b]/N)+E
-              p.x <- (g(a, newcorpus)/N)
-              p.y <- (g(b, newcorpus)/N)
-              pmi <- log2(p.xy/(p.x*p.y))
-              s[a, b] <- pmi
-            }
+          #if (a != b) {
+          if ((a!="-") && (b!="-")) {
+            p.xy <- (co.mat[a, b]/N)+E
+            p.x <- (g(a, newcorpus)/N)
+            p.y <- (g(b, newcorpus)/N)
+            pmi <- log2(p.xy/(p.x*p.y))
+            s[a, b] <- pmi
           }
+          #}
         }
       }
     }

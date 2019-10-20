@@ -15,7 +15,7 @@ filesPath <- GetPathList()
 out <- NULL
 kMaxLoop <- 10
 
-for (out in -1:-10) {
+for (out in -1:-100) {
   
   # epsilon size
   E <- 1/1000
