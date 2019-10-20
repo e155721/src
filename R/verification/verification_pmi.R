@@ -28,17 +28,17 @@ if (!dir.exists(output.dir)) {
 
 # conduct the alignment for each files
 foreach.rlt <- foreach (f = filesPath) %dopar% {
-
+  
   # make the word list
   gold.list <- MakeWordList(f["input"])
   input.list <- MakeInputSeq(gold.list)
-
+  
   # making the gold standard alignments
   gold.aln <- MakeGoldStandard(gold.list)
-
+  
   # Makes the scoring matrix.
   s <- MakeEditDistance(Inf)
-
+  
   as <- 0
   loop <- 1
   psa.tmp <- list()
@@ -54,13 +54,13 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     N <- length(psa.aln)
     for (i in 1:N)
       as.new <- as.new + psa.aln[[i]]$score
-
+    
     psa.tmp[[loop]] <- psa.aln
     as.tmp <- c(as.tmp, as.new)
-
+    
     # calculating the matching rate
     matching.rate <- VerifAcc(psa.aln, gold.aln)
-
+    
     # exit condition
     if (as == as.new) {
       break
@@ -73,23 +73,23 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       print(length(psa.tmp))
       psa.tmp <- tail(psa.tmp, 2)
       as.tmp <- tail(as.tmp, 2)
-
+      
       as.min <- which(as.tmp == min(as.tmp))
       psa.aln <- psa.tmp[[as.min]]
-
+      
       loop <- 1
       #print(paste(f["name"], as))
-      break
+      break 
     } else {
       loop <- loop + 1
     }
-
+    
     # calculating PMI
     newcorpus <- MakeCorpus(psa.aln)
     co.mat <- MakeCoMat(newcorpus)
     v.vec <- dimnames(co.mat)[[1]]
     V <- length(v.vec)
-    N <- length(newcorpus)
+    N <- length(newcorpus)  
     pmi.max <- 0
     E <- 1
     for (i in 1:V) {
@@ -107,16 +107,17 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       }
     }
     pmi.max <- max(pmi.max)[1]
-
+    
     # Converts the PMI to the weight of edit operations.
     for (a in v.vec) {
       for (b in v.vec) {
         if (a != b)
-          s[a, b] <- pmi.max-s[a, b]
+          s[a, b] <- pmi.max - s[a, b]
       }
     }
-  }
 
+  }
+  
   #######
   # output gold standard
   OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
