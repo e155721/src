@@ -48,7 +48,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     s[1:81, 82:118] <- Inf
     s[82:118, 1:81] <- Inf
     psa.aln <- MakePairwise(input.list, s, select.min = T)
-
+    
     # updating old scoring matrix and alignment
     as.new <- 0
     N <- length(psa.aln)
@@ -68,7 +68,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       as <- as.new
       print(paste(f["name"], as))
     }
-
+    
     if (loop == 11) {
       print(length(psa.tmp))
       psa.tmp <- tail(psa.tmp, 2)
@@ -79,7 +79,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
       
       loop <- 1
       #print(paste(f["name"], as))
-      break 
+      break
     } else {
       loop <- loop + 1
     }
@@ -89,7 +89,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
     co.mat <- MakeCoMat(newcorpus)
     v.vec <- dimnames(co.mat)[[1]]
     V <- length(v.vec)
-    N <- length(newcorpus)  
+    N <- length(newcorpus)
     pmi.max <- 0
     E <- 1
     for (i in 1:V) {
@@ -115,7 +115,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
           s[a, b] <- pmi.max - s[a, b]
       }
     }
-
+    
   }
   
   #######
@@ -126,9 +126,11 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   # output match or mismatch
   OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
 
-  # output the matching rate
-  sink(ansrate.file, append = T)
-  rlt <- paste(f["name"], matching.rate, sep = " ")
-  print(rlt, quote = F)
-  sink()
+  # Returns the matching rate to the list of foreach.
+  c(f["name"], matching.rate)
 }
+
+# Outputs the matching rate
+matching.rate.mat <- list2mat(foreach.rlt)
+matching.rate.mat <- matching.rate.mat[order(matching.rate.mat[, 1]), , drop=F]
+write.table(matching.rate.mat, ansrate.file, quote = F)
