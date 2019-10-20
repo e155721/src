@@ -87,8 +87,13 @@ for (out in -51:-100) {
         psa.tmp <- tail(psa.tmp, 2)
         as.tmp <- tail(as.tmp, 2)
         
-        as.min <- which(as.tmp == min(as.tmp))
-        psa.aln <- psa.tmp[[as.min]]
+        if (PF) {
+          as.max <- which(as.tmp == max(as.tmp))
+          psa.aln <- psa.tmp[[as.max]]
+        } else {
+          as.min <- which(as.tmp == min(as.tmp))
+          psa.aln <- psa.tmp[[as.min]]
+        }
         
         loop <- 1
         #print(paste(f["name"], as))
