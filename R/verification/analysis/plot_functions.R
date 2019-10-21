@@ -27,7 +27,7 @@ PlotGraph <- function(x, list, fixValVec, yLim, title, xlab)
 PlotHist <- function(inFile)
 {
   # read data file
-  data <- read.table(inFile)$V3
+  data <- read.table(inFile)$V2
   mean <- mean(data)
   dataLen <- length(data)
   

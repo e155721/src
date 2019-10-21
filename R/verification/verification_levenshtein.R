@@ -23,7 +23,7 @@ if (!dir.exists(output.dir)) {
 s <- MakeEditDistance(Inf)
 
 # conduct the alignment for each files
-null <- foreach (f = filesPath) %dopar% {
+foreach.rlt <- foreach (f = filesPath) %dopar% {
   
   # make the word list
   gold.list <- MakeWordList(f["input"])
@@ -45,10 +45,12 @@ null <- foreach (f = filesPath) %dopar% {
   # output match or mismatch
   OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
   
-  # output the matching rate
-  sink(ansrate.file, append = T)
-  rlt <- paste(f["name"], matching.rate, sep = " ")
-  print(rlt, quote = F)
-  sink()
-  
+  # Returns the matching rate to the list of foreach.
+  c(f["name"], matching.rate)
 }
+
+# Outputs the matching rate
+matching.rate.mat <- list2mat(foreach.rlt)
+matching.rate.mat <- matching.rate.mat[order(matching.rate.mat[, 1]), , drop=F]
+write.table(matching.rate.mat, ansrate.file, quote = F)
+

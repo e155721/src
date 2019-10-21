@@ -13,7 +13,7 @@ path.list <- GetPathList()
 p.vec <- -3
 digits <- 2
 
-pairwise <- foreach (p = p.vec) %dopar% {
+null <- foreach (p = p.vec) %do% {
   
   ansrate.dir <- paste("../../Alignment/ansrate_", format(Sys.Date()), "/", sep = "")
   if (!dir.exists(ansrate.dir)) {
@@ -37,7 +37,7 @@ pairwise <- foreach (p = p.vec) %dopar% {
   }
   
   # conduct the alignment for each files
-  foreach (f = path.list) %dopar% {
+  foreach.rlt <- foreach (f = path.list) %dopar% {
     
     # make the word list
     gold.list <- MakeWordList(f["input"])
@@ -62,10 +62,12 @@ pairwise <- foreach (p = p.vec) %dopar% {
     # output match or mismatch
     OutputAlignmentCheck(f["name"], output.dir.sub, ".check", psa.aln, gold.aln)
     
-    # output the matching rate
-    sink(ansrate.file, append = T)
-    rlt <- paste(f["name"], matching.rate, sep = " ")
-    print(rlt, quote = F)
-    sink()
+    # Returns the matching rate to the list of foreach.
+    c(f["name"], matching.rate)
   }
+  
+  # Outputs the matching rate
+  matching.rate.mat <- list2mat(foreach.rlt)
+  matching.rate.mat <- matching.rate.mat[order(matching.rate.mat[, 1]), , drop=F]
+  write.table(matching.rate.mat, ansrate.file, quote = F)
 }
