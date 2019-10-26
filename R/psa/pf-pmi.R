@@ -1,3 +1,4 @@
+source("lib/load_scoring_matrix.R")
 source("lib/load_verif_lib.R")
 source("verification/methods/MakeCorpus.R")
 source("verification/methods/PMI.R")
@@ -6,8 +7,8 @@ library(foreach)
 library(doParallel)
 registerDoParallel(detectCores())
 
-PairwisePMI <- function(word.list, s) {
-  # Comptes the pairwise alignment using PMI-weighting.
+PairwisePFPMI <- function(word.list, s) {
+  # Comptes the pairwise alignment using PF-PMI-weighting.
   # Args:
   #   word.list: The list of words.
   #   s: The scoring matrix.
@@ -16,7 +17,7 @@ PairwisePMI <- function(word.list, s) {
   #   psa.aln: The list of PSA.
   E <- 1/1000  # epsilon size
   kMaxLoop <- 10  # number of max loop
-
+    
   as <- 0
   loop <- 1
   psa.tmp <- list()
@@ -24,9 +25,9 @@ PairwisePMI <- function(word.list, s) {
   while (1) {
     # START OF LOOP
     # updating CV penalties
-    s[1:81, 82:118] <- Inf
-    s[82:118, 1:81] <- Inf
-    psa.aln <- MakePairwise(word.list, s, select.min = T)
+    s[1:81, 82:118] <- -Inf
+    s[82:118, 1:81] <- -Inf
+    psa.aln <- MakePairwise(word.list, s, select.min = F)
     
     # updating old scoring matrix and alignment
     as.new <- 0
@@ -49,11 +50,11 @@ PairwisePMI <- function(word.list, s) {
       psa.tmp <- tail(psa.tmp, 2)
       as.tmp <- tail(as.tmp, 2)
       
-      as.min <- which(as.tmp == min(as.tmp))
-      psa.aln <- psa.tmp[[as.min]]
+      as.max <- which(as.tmp == max(as.tmp))
+      psa.aln <- psa.tmp[[as.max]]
       
       loop <- 1
-      break
+      break 
     } else {
       loop <- loop + 1
     }
@@ -64,32 +65,25 @@ PairwisePMI <- function(word.list, s) {
     v.vec <- dimnames(co.mat)[[1]]
     V <- length(v.vec)
     N <- length(newcorpus)
-    pmi.max <- 0
+    N <- N - (sum(newcorpus == "-") * 2)
     E <- 1
     for (i in 1:V) {
       for (j in 1:V) {
         a <- v.vec[i]
         b <- v.vec[j]
-        if (a!=b) {
-          p.xy <- (co.mat[a, b]/N)+E
-          p.x <- (g(a, newcorpus)/N)
-          p.y <- (g(b, newcorpus)/N)
-          pmi <- log2(p.xy/(p.x*p.y))
-          s[a, b] <- pmi
-          pmi.max <- max(pmi.max, pmi)
+        if (a != b) {
+          if ((a!="-") && (b!="-")) {
+            p.xy <- (co.mat[a, b]/N)+E
+            p.x <- (g(a, newcorpus)/N)
+            p.y <- (g(b, newcorpus)/N)
+            pmi <- log2(p.xy/(p.x*p.y))
+            s[a, b] <- pmi
+          }
         }
       }
     }
-    pmi.max <- max(pmi.max)[1]
-    
-    # Converts the PMI to the weight of edit operations.
-    for (a in v.vec) {
-      for (b in v.vec) {
-        if (a != b)
-          s[a, b] <- pmi.max - s[a, b]
-      }
-    }
-    # END OF LOOP    
+    # END OF LOOP
   }
   return(psa.aln)
 }
+

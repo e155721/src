@@ -4,7 +4,7 @@ source("verification/VerificationPSA.R")
 # get the all of files path
 filesPath <- GetPathList()
 
-ansrate <- "ansrate_pmi"
-pairwise <- "pairwise_pmi"
+ansrate <- "ansrate_lv"
+pairwise <- "pairwise_lv"
 
-VerificationPSA(ansrate=ansrate, pairwise=pairwise, method="PMI")
+VerificationPSA(ansrate=ansrate, pairwise=pairwise, method="LV")
