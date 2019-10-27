@@ -1,5 +1,4 @@
 source("lib/load_verif_lib.R")
-source("verification/methods/MakeCorpus.R")
 source("verification/methods/PMI.R")
 
 library(foreach)
@@ -14,9 +13,10 @@ PairwisePMI <- function(word.list, s) {
   #
   # Returns:
   #   psa.aln: The list of PSA.
-  E <- 1/1000  # epsilon size
+  #E <- 1/1000  # epsilon size
+  E <- 1  # epsilon size
   kMaxLoop <- 10  # number of max loop
-
+  
   as <- 0
   loop <- 1
   psa.tmp <- list()
@@ -60,21 +60,15 @@ PairwisePMI <- function(word.list, s) {
     
     # calculating PMI
     newcorpus <- MakeCorpus(psa.aln)
-    co.mat <- MakeCoMat(newcorpus)
-    v.vec <- dimnames(co.mat)[[1]]
+    v.vec <- unique(as.vector(newcorpus))
     V <- length(v.vec)
-    N <- length(newcorpus)
     pmi.max <- 0
-    E <- 1
     for (i in 1:V) {
       for (j in 1:V) {
         a <- v.vec[i]
         b <- v.vec[j]
-        if (a!=b) {
-          p.xy <- (co.mat[a, b]/N)+E
-          p.x <- (g(a, newcorpus)/N)
-          p.y <- (g(b, newcorpus)/N)
-          pmi <- log2(p.xy/(p.x*p.y))
+        if (a != b) {
+          pmi <- PMI(a, b, newcorpus, E)
           s[a, b] <- pmi
           pmi.max <- max(pmi.max, pmi)
         }
