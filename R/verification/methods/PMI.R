@@ -16,6 +16,9 @@ MakeCorpus <- function(psa.aln) {
   }
   corpus <- rbind(seq1, seq2)
   
+  # Removes identical segments from the corpus.
+  corpus <- corpus[, -which(seq1 == seq2), drop=F]
+  
   return(corpus)
 }
 
@@ -28,10 +31,10 @@ f <- function(x, y, corpus) {
   #
   # Returns:
   #   The frequency of the symbol pairs (x, y).
-  X <- x == corpus[1, ]
-  Y <- y == corpus[2, ]
-  Z <- X + Y
-  f.xy <- length(Z[Z == 2])
+  f.x <- x == corpus[1, ]          # frequency of x in the segment pairs
+  f.y <- y == corpus[2, ]          # frequency of y in the segment pairs
+  f.xy <- f.x * f.y
+  f.xy <- length(f.xy[f.xy == 1])  # frequency of xy in the segment pairs
   
   return(f.xy)
 }
@@ -46,7 +49,7 @@ g <- function(x, corpus)
   #
   # Returns:
   #   The frequency of the symbol x.   
-  f.x <- length(corpus[corpus == x])
+  f.x <- length(corpus[corpus == x])  # frequency of x in the segments
   
   return(f.x)
 }
@@ -59,11 +62,16 @@ PMI <- function(x, y, corpus, E) {
   #
   # Returns:
   #   The PMI of the symbol pair (x, y).
-  N <- length(corpus)
-  p.xy <- (f(x, y, corpus) / N) + E
-  p.x <- g(x, corpus) / N
-  p.y <- g(y, corpus) / N
-  pmi <- log2(p.xy / (p.x * p.y))
+  N1 <- dim(corpus)[2]  # number of the aligned segments
+  N2 <- N1 * 2          # number of segments in the aligned segments
+
+  V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of symbol pairs types in the segment pairs
+  V2 <- length(unique(as.vector(corpus)))                # number of symbol types in the segments
+
+  p.xy <- (f(x, y, corpus) + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
+  p.x <- (g(x, corpus) + 1) / (N2 + V2)      # probability of the occurrence frequency of x
+  p.y <- (g(y, corpus) + 1) / (N2 + V2)      # probability of the occurrence frequency of y
+  pmi <- log2(p.xy / (p.x * p.y))            # calculating the pmi
   
   return(pmi)
 }
