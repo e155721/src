@@ -1,6 +1,8 @@
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
+source("psa/pf.R")
+
 ProgressiveAlignment <- function(word.list, s) {
   # Computes the multiple alignment using progressive method.
   #
@@ -10,23 +12,30 @@ ProgressiveAlignment <- function(word.list, s) {
   #
   # Returns:
   #   The multiple alignment using progressive method.
-  N <- length(word.list)  # number of sequences
-  dist.mat <- matrix(NA, N, N)
+  num.regions <- length(word.list)  # number of sequences
+  dist.mat <- matrix(NA, num.regions, num.regions)
   
   # Computes the pairwise alignment score for each regions pair.
-  for (j in 1:(N-1)) {
-    for (i in 1:N) {
-      psa <- NeedlemanWunsch(word.list[[i]], word.list[[j]], s)
-      dist.mat[i, j] <- psa$score
-    }
+  psa <- PairwisePF(word.list, s)
+  
+  reg.comb <- combn(1:num.regions, 2)
+  N <- dim(reg.comb)[2]
+  for (k in 1:N) {
+    i <- reg.comb[1, k]
+    j <- reg.comb[2, k]
+    dist.mat[i, j] <- psa[[k]]$score
   }
+
+  dist.mat.tmp <- t(dist.mat)
+  dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
   
   # Makes the guide tree.
+  #dist.mat <- dist.mat[-dim(dist.mat)[1], , drop=F]
   psa.d <- dist(dist.mat)
   psa.hc <- hclust(psa.d, "average")
   gtree <- psa.hc$merge
   
-  # --> START OF PROGRESSIVE ALIGNMENT
+  # START OF PROGRESSIVE ALIGNMENT
   pa <- list()
   len <- dim(gtree)[1]
   for (i in 1:len) {
@@ -49,7 +58,7 @@ ProgressiveAlignment <- function(word.list, s) {
       pa[[i]] <- DelGap(psa$aln)
     }
   }
-  # --> END OF PROGRESSIVE ALIGNMENT
+  # END OF PROGRESSIVE ALIGNMENT
   
   # Returns the list of progressive alignment results.
   msa <- list()
