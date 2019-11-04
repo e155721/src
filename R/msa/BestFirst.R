@@ -6,7 +6,9 @@ source("msa/ProgressiveAlignment.R")
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-BestFirst <- function(word.list, s) {
+source("lib/load_scoring_matrix.R")
+
+BestFirst <- function(word.list, s, method="PF") {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -18,7 +20,7 @@ BestFirst <- function(word.list, s) {
   N <- length(word.list)  # number of sequences
   
   # Computes the initial multiple alignment using the progressive method.
-  msa.tmp <- ProgressiveAlignment(word.list, s)
+  msa.tmp <- ProgressiveAlignment(word.list, s, method)
   msa <- msa.tmp$aln
   score <- msa.tmp$score
   
@@ -26,7 +28,13 @@ BestFirst <- function(word.list, s) {
   count <- 0  # loop counter
   max <- 2 * N * N  # max iteration
   
-  # --> START OF ITERATION
+  if (method == "PF") {
+    min <- F
+  } else {
+    min <- T
+  }
+  
+  # START OF ITERATION
   while (1) {
     
     # Determines the exit condition.
@@ -39,7 +47,7 @@ BestFirst <- function(word.list, s) {
       # Removes the ith sequence.
       seq1 <- msa[drop = F, i, ]
       seq2 <- msa[drop = F, -i, ]
-      NeedlemanWunsch(seq1, seq2, s)
+      NeedlemanWunsch(seq1, seq2, s, select.min=min)
     }
     
     score.vec <- c()
@@ -60,7 +68,7 @@ BestFirst <- function(word.list, s) {
     }
     
   }
-  # END OF ITERATION <--
-    
+  # END OF ITERATION
+  
   return(msa)
 }
