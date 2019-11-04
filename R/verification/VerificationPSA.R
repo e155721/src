@@ -41,7 +41,8 @@ VerificationPSA <- function(ansrate, pairwise, method, pen=NULL) {
     psa.aln <- switch(method,
                       "LV" = PairwiseLV(input.list, s),
                       "PMI" = PairwisePMI(input.list, s),
-                      "PF" = PairwisePF(input.list, s)
+                      "PF" = PairwisePF(input.list, s),
+                      "PF-PMI" = PairwisePFPMI(input.list, s)
     )
     
     #######
