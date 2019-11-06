@@ -14,10 +14,10 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
   # Returns:
   #   The multiple alignment using progressive method.
   num.regions <- length(word.list)  # number of sequences
-  dist.mat <- matrix(NA, num.regions, num.regions)
+  dist.mat <- matrix(0, num.regions, num.regions)
   
   # Computes the pairwise alignment score for each regions pair.
-    
+  
   psa <- switch(method,
                 "PF" = PairwisePF(word.list, s),
                 "PMI" = PairwisePMI(word.list, s)
@@ -37,6 +37,11 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
     dist.mat[i, j] <- psa[[k]]$score
   }
 
+  # Calculates the PSA of identical pairs.  
+  for (i in 1:num.regions) {
+    dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s)$score
+  }
+  
   dist.mat.tmp <- t(dist.mat)
   dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
   
