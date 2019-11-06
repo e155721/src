@@ -28,7 +28,7 @@ BestFirst <- function(word.list, s, method="PF") {
   count <- 0  # loop counter
   max <- 2 * N * N  # max iteration
   
-  if (method == "PF") {
+  if ((method == "PF") || (method == "PF-PMI")) {
     min <- F
   } else {
     min <- T
@@ -59,12 +59,22 @@ BestFirst <- function(word.list, s, method="PF") {
     score.new <- score.vec[score.max]
     
     # Refines the alignment score.
-    if (score.new > score) {
-      count <- count + 1
-      msa <- DelGap(msa.new[[score.max]]$aln)
-      score <- score.new
+    if ((method == "PF") || (method == "PF-PMI")) {
+      if (score.new > score) {
+        count <- count + 1
+        msa <- DelGap(msa.new[[score.max]]$aln)
+        score <- score.new
+      } else {
+        break
+      }
     } else {
-      break
+      if (score.new < score) {
+        count <- count + 1
+        msa <- DelGap(msa.new[[score.max]]$aln)
+        score <- score.new
+      } else {
+        break
+      }
     }
     
   }

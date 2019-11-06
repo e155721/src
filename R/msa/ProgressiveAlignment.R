@@ -3,6 +3,7 @@ source("lib/load_nwunsch.R")
 
 source("psa/pf.R")
 source("psa/pmi.R")
+source("psa/pf-pmi.R")
 
 ProgressiveAlignment <- function(word.list, s, method="PF") {
   # Computes the multiple alignment using progressive method.
@@ -20,10 +21,11 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
   
   psa <- switch(method,
                 "PF" = PairwisePF(word.list, s),
-                "PMI" = PairwisePMI(word.list, s)
+                "PMI" = PairwisePMI(word.list, s),
+                "PF-PMI" = PairwisePFPMI(word.list, s)
   )
   
-  if (method == "PF") {
+  if ((method == "PF") || method == "PF-PMI") {
     min <- F
   } else {
     min <- T
@@ -39,7 +41,7 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
 
   # Calculates the PSA of identical pairs.  
   for (i in 1:num.regions) {
-    dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s)$score
+    dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s, select.min=min)$score
   }
   
   dist.mat.tmp <- t(dist.mat)
