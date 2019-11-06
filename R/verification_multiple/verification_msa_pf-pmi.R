@@ -20,7 +20,7 @@ if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
 
-s <- MakeEditDistance(Inf)
+s <- MakeFeatureMatrix(-Inf, pen)
 for (file in files) {
   
   gold.list <- MakeWordList(file["input"])  # gold alignment

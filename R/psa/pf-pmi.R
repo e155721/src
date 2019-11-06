@@ -58,8 +58,10 @@ PairwisePFPMI <- function(word.list, s) {
     
     # Caluculates the PMI.
     newcorpus <- MakeCorpus(psa.aln)
-    newcorpus <- newcorpus[, -which(corpus[1, ] == "-"), drop=F]
-    newcorpus <- newcorpus[, -which(corpus[2, ] == "-"), drop=F]
+    newcorpus <- newcorpus[, -which(newcorpus[1, ] == "-"), drop=F]
+    newcorpus <- newcorpus[, -which(newcorpus[2, ] == "-"), drop=F]
+    if (dim(newcorpus)[2] == 0)
+      break
     V <- unique(as.vector(newcorpus))
     pmi.tmp <- NULL
     for (a in V) {
