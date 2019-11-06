@@ -5,31 +5,6 @@ library(foreach)
 library(doParallel)
 registerDoParallel(detectCores())
 
-MakeCorpus <- function(psa.aln) {
-  # Makes the corpus to calculate PMI.
-  #
-  # Args:
-  #   psa.aln: A list of an pairwise sequence aligment resutls.
-  #
-  # Returns:
-  #   A corpus to calculate PMI.
-  N <- length(psa.aln)
-  seq1 <- NULL
-  seq2 <- NULL
-  
-  for (i in 1:N) {
-    seq1 <- cbind(seq1, psa.aln[[i]]$seq1[1, -1, drop=F])
-    seq2 <- cbind(seq2, psa.aln[[i]]$seq2[1, -1, drop=F])
-  }
-  corpus <- rbind(seq1, seq2)
-  
-  # Removes identical segments from the corpus.
-  corpus <- corpus[, -which(seq1 == seq2), drop=F]
-  corpus <- corpus[, -which(corpus[1, ] == "-"), drop=F]
-  corpus <- corpus[, -which(corpus[2, ] == "-"), drop=F]
-  return(corpus)
-}
-
 PairwisePFPMI <- function(word.list, s) {
   # Comptes the pairwise alignment using PMI-weighting.
   # Args:
@@ -83,6 +58,8 @@ PairwisePFPMI <- function(word.list, s) {
     
     # Caluculates the PMI.
     newcorpus <- MakeCorpus(psa.aln)
+    newcorpus <- newcorpus[, -which(corpus[1, ] == "-"), drop=F]
+    newcorpus <- newcorpus[, -which(corpus[2, ] == "-"), drop=F]
     V <- unique(as.vector(newcorpus))
     pmi.tmp <- NULL
     for (a in V) {
