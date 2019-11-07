@@ -53,4 +53,4 @@ for (file in files) {
 }
 
 # Outputs the accuracy file.
-write.table(accuracy.mat[-1:-109, , drop=F], ansrate.file, quote=F)
+write.table(accuracy.mat[-1:-length(files), , drop=F], ansrate.file, quote=F)
