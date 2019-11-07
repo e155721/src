@@ -11,10 +11,10 @@ multiple <- "multiple"
 accuracy.mat <- matrix(NA, length(files), 2)
 
 # matchingrate path
-ansrate.file <- paste("../../Alignment/", ansrate, "_pmi_", format(Sys.Date()), "_", ".txt", sep = "")
+ansrate.file <- paste("../../Alignment/", ansrate, "_pmi_", format(Sys.Date()), ".txt", sep = "")
 
 # result path
-output.dir <- paste("../../Alignment/", multiple, "_pmi_", format(Sys.Date()), "_", "/", sep = "")
+output.dir <- paste("../../Alignment/", multiple, "_pmi_", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
