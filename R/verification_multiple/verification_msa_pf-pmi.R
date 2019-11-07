@@ -12,10 +12,10 @@ pen <- -12
 accuracy.mat <- matrix(NA, length(files), 2)
 
 # matchingrate path
-ansrate.file <- paste("../../Alignment/", ansrate, "_pf-pmi_", pen, format(Sys.Date()), "_", ".txt", sep = "")
+ansrate.file <- paste("../../Alignment/", ansrate, "_pf-pmi_", format(Sys.Date()), "_", pen, ".txt", sep = "")
 
 # result path
-output.dir <- paste("../../Alignment/", multiple, "_pf-pmi_", pen, format(Sys.Date()), "_", "/", sep = "")
+output.dir <- paste("../../Alignment/", multiple, "_pf-pmi_", format(Sys.Date()), "_", pen, "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
