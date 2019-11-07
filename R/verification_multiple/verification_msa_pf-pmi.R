@@ -50,6 +50,7 @@ for (file in files) {
   
   # Outputs the MSA.  
   write.table(msa, paste(output.dir, gsub("\\..*$", "", file["name"]), ".aln", sep=""), quote=F)
+  write.table(gold.mat, paste(output.dir, gsub("\\..*$", "", file["name"]), ".lg", sep=""), quote=F)
 }
 
 # Outputs the accuracy file.
