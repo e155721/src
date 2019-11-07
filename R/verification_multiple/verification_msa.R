@@ -56,6 +56,6 @@ for (pen in c(-3)) {
   }
   
   # Outputs the accuracy file.
-  write.table(accuracy.mat[-1, , drop=F], ansrate.file, quote=F)
+  write.table(accuracy.mat[-1:-109, , drop=F], ansrate.file, quote=F)
   
 }
