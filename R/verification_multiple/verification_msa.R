@@ -8,7 +8,7 @@ files <- GetPathList()
 ansrate <- "ansrate_msa_pf"
 multiple <- "multiple_pf"
 
-for (pen in c(-3)) {
+for (pen in (-1)) {
   
   accuracy.mat <- matrix(NA, length(files), 2)
   

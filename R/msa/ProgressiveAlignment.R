@@ -18,7 +18,6 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
   dist.mat <- matrix(0, num.regions, num.regions)
   
   # Computes the pairwise alignment score for each regions pair.
-  
   psa <- switch(method,
                 "PF" = PairwisePF(word.list, s),
                 "PMI" = PairwisePMI(word.list, s),
@@ -26,11 +25,18 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
   )
   
   if ((method == "PF") || method == "PF-PMI") {
+    similarity <- T
+  } else {
+    similarity <- F
+  }
+  
+  if (similarity) {
     min <- F
   } else {
     min <- T
   }
   
+  # Makes the similarity matrix.
   reg.comb <- combn(1:num.regions, 2)
   N <- dim(reg.comb)[2]
   for (k in 1:N) {
@@ -38,14 +44,16 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
     j <- reg.comb[2, k]
     dist.mat[i, j] <- psa[[k]]$score
   }
-
-  # Calculates the PSA of identical pairs.  
-  for (i in 1:num.regions) {
-    dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s, select.min=min)$score
-  }
   
-  dist.mat.tmp <- t(dist.mat)
-  dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
+  if (similarity) {
+    # Calculates the PSA of identical pairs.  
+    for (i in 1:num.regions)
+      dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s, select.min=min)$score
+    
+    # Converts the similarity matrix to the distance matrix.
+    dist.mat.tmp <- t(dist.mat)
+    dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
+  }
   
   # Makes the guide tree.
   psa.d <- dist(dist.mat)
