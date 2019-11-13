@@ -1,6 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
+source("msa/ProgressiveAlignment.R")
 source("msa/BestFirst.R")
 
 files <- GetPathList()
@@ -22,7 +23,6 @@ for (pen in (-1)) {
   }
   
   s <- MakeFeatureMatrix(-Inf, pen)
-  #s <- MakeEditDistance(Inf)
   for (file in files) {
     
     gold.list <- MakeWordList(file["input"])  # gold alignment
@@ -30,8 +30,8 @@ for (pen in (-1)) {
     
     # Computes the MSA using the BestFirst method.
     print(paste("Start:", file["name"]))
-    msa <- BestFirst(input.list, s)
-    #msa <- ProgressiveAlignment(input.list, s, method="PMI")$aln
+    psa.init <- ProgressiveAlignment(input.list, s)
+    msa <- BestFirst(psa.init, s)
     print(paste("End:", file["name"]))
     
     # Checks the accuracy of MSA.
