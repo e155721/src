@@ -7,7 +7,13 @@ library(doParallel)
 registerDoParallel(detectCores())
 
 MakeInputList <- function(files) {
-  
+  # Make the word list of all the words.
+  #
+  # Args:
+  #   files: The files path of all the words.
+  #
+  # Returns:
+  #   input.list: The word list of all the words.
   input.list <- list()
   num.input.list <- length(files)
   for (i in 1:num.input.list)
@@ -17,11 +23,18 @@ MakeInputList <- function(files) {
 }
 
 MakePSA <- function(input.list, s) {
+  # Make the PSA of all the words.
+  #
+  # Args:
+  #   input.list: The list of all the words.
+  #   s: The scoring matrix.
+  #
+  # Returns:
+  #   psa.list: The PSA list of all the words.
   cat("\n")
   print("Calculate PSA")
   
   num.words <- length(input.list)
-  psa.list <- list()
   psa.list <- foreach (i = 1:num.words) %dopar%
     MakePairwise(input.list[[i]], s, select.min = T)
   
@@ -29,10 +42,18 @@ MakePSA <- function(input.list, s) {
 }
 
 CalcPMI <- function(psa.list, s) {
+  # Compute the PMI of the PSA list.
+  #
+  # Args:
+  #   psa.list: THe PSA list of all the words.
+  #   s: The scoring matrix.
+  #
+  # Returns:
+  #   s: The scoring matrix that was updated by the PMI-weighting.
   cat("\n")
   print("Calculate PMI")
   
-  # Caluculates the PMI.
+  # Caluculate the PMI.
   newcorpus <- MakeCorpus(psa.list)
   V <- unique(as.vector(newcorpus))
   V <- permutations(length(V), 2, v=V)
@@ -50,11 +71,9 @@ CalcPMI <- function(psa.list, s) {
   pmi.max <- max(pmi.tmp)
   pmi.min <- min(pmi.tmp)
   
-  # Converts the PMI to the weight of edit operations.
-  for (i in 1:len) {
+  # Convert the PMI to the weight of edit operations.
+  for (i in 1:len)
     s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
-    #print(paste((i/len)*100, "%"))
-  }
   
   s[1:81, 82:118] <- Inf
   s[82:118, 1:81] <- Inf
@@ -63,13 +82,21 @@ CalcPMI <- function(psa.list, s) {
 }
 
 PairwisePMI <- function(input.list, s) {
-  
+  # Compute the new scoring matrix by updating PMI iteratively.
+  #
+  # Args:
+  #   input.list: The word list of all the words.
+  #   s: The scoring matrix.
+  #
+  # Returns:
+  #   s: The new scoring matrix by updating PMI iteratively.
+  # Compute the initial PSA.
   psa.list <- MakePSA(input.list, s)
   
-  as <- 0  
+  as <- 0 
+  # START OF LOOP
   while(1) {
-    
-    # Updates the old scoring matrix and the alignment.
+    # Update the old scoring matrix and the alignment.
     as.new <- 0
     M <- length(psa.list)
     for (i in 1:M) {
@@ -77,21 +104,22 @@ PairwisePMI <- function(input.list, s) {
       for (j in 1:N) 
         as.new <- as.new + psa.list[[i]][[j]]$score
     }
-    
     print(paste("Old Edit Distance:", as))
     print(paste("New Edit Distance:", as.new))
     
-    # Checks the convergence of the PMI.
+    # Check the convergence of the PMI.
     if (as == as.new) {
       break
     } else {
       as <- as.new
     }
     
+    # Compute the new scoring matrix that is updated by the PMI-weighting.
     s <- CalcPMI(psa.list, s)
+    # Compute the new PSA using the new scoring matrix.
     psa.list <- MakePSA(input.list, s)
-    
   }
+  # END OF LOOP
   
   return(s)
 }
