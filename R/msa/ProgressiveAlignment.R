@@ -11,19 +11,18 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   #
   # Returns:
   #   The multiple alignment using progressive method.
-  num.regions <- length(word.list)  # number of sequences
-  dist.mat <- matrix(0, num.regions, num.regions)
-  
-  # Computes the pairwise alignment score for each regions pair.
-  psa <- MakePairwise(word.list, s, select.min)
-
   if (similarity) {
     min <- F
   } else {
     min <- T
   }
   
+  # Computes the pairwise alignment score for each regions pair.
+  psa <- MakePairwise(word.list, s, select.min=min)
+
   # Makes the similarity matrix.
+  num.regions <- length(word.list)  # number of sequences
+  dist.mat <- matrix(0, num.regions, num.regions)
   reg.comb <- combn(1:num.regions, 2)
   N <- dim(reg.comb)[2]
   for (k in 1:N) {
