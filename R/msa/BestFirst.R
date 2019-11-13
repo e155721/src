@@ -8,7 +8,7 @@ source("lib/load_nwunsch.R")
 
 source("lib/load_scoring_matrix.R")
 
-BestFirst <- function(word.list, s, method="PF") {
+BestFirst <- function(msa.o, s, similarity=T) {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -17,18 +17,16 @@ BestFirst <- function(word.list, s, method="PF") {
   #
   # Returns:
   #   The multiple alignment using best first method.
-  N <- length(word.list)  # number of sequences
   
   # Computes the initial multiple alignment using the progressive method.
-  msa.tmp <- ProgressiveAlignment(word.list, s, method)
-  msa <- msa.tmp$aln
-  score <- msa.tmp$score
+  msa <- msa.o$aln
+  score <- msa.o$score
   
   N <- dim(msa)[1]  # number of sequences
   count <- 0  # loop counter
   max <- 2 * N * N  # max iteration
   
-  if ((method == "PF") || (method == "PF-PMI")) {
+  if (similarity) {
     min <- F
   } else {
     min <- T
@@ -59,7 +57,7 @@ BestFirst <- function(word.list, s, method="PF") {
     score.new <- score.vec[score.max]
     
     # Refines the alignment score.
-    if ((method == "PF") || (method == "PF-PMI")) {
+    if (similarity) {
       if (score.new > score) {
         count <- count + 1
         msa <- DelGap(msa.new[[score.max]]$aln)
