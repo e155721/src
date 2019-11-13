@@ -1,11 +1,8 @@
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
+source("lib/load_verif_lib.R")
 
-source("psa/pf.R")
-source("psa/pmi.R")
-source("psa/pf-pmi.R")
-
-ProgressiveAlignment <- function(word.list, s, method="PF") {
+ProgressiveAlignment <- function(word.list, s, similarity=T) {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -18,18 +15,8 @@ ProgressiveAlignment <- function(word.list, s, method="PF") {
   dist.mat <- matrix(0, num.regions, num.regions)
   
   # Computes the pairwise alignment score for each regions pair.
-  psa <- switch(method,
-                "PF" = PairwisePF(word.list, s),
-                "PMI" = PairwisePMI(word.list, s),
-                "PF-PMI" = PairwisePFPMI(word.list, s)
-  )
-  
-  if ((method == "PF") || method == "PF-PMI") {
-    similarity <- T
-  } else {
-    similarity <- F
-  }
-  
+  psa <- MakePairwise(word.list, s, select.min)
+
   if (similarity) {
     min <- F
   } else {
