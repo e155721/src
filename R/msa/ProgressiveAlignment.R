@@ -3,7 +3,7 @@ source("lib/load_nwunsch.R")
 source("lib/load_verif_lib.R")
 
 ProgressiveAlignment <- function(word.list, s, similarity=T) {
-  # Computes the multiple alignment using progressive method.
+  # Compute the multiple alignment using progressive method.
   #
   # Args:
   #   word.list: The list of sequences.
@@ -17,10 +17,10 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     min <- T
   }
   
-  # Computes the pairwise alignment score for each regions pair.
+  # Compute the pairwise alignment score for each regions pair.
   psa <- MakePairwise(word.list, s, select.min=min)
 
-  # Makes the similarity matrix.
+  # Make the similarity matrix.
   num.regions <- length(word.list)  # number of sequences
   dist.mat <- matrix(0, num.regions, num.regions)
   reg.comb <- combn(1:num.regions, 2)
@@ -31,18 +31,24 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     dist.mat[i, j] <- psa[[k]]$score
   }
   
-  if (similarity) {
-    # Calculates the PSA of identical pairs.  
+  # Calculate the PSA of identical pairs.  
+  if (similarity)
     for (i in 1:num.regions)
       dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s, select.min=min)$score
+
+  # Fill the distance matrix.
+  dist.mat.tmp <- t(dist.mat)
+  dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
     
-    # Converts the similarity matrix to the distance matrix.
-    dist.mat.tmp <- t(dist.mat)
-    dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
+  if (similarity) {
+    # Convert the similarity matrix to the "dist" object.
+    psa.d <- dist(dist.mat)
+  } else {
+    # Convert the distance matrix to the "dist" object.
+    psa.d <- as.dist(dist.mat)
   }
   
-  # Makes the guide tree.
-  psa.d <- dist(dist.mat)
+  # Make the guide tree.
   psa.hc <- hclust(psa.d, "average")
   gtree <- psa.hc$merge
   
@@ -71,7 +77,7 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   }
   # END OF PROGRESSIVE ALIGNMENT
   
-  # Returns the list of progressive alignment results.
+  # Return the list of progressive alignment results.
   msa <- list()
   msa$aln <- tail(pa, n = 1)[[1]]
   msa$score <- psa$score
