@@ -2,8 +2,8 @@ source("msa/ProgressiveAlignment.R")
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-RemoveFirst <- function(word.list, s) {
-  # Computes the multiple alignment using remove first method.
+RemoveFirst <- function(msa.o, s, similarity=T) {
+  # Compute the multiple alignment using remove first method.
   #
   # Args:
   #   word.list: The list of sequences.
@@ -12,44 +12,58 @@ RemoveFirst <- function(word.list, s) {
   # Returns:
   #   The multiple alignment by remove first method.
   
-  # Computes the initial multiple alignment using the progressive method.
-  msa.tmp <- ProgressiveAlignment(word.list, s)
-  msa <- msa.tmp$aln
-  score <- msa.tmp$score
+  # Compute the initial multiple alignment using the progressive method.
+  msa <- msa.o$aln
+  score <- msa.o$score
   
-  N <- dim(msa)[1]  # number of sequences
-  count <- 0  # loop counter
-  max <- 2 * N * N  # max iteration
+  N <- dim(msa)[1]   # number of sequences
+  count <- 0         # loop counter
+  kMax <- 2 * N * N  # max iteration
   
-  # --> START OF ITERATION
+  if (similarity) {
+    min <- F
+  } else {
+    min <- T
+  }
+  
+  # START OF ITERATION
   i <- 1
   while (i <= N) {
     
-    # Determines the exit condition.
-    if (count == max) {
+    # Check the exit condition.
+    if (count == kMax)
       break
-    }
     
-    # Removes the first sequence.
+    # Remove the first sequence.
     seq1 <- msa[i, , drop = F]
     seq2 <- msa[-i, , drop = F]
-
-    # Makes the new multiple alignment.
+    
+    # Make the new multiple alignment.
     msa.tmp<- NeedlemanWunsch(seq1, seq2, s)
     msa.new <- DelGap(msa.tmp$aln)
     score.new <- msa.tmp$score
     
-    # Refines the alignment score.
-    if (score.new > score) {
-      count <- count + 1
-      msa <- msa.new
-      score <- score.new
+    # Refine the alignment score.
+    if (similarity) {
+      if (score.new > score) {
+        count <- count + 1
+        msa <- msa.new
+        score <- score.new
+      } else {
+        i <- i + 1
+      }
     } else {
-      i <- i + 1
+      if (score.new < score) {
+        count <- count + 1
+        msa <- msa.new
+        score <- score.new
+      } else {
+        i <- i + 1
+      }
     }
     
   }
-  # END OF ITERATION <--
+  # END OF ITERATION
   
   return(msa)
 }
