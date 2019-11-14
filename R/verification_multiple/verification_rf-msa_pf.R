@@ -1,3 +1,7 @@
+library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
+
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
