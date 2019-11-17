@@ -2,13 +2,14 @@ source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
 source("msa/BestFirst.R")
+source("psa/new_pmi.R")
 
 files <- GetPathList()
 
 ansrate <- "ansrate_msa"
 multiple <- "multiple"
 
-for (pen in (-1)) {
+for (pen in -1) {
   
   accuracy.mat <- matrix(NA, length(files), 2)
   
@@ -21,7 +22,13 @@ for (pen in (-1)) {
     dir.create(output.dir)
   }
   
+  # Compute the scoring matrix using the PMI method.
+  input.list <- MakeInputList(files)
+  #s <- MakeEditDistance(Inf)
   s <- MakeFeatureMatrix(-Inf, pen)
+  #s <- PairwisePMI(input.list, s)
+  s <- PairwisePFPMI(input.list, s)
+  
   for (file in files) {
     
     gold.list <- MakeWordList(file["input"])  # gold alignment
@@ -29,7 +36,10 @@ for (pen in (-1)) {
     
     # Computes the MSA using the BestFirst method.
     print(paste("Start:", file["name"]))
-    msa <- BestFirst(input.list, s, "PF-PMI")
+    #psa.init <- ProgressiveAlignment(input.list, s, similarity=F)
+    psa.init <- ProgressiveAlignment(input.list, s, similarity=T)
+    #msa <- BestFirst(psa.init, s, similarity=F)
+    msa <- BestFirst(psa.init, s, similarity=T)
     print(paste("End:", file["name"]))
     
     # Checks the accuracy of MSA.
