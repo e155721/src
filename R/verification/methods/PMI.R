@@ -21,9 +21,6 @@ MakeCorpus <- function(psa.list) {
     corpus <- cbind(corpus, corpus.tmp)
   }
   
-  # Removes identical segments from the corpus.
-  corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
-  
   return(corpus)
 }
 

@@ -12,6 +12,8 @@ CalcPFPMI <- function(psa.list, s) {
   
   # Caluculate the PMI.
   newcorpus <- MakeCorpus(psa.list)
+  # Removes identical segments from the corpus.
+  corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
   newcorpus <- newcorpus[, -which(newcorpus[1, ] == "-"), drop=F]
   newcorpus <- newcorpus[, -which(newcorpus[2, ] == "-"), drop=F]
   V <- unique(as.vector(newcorpus))

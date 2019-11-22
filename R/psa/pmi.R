@@ -54,15 +54,18 @@ CalcPMI <- function(psa.list, s) {
   print("Calculate PMI")
   
   # Caluculate the PMI.
-  newcorpus <- MakeCorpus(psa.list)
-  V <- unique(as.vector(newcorpus))
+  corpus <- MakeCorpus(psa.list)
+  # Removes identical segments from the corpus.
+  corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
+
+  V <- unique(as.vector(corpus))
   V <- permutations(length(V), 2, v=V)
   len <- dim(V)[1]
   score.vec <- list()
   pmi.list <- foreach(i = 1:len) %dopar% {
     score.vec$V1 <- V[i, 1]
     score.vec$V2 <- V[i, 2]
-    score.vec$pmi <- -PMI(V[i, 1], V[i, 2], newcorpus, E)
+    score.vec$pmi <- -PMI(V[i, 1], V[i, 2], corpus, E)
     return(score.vec)
   }
   
