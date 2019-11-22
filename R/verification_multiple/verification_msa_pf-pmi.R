@@ -3,6 +3,7 @@ source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
 source("msa/BestFirst.R")
 source("psa/pmi.R")
+source("psa/pf-pmi.R")
 
 files <- GetPathList()
 

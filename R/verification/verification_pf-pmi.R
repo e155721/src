@@ -7,6 +7,7 @@ source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
 source("psa/pmi.R")
+source("psa/pf-pmi.R")
 
 # get the all of files path
 filesPath <- GetPathList()
