@@ -6,7 +6,7 @@ source("lib/load_data_processing.R")
 #source("verification/VerificationPSA.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
-source("psa/new_pmi.R")
+source("psa/pmi.R")
 
 # get the all of files path
 filesPath <- GetPathList()
