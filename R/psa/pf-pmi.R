@@ -1,5 +1,9 @@
 source("lib/load_phoneme.R")
 
+sym2feat <- function(x) {
+  return(CV.feat[x, ])
+}
+
 MakeFeatueCorpus <- function(corpus) {
   
   len <- dim(corpus)[2]
@@ -38,7 +42,7 @@ CalcPFPMI <- function(psa.list, s) {
   num.kind.CV.feat <- length(kind.CV.feat)
   feat.mat <- matrix(NA, num.kind.CV.feat, num.kind.CV.feat, dimnames=list(kind.CV.feat, kind.CV.feat))
   
-  corpus.feat <- MakeFeatueCorpus(corpus)
+  corpus.feat <- t(apply(corpus, 1, sym2feat))
   
   # Compute the PMI for each pair.
   feat <- unique(as.vector(corpus.feat))
@@ -56,7 +60,7 @@ CalcPFPMI <- function(psa.list, s) {
     pmi.list[[i]]$pmi
   pmi.max <- max(pmi.tmp)
   pmi.min <- min(pmi.tmp)
-
+  
   sym <- unique(as.vector(corpus))
   for (i in 1:len)
     feat.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
