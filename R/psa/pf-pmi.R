@@ -4,20 +4,6 @@ sym2feat <- function(x) {
   return(CV.feat[x, ])
 }
 
-MakeFeatueCorpus <- function(corpus) {
-  
-  len <- dim(corpus)[2]
-  seq1 <- NULL
-  seq2 <- NULL
-  corpus.feat<- foreach (i = 1:len, .combine=cbind) %dopar% {
-    seq1 <- c(seq1, CV.feat[corpus[1, i], ])
-    seq2 <- c(seq2, CV.feat[corpus[2, i], ])
-    rbind(seq1, seq2)
-  }
-  
-  return(corpus.feat)
-}
-
 CalcPFPMI <- function(psa.list, s) {
   # Compute the PMI of the PSA list.
   #
