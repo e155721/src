@@ -19,3 +19,7 @@ for (j in 1:5) {
 
 C.feat <- unique(as.vector(mat.C.feat))
 V.feat <- unique(as.vector(mat.V.feat))
+
+CV <- c(C, V)
+mat.CV.feat <- rbind(mat.C.feat, mat.V.feat)
+CV.feat <- c(C.feat, V.feat)
