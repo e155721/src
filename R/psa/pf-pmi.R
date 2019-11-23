@@ -1,4 +1,18 @@
-source("lib/load_scoring_matrix.R")
+source("lib/load_phoneme.R")
+
+MakeFeatueCorpus <- function(corpus) {
+  
+  len <- dim(corpus)[2]
+  seq1 <- NULL
+  seq2 <- NULL
+  corpus.feat<- foreach (i = 1:len, .combine=cbind) %dopar% {
+    seq1 <- c(seq1, CV.feat[corpus[1, i], ])
+    seq2 <- c(seq2, CV.feat[corpus[2, i], ])
+    rbind(seq1, seq2)
+  }
+  
+  return(corpus.feat)
+}
 
 CalcPFPMI <- function(psa.list, s) {
   # Compute the PMI of the PSA list.
@@ -14,8 +28,6 @@ CalcPFPMI <- function(psa.list, s) {
   
   # Caluculate the PMI.
   corpus <- MakeCorpus(psa.list)
-  # Removes identical segments from the corpus.
-  #corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
   corpus <- corpus[, -which(corpus[1, ] == "-"), drop=F]
   corpus <- corpus[, -which(corpus[2, ] == "-"), drop=F]
   
@@ -26,28 +38,17 @@ CalcPFPMI <- function(psa.list, s) {
   num.kind.CV.feat <- length(kind.CV.feat)
   feat.mat <- matrix(NA, num.kind.CV.feat, num.kind.CV.feat, dimnames=list(kind.CV.feat, kind.CV.feat))
   
-  len <- dim(corpus)[2]
-  seq1 <- NULL
-  seq2 <- NULL
-  for (i in 1:len) {
-    seq1 <- c(seq1, CV.feat[corpus[1, i], ])
-    seq2 <- c(seq2, CV.feat[corpus[2, i], ])
-  }
-  corpus.feat <- rbind(seq1, seq2)
-  #######################################
+  corpus.feat <- MakeFeatueCorpus(corpus)
   
   # Compute the PMI for each pair.
-  sym <- unique(as.vector(corpus))
-  corpus <- corpus.feat
-  feat <- unique(as.vector(corpus))
+  feat <- unique(as.vector(corpus.feat))
   feat <- permutations(length(feat), 2, v=feat, repeats.allowed=T)
   len <- dim(feat)[1]
   score.vec <- list()
   pmi.list <- foreach(i = 1:len) %dopar% {
     score.vec$V1 <- feat[i, 1]
     score.vec$V2 <- feat[i, 2]
-    #score.vec$pmi <- -PMI(feat[i, 1], feat[i, 2], corpus, E)
-    score.vec$pmi <- PMI(feat[i, 1], feat[i, 2], corpus, E)
+    score.vec$pmi <- PMI(feat[i, 1], feat[i, 2], corpus.feat, E)
     return(score.vec)
   }
   
@@ -55,7 +56,8 @@ CalcPFPMI <- function(psa.list, s) {
     pmi.list[[i]]$pmi
   pmi.max <- max(pmi.tmp)
   pmi.min <- min(pmi.tmp)
-  
+
+  sym <- unique(as.vector(corpus))
   for (i in 1:len)
     feat.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
   
@@ -64,8 +66,8 @@ CalcPFPMI <- function(psa.list, s) {
     for (j in sym)
       s[i, j] <- sum(diag(feat.mat[CV.feat[i, ], CV.feat[j, ]]))
   
-  s[1:81, 82:118] <- -Inf
-  s[82:118, 1:81] <- -Inf
+  s[C, V] <- -Inf
+  s[V, C] <- -Inf
   
   return(s)
 }
