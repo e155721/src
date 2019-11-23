@@ -1,3 +1,5 @@
+source("lib/load_scoring_matrix.R")
+
 CalcPFPMI <- function(psa.list, s) {
   # Compute the PMI of the PSA list.
   #
@@ -18,22 +20,6 @@ CalcPFPMI <- function(psa.list, s) {
   corpus <- corpus[, -which(corpus[2, ] == "-"), drop=F]
   
   ### Convert the symbols to features ###
-  C <- as.vector(read.table("lib/data/symbols/consonants")[, 1])
-  num.C <- length(C)
-  
-  V <- as.vector(read.table("lib/data/symbols/vowels")[, 1])
-  num.V <- length(V)
-  
-  C.feat <- as.matrix(read.table("lib/data/features/consonants_values"))
-  V.feat <- as.matrix(read.table("lib/data/features/vowels_values"))
-  
-  for (j in 1:5) {
-    C.feat[, j] <- paste("C", C.feat[, j], j, sep="")
-    V.feat[, j] <- paste("V", V.feat[, j], j, sep="")
-  }
-  CV.feat <- rbind(C.feat, V.feat)
-  dimnames(CV.feat) <- list(c(C, V), NULL)
-  
   kind.C.feat <- unique(as.vector(C.feat))
   kind.V.feat <- unique(as.vector(V.feat))
   kind.CV.feat <- c(kind.C.feat, kind.V.feat)
