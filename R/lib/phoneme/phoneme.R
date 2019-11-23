@@ -5,16 +5,17 @@ C <- as.vector(read.table("lib/phoneme/symbols/consonants.txt")[, 1])
 V <- as.vector(read.table("lib/phoneme/symbols/vowels.txt")[, 1])
 
 # Consonant features
-C.feat <- as.matrix(read.table("lib/phoneme/features/consonants.txt"))
-dimnames(C.feat) <- list(C, NULL)
+mat.C.feat <- as.matrix(read.table("lib/phoneme/features/consonants.txt"))
+dimnames(mat.C.feat) <- list(C, NULL)
 
 # Vowel features
-V.feat <- as.matrix(read.table("lib/phoneme/features/vowels.txt"))
-dimnames(V.feat) <- list(V, NULL)
+mat.V.feat <- as.matrix(read.table("lib/phoneme/features/vowels.txt"))
+dimnames(mat.V.feat) <- list(V, NULL)
 
 for (j in 1:5) {
-  C.feat[, j] <- paste("C", C.feat[, j], j, sep="")
-  V.feat[, j] <- paste("V", V.feat[, j], j, sep="")
+  mat.C.feat[, j] <- paste("C", mat.C.feat[, j], j, sep="")
+  mat.V.feat[, j] <- paste("V", mat.V.feat[, j], j, sep="")
 }
-CV.feat <- rbind(C.feat, V.feat)
-dimnames(CV.feat) <- list(c(C, V), NULL)
+
+C.feat <- unique(as.vector(mat.C.feat))
+V.feat <- unique(as.vector(mat.V.feat))
