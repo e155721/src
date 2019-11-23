@@ -17,12 +17,12 @@ MakeFeatureMatrix <- function(s5=NA, p=NA) {
   C.match <- matrix(NA, num.C, num.C, dimnames=list(C, C))
   for (i in C)
     for (j in C)
-      C.match[i, j] <- sum(C.feat[i, ] == C.feat[j, ])
+      C.match[i, j] <- sum(mat.C.feat[i, ] == mat.C.feat[j, ])
   
   V.match <- matrix(NA, num.V, num.V, dimnames=list(V, V))
   for (i in V)
     for(j in V)
-      V.match[i, j] <- sum(V.feat[i, ] == V.feat[j, ])
+      V.match[i, j] <- sum(mat.V.feat[i, ] == mat.V.feat[j, ])
   
   # Make the scoring matrix.
   symbols <- c(C, V, "-")
