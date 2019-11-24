@@ -70,7 +70,7 @@ PMI <- function(x, y, corpus, E) {
   V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of symbol pairs types in the segment pairs
   V2 <- length(unique(as.vector(corpus)))                # number of symbol types in the segments
   
-  f.xy <- sum((x == corpus[1, ]) * (corpus[2, ]))  # frequency of xy in the segmentpairs
+  f.xy <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
   f.x <- sum(x == corpus[1, ])                     # frequency of x in the segments
   f.y <- sum(y == corpus[2, ])                     # frequency of y in the segments
   
