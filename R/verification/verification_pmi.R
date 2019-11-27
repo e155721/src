@@ -18,6 +18,7 @@ files <- GetPathList()
 input.list <- MakeInputList(files)
 s <- MakeEditDistance(Inf)
 s <- PairwisePMI(input.list, s)
+save(s, file="scoring_matrix_pmi.RData")
 
 # matchingrate path
 ansrate.file <- paste("../../Alignment/", ansrate, "_", format(Sys.Date()), ".txt", sep = "")
