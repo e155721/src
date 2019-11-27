@@ -71,8 +71,8 @@ PMI <- function(x, y, corpus, E) {
   V2 <- length(unique(as.vector(corpus)))                # number of symbol types in the segments
   
   f.xy <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
-  f.x <- sum(x == corpus[1, ])                     # frequency of x in the segments
-  f.y <- sum(y == corpus[2, ])                     # frequency of y in the segments
+  f.x <- sum(x == corpus)                                 # frequency of x in the segments
+  f.y <- sum(y == corpus)                                 # frequency of y in the segments
   
   p.xy <- (f.xy + 1) / (N1 + V1)   # probability of the co-occurrence frequency of xy
   p.x <- (f.x + 1) / (N2 + V2)     # probability of the occurrence frequency of x
