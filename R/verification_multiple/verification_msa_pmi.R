@@ -24,6 +24,7 @@ if (!dir.exists(output.dir)) {
 input.list <- MakeInputList(files)
 s <- MakeEditDistance(Inf)
 s <- PairwisePMI(input.list, s)
+save(s, file="scoring_matrix_msa_pmi.RData")
 
 for (file in files) {
   
