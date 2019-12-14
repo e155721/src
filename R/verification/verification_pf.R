@@ -1,10 +1,19 @@
-source("lib/load_data_processing.R")
 source("verification/VerificationPSA.R")
+source("lib/load_scoring_matrix.R")
 
-# get the all of files path
-filesPath <- GetPathList()
+file <- "ansrate_pf"
+dir <- "pairwise_pf"
 
-ansrate <- "ansrate_pf"
-pairwise <- "pairwise_pf"
-
-VerificationPSA(ansrate=ansrate, pairwise=pairwise, method="PF", pen=-3)
+for (pen in -1) {
+  # Set the path of the matching rate.
+  ansrate.file <- paste("../../Alignment/", file, "_", format(Sys.Date()), "_", pen, ".txt", sep = "")
+  
+  # Set the path of the PSA directory.
+  output.dir <- paste("../../Alignment/", dir, "_", pen, "_", format(Sys.Date()), "_", pen, "/", sep = "")
+  if (!dir.exists(output.dir))
+    dir.create(output.dir)
+  
+  # Make the scoring matrix.
+  s <- MakeFeatureMatrix(-Inf, pen)
+  VerificationPSA(ansrate.file, output.dir, s, dist=T)
+}

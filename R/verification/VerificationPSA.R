@@ -1,65 +1,48 @@
-source("lib/load_data_processing.R")
-source("lib/load_verif_lib.R")
-source("lib/load_scoring_matrix.R")
-
-source("psa/levenshtein.R")
-source("psa/pmi.R")
-source("psa/pf.R")
-
 library(foreach)
 library(doParallel)
 registerDoParallel(detectCores())
 
-VerificationPSA <- function(ansrate, pairwise, method, pen=NULL) {
+source("lib/load_data_processing.R")
+source("lib/load_verif_lib.R")
+
+VerificationPSA <- function(ansrate.file, output.dir, s, dist=T) {
+  # Compute the PSA for each word.
+  # Args:
+  #   ansrate.file: The path of the matching rate file.
+  #   output.dir:   The path of the PSA directory.
+  #   s:            The scoring matrix.
+  #
+  # Returns:
+  #   Nothing.
   
-  # matchingrate path
-  ansrate.file <- paste("../../Alignment/", ansrate, "_", format(Sys.Date()), pen, ".txt", sep = "")
+  # Get the all of files path.
+  file.list <- GetPathList()
   
-  # result path
-  output.dir <- paste("../../Alignment/", pairwise, "_", format(Sys.Date()), pen, "/", sep = "")
-  if (!dir.exists(output.dir)) {
-    dir.create(output.dir)
-  }
-  
-  # conduct the alignment for each files
-  foreach.rlt <- foreach (f = filesPath) %dopar% {
+  # START OF LOOP
+  foreach.rlt <- foreach (f = file.list) %dopar% {
     
-    # make the word list
+    # Make the word list.
     gold.list <- MakeWordList(f["input"])
     input.list <- MakeInputSeq(gold.list)
     
-    # making the gold standard alignments
+    # Make the gold standard alignments.
     gold.aln <- MakeGoldStandard(gold.list)
     
-    # Makes the scoring matrix.
-    if (method == "PF" || method == "PF-PMI") {
-      s <- MakeFeatureMatrix(-Inf, pen)
-    } else {
-      s <- MakeEditDistance(Inf)
-    }    
+    # Compute the PSA for each region.
+    psa.aln <- MakePairwise(input.list, s, select.min=dist)
     
-    psa.aln <- switch(method,
-                      "LV" = PairwiseLV(input.list, s),
-                      "PMI" = PairwisePMI(input.list, s),
-                      "PF" = PairwisePF(input.list, s),
-                      "PF-PMI" = PairwisePFPMI(input.list, s)
-    )
-    
-    #######
-    # calculating the matching rate
-    matching.rate <- VerifAcc(psa.aln, gold.aln)
-    # output gold standard
-    OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
-    # output pairwise
-    OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
-    # output match or mismatch
-    OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
+    # Output the results.
+    matching.rate <- VerifAcc(psa.aln, gold.aln)                              # calculating the matching rate
+    OutputAlignment(f["name"], output.dir, ".lg", gold.aln)                   # writing the gold standard
+    OutputAlignment(f["name"], output.dir, ".aln", psa.aln)                   # writing the PSA
+    OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)  # writing the match or mismatch
     
     # Returns the matching rate to the list of foreach.
     c(f["name"], matching.rate)
   }
+  # END OF LOOP
   
-  # Outputs the matching rate
+  # Output the matching rate.
   matching.rate.mat <- list2mat(foreach.rlt)
   matching.rate.mat <- matching.rate.mat[order(matching.rate.mat[, 1]), , drop=F]
   write.table(matching.rate.mat, ansrate.file, quote = F)

@@ -3,62 +3,33 @@ library(doParallel)
 registerDoParallel(detectCores())
 
 source("lib/load_data_processing.R")
-#source("verification/VerificationPSA.R")
-source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
-source("psa/pmi.R")
+source("lib/load_verif_lib.R")
 source("psa/pf-pmi.R")
+source("psa/pmi.R")
+source("verification/VerificationPSA.R")
 
-# get the all of files path
-filesPath <- GetPathList()
+file <- "ansrate_pf-pmi"
+dir <- "pairwise_pf-pmi"
 
-ansrate <- "ansrate_pf-pmi"
-pairwise <- "pairwise_pf-pmi"
+# Set the path of the matching rate.
+ansrate.file <- paste("../../Alignment/", file, "_", format(Sys.Date()), ".txt", sep = "")
 
-files <- GetPathList()
-input.list <- MakeInputList(files)
-
-s <- MakeEditDistance(Inf)
-#s <- MakeFeatureMatrix(-Inf, pen)
-s <- PairwisePFPMI(input.list, s)
-save(s, file="scoring_matrix.RData")
-
-# matchingrate path
-ansrate.file <- paste("../../Alignment/", ansrate, "_", format(Sys.Date()), ".txt", sep = "")
-
-# result path
-output.dir <- paste("../../Alignment/", pairwise, "_", format(Sys.Date()), "/", sep = "")
+# Set the path of the PSA directory.
+output.dir <- paste("../../Alignment/", dir, "_", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir))
   dir.create(output.dir)
 
-# conduct the alignment for each files
-foreach.rlt <- foreach (f = filesPath) %dopar% {
-  
-  # make the word list
-  gold.list <- MakeWordList(f["input"])
-  input.list <- MakeInputSeq(gold.list)
-  
-  # making the gold standard alignments
-  gold.aln <- MakeGoldStandard(gold.list)
-  
-  psa.aln <- MakePairwise(input.list, s, select.min = T)
-  #psa.aln <- MakePairwise(input.list, s)
-  
-  #######
-  # calculating the matching rate
-  matching.rate <- VerifAcc(psa.aln, gold.aln)
-  # output gold standard
-  OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
-  # output pairwise
-  OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
-  # output match or mismatch
-  OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
-  
-  # Returns the matching rate to the list of foreach.
-  c(f["name"], matching.rate)
+# Update the scoring matrix with PMI.
+files <- GetPathList()
+input.list <- MakeInputList(files)
+s.list <- list()
+for (p in 1:5) {
+  s <- MakeEditDistance(Inf)
+  s.list[[p]] <- PairwisePFPMI(input.list, s, p)
+  s <- s.list[[p]]
 }
+save(s.list, file=paste("scoring_matrices_pf-pmi_", format(Sys.Date()), ".RData", sep=""))
 
-# Outputs the matching rate
-matching.rate.mat <- list2mat(foreach.rlt)
-matching.rate.mat <- matching.rate.mat[order(matching.rate.mat[, 1]), , drop=F]
-write.table(matching.rate.mat, ansrate.file, quote = F)
+# Execute the PSA for each word.
+#VerificationPSA(ansrate.file, output.dir, s)

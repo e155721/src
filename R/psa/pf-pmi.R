@@ -1,10 +1,10 @@
 source("lib/load_phoneme.R")
 
-sym2feat <- function(x, mat.CV.feat) {
-  return(mat.CV.feat[x, ])
+sym2feat <- function(x, args) {
+  return(args[[1]][x, args[[2]]])
 }
 
-CalcPFPMI <- function(psa.list, s) {
+CalcPFPMI <- function(psa.list, s, p) {
   # Compute the PMI of the PSA list.
   #
   # Args:
@@ -31,7 +31,8 @@ CalcPFPMI <- function(psa.list, s) {
   mat.CV.feat <- rbind(mat.CV.feat, gap)
   dimnames(mat.CV.feat) <- list(c(C, V, "-"), NULL)
   
-  corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
+  #corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
+  corpus.feat <- t(apply(corpus, 1, sym2feat, list(mat.CV.feat, p)))
   # Removes identical segments from the corpus.
   corpus.feat <- corpus.feat[, -which(corpus.feat[1, ] == corpus.feat[2, ]), drop=F]
   
@@ -71,7 +72,7 @@ CalcPFPMI <- function(psa.list, s) {
   return(s)
 }
 
-PairwisePFPMI <- function(input.list, s) {
+PairwisePFPMI <- function(input.list, s, p) {
   # Compute the new scoring matrix by updating PMI iteratively.
   #
   # Args:
@@ -105,7 +106,7 @@ PairwisePFPMI <- function(input.list, s) {
     }
     
     # Compute the new scoring matrix that is updated by the PMI-weighting.
-    s <- CalcPFPMI(psa.list, s)
+    s <- CalcPFPMI(psa.list, s, p)
     # Compute the new PSA using the new scoring matrix.
     psa.list <- MakePSA(input.list, s, dist=T)
   }

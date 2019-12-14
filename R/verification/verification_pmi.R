@@ -1,60 +1,26 @@
-library(foreach)
-library(doParallel)
-registerDoParallel(detectCores())
-
 source("lib/load_data_processing.R")
-#source("verification/VerificationPSA.R")
-source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
+source("lib/load_verif_lib.R")
 source("psa/pmi.R")
+source("verification/VerificationPSA.R")
 
-# get the all of files path
-filesPath <- GetPathList()
+file <- "ansrate_pmi"
+dir <- "pairwise_pmi"
 
-ansrate <- "ansrate_pmi"
-pairwise <- "pairwise_pmi"
+# Set the path of the matching rate.
+ansrate.file <- paste("../../Alignment/", file, "_", format(Sys.Date()), ".txt", sep = "")
 
-files <- GetPathList()
-input.list <- MakeInputList(files)
+# Update the scoring matrix with PMI.
+file.list <- GetPathList()
+input.list <- MakeInputList(file.list)
 s <- MakeEditDistance(Inf)
 s <- PairwisePMI(input.list, s)
-save(s, file="scoring_matrix_pmi.RData")
+save(s, file=paste("scoring_matrix_pmi_", format(Sys.Date()), ".RData", sep=""))
 
-# matchingrate path
-ansrate.file <- paste("../../Alignment/", ansrate, "_", format(Sys.Date()), ".txt", sep = "")
-
-# result path
-output.dir <- paste("../../Alignment/", pairwise, "_", format(Sys.Date()), "/", sep = "")
+# Set the path of the PSA directory.
+output.dir <- paste("../../Alignment/", dir, "_", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir))
   dir.create(output.dir)
 
-# conduct the alignment for each files
-foreach.rlt <- foreach (f = filesPath) %dopar% {
-  
-  # make the word list
-  gold.list <- MakeWordList(f["input"])
-  input.list <- MakeInputSeq(gold.list)
-  
-  # making the gold standard alignments
-  gold.aln <- MakeGoldStandard(gold.list)
-
-  psa.aln <- MakePairwise(input.list, s, select.min = T)
-  
-  #######
-  # calculating the matching rate
-  matching.rate <- VerifAcc(psa.aln, gold.aln)
-  # output gold standard
-  OutputAlignment(f["name"], output.dir, ".lg", gold.aln)
-  # output pairwise
-  OutputAlignment(f["name"], output.dir, ".aln", psa.aln)
-  # output match or mismatch
-  OutputAlignmentCheck(f["name"], output.dir, ".check", psa.aln, gold.aln)
-  
-  # Returns the matching rate to the list of foreach.
-  c(f["name"], matching.rate)
-}
-
-# Outputs the matching rate
-matching.rate.mat <- list2mat(foreach.rlt)
-matching.rate.mat <- matching.rate.mat[order(matching.rate.mat[, 1]), , drop=F]
-write.table(matching.rate.mat, ansrate.file, quote = F)
+# Execute the PSA for each word.
+VerificationPSA(ansrate.file, output.dir, "PMI", s)
