@@ -3,6 +3,7 @@ source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
 source("msa/ProgressiveAlignment.R")
 source("msa/BestFirst.R")
+source("verification_multiple/VerificationMSA.R")
 
 ansrate <- "ansrate_msa_pf"
 multiple <- "multiple_pf"
