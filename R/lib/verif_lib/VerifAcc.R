@@ -4,7 +4,7 @@ Convert <- function(psa) {
   for (j in 2:col) {
     a <- psa$aln[, j]
     b <- psa$aln[, (j + 1)]
-    if ((a[2] == "-") && (b[1] == "-")) {
+    if ((a[1] == "-") && (b[2] == "-")) {
       psa$aln[, j] <- b
       psa$aln[, (j + 1)] <- a
       psa$seq1 <- psa$aln[1, , drop=F]

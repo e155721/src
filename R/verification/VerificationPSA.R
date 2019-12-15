@@ -31,9 +31,11 @@ VerificationPSA <- function(ansrate.file, output.dir, s, dist=T) {
     # Compute the PSA for each region.
     psa.aln <- MakePairwise(input.list, s, select.min=dist)
     
-    N <- length(psa.aln)
-    for (i in 1:N)
+    N <- length(gold.aln)
+    for (i in 1:N) {
+      gold.aln[[i]] <- Convert(gold.aln[[i]])
       psa.aln[[i]] <- Convert(psa.aln[[i]])
+    }
     
     # Output the results.
     matching.rate <- VerifAcc(psa.aln, gold.aln)                              # calculating the matching rate
