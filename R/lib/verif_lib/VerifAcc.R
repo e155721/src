@@ -1,6 +1,6 @@
 Convert <- function(psa) {
   
-  col <- dim(psa)[2]
+  col <- dim(psa$aln)[2] - 1
   for (j in 2:col) {
     a <- psa$aln[, j]
     b <- psa$aln[, (j + 1)]
@@ -20,7 +20,7 @@ VerifAcc <- function(psa, gold) {
   N <- length(psa)
   match <- 0
   for (i in 1:N) {
-    psa[[i]]$aln <- Convert(psa[[i]])
+    psa[[i]] <- Convert(psa[[i]])
     psa.aln <- paste(psa[[i]]$aln, collapse = "")
     gold.aln <- paste(gold[[i]]$aln, collapse = "")
     if (psa.aln == gold.aln)
