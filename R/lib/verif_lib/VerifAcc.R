@@ -7,8 +7,8 @@ Convert <- function(psa) {
     if ((a[2] == "-") && (b[1] == "-")) {
       psa$aln[, j] <- b
       psa$aln[, (j + 1)] <- a
-      psa$seq1 <- psa$aln[1, ]
-      psa$seq2 <- psa$aln[2, ]
+      psa$seq1 <- psa$aln[1, , drop=F]
+      psa$seq2 <- psa$aln[2, , drop=F]
     }
   }
   
