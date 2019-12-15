@@ -15,5 +15,5 @@ for (pen in -1) {
   
   # Make the scoring matrix.
   s <- MakeFeatureMatrix(-Inf, pen)
-  VerificationPSA(ansrate.file, output.dir, s, dist=T)
+  VerificationPSA(ansrate.file, output.dir, s, dist=F)
 }
