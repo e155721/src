@@ -1,33 +1,11 @@
-
-source("needleman_wunsch/functions.R")
-source("needleman_wunsch/NeedlemanWunsch.R")
-source("needleman_wunsch/MakeFeatureMatrix.R")
-source("data_processing/MakeWordList.R")
-
-
 library(foreach)
 library(doParallel)
 registerDoParallel(detectCores())
 
-CheckScore <- function(x)
-{
-  nrow <- dim(x)[1]
-  ncol <- dim(x)[2]
-  
-  sp <- 0
-  for (j in 2:ncol) {
-    spVec <- x[, j]
-    l <- 2
-    len <- length(spVec)
-    for (k in 1:(len-1)) {
-      for (m in l:len) {
-        sp <- sp + scoringMatrix[spVec[k], spVec[m]]
-      }
-      l <- l + 1
-    }
-  }
-  return(sp)
-}
+#source("needleman_wunsch/functions.R")
+#source("needleman_wunsch/NeedlemanWunsch.R")
+#source("needleman_wunsch/MakeFeatureMatrix.R")
+#source("data_processing/MakeWordList.R")
 
 path <- "../Alignment/input_data/"
 files <- list.files(path)
