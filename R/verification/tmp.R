@@ -37,20 +37,8 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   
   # making the gold standard alignments
   gold.aln <- MakeGoldStandard(gold.list)
-
-  psa.aln <- list()
-  for (p in 1:5)
-    psa.aln[[p]] <- MakePairwise(input.list, s.list[[p]], select.min = T)
-
-  n <- length(psa.aln[[1]])
-  score <- c(0, 0, 0, 0, 0)
-  for (p in 1:5)
-    for (i in 1:n)
-      score[p] <- score[p] + psa.aln[[p]][[i]]$score
   
-  score.min <- which(score==min(score))[1]
-  
-  psa.aln <- psa.aln[[score.min]]
+  psa.aln <- MakePairwise(input.list, s.list[[1]], select.min = T)
   
   #######
   # calculating the matching rate
