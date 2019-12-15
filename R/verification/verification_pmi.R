@@ -23,4 +23,4 @@ if (!dir.exists(output.dir))
   dir.create(output.dir)
 
 # Execute the PSA for each word.
-VerificationPSA(ansrate.file, output.dir, "PMI", s)
+VerificationPSA(ansrate.file, output.dir, s)
