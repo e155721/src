@@ -20,7 +20,6 @@ VerifAcc <- function(psa, gold) {
   N <- length(psa)
   match <- 0
   for (i in 1:N) {
-    psa[[i]] <- Convert(psa[[i]])
     psa.aln <- paste(psa[[i]]$aln, collapse = "")
     gold.aln <- paste(gold[[i]]$aln, collapse = "")
     if (psa.aln == gold.aln)

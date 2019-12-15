@@ -31,6 +31,10 @@ VerificationPSA <- function(ansrate.file, output.dir, s, dist=T) {
     # Compute the PSA for each region.
     psa.aln <- MakePairwise(input.list, s, select.min=dist)
     
+    N <- length(psa.aln)
+    for (i in 1:N)
+      psa.aln[[i]] <- Convert(psa.aln[[i]])
+    
     # Output the results.
     matching.rate <- VerifAcc(psa.aln, gold.aln)                              # calculating the matching rate
     OutputAlignment(f["name"], output.dir, ".lg", gold.aln)                   # writing the gold standard
