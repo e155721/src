@@ -1,7 +1,7 @@
 # Wednesday, November 20th, 2019
 source("lib/load_data_processing.R")
 
-Compare <- function (f1, f2) {
+Compare <- function (f1, f2, out=NULL) {
   # Compare the two matching rate files.
   #
   # Args:
@@ -54,8 +54,8 @@ Compare <- function (f1, f2) {
     upper.list <- 0
   if (length(lower.list) == 0)
     lower.list <- 0
-  write.table(list2mat(upper.list), "upper.txt", quote=F)
-  write.table(list2mat(lower.list), "lower.txt", quote=F)
+  write.table(list2mat(upper.list), paste("upper", out, ".txt", sep=""), quote=F)
+  write.table(list2mat(lower.list), paste("lower", out, ".txt", sep=""), quote=F)
   
   return(0)
 }
