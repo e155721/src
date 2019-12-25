@@ -14,6 +14,6 @@ SelectMSA <- function(seq1, seq2, s.list, min) {
                  CheckScore(msa.list[[5]]$aln, s))
   min.ind <- which(score.vec == min(score.vec))[1]
   msa <- msa.list[[min.ind]]
-  
+  msa$score <- min(score.vec)[1]
   return(msa)
 }

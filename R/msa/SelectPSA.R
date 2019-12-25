@@ -20,6 +20,7 @@ SelectPSA <- function(word.list, s.list, min) {
                    CheckScore(psa.list[[5]][[i]]$aln, s))
     min.ind <- which(score.vec == min(score.vec))[1]
     psa[[i]] <- psa.list[[min.ind]][[i]]
+    psa[[i]]$score <- min(score.vec)[1]
   }
   
   return(psa)
