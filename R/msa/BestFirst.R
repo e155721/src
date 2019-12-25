@@ -45,7 +45,18 @@ BestFirst <- function(msa.o, s, similarity=T) {
       # Removes the ith sequence.
       seq1 <- msa[drop = F, i, ]
       seq2 <- msa[drop = F, -i, ]
-      NeedlemanWunsch(seq1, seq2, s, select.min=min)
+      #NeedlemanWunsch(seq1, seq2, s, select.min=min)
+      
+      ### For selecting good score.
+      msa.list <- list()
+      for (p in 1:5) {
+        msa.list[[p]] <- NeedlemanWunsch(seq1, seq2, s[[p]], select.min=min)
+      }
+      score.vec <- c(msa.list[[1]]$score, msa.list[[2]]$score, 
+                     msa.list[[3]]$score, msa.list[[4]]$score, msa.list[[5]]$score)
+      min.ind <- which(score.vec == min(score.vec))[1]
+      msa <- msa.list[[min.ind]]
+      ###
     }
     
     score.vec <- c()
