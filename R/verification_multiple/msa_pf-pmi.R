@@ -21,7 +21,7 @@ if (!dir.exists(output.dir))
 
 # Compute the scoring matrix using the PMI method.
 input.list <- MakeInputList(files)
-load("../../Alignment/scoring_matrices.RData")
+load("../../Alignment/pf-pmi/psa_12-11/scoring_matrices.RData")
 
 accuracy.mat <- matrix(NA, length(files), 2)
 for (file in files) {
