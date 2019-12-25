@@ -11,15 +11,32 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   #
   # Returns:
   #   The multiple alignment using progressive method.
-  if (similarity) {
+  if (similarity) {  
     min <- F
   } else {
     min <- T
   }
   
   # Compute the pairwise alignment score for each regions pair.
-  psa <- MakePairwise(word.list, s, select.min=min)
+  # psa <- MakePairwise(word.list, s[[p]], select.min=min)
+  ### For selecting good score.
+  psa.list <- foreach (p = 1:5) %dopar% {
+    MakePairwise(word.list, s[[p]], select.min=min)
+  }
 
+  N <- length(psa.list[[1]])
+  psa <- list()
+  for (i in 1:N) {
+    score.vec <- c(psa.list[[1]][[i]]$score,
+                   psa.list[[2]][[i]]$score,
+                   psa.list[[3]][[i]]$score,
+                   psa.list[[4]][[i]]$score,
+                   psa.list[[5]][[i]]$score)
+    min.ind <- which(score.vec == min(score.vec))[1]
+    psa[[i]] <- psa.list[[min.ind]][[i]]
+  }
+  ###
+  
   # Make the similarity matrix.
   num.regions <- length(word.list)  # number of sequences
   dist.mat <- matrix(0, num.regions, num.regions)
@@ -35,11 +52,11 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   if (similarity)
     for (i in 1:num.regions)
       dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s, select.min=min)$score
-
+  
   # Fill the distance matrix.
   dist.mat.tmp <- t(dist.mat)
   dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
-    
+  
   if (similarity) {
     # Convert the similarity matrix to the "dist" object.
     psa.d <- dist(dist.mat)
@@ -60,18 +77,48 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     if (flg == 2) {
       seq1 <- gtree[i, 1] * -1
       seq2 <- gtree[i, 2] * -1
-      psa <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s, select.min=min)
+      #psa <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s, select.min=min)
+      ### For selecting good score.
+      msa.list <- list()
+      for (p in 1:5) {
+        msa.list[[p]] <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s[[p]], select.min=min)
+      }
+      score.vec <- c(msa.list[[1]]$score, msa.list[[2]]$score, 
+                     msa.list[[3]]$score, msa.list[[4]]$score, msa.list[[5]]$score)
+      min.ind <- which(score.vec == min(score.vec))[1]
+      psa <- msa.list[[min.ind]]
+      ###
       pa[[i]] <- DelGap(psa$aln)
     } 
     else if(flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
-      psa <- NeedlemanWunsch(pa[[clt]], word.list[[seq2]], s, select.min=min)
+      #psa <- NeedlemanWunsch(pa[[clt]], word.list[[seq2]], s, select.min=min)
+      ## For selecting good score.
+      msa.list <- list()
+      for (p in 1:5) {
+        msa.list[[p]] <- NeedlemanWunsch(pa[[clt]], word.list[[seq2]], s[[p]], select.min=min)
+      }
+      score.vec <- c(msa.list[[1]]$score, msa.list[[2]]$score, 
+                     msa.list[[3]]$score, msa.list[[4]]$score, msa.list[[5]]$score)
+      min.ind <- which(score.vec == min(score.vec))[1]
+      psa <- msa.list[[min.ind]]
+      ###
       pa[[i]] <- DelGap(psa$aln)
     } else {
       clt1 <- gtree[i, 1]
       clt2 <- gtree[i, 2]
-      psa <- NeedlemanWunsch(pa[[clt1]], pa[[clt2]], s, select.min=min)
+      #psa <- NeedlemanWunsch(pa[[clt1]], pa[[clt2]], s, select.min=min)
+      ## For selecting good score.
+      msa.list <- list()
+      for (p in 1:5) {
+        msa.list[[p]] <- NeedlemanWunsch(pa[[clt1]], pa[[clt2]], s[[p]], select.min=min)
+      }
+      score.vec <- c(msa.list[[1]]$score, msa.list[[2]]$score, 
+                     msa.list[[3]]$score, msa.list[[4]]$score, msa.list[[5]]$score)
+      min.ind <- which(score.vec == min(score.vec))[1]
+      psa <- msa.list[[min.ind]]
+      ###
       pa[[i]] <- DelGap(psa$aln)
     }
   }
