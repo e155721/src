@@ -27,7 +27,7 @@ accuracy.mat <- matrix(NA, length(files), 2)
 for (file in files) {
   
   gold.list <- MakeWordList(file["input"])  # gold alignment
-  input.list <- MakeInputSeq(gold.list)  # input sequences
+  input.list <- MakeInputSeq(gold.list)     # input sequences
   
   # Computes the MSA using the BestFirst method.
   msa.list <- list()
@@ -39,11 +39,10 @@ for (file in files) {
   print(paste("End:", file["name"]))
   
   n <- length(msa.list[[1]])
-  score <- c(0, 0, 0, 0, 0)
   for (p in 1:5)
-    score[p] <- score[p] + CheckScore(msa.list[[p]], s.list[[p]])
+    score[p] <- CheckScore(msa.list[[p]], s.list[[p]])
   
-  score.min <- which(score==min(score))[1]
+  score.min <- which(score == min(score))[1]
   msa <- msa.list[[score.min]]
   
   # Checks the accuracy of MSA.
