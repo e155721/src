@@ -12,7 +12,7 @@ source("msa/BestFirst2.R")
 source("msa/ProgressiveAlignment2.R")
 
 ############################################################
-MakeListPFPMIMSA <- function(s, similarity=F) {
+MakeListPFPMIMSA <- function(s.list, similarity=F) {
   # Compute the MSA for each word.
   # Args:
   #   ansrate.file: The path of the matching rate file.
@@ -36,9 +36,9 @@ MakeListPFPMIMSA <- function(s, similarity=F) {
     
     # Computes the MSA using the BestFirst method.
     print(paste("Start:", file["name"]))
-    psa.init <- ProgressiveAlignment2(psa.list, s, similarity)
+    psa.init <- ProgressiveAlignment2(psa.list, s.list, similarity)
     msa.list[[i]] <- list()
-    msa.list[[i]] <- BestFirst2(psa.init, s, similarity)
+    msa.list[[i]] <- BestFirst2(psa.init, s.list, similarity)
     i <- i + 1
     print(paste("End:", file["name"]))
     
@@ -47,7 +47,7 @@ MakeListPFPMIMSA <- function(s, similarity=F) {
   return(msa.list)
 }
 
-MultiplePFPMI <- function(psa.list, input.list, s) {
+MultiplePFPMI <- function(psa.list, input.list, s, p) {
   # Compute the new scoring matrix by updating PMI iteratively.
   #
   # Args:
@@ -80,7 +80,7 @@ MultiplePFPMI <- function(psa.list, input.list, s) {
     }
     
     # Compute the new scoring matrix that is updated by the PMI-weighting.
-    s <- CalcPFPMI(psa.list, s)
+    s <- CalcPFPMI(psa.list, s, p)
     # Compute the new PSA using the new scoring matrix.
     psa.list <- MakePSA(input.list, s)
   }
@@ -126,9 +126,11 @@ while (1) {
   }
   diff <- sum(diff)
   if (diff == 0) break
-  msa.list <- MakeListPFPMIMSA(s, similarity=F)
+  msa.list <- MakeListPFPMIMSA(s.list, similarity=F)
   psa.list <- list.msa2psa(msa.list, MakeEditDistance(Inf))
   s.old <- s.list
-  s.list <- MultiplePFPMI(psa.list, input.list, s.list)
+  for (p in 1:5) {
+    s.list[[p]] <- MultiplePFPMI(psa.list, input.list, s.list[[p]], p)
+  }
 }
 VerificationMSA(ansrate.file, output.dir, msa.list)
