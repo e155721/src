@@ -27,23 +27,14 @@ accuracy.mat <- matrix(NA, length(files), 2)
 for (file in files) {
   
   gold.list <- MakeWordList(file["input"])  # gold alignment
-  input.list <- MakeInputSeq(gold.list)     # input sequences
+  input.list <- MakeInputSeq(gold.list)  # input sequences
   
   # Computes the MSA using the BestFirst method.
   msa.list <- list()
   print(paste("Start:", file["name"]))
-  for (p in 1:5) {
-    psa.init <- ProgressiveAlignment(input.list, s.list[[p]], similarity=F)
-    msa.list[[p]] <- BestFirst(psa.init, s.list[[p]], similarity=F)
-  }
+  psa.init <- ProgressiveAlignment(input.list, s.list, similarity=F)
+  msa <- BestFirst(psa.init, s.list, similarity=F)
   print(paste("End:", file["name"]))
-  
-  n <- length(msa.list[[1]])
-  for (p in 1:5)
-    score[p] <- CheckScore(msa.list[[p]], s.list[[p]])
-  
-  score.min <- which(score == min(score))[1]
-  msa <- msa.list[[score.min]]
   
   # Checks the accuracy of MSA.
   gold.mat <- DelGap(list2mat(gold.list))
