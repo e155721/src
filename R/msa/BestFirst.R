@@ -7,7 +7,6 @@ source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
 source("lib/load_scoring_matrix.R")
-source("msa/SelectMSA.R")
 
 BestFirst <- function(msa.o, s, similarity=T) {
   # Computes the multiple alignment using progressive method.
@@ -46,10 +45,7 @@ BestFirst <- function(msa.o, s, similarity=T) {
       # Removes the ith sequence.
       seq1 <- msa[drop = F, i, ]
       seq2 <- msa[drop = F, -i, ]
-      #NeedlemanWunsch(seq1, seq2, s, select.min=min)
-      
-      ### For selecting good score.
-      msa <- SelectMSA(seq1, seq2, s, min)
+      NeedlemanWunsch(seq1, seq2, s, select.min=min)
     }
     
     score.vec <- c()

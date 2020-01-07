@@ -1,8 +1,6 @@
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 source("lib/load_verif_lib.R")
-source("msa/SelectPSA.R")
-source("msa/SelectMSA.R")
 
 ProgressiveAlignment <- function(word.list, s, similarity=T) {
   # Compute the multiple alignment using progressive method.
@@ -13,16 +11,14 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   #
   # Returns:
   #   The multiple alignment using progressive method.
-  if (similarity) {  
+  if (similarity) {
     min <- F
   } else {
     min <- T
   }
   
   # Compute the pairwise alignment score for each regions pair.
-  # psa <- MakePairwise(word.list, s, select.min=min)
-  # Execute the PSA by five scoring matrices.
-  psa <- SelectPSA(word.list, s, min)
+  psa <- MakePairwise(word.list, s, select.min=min)
   
   # Make the similarity matrix.
   num.regions <- length(word.list)  # number of sequences
@@ -66,21 +62,18 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     if (flg == 2) {
       seq1 <- gtree[i, 1] * -1
       seq2 <- gtree[i, 2] * -1
-      #pa <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s, select.min=min)
-      pa <- SelectMSA(word.list[[seq1]], word.list[[seq2]], s, min)
+      pa <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s, select.min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     } 
     else if(flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
-      #pa <- NeedlemanWunsch(pa.list[[clt]], word.list[[seq2]], s, select.min=min)
-      pa <- SelectMSA(pa.list[[clt]], word.list[[seq2]], s, min)
+      pa <- NeedlemanWunsch(pa.list[[clt]], word.list[[seq2]], s, select.min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     } else {
       clt1 <- gtree[i, 1]
       clt2 <- gtree[i, 2]
-      #pa <- NeedlemanWunsch(pa.list[[clt1]], pa.list[clt2]], s, select.min=min)
-      pa <- SelectMSA(pa.list[[clt1]], pa.list[[clt2]], s, min)
+      pa <- NeedlemanWunsch(pa.list[[clt1]], pa.list[[clt2]], s, select.min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     }
   }
