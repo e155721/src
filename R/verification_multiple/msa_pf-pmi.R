@@ -1,7 +1,8 @@
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
-source("msa/BestFirst.R")
+source("msa/ProgressiveAlignment2.R")
+source("msa/BestFirst2.R")
 source("psa/pmi.R")
 source("psa/pf-pmi.R")
 source("test/check_score.R")
@@ -32,8 +33,8 @@ for (file in files) {
   # Computes the MSA using the BestFirst method.
   msa.list <- list()
   print(paste("Start:", file["name"]))
-  psa.init <- ProgressiveAlignment(input.list, s.list, similarity=F)
-  msa <- BestFirst(psa.init, s.list, similarity=F)
+  psa.init <- ProgressiveAlignment2(input.list, s.list, similarity=F)
+  msa <- BestFirst2(psa.init, s.list, similarity=F)
   print(paste("End:", file["name"]))
   
   # Checks the accuracy of MSA.
