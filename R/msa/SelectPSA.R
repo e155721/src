@@ -3,7 +3,8 @@ source("test/check_score.R")
 source("lib/load_scoring_matrix.R")
 
 SelectPSA <- function(word.list, s.list, min) {
-  s <- MakeEditDistance(Inf)
+  #s <- MakeEditDistance(Inf)
+  load("../../Alignment/pmi/psa_11-14/scoring_matrix_pmi.RData")
   
   # PSA for each pair.
   psa.list <- foreach (p = 1:5) %dopar% {
