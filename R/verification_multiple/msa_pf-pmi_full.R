@@ -93,44 +93,48 @@ MultiplePFPMI <- function(psa.list, input.list, s, p) {
 ansrate <- "ansrate_msa"
 multiple <- "multiple"
 
-# matchingrate path
-ansrate.file <- paste("../../Alignment/", ansrate, "_pmi_", format(Sys.Date()), ".txt", sep = "")
-
-# result path
-output.dir <- paste("../../Alignment/", multiple, "_pmi_", format(Sys.Date()), "/", sep = "")
-if (!dir.exists(output.dir)) {
-  dir.create(output.dir)
-}
-
-# Compute the scoring matrix using the PF-PMI method.
-files <- GetPathList()
-input.list <- MakeInputList(files)
-s.list <- list()
-for (p in 1:5) {
-  s <- MakeEditDistance(Inf)
-  s.list[[p]] <- PairwisePFPMI(input.list, s, p)
-}
-
-s.old <- s.list
-for (p in 1:5) {
-  N <- length(s.old[[p]])
-  for (i in 1:N) {
-    s.old[[p]][i] <- 0
+for (pf in 1:5) {
+  
+  # matchingrate path
+  ansrate.file <- paste("../../Alignment/", ansrate, "_pf-pmi_pf", pf, "_", format(Sys.Date()), ".txt", sep = "")
+  
+  # result path
+  output.dir <- paste("../../Alignment/", multiple, "_pf-pmi_pf", pf, "_", format(Sys.Date()), "/", sep = "")
+  if (!dir.exists(output.dir)) {
+    dir.create(output.dir)
   }
-}
-
-while (1) {
-  diff <- NULL
-  for (p in 1:5) {
-    diff[p] <- N - sum(s.list[[p]] == s.old[[p]])
+  
+  # Compute the scoring matrix using the PF-PMI method.
+  files <- GetPathList()
+  input.list <- MakeInputList(files)
+  s.list <- list()
+  for (p in pf) {
+    s <- MakeEditDistance(Inf)
+    s.list[[p]] <- PairwisePFPMI(input.list, s, p)
   }
-  diff <- sum(diff)
-  if (diff == 0) break
-  msa.list <- MakeListPFPMIMSA(s.list, similarity=F)
-  psa.list <- list.msa2psa(msa.list, MakeEditDistance(Inf))
+  s.len <- length(s.list)
+  
   s.old <- s.list
-  for (p in 1:5) {
-    s.list[[p]] <- MultiplePFPMI(psa.list, input.list, s.list[[p]], p)
+  for (p in 1:s.len) {
+    N <- length(s.old[[p]])
+    for (i in 1:N) {
+      s.old[[p]][i] <- 0
+    }
   }
+  
+  while (1) {
+    diff <- NULL
+    for (p in 1:s.len) {
+      diff[p] <- N - sum(s.list[[p]] == s.old[[p]])
+    }
+    diff <- sum(diff)
+    if (diff == 0) break
+    msa.list <- MakeListPFPMIMSA(s.list, similarity=F)
+    psa.list <- list.msa2psa(msa.list, MakeEditDistance(Inf))
+    s.old <- s.list
+    for (p in 1:s.len) {
+      s.list[[p]] <- MultiplePFPMI(psa.list, input.list, s.list[[p]], p)
+    }
+  }
+  VerificationMSA(ansrate.file, output.dir, msa.list)
 }
-VerificationMSA(ansrate.file, output.dir, msa.list)

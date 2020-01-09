@@ -7,18 +7,18 @@ SelectPSA <- function(word.list, s.list, min) {
   load("../../Alignment/pmi/psa_11-14/scoring_matrix_pmi.RData")
   
   # PSA for each pair.
-  psa.list <- foreach (p = 1:5) %dopar% {
+  s.len <- length(s.list)
+  psa.list <- foreach (p = 1:s.len) %dopar% {
     MakePairwise(word.list, s.list[[p]], select.min=min)
   }
   
   N <- length(psa.list[[1]])
   psa <- list()
+  score.vec <- NULL
   for (i in 1:N) {
-    score.vec <- c(CheckScore(psa.list[[1]][[i]]$aln, s),
-                   CheckScore(psa.list[[2]][[i]]$aln, s),
-                   CheckScore(psa.list[[3]][[i]]$aln, s),
-                   CheckScore(psa.list[[4]][[i]]$aln, s),
-                   CheckScore(psa.list[[5]][[i]]$aln, s))
+    for (j in 1:s.len) {
+      score.vec[j] <- CheckScore(psa.list[[1]][[i]]$aln, s)
+    }
     min.ind <- which(score.vec == min(score.vec))[1]
     psa[[i]] <- psa.list[[min.ind]][[i]]
     psa[[i]]$score <- min(score.vec)[1]
