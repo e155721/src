@@ -1,5 +1,5 @@
 source("lib/load_data_processing.R")
-source("lib/load_verif_lib.R")
+source("lib/load_exec_align.R")
 source("msa/ProgressiveAlignment.R")
 source("msa/BestFirst.R")
 
