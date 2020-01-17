@@ -31,6 +31,7 @@ VerificationPSA <- function(ansrate.file, output.dir, s, dist=T) {
     # Compute the PSA for each region.
     psa.aln <- MakePairwise(input.list, s, select.min=dist)
     
+    # Unification the PSAs.
     N <- length(gold.aln)
     for (i in 1:N) {
       gold.aln[[i]] <- Convert(gold.aln[[i]])
