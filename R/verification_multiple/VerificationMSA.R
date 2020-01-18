@@ -43,7 +43,7 @@ VerificationMSA <- function(ansrate.file, output.dir, s, similarity=F) {
     
     # Unificate the MSA.
     for (j in 1:(N - 1)) {
-      if (M != col.gold) {
+      if (N != col.gold) {
         break
       }
       # The columns of the MSA.
@@ -52,13 +52,13 @@ VerificationMSA <- function(ansrate.file, output.dir, s, similarity=F) {
       # The columns of the gold standard MSA.
       col1.gold <- gold.mat[, j]
       col2.gold <- gold.mat[, (j + 1)]
-      
+
       col1 <- sum(col1.msa == col2.gold)
       col2 <- sum(col2.msa == col1.gold)
       if ((col1 == M) && (col2 == M)) {
         num1.gap <- sum(col1.msa == "-")
-        num2.gap <- sum(col2.mda == "-")
-        if (num1.gap < num2.gap) {
+        num2.gap <- sum(col2.msa == "-")
+        if (num1.gap <= num2.gap) {
           msa[, j]            <- col2.msa
           msa[, (j + 1)]      <- col1.msa
           gold.mat[, j]       <- col2.msa
@@ -70,7 +70,6 @@ VerificationMSA <- function(ansrate.file, output.dir, s, similarity=F) {
           gold.mat[, (j + 1)] <- col2.msa
         }
       }
-      
     }
     
     matched <- 0
