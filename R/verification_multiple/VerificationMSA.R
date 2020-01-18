@@ -36,15 +36,51 @@ VerificationMSA <- function(ansrate.file, output.dir, s, similarity=F) {
     msa <- msa[order(msa[, 1]), ]
     
     # Calculates the MSA accuracy.
-    N <- dim(msa)[1]
+    dim.msa <- dim(msa)
+    M <- dim.msa[1]
+    N <- dim.msa[2]
+    col.gold <- dim(gold.mat)[2]
+    
+    # Unificate the MSA.
+    for (j in 1:(N - 1)) {
+      if (M != col.gold) {
+        break
+      }
+      # The columns of the MSA.
+      col1.msa <- msa[, j]
+      col2.msa <- msa[, (j + 1)]
+      # The columns of the gold standard MSA.
+      col1.gold <- gold.mat[, j]
+      col2.gold <- gold.mat[, (j + 1)]
+      
+      col1 <- sum(col1.msa == col2.gold)
+      col2 <- sum(col2.msa == col1.gold)
+      if ((col1 == M) && (col2 == M)) {
+        num1.gap <- sum(col1.msa == "-")
+        num2.gap <- sum(col2.mda == "-")
+        if (num1.gap < num2.gap) {
+          msa[, j]            <- col2.msa
+          msa[, (j + 1)]      <- col1.msa
+          gold.mat[, j]       <- col2.msa
+          gold.mat[, (j + 1)] <- col1.msa
+        } else {
+          msa[, j]            <- col1.msa
+          msa[, (j + 1)]      <- col2.msa
+          gold.mat[, j]       <- col1.msa
+          gold.mat[, (j + 1)] <- col2.msa
+        }
+      }
+      
+    }
+    
     matched <- 0
-    for (i in 1:N) {
+    for (i in 1:M) {
       aligned <- paste(msa[i, ], collapse = " ")
       gold <- paste(gold.mat[i, ], collapse = " ")
       if (aligned == gold)
         matched <- matched + 1
     }
-    matching.rate <- (matched / N) * 100
+    matching.rate <- (matched / M) * 100
     accuracy.mat <- rbind(accuracy.mat, c(file[["name"]], matching.rate))
     
     # Outputs the MSA.  
