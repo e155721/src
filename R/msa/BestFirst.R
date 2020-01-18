@@ -8,7 +8,7 @@ source("lib/load_nwunsch.R")
 
 source("lib/load_scoring_matrix.R")
 
-BestFirst <- function(msa.o, s, similarity=T) {
+BestFirst <- function(msa, s, similarity=T) {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -19,10 +19,7 @@ BestFirst <- function(msa.o, s, similarity=T) {
   #   The multiple alignment using best first method.
   
   # Computes the initial multiple alignment using the progressive method.
-  msa <- msa.o$aln
-  score <- msa.o$score
-  
-  N <- dim(msa)[1]  # number of sequences
+  N <- dim(msa$aln)[1]  # number of sequences
   count <- 0  # loop counter
   max <- 2 * N * N  # max iteration
   
@@ -43,8 +40,8 @@ BestFirst <- function(msa.o, s, similarity=T) {
     # Makes the multiple alignment.
     msa.new <- foreach (i = 1:N) %dopar% {
       # Removes the ith sequence.
-      seq1 <- msa[drop = F, i, ]
-      seq2 <- msa[drop = F, -i, ]
+      seq1 <- msa$aln[drop = F, i, ]
+      seq2 <- msa$aln[drop = F, -i, ]
       NeedlemanWunsch(seq1, seq2, s, select.min=min)
     }
     
@@ -58,18 +55,20 @@ BestFirst <- function(msa.o, s, similarity=T) {
     
     # Refines the alignment score.
     if (similarity) {
-      if (score.new > score) {
+      if (score.new > msa$score) {
         count <- count + 1
-        msa <- DelGap(msa.new[[score.max]]$aln)
-        score <- score.new
+        msa <- list()
+        msa$aln <- DelGap(msa.new[[score.max]]$aln)
+        msa$score <- score.new
       } else {
         break
       }
     } else {
-      if (score.new < score) {
+      if (score.new < msa$score) {
         count <- count + 1
-        msa <- DelGap(msa.new[[score.max]]$aln)
-        score <- score.new
+        msa <- list()
+        msa$aln <- DelGap(msa.new[[score.max]]$aln)
+        msa$score <- score.new
       } else {
         break
       }

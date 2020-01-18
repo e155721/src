@@ -27,6 +27,7 @@ VerificationMSA <- function(ansrate.file, output.dir, s, similarity=F) {
     print(paste("Start:", file["name"]))
     psa.init <- ProgressiveAlignment(input.list, s, similarity)
     msa <- BestFirst(psa.init, s, similarity)
+    msa <- msa$aln
     print(paste("End:", file["name"]))
     
     # Checks the accuracy of MSA.
