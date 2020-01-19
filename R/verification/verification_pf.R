@@ -1,4 +1,5 @@
-source("verification/VerificationPSA.R")
+source("psa/psa_for_all_words.R")
+source("verification/verification_psa.R")
 source("lib/load_scoring_matrix.R")
 
 file <- "ansrate_pf"
@@ -10,10 +11,12 @@ for (pen in -1) {
   
   # Set the path of the PSA directory.
   output.dir <- paste("../../Alignment/", dir, "_", pen, "_", format(Sys.Date()), "/", sep = "")
-  if (!dir.exists(output.dir))
+  if (!dir.exists(output.dir)) {
     dir.create(output.dir)
+  }
   
   # Make the scoring matrix.
   s <- MakeFeatureMatrix(-Inf, pen)
-  VerificationPSA(ansrate.file, output.dir, s, dist=F)
+  psa.list <- PSAforAllWrods(s, dist=F)
+  VerificationPSA(psa.list, ansrate.file, output.dir)
 }
