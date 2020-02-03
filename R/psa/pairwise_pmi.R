@@ -51,7 +51,7 @@ CalcPMI <- function(psa.list, s) {
   return(s)
 }
 
-PairwisePMI <- function(psa.list, s) {
+PairwisePMI <- function(psa.list, list.words, s) {
   # Compute the new scoring matrix by updating PMI iteratively.
   #
   # Args:
