@@ -3,9 +3,9 @@ source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
 source("msa/BestFirst.R")
 source("psa/pairwise_pmi.R")
-source("verification_multiple/VerificationMSA.R")
 source("verification_multiple/pmi_for_msa.R")
 source("verification_multiple/msa_set.R")
+source("verification_multiple/VerificationMSA.R")
 
 ansrate <- "ansrate_msa"
 multiple <- "multiple"
@@ -40,4 +40,4 @@ while (1) {
   s.old <- s
   s <- PairwisePMI(psa.list, list.words, s)
 }
-VerificationMSA(ansrate.file, output.dir, msa.list)
+VerificationMSA(ansrate.file, output.dir, s, similarity=F)
