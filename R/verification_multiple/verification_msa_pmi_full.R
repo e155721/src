@@ -2,7 +2,7 @@ source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
 source("msa/BestFirst.R")
-source("psa/pmi.R")
+source("psa/pairwise_pmi.R")
 source("verification_multiple/VerificationMSA.R")
 source("verification_multiple/pmi_for_msa.R")
 source("verification_multiple/msa_set.R")
@@ -20,10 +20,10 @@ if (!dir.exists(output.dir)) {
 }
 
 # Compute the scoring matrix using the PMI method.
-files <- GetPathList()
-input.list <- MakeInputList(files)
+list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
-s <- PairwisePMI(input.list, s)
+psa.list <- PSAforAllWords(list.words, s)
+s <- PairwisePMI(psa.list, list.words, s)
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
 s.old <- s
@@ -38,7 +38,6 @@ while (1) {
   msa.list <- MakeListMSA(s, similarity=F)
   psa.list <- list.msa2psa(msa.list, s)
   s.old <- s
-  s <- MultiplePMI(psa.list, input.list, s)
-  VerificationMSA(ansrate.file, output.dir, msa.list)
+  s <- PairwisePMI(psa.list, list.words, s)
 }
 VerificationMSA(ansrate.file, output.dir, msa.list)

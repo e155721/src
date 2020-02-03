@@ -54,7 +54,7 @@ VerificationMSA <- function(ansrate.file, output.dir, msa.list) {
   
   m <- 1  
   for (file in files) {
-    msa <- msa.list[[m]]
+    msa <- msa.list[[m]]$aln
     m <- m + 1
     
     # Make the word list.
