@@ -21,7 +21,7 @@ if (!dir.exists(output.dir)) {
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforAllWords(list.words, s)
-s <- PairwisePMI(psa.list, s)
+s <- PairwisePMI(psa.list, list.words, s)
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
 VerificationMSA(ansrate.file, output.dir, s, similarity=F)
