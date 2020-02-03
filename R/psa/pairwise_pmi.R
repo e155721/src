@@ -60,29 +60,17 @@ PairwisePMI <- function(psa.list, list.words, s) {
   #
   # Returns:
   #   s: The new scoring matrix by updating PMI iteratively.
-  as <- 0 
+  s.old <- s
+  N <- length(s.old)
+  for (i in 1:N) {
+    s.old[i] <- 0
+  }
   # START OF LOOP
   while(1) {
-    # Update the old scoring matrix and the alignment.
-    as.new <- 0
-    M <- length(psa.list)
-    for (i in 1:M) {
-      N <- length(psa.list[[i]])
-      for (j in 1:N) {
-        as.new <- as.new + psa.list[[i]][[j]]$score
-      }
-    }
-    print(paste("Old Edit Distance:", as))
-    print(paste("New Edit Distance:", as.new))
-    
-    # Check the convergence of the PMI.
-    if (as == as.new) {
-      break
-    } else {
-      as <- as.new
-    }
-    
+    diff <- N - sum(s == s.old)
+    if (diff == 0) break
     # Compute the new scoring matrix that is updated by the PMI-weighting.
+    s.old <- s
     s <- CalcPMI(psa.list, s)
     # Compute the new PSA using the new scoring matrix.
     psa.list <- PSAforAllWords(list.words, s)
