@@ -13,10 +13,10 @@ ansrate <- "ansrate_msa"
 multiple <- "multiple"
 
 # matchingrate path
-ansrate.file <- paste("../../Alignment/", ansrate, "_pmi_", format(Sys.Date()), ".txt", sep = "")
+ansrate.file <- paste("../../Alignment/", ansrate, "_pf-pmi_", format(Sys.Date()), ".txt", sep = "")
 
 # result path
-output.dir <- paste("../../Alignment/", multiple, "_pmi_", format(Sys.Date()), "/", sep = "")
+output.dir <- paste("../../Alignment/", multiple, "_pf-pmi_", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
