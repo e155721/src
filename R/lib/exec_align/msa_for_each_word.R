@@ -23,11 +23,11 @@ MSAforEachWord <- function(list.words, s, similarity=F) {
     
     # Make the word list.
     gold.list <- MakeWordList(w["input"])  # gold alignment
-    psa.list <- MakeInputSeq(gold.list)     # input sequences
+    seq.list <- MakeInputSeq(gold.list)     # input sequences
     
     # Computes the MSA using the BestFirst method.
     print(paste("Start:", w["name"]))
-    psa.init <- ProgressiveAlignment(psa.list, s, similarity)
+    psa.init <- ProgressiveAlignment(seq.list, s, similarity)
     msa.list[[i]] <- list()
     msa.list[[i]] <- BestFirst(psa.init, s, similarity)
     i <- i + 1
