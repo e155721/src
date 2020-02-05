@@ -41,8 +41,7 @@ PFPMI <- function(x, y, corpus.feat) {
   }
   
   pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
-  pmi <- sqrt(sum(pmi))
-  
+  pmi <- sqrt(sum(pmi * pmi))  
   #pmi <- log2(p.xy / (p.x * p.y))  # calculating the pmi
   
   return(pmi)
