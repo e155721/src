@@ -1,9 +1,4 @@
 library(gtools)
-library(foreach)
-library(doParallel)
-registerDoParallel(detectCores())
-
-source("lib/load_exec_align.R")
 
 MakeCorpus <- function(psa.list) {
   # Makes the corpus to calculate PMI.

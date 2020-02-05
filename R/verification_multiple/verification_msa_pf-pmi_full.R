@@ -7,6 +7,7 @@ source("psa/pairwise_pmi.R")
 source("psa/pairwise_pf-pmi.R")
 source("verification_multiple/change_list_msa2psa.R")
 source("verification_multiple/VerificationMSA.R")
+source("parallel_config.R")
 
 ansrate <- "ansrate_msa"
 multiple <- "multiple"

@@ -1,7 +1,3 @@
-library(foreach)
-library(doParallel)
-registerDoParallel(detectCores())
-
 source("msa/ProgressiveAlignment.R")
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
