@@ -4,7 +4,7 @@ source("lib/load_scoring_matrix.R")
 source("lib/load_exec_align.R")
 source("msa/BestFirst.R")
 source("psa/pairwise_pmi.R")
-source("verification_multiple/pmi_for_msa.R")
+source("verification_multiple/change_list_msa2psa.R")
 source("verification_multiple/VerificationMSA.R")
 
 ansrate <- "ansrate_msa"
@@ -36,7 +36,7 @@ while (1) {
   diff <- N - sum(s == s.old)
   if (diff == 0) break
   msa.list <- MSAforEachWord(list.word, s, similarity=F)
-  psa.list <- list.msa2psa(msa.list, s)
+  psa.list <- ChangeListMSA2PSA(msa.list, s)
   s.old <- s
   s <- PairwisePMI(psa.list, list.words, s)
 }

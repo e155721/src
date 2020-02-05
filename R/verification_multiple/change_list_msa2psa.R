@@ -1,6 +1,6 @@
 source("test/check_score.R")
 
-list.msa2psa <- function(msa.list, s) {
+ChangeListMSA2PSA <- function(msa.list, s) {
   # Make the word list of all the words.
   #
   # Args:
@@ -8,7 +8,6 @@ list.msa2psa <- function(msa.list, s) {
   #
   # Returns:
   #   psa.list: The word list of all the words.
-  # Make the similarity matrix.
   psa.list <- list()
   num.msa <- length(msa.list)
   for (i in 1:num.msa) {

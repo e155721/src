@@ -5,7 +5,7 @@ source("msa/BestFirst.R")
 source("psa/pmi.R")
 source("psa/pf-pmi.R")
 source("verification_multiple/VerificationMSA.R")
-source("verification_multiple/pmi_for_msa.R")
+source("verification_multiple/change_list_msa2psa.R")
 source("verification_multiple/msa_set.R")
 
 source("msa/BestFirst2.R")
@@ -130,7 +130,7 @@ for (pf in 1:5) {
     diff <- sum(diff)
     if (diff == 0) break
     msa.list <- MakeListPFPMIMSA(s.list, similarity=F)
-    psa.list <- list.msa2psa(msa.list, MakeEditDistance(Inf))
+    psa.list <- ChangeListMSA2PSA(msa.list, MakeEditDistance(Inf))
     s.old <- s.list
     for (p in 1:s.len) {
       s.list[[p]] <- MultiplePFPMI(psa.list, input.list, s.list[[p]], p)
