@@ -20,7 +20,7 @@ if (!dir.exists(output.dir)) {
 # Compute the scoring matrix using the PMI method.
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforAllWords(list.words, s)
+psa.list <- PSAforEachWord(list.words, s)
 s <- PairwisePMI(psa.list, list.words, s)
 #save(s, file="scoring_matrix_msa_pmi.RData")
 

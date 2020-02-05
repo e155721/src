@@ -20,7 +20,7 @@ if (!dir.exists(output.dir)) {
 # Update the scoring matrix with PMI.
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforAllWords(list.words, s)
+psa.list <- PSAforEachWord(list.words, s)
 s <- PairwisePMI(psa.list, list.words, s)
 #save(s, file=paste("scoring_matrix_pmi_", format(Sys.Date()), ".RData", sep=""))
 
