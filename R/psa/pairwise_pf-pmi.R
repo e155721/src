@@ -15,28 +15,29 @@ PFPMI <- function(x, y, corpus.feat) {
   #
   # Returns:
   #   The PMI of the symbol pair (x, y).
-  N1 <- dim(corpus.feat)[2] / 5  # number of the aligned segments
-  N2 <- N1 * 2          # number of segments in the aligned segments
+  N1 <- dim(corpus.feat)[2]  # number of the aligned segments
+  N2 <- N1 * 2  # number of segments in the aligned segments
   
   V1 <- length(unique(paste(corpus.feat[1, ], corpus.feat[2, ])))  # number of symbol pairs types in the segment pairs
-  V2 <- length(unique(as.vector(corpus.feat)))                # number of symbol types in the segments
+  V2 <- length(unique(as.vector(corpus.feat)))  # number of symbol types in the segments
   
   f.xy <- vector(length=5)
   f.x  <- vector(length=5)
   f.y  <- vector(length=5)
   for (p in 1:5) {
     f.xy[p] <- sum((x[p] == corpus.feat[1, ]) * (y[p] == (corpus.feat[2, ])))  # frequency of xy in the segmentpairs
-    f.x[p] <- sum(x[p] == corpus.feat)                                 # frequency of x in the segments
-    f.y[p] <- sum(y[p] == corpus.feat)                                 # frequency of y in the segments
+    f.xy[p] <- f.xy[p] + sum((x[p] == corpus.feat[2, ]) * (y[p] == (corpus.feat[1, ])))  # frequency of xy in the segmentpairs
+    f.x[p]  <- sum(x[p] == corpus.feat)  # frequency of x in the segments
+    f.y[p]  <- sum(y[p] == corpus.feat)  # frequency of y in the segments
   }
   
   p.xy <- vector(length=5)
   p.x  <- vector(length=5)
   p.y  <- vector(length=5)
   for (p in 1:5) {
-    p.xy[p] <- (f.xy[p] + 1) / (N1 + V1)   # probability of the co-occurrence frequency of xy
-    p.x[p] <- (f.x[p] + 1) / (N2 + V2)     # probability of the occurrence frequency of x
-    p.y[p] <- (f.y[p] + 1) / (N2 + V2)     # probability of the occurrence frequency of y
+    p.xy[p] <- (f.xy[p] + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
+    p.x[p]  <- (f.x[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of x
+    p.y[p]  <- (f.y[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of y
   }
   
   pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
@@ -73,6 +74,7 @@ CalcPFPMI <- function(psa.list, s, p) {
   
   #corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
   corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
+  corpus.feat <- apply(corpus.feat, 2, sort.col)
   
   # Compute the PMI for each pair.
   V <- unique(as.vector(corpus))
