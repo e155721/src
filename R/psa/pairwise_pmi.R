@@ -1,5 +1,9 @@
 library(gtools)
 
+sort.col <- function(x) {
+  return(sort(x))
+}
+
 MakeCorpus <- function(psa.list) {
   # Makes the corpus to calculate PMI.
   #
@@ -26,7 +30,7 @@ MakeCorpus <- function(psa.list) {
   return(corpus)
 }
 
-PMI <- function(x, y, corpus, E) {
+PMI <- function(x, y, corpus) {
   # Computes the PMI of symbol pair (x, y) in the corpus.
   # Args:
   #   x, y: The symbols.
@@ -35,19 +39,20 @@ PMI <- function(x, y, corpus, E) {
   # Returns:
   #   The PMI of the symbol pair (x, y).
   N1 <- dim(corpus)[2]  # number of the aligned segments
-  N2 <- N1 * 2          # number of segments in the aligned segments
+  N2 <- N1 * 2  # number of segments in the aligned segments
   
   V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of symbol pairs types in the segment pairs
-  V2 <- length(unique(as.vector(corpus)))                # number of symbol types in the segments
+  V2 <- length(unique(as.vector(corpus))) # number of symbol types in the segments
   
   f.xy <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
-  f.x <- sum(x == corpus)                                 # frequency of x in the segments
-  f.y <- sum(y == corpus)                                 # frequency of y in the segments
+  f.xy <- f.xy + sum((x == corpus[2, ]) * (y == (corpus[1, ])))  # frequency of xy in the segmentpairs
+  f.x  <- sum(x == corpus)  # frequency of x in the segments
+  f.y  <- sum(y == corpus)  # frequency of y in the segments
   
-  p.xy <- (f.xy + 1) / (N1 + V1)   # probability of the co-occurrence frequency of xy
-  p.x <- (f.x + 1) / (N2 + V2)     # probability of the occurrence frequency of x
-  p.y <- (f.y + 1) / (N2 + V2)     # probability of the occurrence frequency of y
-  pmi <- log2(p.xy / (p.x * p.y))  # calculating the pmi
+  p.xy <- (f.xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
+  p.x  <- (f.x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
+  p.y  <- (f.y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
+  pmi  <- log2(p.xy / (p.x * p.y))  # calculating the pmi
   
   return(pmi)
 }
@@ -68,6 +73,7 @@ CalcPMI <- function(psa.list, s) {
   corpus <- MakeCorpus(psa.list)
   # Removes identical segments from the corpus.
   corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
+  corpus <- apply(corpus, 2, sort.col)
   
   V <- unique(as.vector(corpus))
   V <- permutations(length(V), 2, v=V)
@@ -76,7 +82,7 @@ CalcPMI <- function(psa.list, s) {
   pmi.list <- foreach(i = 1:len) %dopar% {
     score.vec$V1  <- V[i, 1]
     score.vec$V2  <- V[i, 2]
-    score.vec$pmi <- -PMI(V[i, 1], V[i, 2], corpus, E)
+    score.vec$pmi <- -PMI(V[i, 1], V[i, 2], corpus)
     return(score.vec)
   }
   
