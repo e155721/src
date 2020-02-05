@@ -4,7 +4,58 @@ library(doParallel)
 registerDoParallel(detectCores())
 
 source("lib/load_exec_align.R")
-source("lib/load_pmi.R")
+
+MakeCorpus <- function(psa.list) {
+  # Makes the corpus to calculate PMI.
+  #
+  # Args:
+  #   psa.list: A list of an pairwise sequence aligment resutls.
+  #
+  # Returns:
+  #   A corpus to calculate PMI.
+  M <- length(psa.list)
+  seq1 <- NULL
+  seq2 <- NULL
+  corpus <- NULL
+  
+  for (i in 1:M) {
+    N <- length(psa.list[[i]])
+    corpus.tmp <- foreach (j = 1:N, .combine = cbind) %dopar% {
+      seq1 <- cbind(seq1, psa.list[[i]][[j]]$seq1[1, -1, drop=F])
+      seq2 <- cbind(seq2, psa.list[[i]][[j]]$seq2[1, -1, drop=F])
+      rbind(seq1, seq2)
+    }
+    corpus <- cbind(corpus, corpus.tmp)
+  }
+  
+  return(corpus)
+}
+
+PMI <- function(x, y, corpus, E) {
+  # Computes the PMI of symbol pair (x, y) in the corpus.
+  # Args:
+  #   x, y: The symbols.
+  #   corputs: The corpus.
+  #
+  # Returns:
+  #   The PMI of the symbol pair (x, y).
+  N1 <- dim(corpus)[2]  # number of the aligned segments
+  N2 <- N1 * 2          # number of segments in the aligned segments
+  
+  V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of symbol pairs types in the segment pairs
+  V2 <- length(unique(as.vector(corpus)))                # number of symbol types in the segments
+  
+  f.xy <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
+  f.x <- sum(x == corpus)                                 # frequency of x in the segments
+  f.y <- sum(y == corpus)                                 # frequency of y in the segments
+  
+  p.xy <- (f.xy + 1) / (N1 + V1)   # probability of the co-occurrence frequency of xy
+  p.x <- (f.x + 1) / (N2 + V2)     # probability of the occurrence frequency of x
+  p.y <- (f.y + 1) / (N2 + V2)     # probability of the occurrence frequency of y
+  pmi <- log2(p.xy / (p.x * p.y))  # calculating the pmi
+  
+  return(pmi)
+}
 
 CalcPMI <- function(psa.list, s) {
   # Compute the PMI of the PSA list.
