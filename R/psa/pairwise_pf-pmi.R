@@ -1,3 +1,4 @@
+library(gtools)
 library(MASS)
 
 source("lib/load_phoneme.R")
