@@ -26,7 +26,6 @@ PFPMI <- function(x, y, corpus.feat) {
   f.y  <- vector(length=5)
   for (p in 1:5) {
     f.xy[p] <- sum((x[p] == corpus.feat[1, ]) * (y[p] == (corpus.feat[2, ])))  # frequency of xy in the segmentpairs
-    f.xy[p] <- f.xy[p] + sum((x[p] == corpus.feat[2, ]) * (y[p] == (corpus.feat[1, ])))  # frequency of xy in the segmentpairs
     f.x[p]  <- sum(x[p] == corpus.feat)  # frequency of x in the segments
     f.y[p]  <- sum(y[p] == corpus.feat)  # frequency of y in the segments
   }
@@ -77,7 +76,7 @@ CalcPFPMI <- function(psa.list, s, p) {
   
   # Compute the PMI for each pair.
   V <- unique(as.vector(corpus))
-  V <- permutations(length(V), 2, v=V)
+  V <- t(combn(x=V, m=2))
   len <- dim(V)[1]
   #score.list <- list()
   pmi.list <- foreach(i = 1:len) %dopar% {
@@ -98,6 +97,7 @@ CalcPFPMI <- function(psa.list, s, p) {
   # Convert the PMI to the weight of edit operations.
   for (i in 1:len) {
     s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
   }
   
   s[1:81, 82:118] <- Inf

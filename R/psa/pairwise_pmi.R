@@ -45,7 +45,6 @@ PMI <- function(x, y, corpus) {
   V2 <- length(unique(as.vector(corpus))) # number of symbol types in the segments
   
   f.xy <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
-  f.xy <- f.xy + sum((x == corpus[2, ]) * (y == (corpus[1, ])))  # frequency of xy in the segmentpairs
   f.x  <- sum(x == corpus)  # frequency of x in the segments
   f.y  <- sum(y == corpus)  # frequency of y in the segments
   
@@ -76,7 +75,7 @@ CalcPMI <- function(psa.list, s) {
   corpus <- apply(corpus, 2, sort.col)
   
   V <- unique(as.vector(corpus))
-  V <- permutations(length(V), 2, v=V)
+  V <- t(combn(x=V, m=2))
   len <- dim(V)[1]
   score.vec <- list()
   pmi.list <- foreach(i = 1:len) %dopar% {
@@ -95,6 +94,7 @@ CalcPMI <- function(psa.list, s) {
   # Convert the PMI to the weight of edit operations.
   for (i in 1:len) {
     s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
   }
   
   s[1:81, 82:118] <- Inf
