@@ -12,7 +12,7 @@ multiple <- "multiple_lv"
 ansrate.file <- paste("../../Alignment/", ansrate, "_", format(Sys.Date()), ".txt", sep = "")
 
 # result path
-output.dir <- paste("../../Alignment/", multiple, "_", format(Sys.Date()), sep = "")
+output.dir <- paste("../../Alignment/", multiple, "_", format(Sys.Date()), "/", sep = "")
 if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
