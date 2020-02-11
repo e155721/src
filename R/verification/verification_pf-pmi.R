@@ -5,6 +5,7 @@ source("lib/load_verif_lib.R")
 source("psa/pairwise_pmi.R")
 source("psa/pairwise_pf-pmi.R")
 source("verification/VerificationPSA.R")
+source("parallel_config.R")
 
 file <- "ansrate_pf-pmi"
 dir <- "pairwise_pf-pmi"

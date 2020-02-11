@@ -1,6 +1,7 @@
 source("psa/psa_for_all_words.R")
 source("verification/verification_psa.R")
 source("lib/load_scoring_matrix.R")
+source("parallel_config.R")
 
 file <- "ansrate_pf"
 dir <- "pairwise_pf"

@@ -1,5 +1,6 @@
 source("verification/VerificationPSA.R")
 source("lib/load_scoring_matrix.R")
+source("parallel_config.R")
 
 file <- "ansrate_lv"
 dir <- "pairwise_lv"
