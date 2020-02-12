@@ -13,12 +13,7 @@ MSAforEachWord <- function(list.words, s, similarity=F) {
   # Returns:
   #   The list of MSA for each word.
   
-  # Get the all of files path.
-  list.words <- GetPathList()
-  accuracy.mat <- matrix(NA, length(list.words), 2)
   msa.list <- list()
-  
-  i <- 1
   for (w in list.words) {
     
     # Make the word list.
@@ -27,10 +22,10 @@ MSAforEachWord <- function(list.words, s, similarity=F) {
     
     # Computes the MSA using the BestFirst method.
     print(paste("Start:", w["name"]))
-    psa.init <- ProgressiveAlignment(seq.list, s, similarity)
-    msa.list[[i]] <- list()
-    msa.list[[i]] <- BestFirst(psa.init, s, similarity)
-    i <- i + 1
+    psa.init <- ProgressiveAlignment(w["input"], s, similarity)
+    id <- as.numeric(w["id"])
+    msa.list[[id]] <- list()
+    msa.list[[id]] <- BestFirst(psa.init, s, similarity)
     print(paste("End:", w["name"]))
     
   }
