@@ -1,3 +1,4 @@
+source("lib/load_data_processing.R")
 source("test/check_score.R")
 
 ChangeListMSA2PSA <- function(msa.list, s) {
@@ -17,9 +18,11 @@ ChangeListMSA2PSA <- function(msa.list, s) {
     psa.list[[i]] <- list()
     
     for (j in 1:N) {
-      seq1 <- msa.list[[i]]$aln[comb.reg[1, j], , drop=F]
-      seq2 <- msa.list[[i]]$aln[comb.reg[2, j], , drop=F]
-      aln <- rbind(seq1, seq2)
+      aln <- rbind(msa.list[[i]]$aln[comb.reg[1, j], ],
+                   msa.list[[i]]$aln[comb.reg[2, j], ])
+      aln <- DelGap(aln)
+      seq1 <- aln[1, , drop=F]
+      seq2 <- aln[2, , drop=F]
       
       psa.list[[i]][[j]] <- list()
       psa.list[[i]][[j]]$seq1 <- seq1
