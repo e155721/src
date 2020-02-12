@@ -1,8 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_scoring_matrix.R")
-source("msa/ProgressiveAlignment.R")
-source("msa/BestFirst.R")
-source("verification_multiple/VerificationMSA.R")
+source("lib/load_exec_align.R")
+source("verification_multiple/CalcAccMSA.R")
 source("parallel_config.R")
 
 ansrate <- "ansrate_msa_lv"
@@ -17,5 +16,8 @@ if (!dir.exists(output.dir)) {
   dir.create(output.dir)
 }
 
+# Get the all of files path.
+list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
-VerificationMSA(ansrate.file, output.dir, s, similarity=F)
+msa.list <- MSAforEachWord(list.words, s)
+CalcAccMSA(msa.list, list.words, ansrate.file, output.dir)
