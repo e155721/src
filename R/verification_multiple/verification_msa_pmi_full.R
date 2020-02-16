@@ -6,7 +6,7 @@ source("msa/ProgressiveAlignment.R")
 source("msa/BestFirst.R")
 source("psa/pairwise_pmi.R")
 source("verification_multiple/change_list_msa2psa.R")
-source("verification_multiple/VerificationMSA.R")
+source("verification_multiple/CalcAccMSA.R")
 source("parallel_config.R")
 
 ansrate <- "ansrate_msa"
@@ -28,66 +28,76 @@ psa.list <- PSAforEachWord(list.words, s)
 s <- PairwisePMI(psa.list, list.words, s)
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
-# For progressive
-s.old <- s
-N <- length(s.old)
+s.old.main <- s
+N <- length(s.old.main)
 for (i in 1:N) {
-  s.old[i] <- 0
+  s.old.main <- 0 
 }
 
-pa.list <- list()
 while (1) {
-  diff <- N - sum(s == s.old)
+  print("First loop")
+  diff <- N - sum(s == s.old.main)
   if (diff == 0) break
-  #
-  i <- 1
-  for (w in list.words) {
-    # Make the word list.
-    gold.list <- MakeWordList(w["input"])  # gold alignment
-    seq.list <- MakeInputSeq(gold.list)  # input sequences
-    
-    # Computes the MSA using the BestFirst method.
-    print(paste("Start:", w["name"]))
-    pa.list[[i]] <- list()
-    pa.list[[i]] <- ProgressiveAlignment(seq.list, s, F)
-    i <- i + 1
-    print(paste("End:", w["name"]))
-  } 
-  #
-  psa.list <- ChangeListMSA2PSA(pa.list, s)
+  
+  # For progressive
   s.old <- s
-  s <- PairwisePMI(psa.list, list.words, s)
-}
-
-# For best first
-s.old <- s
-N <- length(s.old)
-for (i in 1:N) {
-  s.old[i] <- 0
-}
-
-msa.list <- list()
-while (1) {
-  diff <- N - sum(s == s.old)
-  if (diff == 0) break
-  #
-  i <- 1
-  for (pa in pa.list) {
-    # Make the word list.
-    gold.list <- MakeWordList(w["input"])  # gold alignment
-    seq.list <- MakeInputSeq(gold.list)  # input sequences
-    
-    # Computes the MSA using the BestFirst method.
-    msa.list[[i]] <- list()
-    msa.list[[i]] <- msa.list[[i]] <- BestFirst(pa, s, F)
+  for (i in 1:N) {
+    s.old[i] <- 0
+  }
+  
+  pa.list <- list()
+  while (1) {
+    print("Second loop")
+    diff <- N - sum(s == s.old)
+    if (diff == 0) break
     #
-    i <- i + 1
-  } 
-  #
-  psa.list <- ChangeListMSA2PSA(msa.list, s)
+    for (w in list.words) {
+      # Make the word list.
+      gold.list <- MakeWordList(w["input"])  # gold alignment
+      seq.list <- MakeInputSeq(gold.list)  # input sequences
+      
+      # Computes the MSA using the BestFirst method.
+      print(paste("Start:", w["name"]))
+      id <- as.numeric(w["id"])
+      pa.list[[id]] <- list()
+      pa.list[[id]] <- ProgressiveAlignment(seq.list, s, F)
+      print(paste("End:", w["name"]))
+    } 
+    #
+    psa.list <- ChangeListMSA2PSA(pa.list, s)
+    s.old <- s
+    s <- PairwisePMI(psa.list, list.words, s)
+  }
+  
+  # For best first
   s.old <- s
-  s <- PairwisePMI(psa.list, list.words, s)
+  for (i in 1:N) {
+    s.old[i] <- 0
+  }
+  
+  msa.list <- list()
+  while (1) {
+    print("Third loop")
+    diff <- N - sum(s == s.old)
+    if (diff == 0) break
+    #
+    for (w in list.words) {
+      # Make the word list.
+      gold.list <- MakeWordList(w["input"])  # gold alignment
+      seq.list <- MakeInputSeq(gold.list)  # input sequences
+      
+      # Computes the MSA using the BestFirst method.
+      id <- as.numeric(w["id"])
+      msa.list[[id]] <- list()
+      msa.list[[id]] <- BestFirst(pa.list[[id]], s, F)
+    }
+    #
+    psa.list <- ChangeListMSA2PSA(msa.list, s)
+    s.old <- s
+    s <- PairwisePMI(psa.list, list.words, s)
+  }
+  s.old.main <- s
 }
 
-# For verification
-VerificationMSA(ansrate.file, output.dir, s, similarity=F)
+# Calculate the accuracy of the MSAs.
+CalcAccMSA(msa.list, list.words, ansrate.file, output.dir)
