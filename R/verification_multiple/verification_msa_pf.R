@@ -22,7 +22,7 @@ for (pen in (-1)) {
 
   # Make the list of the MSAs.
   s <- MakeFeatureMatrix(-Inf, pen)
-  msa.list <- MSAforEachWord(list.words, s)
+  msa.list <- MSAforEachWord(list.words, s, similarity=T)
   # Calculate the accuracy of the MSAs.
   CalcAccMSA(msa.list, list.words, ansrate.file, output.dir)
   
