@@ -22,7 +22,7 @@ MSAforEachWord <- function(list.words, s, similarity=F) {
     
     # Computes the MSA using the BestFirst method.
     print(paste("Start:", w["name"]))
-    psa.init <- ProgressiveAlignment(w["input"], s, similarity)
+    psa.init <- ProgressiveAlignment(seq.list, s, similarity)
     id <- as.numeric(w["id"])
     msa.list[[id]] <- list()
     msa.list[[id]] <- BestFirst(psa.init, s, similarity)
