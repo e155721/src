@@ -45,12 +45,13 @@ BestFirst <- function(msa, s, similarity=T) {
     for (i in 1:N)
       score.vec[i] <- msa.new[[i]]$score
     
-    score.max <- grep(score.vec, pattern = max(score.vec))
-    score.max <- score.max[1]
-    score.new <- score.vec[score.max]
-    
     # Refines the alignment score.
     if (similarity) {
+      # Find a maximum MSA score.
+      score.max <- grep(score.vec, pattern = max(score.vec))
+      score.max <- score.max[1]
+      score.new <- score.vec[score.max]
+      
       if (score.new > msa$score) {
         count <- count + 1
         msa <- list()
@@ -60,10 +61,15 @@ BestFirst <- function(msa, s, similarity=T) {
         break
       }
     } else {
+      # Find a minimum MSA score.
+      score.min <- grep(score.vec, pattern = min(score.vec))
+      score.min <- score.min[1]
+      score.new <- score.vec[score.min]
+      
       if (score.new < msa$score) {
         count <- count + 1
         msa <- list()
-        msa$aln <- DelGap(msa.new[[score.max]]$aln)
+        msa$aln <- DelGap(msa.new[[score.min]]$aln)
         msa$score <- score.new
       } else {
         break
