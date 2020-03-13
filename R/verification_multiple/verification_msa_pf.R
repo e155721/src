@@ -4,38 +4,25 @@ source("lib/load_exec_align.R")
 source("verification_multiple/CalcAccMSA.R")
 source("parallel_config.R")
 
-VerificationPF <- function(ansrate, multiple, ext) {
-  
-  if (is.na(ext)) {
-    ext <- NULL
-  } else {
-    ext <- paste(ext, "_", sep = "")
-  }
-  
-  list.words <- GetPathList()  # the list of words
-  
-  for (pen in (-1)) {
-    
-    # matchingrate path
-    ansrate.file <- paste("../../Alignment/", ansrate, "_", ext, pen, "_", format(Sys.Date()), ".txt", sep = "")
-    
-    # result path
-    output.dir <- paste("../../Alignment/", multiple, "_", ext, pen, "_", format(Sys.Date()), "/", sep = "")
-    if (!dir.exists(output.dir)) {
-      dir.create(output.dir)
-    }
-    
-    # Make the list of the MSAs.
-    s <- MakeFeatureMatrix(-Inf, pen)
-    msa.list <- MSAforEachWord(list.words, s, similarity=T)
-    # Calculate the accuracy of the MSAs.
-    CalcAccMSA(msa.list, list.words, ansrate.file, output.dir)
-    
-  }
-  
-}
-
 ansrate <- "ansrate_msa_pf"
 multiple <- "multiple_pf"
 ext = commandArgs(trailingOnly=TRUE)[1]
-VerificationPF(ansrate, multiple, ext)
+
+list.words <- GetPathList()  # the list of words
+
+for (pen in (-1)) {
+  
+  if (is.na(ext)) {
+    ext <- pen
+  } else {
+    ext <- paste(pen, "_", ext, sep = "")
+  }
+  path <- MakePath(ansrate, multiple, ext)
+  
+  # Make the list of the MSAs.
+  s <- MakeFeatureMatrix(-Inf, pen)
+  msa.list <- MSAforEachWord(list.words, s, similarity=T)
+  # Calculate the accuracy of the MSAs.
+  CalcAccMSA(msa.list, list.words, path$ansrate.file, path$output.dir)
+  
+}
