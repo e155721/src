@@ -11,5 +11,5 @@ path <- MakePath(file, dir, ext)
 
 # Execute the PSA for each word.
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforAllWrods(s, dist=F)
+psa.list <- PSAforAllWrods(s, dist=T)
 VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
