@@ -1,6 +1,6 @@
 source("lib/load_scoring_matrix.R")
 source("lib/load_verif_lib.R")
-source("psa/psa_for_all_words.R")
+source("psa/psa_for_each_word.R")
 source("verification/verification_psa.R")
 source("parallel_config.R")
 
@@ -18,8 +18,9 @@ for (pen in -1) {
   path <- MakePath(file, dir, ext)
   
   # Make the scoring matrix.
+  list.words <- GetPathList()
   s <- MakeFeatureMatrix(-Inf, pen)
-  psa.list <- PSAforAllWrods(s, dist=F)
+  psa.list <- PSAforEachWord(list.words, s, dist = F)
   VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
   
 }
