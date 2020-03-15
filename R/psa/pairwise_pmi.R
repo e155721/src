@@ -125,7 +125,7 @@ PairwisePMI <- function(psa.list, list.words, s) {
     s.old <- s
     s <- CalcPMI(psa.list, s)
     # Compute the new PSA using the new scoring matrix.
-    psa.list <- PSAforEachWord(list.words, s)
+    psa.list <- PSAforEachWord(list.words, s, dist = T)
   }
   # END OF LOOP
   
