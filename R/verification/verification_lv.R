@@ -1,6 +1,6 @@
 source("lib/load_scoring_matrix.R")
 source("lib/load_verif_lib.R")
-source("psa/psa_for_all_words.R")
+source("psa/psa_for_each_word.R")
 source("verification/verification_psa.R")
 source("parallel_config.R")
 
@@ -10,6 +10,7 @@ ext = commandArgs(trailingOnly=TRUE)[1]
 path <- MakePath(file, dir, ext)
 
 # Execute the PSA for each word.
+list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforAllWrods(s, dist=F)
+psa.list <- PSAforEachWord(list.words, s, dist = T)
 VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
