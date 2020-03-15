@@ -18,12 +18,6 @@ PSAforAllWrods <- function(s, dist) {
     # Compute the PSA for each region.
     psa <- MakePairwise(input.list, s, select.min=dist)
     
-    # Unification the PSAs.
-    N <- length(psa)
-    for (i in 1:N) {
-      psa[[i]] <- Convert(psa[[i]])
-    }
-    
     return(psa)
   }
   
