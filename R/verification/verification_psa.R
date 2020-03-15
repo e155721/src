@@ -32,6 +32,7 @@ VerificationPSA <- function(psa.list, ansrate.file, output.dir) {
     # Unification the PSAs.
     N <- length(gold.aln)
     for (i in 1:N) {
+      psa[[i]]      <- Convert(psa[[i]])
       gold.aln[[i]] <- Convert(gold.aln[[i]])
     }
     

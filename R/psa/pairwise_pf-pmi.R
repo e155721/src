@@ -132,6 +132,9 @@ PairwisePFPMI <- function(psa.list, list.words, s) {
   }
   # END OF LOOP
   
-  return(s)
+  rlt <- list()
+  rlt$psa.list <- psa.list
+  rlt$s <- s
+  return(rlt)
 }
 
