@@ -1,6 +1,6 @@
 source("lib/load_data_processing.R")
 source("lib/load_scoring_matrix.R")
-source("psa/psa_for_all_words.R")
+source("psa/psa_for_each_word.R")
 source("lib/load_verif_lib.R")
 source("psa/pairwise_pmi.R")
 source("psa/pairwise_pf-pmi.R")
@@ -15,7 +15,7 @@ path <- MakePath(file, dir, ext)
 # Update the scoring matrix with PMI.
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforAllWrods(s, dist = T)
+psa.list <- PSAforEachWord(list.words, s, dist = T)
 psa.list <- PairwisePFPMI(psa.list, list.words, s)$psa.list
 #save(s, file=paste("scoring_matrix_pmi_", format(Sys.Date()), ".RData", sep=""))
 
