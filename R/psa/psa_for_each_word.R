@@ -5,12 +5,17 @@ registerDoParallel(detectCores())
 source("lib/load_exec_align.R")
 source("lib/load_verif_lib.R")
 
-PSAforAllWrods <- function(s, dist) {
-  # Get the all of files path.
-  file.list <- GetPathList()
+PSAforEachWord <- function(list.words, s, dist = F) {
+  # Compute the PSA for each word.
+  # Args:
+  #   s: The scoring matrix.
+  #   dist: The PSA will be using a distance or not.
+  #
+  # Returns:
+  #   The list of PSA for each word.
   
   # START OF LOOP
-  psa.list <- foreach (f = file.list) %dopar% {
+  psa.list <- foreach (f = list.words) %dopar% {
     
     # Make the word list.
     input.list <- MakeInputSeq(MakeWordList(f[["input"]]))
