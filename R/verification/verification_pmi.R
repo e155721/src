@@ -3,7 +3,7 @@ source("lib/load_scoring_matrix.R")
 source("lib/load_exec_align.R")
 source("lib/load_verif_lib.R")
 source("psa/pairwise_pmi.R")
-source("verification/VerificationPSA.R")
+source("verification/verification_psa.R")
 source("parallel_config.R")
 
 file <- "ansrate_pmi"
@@ -19,4 +19,4 @@ s <- PairwisePMI(psa.list, list.words, s)
 #save(s, file=paste("scoring_matrix_pmi_", format(Sys.Date()), ".RData", sep=""))
 
 # Execute the PSA for each word.
-VerificationPSA(path$ansrate.file, path$output.dir, s)
+VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
