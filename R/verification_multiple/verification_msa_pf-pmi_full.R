@@ -6,6 +6,7 @@ source("msa/ProgressiveAlignment.R")
 source("msa/BestFirst.R")
 source("psa/pairwise_pmi.R")
 source("psa/pairwise_pf-pmi.R")
+source("psa/psa_for_each_word.R")
 source("verification_multiple/change_list_msa2psa.R")
 source("verification_multiple/CalcAccMSA.R")
 source("parallel_config.R")
@@ -18,7 +19,7 @@ path <- MakePath(ansrate, multiple, ext)
 # Compute the scoring matrix using the PMI method.
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforEachWord(list.words, s)
+psa.list <- PSAforEachWord(list.words, s, dist = T)
 s <- PairwisePFPMI(psa.list, list.words, s)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
