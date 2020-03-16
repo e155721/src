@@ -95,4 +95,10 @@ while (1) {
 
 # Calculate the accuracy of the MSAs.
 CalcAccMSA(msa.list, list.words, path$ansrate.file, path$output.dir)
-save(s, file = "score_PMI.RData")
+
+if (is.na(ext)) {
+  ext <- NULL 
+} else {
+  ext <- paste("_", ext, sep = "")
+}
+save(s, file = paste("score_PMI", ext, ".RData", sep = ""))
