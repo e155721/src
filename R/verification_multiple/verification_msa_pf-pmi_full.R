@@ -33,6 +33,7 @@ while (1) {
   print("First loop")
   diff <- N - sum(s == s.old.main)
   if (diff == 0) break
+  s.old.main <- s
   
   # For progressive
   s.old <- s
@@ -91,7 +92,6 @@ while (1) {
     s.old <- s
     s <- PairwisePFPMI(psa.list, list.words, s)$s
   }
-  s.old.main <- s
 }
 
 # Calculate the accuracy of the MSAs.
