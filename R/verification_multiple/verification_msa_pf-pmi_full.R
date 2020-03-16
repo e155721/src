@@ -96,3 +96,4 @@ while (1) {
 
 # Calculate the accuracy of the MSAs.
 CalcAccMSA(msa.list, list.words, path$ansrate.file, path$output.dir)
+save(s, file = "score_PF-PMI.RData")
