@@ -10,6 +10,10 @@ source("verification_multiple/change_list_msa2psa.R")
 source("verification_multiple/CalcAccMSA.R")
 source("parallel_config.R")
 
+zero <- function(x) {
+  return(0)
+}
+
 ansrate <- "ansrate_msa_pmi"
 multiple <- "multiple_pmi"
 ext = commandArgs(trailingOnly=TRUE)[1]
@@ -22,29 +26,32 @@ psa.list <- PSAforEachWord(list.words, s, dist = T)
 s <- PairwisePMI(psa.list, list.words, s)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
+N <- length(s)
 s.old.main <- s
-N <- length(s.old.main)
-for (i in 1:N) {
-  s.old.main <- 0 
-}
+s.old.main <- apply(s.old.main, MARGIN = c(1, 2), zero)
 
 while (1) {
   print("First loop")
   diff <- N - sum(s == s.old.main)
-  if (diff == 0) break
-  s.old.main <- s
+  if (diff == 0) {
+    break
+  } else {
+    s.old.main <- s
+  }
   
   # For progressive
   s.old <- s
-  for (i in 1:N) {
-    s.old[i] <- 0
-  }
+  s.old <- apply(s.old, MARGIN = c(1, 2), zero)
   
   pa.list <- list()
   while (1) {
     print("Second loop")
     diff <- N - sum(s == s.old)
-    if (diff == 0) break
+    if (diff == 0) {
+      break
+    } else {
+      s.old <- s
+    }
     #
     for (w in list.words) {
       # Make the word list.
@@ -60,21 +67,22 @@ while (1) {
     } 
     #
     psa.list <- ChangeListMSA2PSA(pa.list, s)
-    s.old <- s
     s <- PairwisePMI(psa.list, list.words, s)$s
   }
   
   # For best first
   s.old <- s
-  for (i in 1:N) {
-    s.old[i] <- 0
-  }
+  s.old <- apply(s.old, MARGIN = c(1, 2), zero)
   
   msa.list <- list()
   while (1) {
     print("Third loop")
     diff <- N - sum(s == s.old)
-    if (diff == 0) break
+    if (diff == 0) {
+      break
+    } else {
+      s.old <- s
+    }
     #
     for (w in list.words) {
       # Make the word list.
@@ -88,7 +96,6 @@ while (1) {
     }
     #
     psa.list <- ChangeListMSA2PSA(msa.list, s)
-    s.old <- s
     s <- PairwisePMI(psa.list, list.words, s)$s
   }
 }
