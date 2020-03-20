@@ -40,8 +40,6 @@ PFPMI <- function(x, y, corpus.feat) {
   }
   
   pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
-  pmi <- sqrt(sum(pmi * pmi))  
-  #pmi <- log2(p.xy / (p.x * p.y))  # calculating the pmi
   
   return(pmi)
 }
@@ -81,9 +79,11 @@ CalcPFPMI <- function(psa.list, s, p) {
   #score.list <- list()
   pmi.list <- foreach(i = 1:len) %dopar% {
     score.list <- list()
-    score.list$V1  <- V[i, 1]
-    score.list$V2  <- V[i, 2]
-    score.list$pmi <- -PFPMI(mat.CV.feat[V[i, 1], ], mat.CV.feat[V[i, 2], ], corpus.feat)
+    score.list$V1 <- V[i, 1]
+    score.list$V2 <- V[i, 2]
+    pmi <- PFPMI(mat.CV.feat[V[i, 1], ], mat.CV.feat[V[i, 2], ], corpus.feat)
+    #score.list$pmi <- -sum(abs(pmi))  # L1 norm
+    score.list$pmi <- -sqrt(sum(pmi * pmi))  # L2 norm
     return(score.list)
     #return(score.vec)
   }
