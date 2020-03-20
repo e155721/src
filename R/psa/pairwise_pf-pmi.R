@@ -82,28 +82,44 @@ CalcPFPMI <- function(psa.list, s, p) {
     score.list$V1 <- V[i, 1]
     score.list$V2 <- V[i, 2]
     pmi <- PFPMI(mat.CV.feat[V[i, 1], ], mat.CV.feat[V[i, 2], ], corpus.feat)
-    #score.list$pmi <- -sum(abs(pmi))  # L1 norm
-    score.list$pmi <- -sqrt(sum(pmi * pmi))  # L2 norm
+    score.list$pmi <- pmi
+    #score.list$norm <- -sum(abs(pmi))  # L1 norm
+    score.list$norm <- -sqrt(sum(pmi * pmi))  # L2 norm
     return(score.list)
     #return(score.vec)
   }
   
   pmi.tmp <- foreach(i = 1:len, .combine = c) %dopar% {
-    pmi.list[[i]]$pmi
+    pmi.list[[i]]$norm
   }
   pmi.max <- max(pmi.tmp)
   pmi.min <- min(pmi.tmp)
   
-  # Convert the PMI to the weight of edit operations.
+  # The three-dimensional array to save the PF-PMI for each symbol pairs.
+  s.dim <- dim(s)[1]
+  s.names <- dimnames(s)[[1]]
+  pmi.mat <- array(NA, dim = c(s.dim, s.dim, 5), dimnames = list(s.names, s.names))
+  
   for (i in 1:len) {
-    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
-    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
+    # Save the PF-PMI.
+    pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
+    pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
+    # Convert the PMI to the weight of edit operations.
+    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$norm - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (pmi.list[[i]]$norm - pmi.min) / (pmi.max - pmi.min)
   }
+
+  # Prevent pairs of CV.
+  pmi.mat[1:81, 82:118, ] <- NA
+  pmi.mat[1:81, 82:118, ] <- NA
   
   s[1:81, 82:118] <- Inf
   s[82:118, 1:81] <- Inf
   
-  return(s)
+  rlt <- list()
+  rlt$pmi.mat <- pmi.mat
+  rlt$s <- s
+  return(rlt)
 }
 
 PairwisePFPMI <- function(psa.list, list.words, s) {
@@ -125,8 +141,11 @@ PairwisePFPMI <- function(psa.list, list.words, s) {
     diff <- N - sum(s == s.old)
     if (diff == 0) break
     # Compute the new scoring matrix that is updated by the PMI-weighting.
+    rlt.pmi <- CalcPFPMI(psa.list, s)
     s.old <- s
-    s <- CalcPFPMI(psa.list, s)
+    rlt.pmi <- CalcPFPMI(psa.list, s)
+    pmi.mat <- rlt.pmi$pmi.mat
+    s <- rlt.pmi$s
     # Compute the new PSA using the new scoring matrix.
     psa.list <- PSAforEachWord(list.words, s, dist = T)
   }
@@ -134,6 +153,7 @@ PairwisePFPMI <- function(psa.list, list.words, s) {
   
   rlt <- list()
   rlt$psa.list <- psa.list
+  rlt$pmi.mat <- pmi.mat
   rlt$s <- s
   return(rlt)
 }

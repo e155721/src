@@ -32,6 +32,7 @@ s.old.main <- s
 s.old.main <- apply(s.old.main, MARGIN = c(1, 2), zero)
 
 while (1) {
+  print("First loop")
   diff <- N - sum(s == s.old.main)
   if (diff == 0) {
     break
@@ -96,7 +97,9 @@ while (1) {
     }
     #
     psa.list <- ChangeListMSA2PSA(msa.list, s)
-    s <- PairwisePFPMI(psa.list, list.words, s)$s
+    rlt.pmi <- PairwisePFPMI(psa.list, list.words, s)
+    pmi.mat <- rlt.pmi$pmi.mat
+    s <- rlt.pmi$s
   }
 }
 
@@ -108,4 +111,5 @@ if (is.na(ext)) {
 } else {
   ext <- paste("_", ext, sep = "")
 }
+save(pmi.mat, file = paste("matrix_PF-PMI", ext, ".RData", sep = ""))
 save(s, file = paste("score_PF-PMI", ext, ".RData", sep = ""))
