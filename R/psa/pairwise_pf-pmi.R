@@ -68,7 +68,6 @@ CalcPFPMI <- function(psa.list, s, p) {
   mat.CV.feat <- rbind(mat.CV.feat, gap)
   dimnames(mat.CV.feat) <- list(c(C, V, "-"), NULL)
   
-  #corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
   corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
   corpus.feat <- apply(corpus.feat, 2, sort.col)
   
@@ -76,24 +75,21 @@ CalcPFPMI <- function(psa.list, s, p) {
   V <- unique(as.vector(corpus))
   V <- t(combn(x=V, m=2))
   len <- dim(V)[1]
-  #score.list <- list()
   pmi.list <- foreach(i = 1:len) %dopar% {
-    score.list <- list()
-    score.list$V1 <- V[i, 1]
-    score.list$V2 <- V[i, 2]
-    pmi <- PFPMI(mat.CV.feat[V[i, 1], ], mat.CV.feat[V[i, 2], ], corpus.feat)
-    score.list$pmi <- pmi
-    #score.list$norm <- -sum(abs(pmi))  # L1 norm
-    score.list$norm <- -sqrt(sum(pmi * pmi))  # L2 norm
-    return(score.list)
-    #return(score.vec)
+    pmi     <- list()
+    pmi$V1  <- V[i, 1]
+    pmi$V2  <- V[i, 2]
+    pmi$pmi <- PFPMI(mat.CV.feat[V[i, 1], ], mat.CV.feat[V[i, 2], ], corpus.feat)
+    return(pmi)
   }
   
-  pmi.tmp <- foreach(i = 1:len, .combine = c) %dopar% {
-    pmi.list[[i]]$norm
+  score.tmp <- foreach(i = 1:len, .combine = c) %dopar% {
+    pmi <- pmi.list[[i]]$pmi
+    #-sum(abs(pmi))  # L1 norm
+    -sqrt(sum(pmi * pmi))  # L2 norm
   }
-  pmi.max <- max(pmi.tmp)
-  pmi.min <- min(pmi.tmp)
+  pmi.max <- max(score.tmp)
+  pmi.min <- min(score.tmp)
   
   # The three-dimensional array to save the PF-PMI for each symbol pairs.
   s.dim <- dim(s)[1]
@@ -105,8 +101,8 @@ CalcPFPMI <- function(psa.list, s, p) {
     pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
     pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
     # Convert the PMI to the weight of edit operations.
-    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$norm - pmi.min) / (pmi.max - pmi.min)
-    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (pmi.list[[i]]$norm - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
   }
 
   # Prevent pairs of CV.
@@ -116,10 +112,10 @@ CalcPFPMI <- function(psa.list, s, p) {
   s[1:81, 82:118] <- Inf
   s[82:118, 1:81] <- Inf
   
-  rlt <- list()
-  rlt$pmi.mat <- pmi.mat
-  rlt$s <- s
-  return(rlt)
+  pmi <- list()
+  pmi$pmi.mat <- pmi.mat
+  pmi$s <- s
+  return(pmi)
 }
 
 PairwisePFPMI <- function(psa.list, list.words, s) {
@@ -141,7 +137,6 @@ PairwisePFPMI <- function(psa.list, list.words, s) {
     diff <- N - sum(s == s.old)
     if (diff == 0) break
     # Compute the new scoring matrix that is updated by the PMI-weighting.
-    rlt.pmi <- CalcPFPMI(psa.list, s)
     s.old <- s
     rlt.pmi <- CalcPFPMI(psa.list, s)
     pmi.mat <- rlt.pmi$pmi.mat
@@ -151,10 +146,9 @@ PairwisePFPMI <- function(psa.list, list.words, s) {
   }
   # END OF LOOP
   
-  rlt <- list()
-  rlt$psa.list <- psa.list
-  rlt$pmi.mat <- pmi.mat
-  rlt$s <- s
-  return(rlt)
+  pmi <- list()
+  pmi$psa.list <- psa.list
+  pmi$pmi.mat <- pmi.mat
+  pmi$s <- s
+  return(pmi)
 }
-
