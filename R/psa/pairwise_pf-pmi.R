@@ -107,7 +107,7 @@ CalcPFPMI <- function(psa.list, s, p) {
 
   # Prevent pairs of CV.
   pmi.mat[1:81, 82:118, ] <- NA
-  pmi.mat[1:81, 82:118, ] <- NA
+  pmi.mat[82:118, 1:81, ] <- NA
   
   s[1:81, 82:118] <- Inf
   s[82:118, 1:81] <- Inf
