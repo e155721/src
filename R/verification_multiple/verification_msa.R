@@ -30,6 +30,10 @@ for (i in 1:N) {
   }
 }
 
+## Temporary Fixing
+# For fixing the VC pairs.
+s.tmp[V, C] <- NA
+
 max <- max(s.tmp[!is.na(s.tmp)])
 min <- min(s.tmp[!is.na(s.tmp)])
 for (i in 1:N) {
