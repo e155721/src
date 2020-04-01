@@ -72,14 +72,14 @@ CalcPFPMI <- function(psa.list, s, p) {
   corpus.feat <- apply(corpus.feat, 2, sort.col)
   
   # Compute the PMI for each pair.
-  V <- unique(as.vector(corpus))
-  V <- t(combn(x=V, m=2))
-  len <- dim(V)[1]
+  sym.vec <- unique(as.vector(corpus))
+  sym.vec <- t(combn(x=sym.vec, m=2))
+  len <- dim(sym.vec)[1]
   pmi.list <- foreach(i = 1:len) %dopar% {
     pmi     <- list()
-    pmi$V1  <- V[i, 1]
-    pmi$V2  <- V[i, 2]
-    pmi$pmi <- PFPMI(mat.CV.feat[V[i, 1], ], mat.CV.feat[V[i, 2], ], corpus.feat)
+    pmi$V1  <- sym.vec[i, 1]
+    pmi$V2  <- sym.vec[i, 2]
+    pmi$pmi <- PFPMI(mat.CV.feat[sym.vec[i, 1], ], mat.CV.feat[sym.vec[i, 2], ], corpus.feat)
     return(pmi)
   }
   
@@ -106,11 +106,11 @@ CalcPFPMI <- function(psa.list, s, p) {
   }
 
   # Prevent pairs of CV.
-  pmi.mat[1:81, 82:118, ] <- NA
-  pmi.mat[1:81, 82:118, ] <- NA
+  pmi.mat[C, V, ] <- NA
+  pmi.mat[V, C, ] <- NA
   
-  s[1:81, 82:118] <- Inf
-  s[82:118, 1:81] <- Inf
+  s[C, V] <- Inf
+  s[V, C] <- Inf
   
   pmi <- list()
   pmi$pmi.mat <- pmi.mat
