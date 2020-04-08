@@ -6,12 +6,12 @@ Plot <- function(hist.mat) {
   max <- NULL
   for (j in 1:hist.mat.col) {
     tmp[[j]] <- as.vector(hist.mat[, j])
-    max <- c(c, tmp[[j]])
+    max <- c(max, tmp[[j]])
   }
   max <- max(max)
   
   for (i in 1:hist.mat.col) {
-    plot(tmp[[i]], type = "l", col = i, ylim = c(0, max))
+    plot(tmp[[i]], type = "o", col = i, ylim = c(0, max))
     par(new = T)
   }
   par(new = F)
