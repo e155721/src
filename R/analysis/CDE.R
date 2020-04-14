@@ -1,3 +1,5 @@
+options(digits=22)
+
 ColSim <- function(col.gs, col.ga) {
   # Calculate the column similarity.
   #
@@ -10,6 +12,7 @@ ColSim <- function(col.gs, col.ga) {
   
   match <- sum(col.gs == col.ga)
   cs <- match / dim(col.ga)[1]
+  #cs <- floor(cs * 1e+04) * 1e-04
   
   return(cs)
 }
