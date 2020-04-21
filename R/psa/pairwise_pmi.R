@@ -73,7 +73,9 @@ CalcPMI <- function(psa.list, s) {
   # Caluculate the PMI.
   corpus <- MakeCorpus(psa.list)
   # Removes identical segments from the corpus.
-  corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
+  if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
+    corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
+  }
   corpus <- apply(corpus, 2, sort.col)
   
   sym.vec <- unique(as.vector(corpus))

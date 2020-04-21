@@ -59,7 +59,9 @@ CalcPFPMI <- function(psa.list, s, p) {
   # Caluculate the PMI.
   corpus <- MakeCorpus(psa.list)
   # Removes identical segments from the corpus.
-  corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
+  if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
+    corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
+  }
   
   ### Convert the symbols to features ###
   num.CV.feat <- length(CV.feat) + 1
