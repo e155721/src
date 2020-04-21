@@ -96,7 +96,9 @@ while (1) {
     }
     #
     psa.list <- ChangeListMSA2PSA(msa.list, s)
-    s <- PairwisePMI(psa.list, list.words, s)$s
+    rlt.pmi <- PairwisePMI(psa.list, list.words, s)
+    pmi.mat <- rlt.pmi$pmi.mat
+    s <- rlt.pmi$s
   }
 }
 
@@ -108,4 +110,5 @@ if (is.na(ext)) {
 } else {
   ext <- paste("_", ext, sep = "")
 }
+save(pmi.mat, file = paste("matrix_PMI", ext, ".RData", sep = ""))
 save(s, file = paste("score_PMI", ext, ".RData", sep = ""))

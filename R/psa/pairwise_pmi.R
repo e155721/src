@@ -1,5 +1,7 @@
 library(gtools)
 
+source("lib/load_phoneme.R")
+
 sort.col <- function(x) {
   return(sort(x))
 }
@@ -74,33 +76,48 @@ CalcPMI <- function(psa.list, s) {
   corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
   corpus <- apply(corpus, 2, sort.col)
   
-  V <- unique(as.vector(corpus))
-  V <- t(combn(x=V, m=2))
-  len <- dim(V)[1]
+  sym.vec <- unique(as.vector(corpus))
+  sym.vec <- t(combn(x=sym.vec, m=2))
+  len <- dim(sym.vec)[1]
   score.vec <- list()
   pmi.list <- foreach(i = 1:len) %dopar% {
-    score.vec$V1  <- V[i, 1]
-    score.vec$V2  <- V[i, 2]
-    score.vec$pmi <- -PMI(V[i, 1], V[i, 2], corpus)
+    score.vec$V1  <- sym.vec[i, 1]
+    score.vec$V2  <- sym.vec[i, 2]
+    score.vec$pmi <- PMI(sym.vec[i, 1], sym.vec[i, 2], corpus)
     return(score.vec)
   }
   
-  pmi.tmp <- foreach(i = 1:len, .combine = c) %dopar% {
-    pmi.list[[i]]$pmi
+  score.tmp <- foreach(i = 1:len, .combine = c) %dopar% {
+    -pmi.list[[i]]$pmi
   }
-  pmi.max <- max(pmi.tmp)
-  pmi.min <- min(pmi.tmp)
+  pmi.max <- max(score.tmp)
+  pmi.min <- min(score.tmp)
   
-  # Convert the PMI to the weight of edit operations.
+  s.dim <- dim(s)[1]
+  s.names <- dimnames(s)[[1]]
+  pmi.mat <- array(NA, dim = c(s.dim, s.dim), dimnames = list(s.names, s.names))
+  
   for (i in 1:len) {
-    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
-    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
+    # Save the PMI.
+    pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- pmi.list[[i]]$pmi
+    pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- pmi.list[[i]]$pmi
+    # Convert the PMI to the weight of edit operations.
+    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
   }
   
-  s[1:81, 82:118] <- Inf
-  s[82:118, 1:81] <- Inf
+  # Prevent pairs of CV.
+  pmi.mat[C, V] <- NA
+  pmi.mat[V, C] <- NA
   
-  return(s)
+  s[C, V] <- Inf
+  s[V, C] <- Inf
+  
+  pmi <- list()
+  pmi$pmi.mat <- pmi.mat
+  pmi$s <- s
+  
+  return(pmi)
 }
 
 PairwisePMI <- function(psa.list, list.words, s) {
@@ -123,14 +140,17 @@ PairwisePMI <- function(psa.list, list.words, s) {
     if (diff == 0) break
     # Compute the new scoring matrix that is updated by the PMI-weighting.
     s.old <- s
-    s <- CalcPMI(psa.list, s)
+    rlt.pmi <- CalcPMI(psa.list, s)
+    pmi.mat <- rlt.pmi$pmi.mat
+    s <- rlt.pmi$s
     # Compute the new PSA using the new scoring matrix.
     psa.list <- PSAforEachWord(list.words, s, dist = T)
   }
   # END OF LOOP
   
-  rlt <- list()
-  rlt$psa.list <- psa.list
-  rlt$s <- s
-  return(rlt)
+  pmi <- list()
+  pmi$psa.list <- psa.list
+  pmi$pmi.mat <- pmi.mat
+  pmi$s <- s
+  return(pmi)
 }
