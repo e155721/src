@@ -7,7 +7,7 @@ sym2feat <- function(x, args) {
   return(args[x, ])
 }
 
-PFPMI <- function(x, y, corpus.feat) {
+PFPMI <- function(f.xy, f.x, f.y, corpus.feat) {
   # Computes the PMI of symbol pair (x, y) in the corpus.feat.
   # Args:
   #   x, y: The symbols.
@@ -20,15 +20,6 @@ PFPMI <- function(x, y, corpus.feat) {
   
   V1 <- length(unique(paste(corpus.feat[1, ], corpus.feat[2, ])))  # number of symbol pairs types in the segment pairs
   V2 <- length(unique(as.vector(corpus.feat)))  # number of symbol types in the segments
-  
-  f.xy <- vector(length=5)
-  f.x  <- vector(length=5)
-  f.y  <- vector(length=5)
-  for (p in 1:5) {
-    f.xy[p] <- sum((x[p] == corpus.feat[1, ]) * (y[p] == (corpus.feat[2, ])))  # frequency of xy in the segmentpairs
-    f.x[p]  <- sum(x[p] == corpus.feat)  # frequency of x in the segments
-    f.y[p]  <- sum(y[p] == corpus.feat)  # frequency of y in the segments
-  }
   
   p.xy <- vector(length=5)
   p.x  <- vector(length=5)
@@ -74,18 +65,68 @@ CalcPFPMI <- function(psa.list, s, p) {
   corpus.feat <- apply(corpus.feat, 2, sort.col)
   
   # Compute the PMI for each pair.
-  sym.vec <- unique(as.vector(corpus))
-  sym.vec <- t(combn(x=sym.vec, m=2))
-  len <- dim(sym.vec)[1]
-  pmi.list <- foreach(i = 1:len) %dopar% {
+  seg.vec <- unique(as.vector(corpus))
+  seg.num <- length(seg.vec)
+  
+  feat.vec <- unique(as.vector(corpus.feat))
+  feat.num <- length(feat.vec)
+  
+  seg.pair.mat <- t(combn(x=seg.vec, m=2))
+  seg.pair.num <- dim(seg.pair.mat)[1]
+  
+  feat.pair.mat <- combn(x=feat.vec, m=2)
+  feat.pair.mat <- cbind(feat.pair.mat, rbind(feat.vec, feat.vec))  # add the identical feature pairs.
+  feat.pair.mat <- t(apply(feat.pair.mat, 2, sort.col))
+  feat.pair.num <- dim(feat.pair.mat)[1]
+  
+  # Calculate the frequency matrix for aligned features.
+  feat.pair.freq.mat <- matrix(0, feat.num, feat.num, 
+                              dimnames = list(feat.vec, feat.vec))
+  for (i in 1:feat.pair.num) {
+    x <- feat.pair.mat[i, 1]
+    y <- feat.pair.mat[i, 2]
+    feat.pair.freq.mat[x, y] <- sum((x == corpus.feat[1, ]) * (y == (corpus.feat[2, ])))  # frequency of xy in the segmentpairs
+  }
+  
+  # Calculate the frequency vector for individual segments.
+  feat.freq.vec <- vector(mode = "numeric", feat.num)
+  names(feat.freq.vec) <- feat.vec
+  for (i in 1:feat.num) {
+    x <- feat.vec[i]
+    feat.freq.vec[x] <- sum(x == corpus.feat)
+  }
+  
+  pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
+    
+    x <- seg.pair.mat[i, 1]
+    y <- seg.pair.mat[i, 2]
+    
+    x.feat <- mat.CV.feat[x, ]
+    y.feat <- mat.CV.feat[y, ]
+    
+    feat.pair <- rbind(x.feat, y.feat)
+    feat.pair <- apply(feat.pair, 2, sort.col)
+    
+    x.feat <- feat.pair[1, ]
+    y.feat <- feat.pair[2, ]
+    
+    f.xy <- vector(length=5)
+    f.x  <- vector(length=5)
+    f.y  <- vector(length=5)
+    for (p in 1:5) {
+      f.xy[p] <- feat.pair.freq.mat[x.feat[p], y.feat[p]]
+      f.x[p]  <- feat.freq.vec[x.feat[p]]  # frequency of x in the segments
+      f.y[p]  <- feat.freq.vec[y.feat[p]]
+    }
+    
     pmi     <- list()
-    pmi$V1  <- sym.vec[i, 1]
-    pmi$V2  <- sym.vec[i, 2]
-    pmi$pmi <- PFPMI(mat.CV.feat[sym.vec[i, 1], ], mat.CV.feat[sym.vec[i, 2], ], corpus.feat)
+    pmi$V1  <- x
+    pmi$V2  <- y
+    pmi$pmi <- PFPMI(f.xy, f.x, f.y, corpus.feat)
     return(pmi)
   }
   
-  score.tmp <- foreach(i = 1:len, .combine = c) %dopar% {
+  score.tmp <- foreach(i = 1:seg.pair.num, .combine = c) %dopar% {
     pmi <- pmi.list[[i]]$pmi
     #-sum(abs(pmi))  # L1 norm
     -sqrt(sum(pmi * pmi))  # L2 norm
@@ -98,7 +139,7 @@ CalcPFPMI <- function(psa.list, s, p) {
   s.names <- dimnames(s)[[1]]
   pmi.mat <- array(NA, dim = c(s.dim, s.dim, 5), dimnames = list(s.names, s.names))
   
-  for (i in 1:len) {
+  for (i in 1:seg.pair.num) {
     # Save the PF-PMI.
     pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
     pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
