@@ -32,11 +32,12 @@ MakeCorpus <- function(psa.list) {
   return(corpus)
 }
 
-PMI <- function(x, y, corpus) {
+PMI <- function(f.xy, f.x, f.y, corpus) {
   # Computes the PMI of symbol pair (x, y) in the corpus.
   # Args:
-  #   x, y: The symbols.
-  #   corputs: The corpus.
+  #   f.xy: The frequency of the pair of x and y.
+  #   f.x:  The frequency of x.
+  #   f.y:  The frequency of y.
   #
   # Returns:
   #   The PMI of the symbol pair (x, y).
@@ -45,10 +46,6 @@ PMI <- function(x, y, corpus) {
   
   V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of symbol pairs types in the segment pairs
   V2 <- length(unique(as.vector(corpus))) # number of symbol types in the segments
-  
-  f.xy <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
-  f.x  <- sum(x == corpus)  # frequency of x in the segments
-  f.y  <- sum(y == corpus)  # frequency of y in the segments
   
   p.xy <- (f.xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
   p.x  <- (f.x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
@@ -78,18 +75,47 @@ CalcPMI <- function(psa.list, s) {
   }
   corpus <- apply(corpus, 2, sort.col)
   
-  sym.vec <- unique(as.vector(corpus))
-  sym.vec <- t(combn(x=sym.vec, m=2))
-  len <- dim(sym.vec)[1]
+  seg.vec <- unique(as.vector(corpus))
+  seg.num <- length(seg.vec)
+  
+  seg.pair.mat <- t(combn(x=seg.vec, m=2))
+  seg.pair.num <- dim(seg.pair.mat)[1]
+  
+  # Calculate the frequency matrix for aligned segments.
+  seg.pair.freq.mat <- matrix(0, seg.num, seg.num, 
+                              dimnames = list(seg.vec, seg.vec))
+  for (i in 1:seg.pair.num) {
+    x <- seg.pair.mat[i, 1]
+    y <- seg.pair.mat[i, 2]
+    seg.pair.freq.mat[x, y] <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
+  }
+  
+  # Calculate the frequency vector for individual segments.
+  seg.freq.vec <- vector(mode = "numeric", seg.num)
+  names(seg.freq.vec) <- seg.vec
+  for (i in 1:seg.num) {
+    x <- seg.vec[i]
+    seg.freq.vec[x] <- sum(x == corpus)
+  }
+  
   score.vec <- list()
-  pmi.list <- foreach(i = 1:len) %dopar% {
-    score.vec$V1  <- sym.vec[i, 1]
-    score.vec$V2  <- sym.vec[i, 2]
-    score.vec$pmi <- PMI(sym.vec[i, 1], sym.vec[i, 2], corpus)
+  pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
+    
+    x <- seg.pair.mat[i, 1]
+    y <- seg.pair.mat[i, 2]
+    
+    score.vec$V1  <- x
+    score.vec$V2  <- y
+    
+    f.xy <- seg.pair.freq.mat[x, y]
+    f.x  <- seg.freq.vec[x]
+    f.y  <- seg.freq.vec[y]
+    score.vec$pmi <- PMI(f.xy, f.x, f.y, corpus)
+    
     return(score.vec)
   }
   
-  score.tmp <- foreach(i = 1:len, .combine = c) %dopar% {
+  score.tmp <- foreach(i = 1:seg.pair.num, .combine = c) %dopar% {
     -pmi.list[[i]]$pmi
   }
   pmi.max <- max(score.tmp)
@@ -99,7 +125,7 @@ CalcPMI <- function(psa.list, s) {
   s.names <- dimnames(s)[[1]]
   pmi.mat <- array(NA, dim = c(s.dim, s.dim), dimnames = list(s.names, s.names))
   
-  for (i in 1:len) {
+  for (i in 1:seg.pair.num) {
     # Save the PMI.
     pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- pmi.list[[i]]$pmi
     pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- pmi.list[[i]]$pmi
