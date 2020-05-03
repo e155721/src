@@ -7,7 +7,7 @@ sym2feat <- function(x, args) {
   return(args[x, ])
 }
 
-PFPMI <- function(f.xy, f.x, f.y, corpus.feat) {
+PFPMI <- function(f.xy, f.x, f.y, N1, N2, V1, V2, corpus.feat) {
   # Computes the PMI of symbol pair (x, y) in the corpus.feat.
   # Args:
   #   x, y: The symbols.
@@ -15,11 +15,6 @@ PFPMI <- function(f.xy, f.x, f.y, corpus.feat) {
   #
   # Returns:
   #   The PMI of the symbol pair (x, y).
-  N1 <- dim(corpus.feat)[2]  # number of the aligned segments
-  N2 <- N1 * 2  # number of segments in the aligned segments
-  
-  V1 <- length(unique(paste(corpus.feat[1, ], corpus.feat[2, ])))  # number of symbol pairs types in the segment pairs
-  V2 <- length(unique(as.vector(corpus.feat)))  # number of symbol types in the segments
   
   p.xy <- vector(length=5)
   p.x  <- vector(length=5)
@@ -96,6 +91,11 @@ CalcPFPMI <- function(psa.list, s, p) {
     feat.freq.vec[x] <- sum(x == corpus.feat)
   }
   
+  N1 <- dim(corpus.feat)[2]  # number of the aligned segments
+  N2 <- N1 * 2  # number of segments in the aligned segments
+  V1 <- length(unique(paste(corpus.feat[1, ], corpus.feat[2, ])))  # number of symbol pairs types in the segment pairs
+  V2 <- length(unique(as.vector(corpus.feat)))  # number of symbol types in the segments
+  
   pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
     
     x <- seg.pair.mat[i, 1]
@@ -122,7 +122,7 @@ CalcPFPMI <- function(psa.list, s, p) {
     pmi     <- list()
     pmi$V1  <- x
     pmi$V2  <- y
-    pmi$pmi <- PFPMI(f.xy, f.x, f.y, corpus.feat)
+    pmi$pmi <- PFPMI(f.xy, f.x, f.y, N1, N2, V1, V2, corpus.feat)
     return(pmi)
   }
   
