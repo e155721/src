@@ -13,8 +13,8 @@ mat.V.feat <- as.matrix(read.table("lib/phoneme/features/vowels.txt"))
 dimnames(mat.V.feat) <- list(V, NULL)
 
 for (j in 1:5) {
-  mat.C.feat[, j] <- paste("C", mat.C.feat[, j], j, sep="")
-  mat.V.feat[, j] <- paste("V", mat.V.feat[, j], j, sep="")
+  mat.C.feat[, j] <- paste(j, "C", mat.C.feat[, j], sep="")
+  mat.V.feat[, j] <- paste(j, "V", mat.V.feat[, j], sep="")
 }
 
 C.feat <- unique(as.vector(mat.C.feat))
