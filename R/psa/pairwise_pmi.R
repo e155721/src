@@ -78,7 +78,8 @@ CalcPMI <- function(psa.list, s) {
   seg.vec <- unique(as.vector(corpus))
   seg.num <- length(seg.vec)
   
-  seg.pair.mat <- t(combn(x=seg.vec, m=2))
+  seg.pair.mat <- apply(combn(x=seg.vec, m=2), 2, sort)
+  seg.pair.mat <- t(seg.pair.mat)
   seg.pair.num <- dim(seg.pair.mat)[1]
   
   # Calculate the frequency matrix for aligned segments.
