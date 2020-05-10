@@ -7,14 +7,26 @@ sym2feat <- function(x, args) {
   return(args[x, ])
 }
 
-PFPMI <- function(f.xy, f.x, f.y, N1, N2, V1, V2, corpus.feat) {
+PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   # Computes the PMI of symbol pair (x, y) in the corpus.feat.
   # Args:
-  #   x, y: The symbols.
-  #   corputs: The corpus.feat.
+  #   x, y: the feature vectors
+  #   N1, N2: the denominators for the PMI
+  #   V1, V2: the paramators for the Laplace smoothing
+  #   pair.freq: the frequency matrix of the feature pairs
+  #   seg.freq: the frequency vector of the features
   #
   # Returns:
   #   The PMI of the symbol pair (x, y).
+  
+  f.xy <- vector(length=5)
+  f.x  <- vector(length=5)
+  f.y  <- vector(length=5)
+  for (p in 1:5) {
+    f.xy[p] <- pair.freq[x[p], y[p]]
+    f.x[p]  <- seg.freq[x[p]]  # frequency of x in the segments
+    f.y[p]  <- seg.freq[y[p]]
+  }
   
   p.xy <- vector(length=5)
   p.x  <- vector(length=5)
@@ -110,19 +122,13 @@ CalcPFPMI <- function(psa.list, s, p) {
     x.feat <- feat.pair[1, ]
     y.feat <- feat.pair[2, ]
     
-    f.xy <- vector(length=5)
-    f.x  <- vector(length=5)
-    f.y  <- vector(length=5)
-    for (p in 1:5) {
-      f.xy[p] <- feat.pair.freq.mat[x.feat[p], y.feat[p]]
-      f.x[p]  <- feat.freq.vec[x.feat[p]]  # frequency of x in the segments
-      f.y[p]  <- feat.freq.vec[y.feat[p]]
-    }
+    pf.pmi <- PFPMI(x.feat, y.feat, N1, N2, V1, V2, 
+                    pair.freq = feat.pair.freq.mat, seg.freq = feat.freq.vec)
     
     pmi     <- list()
     pmi$V1  <- x
     pmi$V2  <- y
-    pmi$pmi <- PFPMI(f.xy, f.x, f.y, N1, N2, V1, V2, corpus.feat)
+    pmi$pmi <- pf.pmi
     return(pmi)
   }
   
