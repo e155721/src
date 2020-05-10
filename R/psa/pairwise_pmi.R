@@ -10,7 +10,7 @@ MakeCorpus <- function(psa.list) {
   # Makes the corpus to calculate PMI.
   #
   # Args:
-  #   psa.list: A list of an pairwise sequence aligment resutls.
+  #   psa.list: A list of the PSA lists.
   #
   # Returns:
   #   A corpus to calculate PMI.
@@ -32,20 +32,22 @@ MakeCorpus <- function(psa.list) {
   return(corpus)
 }
 
-PMI <- function(f.xy, f.x, f.y, corpus) {
+PMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   # Computes the PMI of symbol pair (x, y) in the corpus.
+  #
   # Args:
-  #   f.xy: The frequency of the pair of x and y.
-  #   f.x:  The frequency of x.
-  #   f.y:  The frequency of y.
+  #   x, y: the segment pairs
+  #   N1, N2: the parametors for the PMI
+  #   V1, V2: the parametors for the Laplace smoothing
+  #   pair.freq: the frequency matrix of the pair of segments
+  #   seg.freq: the frequency vector of the segments
   #
   # Returns:
-  #   The PMI of the symbol pair (x, y).
-  N1 <- dim(corpus)[2]  # number of the aligned segments
-  N2 <- N1 * 2  # number of segments in the aligned segments
-  
-  V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of symbol pairs types in the segment pairs
-  V2 <- length(unique(as.vector(corpus))) # number of symbol types in the segments
+  #   the PMI velue of the segment pair (x, y)
+ 
+  f.xy <- pair.freq[x, y]
+  f.x  <- seg.freq[x]
+  f.y  <- seg.freq[y]
   
   p.xy <- (f.xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
   p.x  <- (f.x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
@@ -99,19 +101,23 @@ CalcPMI <- function(psa.list, s) {
     seg.freq.vec[x] <- sum(x == corpus)
   }
   
+  
+  N1 <- dim(corpus)[2]  # number of the aligned segments
+  N2 <- N1 * 2  # number of segments in the aligned segments
+  V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of symbol pairs types in the segment pairs
+  V2 <- length(unique(as.vector(corpus))) # number of symbol types in the segments
+    
   score.vec <- list()
   pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
     
     x <- seg.pair.mat[i, 1]
     y <- seg.pair.mat[i, 2]
+    pmi <- PMI(x = x, y = y, N1 = N1, N2 = N2, V1 = V1, V2 = V2,
+               pair.freq = seg.pair.freq.mat, seg.freq = seg.freq.vec)
     
     score.vec$V1  <- x
     score.vec$V2  <- y
-    
-    f.xy <- seg.pair.freq.mat[x, y]
-    f.x  <- seg.freq.vec[x]
-    f.y  <- seg.freq.vec[y]
-    score.vec$pmi <- PMI(f.xy, f.x, f.y, corpus)
+    score.vec$pmi <- pmi
     
     return(score.vec)
   }
