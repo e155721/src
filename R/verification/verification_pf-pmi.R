@@ -3,7 +3,7 @@ source("lib/load_scoring_matrix.R")
 source("psa/psa_for_each_word.R")
 source("lib/load_verif_lib.R")
 source("psa/pairwise_pmi.R")
-source("psa/pairwise_pf-pmi.R")
+source("psa/pf-pmi.R")
 source("verification/verification_psa.R")
 source("parallel_config.R")
 
@@ -16,7 +16,7 @@ path <- MakePath(file, dir, ext)
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(list.words, s, dist = T)
-psa.list <- PairwisePFPMI(psa.list, list.words, s)$psa.list
+psa.list <- PairwisePMI(psa.list, list.words, s, CalcPFPMI)$psa.list
 #save(s, file=paste("scoring_matrix_pmi_", format(Sys.Date()), ".RData", sep=""))
 
 # Execute the PSA for each word.

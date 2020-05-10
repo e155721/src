@@ -1,7 +1,46 @@
+library(gtools)
+library(MASS)
+
 source("lib/load_phoneme.R")
+source("psa/pmi_tools.R")
 
 sym2feat <- function(x, args) {
-  return(args[[1]][x, args[[2]]])
+  return(args[x, ])
+}
+
+PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
+  # Computes the PMI of symbol pair (x, y) in the corpus.feat.
+  # Args:
+  #   x, y: the feature vectors
+  #   N1, N2: the denominators for the PMI
+  #   V1, V2: the paramators for the Laplace smoothing
+  #   pair.freq: the frequency matrix of the feature pairs
+  #   seg.freq: the frequency vector of the features
+  #
+  # Returns:
+  #   The PMI of the symbol pair (x, y).
+  
+  f.xy <- vector(length=5)
+  f.x  <- vector(length=5)
+  f.y  <- vector(length=5)
+  for (p in 1:5) {
+    f.xy[p] <- pair.freq[x[p], y[p]]
+    f.x[p]  <- seg.freq[x[p]]  # frequency of x in the segments
+    f.y[p]  <- seg.freq[y[p]]
+  }
+  
+  p.xy <- vector(length=5)
+  p.x  <- vector(length=5)
+  p.y  <- vector(length=5)
+  for (p in 1:5) {
+    p.xy[p] <- (f.xy[p] + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
+    p.x[p]  <- (f.x[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of x
+    p.y[p]  <- (f.y[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of y
+  }
+  
+  pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
+  
+  return(pmi)
 }
 
 CalcPFPMI <- function(psa.list, s, p) {
@@ -19,98 +58,112 @@ CalcPFPMI <- function(psa.list, s, p) {
   # Caluculate the PMI.
   corpus <- MakeCorpus(psa.list)
   # Removes identical segments from the corpus.
-  #corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
-  #corpus <- corpus[, -which(corpus[1, ] == "-"), drop=F]
-  #corpus <- corpus[, -which(corpus[2, ] == "-"), drop=F]
+  if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
+    corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop=F]
+  }
   
   ### Convert the symbols to features ###
   num.CV.feat <- length(CV.feat) + 1
-  feat.mat <- matrix(0, num.CV.feat, num.CV.feat, dimnames=list(c(CV.feat, "-"), c(CV.feat, "-")))
   gap <- vector(length=5)
   gap[1:5] <- "-"
   mat.CV.feat <- rbind(mat.CV.feat, gap)
   dimnames(mat.CV.feat) <- list(c(C, V, "-"), NULL)
   
-  #corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
-  corpus.feat <- t(apply(corpus, 1, sym2feat, list(mat.CV.feat, p)))
-  # Removes identical segments from the corpus.
-  corpus.feat <- corpus.feat[, -which(corpus.feat[1, ] == corpus.feat[2, ]), drop=F]
+  corpus.feat <- t(apply(corpus, 1, sym2feat, mat.CV.feat))
+  corpus.feat <- apply(corpus.feat, 2, sort.col)
   
   # Compute the PMI for each pair.
-  feat <- unique(as.vector(corpus.feat))
-  feat <- permutations(length(feat), 2, v=feat, repeats.allowed=F)
-  #feat <- feat[-1, ]
-  num.feat.pair <- dim(feat)[1]
-  score.vec <- list()
-  pmi.list <- foreach(i = 1:num.feat.pair) %dopar% {
-    score.vec$V1 <- feat[i, 1]
-    score.vec$V2 <- feat[i, 2]
-    score.vec$pmi <- -PMI(feat[i, 1], feat[i, 2], corpus.feat, E)
-    return(score.vec)
+  seg.vec <- unique(as.vector(corpus))
+  seg.num <- length(seg.vec)
+  
+  feat.vec <- unique(as.vector(corpus.feat))
+  feat.num <- length(feat.vec)
+  
+  seg.pair.mat <- t(combn(x=seg.vec, m=2))
+  seg.pair.num <- dim(seg.pair.mat)[1]
+  
+  feat.pair.mat <- combn(x=feat.vec, m=2)
+  feat.pair.mat <- cbind(feat.pair.mat, rbind(feat.vec, feat.vec))  # add the identical feature pairs.
+  feat.pair.mat <- t(apply(feat.pair.mat, 2, sort.col))
+  feat.pair.num <- dim(feat.pair.mat)[1]
+  
+  # Calculate the frequency matrix for aligned features.
+  feat.pair.freq.mat <- matrix(0, feat.num, feat.num, 
+                              dimnames = list(feat.vec, feat.vec))
+  for (i in 1:feat.pair.num) {
+    x <- feat.pair.mat[i, 1]
+    y <- feat.pair.mat[i, 2]
+    feat.pair.freq.mat[x, y] <- sum((x == corpus.feat[1, ]) * (y == (corpus.feat[2, ])))  # frequency of xy in the segmentpairs
   }
   
-  pmi.tmp <- foreach(i = 1:num.feat.pair, .combine = c) %dopar%
-    pmi.list[[i]]$pmi
-  pmi.max <- max(pmi.tmp)
-  pmi.min <- min(pmi.tmp)
+  # Calculate the frequency vector for individual segments.
+  feat.freq.vec <- vector(mode = "numeric", feat.num)
+  names(feat.freq.vec) <- feat.vec
+  for (i in 1:feat.num) {
+    x <- feat.vec[i]
+    feat.freq.vec[x] <- sum(x == corpus.feat)
+  }
   
-  for (i in 1:num.feat.pair)
-    feat.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (pmi.list[[i]]$pmi - pmi.min) / (pmi.max - pmi.min)
+  N1 <- dim(corpus.feat)[2]  # number of the aligned segments
+  N2 <- N1 * 2  # number of segments in the aligned segments
+  V1 <- length(unique(paste(corpus.feat[1, ], corpus.feat[2, ])))  # number of symbol pairs types in the segment pairs
+  V2 <- length(unique(as.vector(corpus.feat)))  # number of symbol types in the segments
   
-  feat.mat[C.feat, V.feat] <- Inf
-  feat.mat[V.feat, C.feat] <- Inf
+  pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
+    
+    x <- seg.pair.mat[i, 1]
+    y <- seg.pair.mat[i, 2]
+    
+    x.feat <- mat.CV.feat[x, ]
+    y.feat <- mat.CV.feat[y, ]
+    
+    feat.pair <- rbind(x.feat, y.feat)
+    feat.pair <- apply(feat.pair, 2, sort.col)
+    
+    x.feat <- feat.pair[1, ]
+    y.feat <- feat.pair[2, ]
+    
+    pf.pmi <- PFPMI(x.feat, y.feat, N1, N2, V1, V2, 
+                    pair.freq = feat.pair.freq.mat, seg.freq = feat.freq.vec)
+    
+    pmi     <- list()
+    pmi$V1  <- x
+    pmi$V2  <- y
+    pmi$pmi <- pf.pmi
+    return(pmi)
+  }
   
-  # Convert the PMI to the weight of edit operations.
-  sym <- unique(as.vector(corpus))
-  for (i in sym)
-    for (j in sym)
-      s[i, j] <- sum(diag(feat.mat[mat.CV.feat[i, ], mat.CV.feat[j, ]]))
+  score.tmp <- foreach(i = 1:seg.pair.num, .combine = c) %dopar% {
+    pmi <- pmi.list[[i]]$pmi
+    #-sum(abs(pmi))  # L1 norm
+    -sqrt(sum(pmi * pmi))  # L2 norm
+  }
+  pmi.max <- max(score.tmp)
+  pmi.min <- min(score.tmp)
+  
+  # The three-dimensional array to save the PF-PMI for each symbol pairs.
+  s.dim <- dim(s)[1]
+  s.names <- dimnames(s)[[1]]
+  pmi.mat <- array(NA, dim = c(s.dim, s.dim, 5), dimnames = list(s.names, s.names))
+  
+  for (i in 1:seg.pair.num) {
+    # Save the PF-PMI.
+    pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
+    pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
+    # Convert the PMI to the weight of edit operations.
+    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
+  }
+
+  # Prevent pairs of CV.
+  pmi.mat[C, V, ] <- NA
+  pmi.mat[V, C, ] <- NA
   
   s[C, V] <- Inf
   s[V, C] <- Inf
   
-  return(s)
-}
-
-PairwisePFPMI <- function(input.list, s, p) {
-  # Compute the new scoring matrix by updating PMI iteratively.
-  #
-  # Args:
-  #   input.list: The word list of all the words.
-  #   s: The scoring matrix.
-  #
-  # Returns:
-  #   s: The new scoring matrix by updating PMI iteratively.
-  # Compute the initial PSA.
-  psa.list <- MakePSA(input.list, s, dist=T)
-  
-  as <- 0 
-  # START OF LOOP
-  while(1) {
-    # Update the old scoring matrix and the alignment.
-    as.new <- 0
-    M <- length(psa.list)
-    for (i in 1:M) {
-      N <- length(psa.list[[i]])
-      for (j in 1:N) 
-        as.new <- as.new + psa.list[[i]][[j]]$score
-    }
-    print(paste("Old Edit Distance:", as))
-    print(paste("New Edit Distance:", as.new))
-    
-    # Check the convergence of the PMI.
-    if (as == as.new) {
-      break
-    } else {
-      as <- as.new
-    }
-    
-    # Compute the new scoring matrix that is updated by the PMI-weighting.
-    s <- CalcPFPMI(psa.list, s, p)
-    # Compute the new PSA using the new scoring matrix.
-    psa.list <- MakePSA(input.list, s, dist=T)
-  }
-  # END OF LOOP
-  
-  return(s)
+  pmi <- list()
+  pmi$pmi.mat <- pmi.mat
+  pmi$s <- s
+  return(pmi)
 }
