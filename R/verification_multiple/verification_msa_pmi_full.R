@@ -4,6 +4,7 @@ source("lib/load_scoring_matrix.R")
 source("lib/load_exec_align.R")
 source("msa/ProgressiveAlignment.R")
 source("msa/BestFirst.R")
+source("psa/pmi.R")
 source("psa/pairwise_pmi.R")
 source("psa/psa_for_each_word.R")
 source("verification_multiple/change_list_msa2psa.R")
@@ -23,7 +24,7 @@ path <- MakePath(ansrate, multiple, ext)
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(list.words, s, dist = T)
-s <- PairwisePMI(psa.list, list.words, s)$s
+s <- PairwisePMI(psa.list, list.words, s, CalcPMI)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
 N <- length(s)
@@ -67,7 +68,7 @@ while (1) {
     } 
     #
     psa.list <- ChangeListMSA2PSA(pa.list, s)
-    s <- PairwisePMI(psa.list, list.words, s)$s
+    s <- PairwisePMI(psa.list, list.words, s, CalcPMI)$s
   }
   
   # For best first
@@ -96,7 +97,7 @@ while (1) {
     }
     #
     psa.list <- ChangeListMSA2PSA(msa.list, s)
-    rlt.pmi <- PairwisePMI(psa.list, list.words, s)
+    rlt.pmi <- PairwisePMI(psa.list, list.words, s, CalcPMI)
     pmi.mat <- rlt.pmi$pmi.mat
     s <- rlt.pmi$s
   }
