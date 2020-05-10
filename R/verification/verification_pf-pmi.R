@@ -16,7 +16,7 @@ path <- MakePath(file, dir, ext)
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(list.words, s, dist = T)
-psa.list <- PairwisePMI(psa.list, list.words, s, CalcPFPMI)$psa.list
+psa.list <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI)$psa.list
 #save(s, file=paste("scoring_matrix_pmi_", format(Sys.Date()), ".RData", sep=""))
 
 # Execute the PSA for each word.

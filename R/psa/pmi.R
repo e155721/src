@@ -28,7 +28,7 @@ PMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   return(pmi)
 }
 
-CalcPMI <- function(psa.list, s) {
+UpdatePMI <- function(psa.list, s) {
   # Compute the PMI of the PSA list.
   #
   # Args:

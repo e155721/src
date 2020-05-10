@@ -43,7 +43,7 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   return(pmi)
 }
 
-CalcPFPMI <- function(psa.list, s, p) {
+UpdatePFPMI <- function(psa.list, s, p) {
   # Compute the PMI of the PSA list.
   #
   # Args:

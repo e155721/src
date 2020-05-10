@@ -24,7 +24,7 @@ path <- MakePath(ansrate, multiple, ext)
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(list.words, s, dist = T)
-s <- PairwisePMI(psa.list, list.words, s, CalcPFPMI)$s
+s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
 N <- length(s)
@@ -68,7 +68,7 @@ while (1) {
     } 
     #
     psa.list <- ChangeListMSA2PSA(pa.list, s)
-    s <- PairwisePMI(psa.list, list.words, s, CalcPFPMI)$s
+    s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI)$s
   }
   
   # For best first
@@ -97,7 +97,7 @@ while (1) {
     }
     #
     psa.list <- ChangeListMSA2PSA(msa.list, s)
-    rlt.pmi <- PairwisePMI(psa.list, list.words, s, CalcPFPMI)
+    rlt.pmi <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI)
     pmi.mat <- rlt.pmi$pmi.mat
     s <- rlt.pmi$s
   }
