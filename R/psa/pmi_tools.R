@@ -27,3 +27,113 @@ MakeCorpus <- function(psa.list) {
   
   return(corpus)
 }
+
+MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
+  # Create the matrix of segment pairs frequency from a corpus.
+  #
+  # Args:
+  #   seg.vec: a segment vector
+  #   seg.pair.mat: a segment pairs matrix
+  #   corpus: a corpus
+  #
+  # Return:
+  #   the matrix of segment pairs frequency.
+  
+  seg.num      <- length(seg.vec)
+  seg.pair.num <- dim(seg.pair.mat)[1]
+  
+  # Calculate the frequency matrix for aligned segments.
+  seg.pair.freq.mat <- matrix(0, seg.num, seg.num, 
+                              dimnames = list(seg.vec, seg.vec))
+  for (i in 1:seg.pair.num) {
+    x <- seg.pair.mat[i, 1]
+    y <- seg.pair.mat[i, 2]
+    seg.pair.freq.mat[x, y] <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
+  }
+  
+  return(seg.pair.freq.mat)
+}
+
+MakeFreqVec <- function(seg.vec, corpus) {
+  # Create the vector of segmens frequency from a corpus.
+  #
+  # Args:
+  #   seg.vec: a segment vector
+  #   corpus: a corpus
+  #
+  # Return:
+  #   the vector of segments frequency.
+  
+  seg.num <- length(seg.vec)
+  
+  # Calculate the frequency vector for individual segments.
+  seg.freq.vec <- vector(mode = "numeric", seg.num)
+  names(seg.freq.vec) <- seg.vec
+  for (i in 1:seg.num) {
+    x <- seg.vec[i]
+    seg.freq.vec[x] <- sum(x == corpus)
+  }
+  
+  return(seg.freq.vec)
+}
+
+AggrtPMI <- function(s, pmi.list) {
+  # Create the PMI matrix.
+  #
+  # Args:
+  #   s: a scoring matrix
+  #   pmi.list: a list of the PMIs for each segment pair.
+  #
+  # Return:
+  #   the matrix of the PMIs.
+  
+  # The three-dimensional array to save the PF-PMI for each symbol pairs.
+  s.dim <- dim(s)[1]
+  s.names <- dimnames(s)[[1]]
+  pmi.mat <- array(NA, dim = c(s.dim, s.dim, 5), dimnames = list(s.names, s.names))
+  
+  seg.pair.num <- length(pmi.list)
+  for (i in 1:seg.pair.num) {
+    pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
+    pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
+  }
+  
+  # Prevent pairs of CV.
+  pmi.mat[C, V, ] <- NA
+  pmi.mat[V, C, ] <- NA
+  
+  # If the symbol pair PMI has been used, 
+  # the matrix of the PMIs is changed 
+  # from a three-dimensional array to a matrix.
+  if (length(pmi.list[[1]]$pmi) != 5) {
+    pmi.mat <- as.matrix(pmi.mat)
+  }
+  
+  return(pmi.mat)
+}
+
+pmi2dist <- function(score.tmp, pmi.list) {
+  # Create a scoring matrix based the PMI.
+  #
+  # Args:
+  #   score.tmp: a list of inverted the PMIs for each segment pair.
+  #   pmi.list: a list of the PMIs for each segment pair.
+  #
+  # Return:
+  #   the scoring matrix based the PMIs.
+  
+  pmi.max <- max(score.tmp)
+  pmi.min <- min(score.tmp)
+
+  # Convert the PMI to the weight of edit operations.
+  seg.pair.num <- length(pmi.list)  
+  for (i in 1:seg.pair.num) {
+    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
+    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
+  }
+  
+  s[C, V] <- Inf
+  s[V, C] <- Inf
+  
+  return(s)  
+}
