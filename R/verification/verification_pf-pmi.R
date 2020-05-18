@@ -32,5 +32,5 @@ if (is.na(ext)) {
 } else {
   ext <- paste("_", ext, sep = "")
 }
-save(pmi.mat, file = paste("matrix_psa_PF-PMI", ext, "_", format(Sys.Date()), ".RData", sep = ""))
-save(s, file = paste("score_psa_PF-PMI", ext, "_", format(Sys.Date()), ".RData", sep = ""))
+save(pmi.mat, file = paste("matrix_psa_pf-pmi", ext, "_", format(Sys.Date()), ".RData", sep = ""))
+save(s, file = paste("score_psa_pf-pmi", ext, "_", format(Sys.Date()), ".RData", sep = ""))

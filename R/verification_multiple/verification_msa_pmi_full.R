@@ -111,5 +111,5 @@ if (is.na(ext)) {
 } else {
   ext <- paste("_", ext, sep = "")
 }
-save(pmi.mat, file = paste("matrix_msa_PMI", ext, "_", format(Sys.Date()), ".RData", sep = ""))
-save(s, file = paste("score_msa_PMI", ext, "_", format(Sys.Date()), ".RData", sep = ""))
+save(pmi.mat, file = paste("matrix_msa_pmi", ext, "_", format(Sys.Date()), ".RData", sep = ""))
+save(s, file = paste("score_msa_pmi", ext, "_", format(Sys.Date()), ".RData", sep = ""))
