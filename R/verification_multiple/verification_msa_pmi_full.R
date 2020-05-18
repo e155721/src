@@ -106,10 +106,7 @@ while (1) {
 # Calculate the accuracy of the MSAs.
 CalcAccMSA(msa.list, list.words, path$ansrate.file, path$output.dir)
 
-if (is.na(ext)) {
-  ext <- NULL 
-} else {
-  ext <- paste("_", ext, sep = "")
-}
-save(pmi.mat, file = paste("matrix_msa_pmi", ext, "_", format(Sys.Date()), ".RData", sep = ""))
-save(s, file = paste("score_msa_pmi", ext, "_", format(Sys.Date()), ".RData", sep = ""))
+# Save the matrix of the PMIs and the scoring matrix.
+rdata.path <- MakeMatPath("matrix_msa_pmi", "score_msa_pmi", ext)
+save(pmi.mat, file = rdata.path$rdata1)
+save(s, file = rdata.path$rdata2)
