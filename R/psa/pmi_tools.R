@@ -1,7 +1,3 @@
-sort.col <- function(x) {
-  return(sort(x))
-}
-
 MakeCorpus <- function(psa.list) {
   # Makes the corpus to calculate PMI.
   #

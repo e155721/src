@@ -73,13 +73,13 @@ UpdatePFPMI <- function(psa.list, s, p) {
   
   # Convert from corpus to feature corpus.
   corpus.feat <- t(apply(corpus, 1, sym2feat, feat.mat))
-  corpus.feat <- apply(corpus.feat, 2, sort.col)
+  corpus.feat <- apply(corpus.feat, 2, sort)
   
   # Create the features vector and the feature pairs matrix.
   feat.vec      <- unique(as.vector(corpus.feat))
   feat.pair.mat <- combn(x = feat.vec, m = 2)
   feat.pair.mat <- cbind(feat.pair.mat, rbind(feat.vec, feat.vec))  # add the identical feature pairs.
-  feat.pair.mat <- t(apply(feat.pair.mat, 2, sort.col))
+  feat.pair.mat <- t(apply(feat.pair.mat, 2, sort))
   feat.pair.num <- dim(feat.pair.mat)[1]
   
   # Create the frequency matrix and the vector.
@@ -99,7 +99,7 @@ UpdatePFPMI <- function(psa.list, s, p) {
     y <- seg.pair.mat[i, 2]
     
     feat.pair <- rbind(feat.mat[x, ], feat.mat[y, ])
-    feat.pair <- apply(feat.pair, 2, sort.col)
+    feat.pair <- apply(feat.pair, 2, sort)
     
     x.feat <- feat.pair[1, ]
     y.feat <- feat.pair[2, ]

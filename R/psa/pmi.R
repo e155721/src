@@ -45,7 +45,7 @@ UpdatePMI <- function(psa.list, s) {
   if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
     corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop = F]
   }
-  corpus <- apply(corpus, 2, sort.col)
+  corpus <- apply(corpus, 2, sort)
   
   # Create the segment vector and the segment pairs matrix.
   seg.vec      <- unique(as.vector(corpus))
