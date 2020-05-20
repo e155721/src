@@ -102,7 +102,7 @@ AggrtPMI <- function(s, pmi.list) {
   # the matrix of the PMIs is changed 
   # from a three-dimensional array to a matrix.
   if (length(pmi.list[[1]]$pmi) != 5) {
-    pmi.mat <- as.matrix(pmi.mat)
+    pmi.mat <- as.matrix(pmi.mat[, , 1])
   }
   
   return(pmi.mat)
