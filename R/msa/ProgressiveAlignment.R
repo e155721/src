@@ -16,10 +16,10 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   } else {
     min <- T
   }
-  
+
   # Compute the pairwise alignment score for each regions pair.
   psa <- MakePairwise(word.list, s, select_min=min)
-  
+
   # Make the similarity matrix.
   num.regions <- length(word.list)  # number of sequences
   dist.mat <- matrix(0, num.regions, num.regions)
@@ -30,30 +30,26 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     j <- reg.comb[2, k]
     dist.mat[i, j] <- psa[[k]]$score
   }
-  
-  # Calculate the PSA of identical pairs.  
+
+  # Calculate the PSA of identical pairs.
   if (similarity) {
-    for (i in 1:num.regions) {
-      dist.mat[i, i] <- needleman_wunsch(word.list[[i]], word.list[[i]], s, select_min=min)$score
-    }
+    dist.mat <- -dist.mat
+    dist.max <- max(dist.mat[upper.tri(dist.mat, diag = T)])
+    dist.min <- min(dist.mat[upper.tri(dist.mat, diag = T)])
+    dist.mat[upper.tri(dist.mat, diag = T)] <- (dist.mat[upper.tri(dist.mat, diag = T)] - dist.min) / (dist.max - dist.min)
   }
-  
+
   # Fill the distance matrix.
   dist.mat.tmp <- t(dist.mat)
   dist.mat[lower.tri(dist.mat)] <- dist.mat.tmp[lower.tri(dist.mat.tmp)]
-  
-  if (similarity) {
-    # Convert the similarity matrix to the "dist" object.
-    psa.d <- dist(dist.mat)
-  } else {
-    # Convert the distance matrix to the "dist" object.
-    psa.d <- as.dist(dist.mat)
-  }
-  
+
+  # Convert the distance matrix to the "dist" object.
+  psa.d <- as.dist(dist.mat)
+
   # Make the guide tree.
   psa.hc <- hclust(psa.d, "average")
   gtree <- psa.hc$merge
-  
+
   # START OF PROGRESSIVE ALIGNMENT
   pa.list <- list()
   len <- dim(gtree)[1]
@@ -64,7 +60,7 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
       seq2 <- gtree[i, 2] * -1
       pa <- needleman_wunsch(word.list[[seq1]], word.list[[seq2]], s, select_min=min)
       pa.list[[i]] <- DelGap(pa$aln)
-    } 
+    }
     else if(flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
@@ -78,7 +74,7 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     }
   }
   # END OF PROGRESSIVE ALIGNMENT
-  
+
   # Return the list of progressive alignment results.
   msa <- list()
   msa$aln <- tail(pa.list, n = 1)[[1]]
