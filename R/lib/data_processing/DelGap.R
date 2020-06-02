@@ -1,5 +1,4 @@
-DelGap <- function(x)
-{
+DelGap <- function(x) {
   d.vec <- c()
   j <- 1
   while (j <= dim(x)[2]) {
@@ -9,12 +8,11 @@ DelGap <- function(x)
     }
     j <- j + 1
   }
-
+  
   d.vec <- rev(d.vec)
   for (j in d.vec) {
-    x <- x[, -j]
+    x <- x[, -j, drop = F]
   }
   
   return(x)
 }
-
