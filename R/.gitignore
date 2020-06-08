@@ -1,3 +1,4 @@
 *.sh
 *.tmp
 tmp/
+*.RData
