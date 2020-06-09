@@ -61,10 +61,9 @@ for (j in 1:72) {
 
 for (c in 1:72) {
   
-  if (c == 51) {
+  if ((c == 51) || (c == 42)) {
     # NOP
   } else {
-    
     name.vec <- FindSheetName(c, sheet_names)
     N <- length(name.vec)
     
