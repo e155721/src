@@ -16,23 +16,37 @@ align <- function(c1, c2, method, s) {
   
   N1 <- length(c1)
   N2 <- length(c2)
-  ldn.vec <- NULL
+
+  dist <- is.dist(method)
   
-  for (i in 1:N1) {
-    for (j in 1:N2) {
-      as      <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = is.dist(method))$score
-      ldn     <- as / max(length(c1[[i]]), length(c2[[j]]))
-      ldn.vec <- c(ldn.vec, ldn)
+  if (dist) {
+    # for LDN
+    ldn.vec <- NULL
+    for (i in 1:N1) {
+      for (j in 1:N2) {
+        as      <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)$score
+        ldn     <- as / max(length(c1[[i]]), length(c2[[j]]))
+        ldn.vec <- c(ldn.vec, ldn)
+      }
+    }
+  } else {
+    # for PF
+    pf.vec <- NULL
+    for (i in 1:N1) {
+      for (j in 1:N2) {
+        pf     <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)$score
+        pf.vec <- c(pf.vec, pf)
+      }
     }
   }
   
-  if (is.dist(method)) {
-    ldn <- min(ldn.vec)
+  if (dist) {
+    score <- min(ldn.vec)
   } else {
-    ldn <- max(ldn.vec)
+    score <- max(pf.vec)
   }
   
-  return(ldn)
+  return(score)
 }
 
 MakeMat <- function(r1, r2, method="lv") {
