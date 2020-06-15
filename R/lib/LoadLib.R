@@ -1,6 +1,6 @@
 LoadLib <- function(path) {
   lib.path <- paste(getwd(), path, sep = "/")
-  files <- list.files(lib.path, pattern = "*.R")
+  files <- list.files(lib.path, pattern = "*.R$")
   
   for (f in files) {
     print(f)
