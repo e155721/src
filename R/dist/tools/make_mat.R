@@ -73,7 +73,7 @@ MakeMat <- function(r1, r2, method="lv") {
   switch (method,
           "lv"  = s <- MakeEditDistance(Inf), 
           "pf"  = s <- MakeFeatureMatrix(-Inf, -1),
-          "pmi" = load("../../Alignment/ex_05-21/score_psa_pmi_base_2020-05-21.RData")
+          "pmi" = load("pmi_score.RData")
   )
 
   concepts <- names(r1)  
