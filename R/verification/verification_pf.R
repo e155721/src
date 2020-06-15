@@ -1,6 +1,6 @@
 source("lib/load_scoring_matrix.R")
 source("lib/load_verif_lib.R")
-source("psa/psa_for_each_word.R")
+source("lib/load_exec_align.R")
 source("verification/verification_psa.R")
 source("parallel_config.R")
 
