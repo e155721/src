@@ -25,7 +25,8 @@ dist_for_all <- function(method="lv") {
     d      <- dist(nr.vec)
     
     dist       <- list()
-    dist$pair  <- c(regions[k], regions[l])
+    dist$pair  <- paste(regions[k], regions[l])  # for using UTF-8.
+    dist$pair  <- unlist(strsplit(dist$pair, " "))
     dist$mat   <- mat
     dist$ranks <- nr.vec
     dist$dist  <- d
@@ -54,4 +55,3 @@ if (is.na(file)) {
 }
 
 print("Finished!!")
-
