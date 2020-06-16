@@ -25,7 +25,9 @@ align <- function(c1, c2, method, s) {
     for (i in 1:N1) {
       for (j in 1:N2) {
         as      <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)$score
-        ldn     <- as / max(length(c1[[i]]), length(c2[[j]]))
+        c1.len  <- length(c1[[i]]) - 1
+        c2.len  <- length(c2[[j]]) - 1
+        ldn     <- as / max(c1.len, c2.len)
         ldn.vec <- c(ldn.vec, ldn)
       }
     }
