@@ -35,7 +35,7 @@ Z <- function(nr.vec) {
   return(z)
 }
 
-Dist <- function(nr.vec) {
+dist <- function(nr.vec) {
   
   N <- length(nr.vec)
   

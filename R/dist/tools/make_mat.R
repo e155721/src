@@ -12,11 +12,11 @@ is.dist <- function(method) {
   return(dist)
 }
 
-align <- function(c1, c2, method, s) {
+psa <- function(c1, c2, method, s) {
   
   N1 <- length(c1)
   N2 <- length(c2)
-
+  
   dist <- is.dist(method)
   
   if (dist) {
@@ -77,14 +77,12 @@ MakeMat <- function(r1, r2, method="lv") {
           "pf"  = s <- MakeFeatureMatrix(-Inf, -1),
           "pmi" = load("pmi_score.RData")
   )
-
+  
   concepts <- names(r1)  
   mat <- matrix(NA, N, N, dimnames = list(concepts, concepts))
   for (i in 1:N) {
     for (j in 1:N) {
-      
-      mat[i, j] <- align(r1[[i]], r2[[j]], method, s)
-      
+      mat[i, j] <- psa(r1[[i]], r2[[j]], method, s)
     }
   }
   
