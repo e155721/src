@@ -19,33 +19,21 @@ psa <- function(c1, c2, method, s) {
   
   dist <- is.dist(method)
   
-  if (dist) {
-    # for LDN
-    ldn.vec <- NULL
-    for (i in 1:N1) {
-      for (j in 1:N2) {
-        as      <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)$score
-        c1.len  <- length(c1[[i]]) - 1
-        c2.len  <- length(c2[[j]]) - 1
-        ldn     <- as / max(c1.len, c2.len)
-        ldn.vec <- c(ldn.vec, ldn)
-      }
-    }
-  } else {
-    # for PF
-    pf.vec <- NULL
-    for (i in 1:N1) {
-      for (j in 1:N2) {
-        pf     <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)$score
-        pf.vec <- c(pf.vec, pf)
-      }
+  asn.vec <- NULL
+  for (i in 1:N1) {
+    for (j in 1:N2) {
+      as      <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)$score
+      c1.len  <- length(c1[[i]]) - 1
+      c2.len  <- length(c2[[j]]) - 1
+      asn     <- as / max(c1.len, c2.len)
+      asn.vec <- c(asn.vec, asn)
     }
   }
   
   if (dist) {
-    score <- min(ldn.vec)
+    score <- min(asn.vec)
   } else {
-    score <- max(pf.vec)
+    score <- max(asn.vec)
   }
   
   return(score)
