@@ -70,7 +70,9 @@ MakeMat <- function(r1, r2, method="lv") {
   mat <- matrix(NA, N, N, dimnames = list(concepts, concepts))
   for (i in 1:N) {
     for (j in 1:N) {
-      mat[i, j] <- psa(r1[[i]], r2[[j]], method, s)
+      c1 <- r1[[i]]
+      c2 <- r2[[j]]
+      mat[i, j] <- psa(c1, c2, method, s)
     }
   }
   
