@@ -12,31 +12,39 @@ is.dist <- function(method) {
   return(dist)
 }
 
-psa <- function(c1, c2, method, s) {
+psa_for_each_form <- function(c1, c2, method, s) {
   
   N1 <- length(c1)
   N2 <- length(c2)
   
   dist <- is.dist(method)
   
-  asn.vec <- NULL
+  psa.list <- list()
+  asn.vec  <- NULL
   for (i in 1:N1) {
     for (j in 1:N2) {
-      as      <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)$score
-      c1.len  <- length(c1[[i]]) - 1
-      c2.len  <- length(c2[[j]]) - 1
-      asn     <- as / max(c1.len, c2.len)
-      asn.vec <- c(asn.vec, asn)
+      psa           <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)
+      k             <- i + (j - 1) * N1
+      psa.list[[k]] <- psa
+      
+      as       <- psa$score
+      seq1.len <- length(psa$seq1) - 1
+      seq2.len <- length(psa$seq2) - 1
+      
+      asn      <- as / max(seq1.len, seq2.len)
+      asn.vec  <- c(asn.vec, asn)
+      
+      psa.list[[k]]$asn <- asn
     }
   }
   
   if (dist) {
-    score <- min(asn.vec)
+    best <- which(asn.vec == min(asn.vec)[1])
   } else {
-    score <- max(asn.vec)
+    best <- which(asn.vec == max(asn.vec)[1])
   }
   
-  return(score)
+  return(psa.list[[best]])
 }
 
 MakeMat <- function(r1, r2, method="lv") {
@@ -67,14 +75,22 @@ MakeMat <- function(r1, r2, method="lv") {
   )
   
   concepts <- names(r1)  
+  psa.list <- list()
   mat <- matrix(NA, N, N, dimnames = list(concepts, concepts))
   for (i in 1:N) {
     for (j in 1:N) {
       c1 <- r1[[i]]
       c2 <- r2[[j]]
-      mat[i, j] <- psa(c1, c2, method, s)
+      
+      psa           <- psa_for_each_form(c1, c2, method, s)
+      k             <- i + (j - 1) * N
+      psa.list[[k]] <- psa
+      mat[i, j]     <- psa$asn
     }
   }
   
-  return(mat)
+  mat.o          <- list()
+  mat.o$psa.list <- psa.list
+  mat.o$mat      <- mat
+  return(mat.o)
 }
