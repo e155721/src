@@ -39,9 +39,9 @@ psa_for_each_form <- function(c1, c2, method, s) {
   }
   
   if (dist) {
-    best <- which(asn.vec == min(asn.vec)[1])
+    best <- which(asn.vec == min(asn.vec))[1]
   } else {
-    best <- which(asn.vec == max(asn.vec)[1])
+    best <- which(asn.vec == max(asn.vec))[1]
   }
   
   return(psa.list[[best]])
