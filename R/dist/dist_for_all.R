@@ -20,8 +20,8 @@ dist_for_all <- function(method="lv") {
     r1 <- all.list[[k]]
     r2 <- all.list[[l]]
     
-    mat    <- MakeMat(r1, r2, method)
-    nr.vec <- each_nr(mat, dist = is.dist(method))
+    mat.o  <- MakeMat(r1, r2, method)
+    nr.vec <- each_nr(mat.o$mat, dist = is.dist(method))
     d      <- dist(nr.vec)
     
     dist        <- list()
