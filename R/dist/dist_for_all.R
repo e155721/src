@@ -24,12 +24,15 @@ dist_for_all <- function(method="lv") {
     nr.vec <- each_nr(mat, dist = is.dist(method))
     d      <- dist(nr.vec)
     
-    dist       <- list()
-    dist$pair  <- paste(regions[k], regions[l])  # for using UTF-8.
-    dist$pair  <- unlist(strsplit(dist$pair, " "))
-    dist$mat   <- mat
-    dist$ranks <- nr.vec
-    dist$dist  <- d
+    dist        <- list()
+    dist$method <- method
+    dist$pair   <- paste(regions[k], regions[l])  # for using UTF-8.
+    dist$pair   <- unlist(strsplit(dist$pair, " "))
+    
+    dist$psa.list <- mat.o$psa.list
+    dist$mat      <- mat.o$mat
+    dist$ranks    <- nr.vec
+    dist$dist     <- d
     return(dist)
   }
   
