@@ -55,7 +55,7 @@ for (r in 1:95) {
 concepts <- FixConcepts(sheet_names)
 
 names(all.list) <- regions
-for (j in 1:72) {
+for (j in 1:95) {
   names(all.list[[j]]) <- concepts
 }
 
