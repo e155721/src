@@ -1,4 +1,4 @@
-source("data_processing/DelGap.R")
+source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
 MakeGoldStandard <- function(gold.list)

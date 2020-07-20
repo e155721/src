@@ -3,6 +3,5 @@
 tmp/
 *.RData
 *.pdf
-test/
 *.Rproj
 .Rproj.user
