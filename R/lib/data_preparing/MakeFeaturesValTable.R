@@ -1,7 +1,7 @@
 # load the library.
 library(openxlsx)
 # load the function.
-source("data_processing/MakeWordList.R")
+source("lib/load_data_processing.R")
 
 MakeFeaturesValTable <- function(input.path = "../../Data/test_data.xlsm", output.path = "features/") {
   # makes the table of the phoneme feature values which each phonetic symbol has.
