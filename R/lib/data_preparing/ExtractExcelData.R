@@ -2,13 +2,19 @@
 library(openxlsx)
 library(data.table)
 
-library(foreach)
-library(doParallel)
-registerDoParallel(detectCores())
+source("parallel_config.R")
 
-# FormatData
-FormatData <- function(sheet)
-{
+format_name <- function(name) {
+  name <- gsub("*[ ]*", "", name)
+  name <- gsub("（", "(", name)
+  name <- gsub("）", ")", name)
+  return(name)
+}
+
+# format_data
+format_data <- function(sheet) {
+  # except the distinctive features
+  sheet <- sheet[, 1:27]
   # delete the labels and the assumed form
   sheet <- sheet[-1:-2, ]
   # redundant region
@@ -36,35 +42,42 @@ FormatData <- function(sheet)
   return(x)
 }
 
+input_file <- "../../Data/fix_test_data.xlsm"
+
 # ExcelDataExtraction
-ExtractExcelData <- function(input_path = "../../Data/fix_test_data.xlsm",
-                             output_path = "../../Alignment/org_data/")
-{
-  if (!dir.exists(output_path)) {
-    dir.create(output_path)
+ExtractExcelData <- function(input_file=NA, output_dir=NA, csv=F) {
+  
+  if (is.na(input_file) || is.na(output_dir)) {
+    print("It must be selected that the name of the input directory and the output directory.")
+    return(1)
+  } else {
+    output_dir <- paste(output_dir, "/", sep = "")
+  }
+  
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir)
   }
   
   # get the all sheet names
-  sheet_names <- getSheetNames(input_path)
+  sheet_names <- getSheetNames(input_file)
   sheet_names_length <- length(sheet_names)
   for (i in 1:sheet_names_length) {
-    sheet_names[[i]] <- gsub("*[ ]*", "", sheet_names[[i]])
-    sheet_names[[i]] <- gsub("（", "(", sheet_names[[i]])
-    sheet_names[[i]] <- gsub("）", ")", sheet_names[[i]])
+    sheet_names[[i]] <- format_name(sheet_names[[i]])
   }
   
   # output sheets
-  k <- 1
-  foreach (i = 6:135) %dopar% {
-    sheet <- read.xlsx(input_path, sheet = i)[, 1:27]
-    
-    #sheet <- transform(sheet, Regions = regions)
-    #setcolorder(sheet, "Regions")
-    sheet <- FormatData(sheet)
-    write.table(sheet, paste(output_path, sheet_names[i], ".org", sep = ""))
-    # write.table(sheet, paste(output_path, formatC(k, width = 3, flag = 0), ".org", sep = ""))
-    k <- k + 1
+  foreach (i = 6:sheet_names_length) %dopar% {
+    sheet <- read.xlsx(input_file, sheet = i)
+    sheet <- format_data(sheet)
+    if (csv) {
+      write.csv(sheet, paste(output_dir, sheet_names[i], ".csv", sep = ""), fileEncoding = "utf-8")
+    } else {
+      write.table(sheet, paste(output_dir, sheet_names[i], ".org", sep = ""), fileEncoding = "utf-8")
+    }
   }
   
   return(0)
 }
+
+ExtractExcelData(input_file = "../../Data/fix_test_data.xlsm",
+                 output_dir = "../../Alignment/org_data/", csv = F)
