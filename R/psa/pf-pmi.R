@@ -20,19 +20,19 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   # Returns:
   #   The PMI of the symbol pair (x, y).
   
-  f.xy <- vector(length = 5)
-  f.x  <- vector(length = 5)
-  f.y  <- vector(length = 5)
-  for (p in 1:5) {
+  f.xy <- vector(length = feat.num)
+  f.x  <- vector(length = feat.num)
+  f.y  <- vector(length = feat.num)
+  for (p in 1:feat.num) {
     f.xy[p] <- pair.freq[x[p], y[p]]
     f.x[p]  <- seg.freq[x[p]]  # frequency of x in the segments
     f.y[p]  <- seg.freq[y[p]]
   }
   
-  p.xy <- vector(length = 5)
-  p.x  <- vector(length = 5)
-  p.y  <- vector(length = 5)
-  for (p in 1:5) {
+  p.xy <- vector(length = feat.num)
+  p.x  <- vector(length = feat.num)
+  p.y  <- vector(length = feat.num)
+  for (p in 1:feat.num) {
     p.xy[p] <- (f.xy[p] + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
     p.x[p]  <- (f.x[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of x
     p.y[p]  <- (f.y[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of y
@@ -67,7 +67,7 @@ UpdatePFPMI <- function(psa.list, s, p) {
   seg.pair.num <- dim(seg.pair.mat)[1]
   
   # Initialization for converting the corpus to the feature corpus.
-  gap <- as.vector(matrix("-", 1, 5))
+  gap <- as.vector(matrix("-", 1, feat.num))
   feat.mat <- rbind(mat.CV.feat, gap)
   dimnames(feat.mat) <- list(c(C, V, "-"), NULL)
   
