@@ -86,7 +86,7 @@ AggrtPMI <- function(s, pmi.list) {
   # The three-dimensional array to save the PF-PMI for each symbol pairs.
   s.dim <- dim(s)[1]
   s.names <- dimnames(s)[[1]]
-  pmi.mat <- array(NA, dim = c(s.dim, s.dim, 5), dimnames = list(s.names, s.names))
+  pmi.mat <- array(NA, dim = c(s.dim, s.dim, dim(mat.C.feat)[2]), dimnames = list(s.names, s.names))
   
   seg.pair.num <- length(pmi.list)
   for (i in 1:seg.pair.num) {
@@ -101,7 +101,7 @@ AggrtPMI <- function(s, pmi.list) {
   # If the symbol pair PMI has been used, 
   # the matrix of the PMIs is changed 
   # from a three-dimensional array to a matrix.
-  if (length(pmi.list[[1]]$pmi) != 5) {
+  if (length(pmi.list[[1]]$pmi) == 1) {
     pmi.mat <- as.matrix(pmi.mat[, , 1])
   }
   
