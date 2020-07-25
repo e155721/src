@@ -1,5 +1,6 @@
 make_phone_vec <- function(file) {
   vec <- read.table(file, fileEncoding = "utf-8")[, 1]
+  vec <- as.vector(vec)  # for gpu
   vec
 }
 
