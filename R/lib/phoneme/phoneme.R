@@ -1,19 +1,41 @@
+make_phone_vec <- function(file) {
+  vec <- read.table(file, fileEncoding = "utf-8")[, 1]
+  vec
+}
+
+make_feat_mat <- function(file) {
+  feat.mat <- read.table(file, fileEncoding = "utf-8")
+  feat.mat <- as.matrix(feat.mat)
+  dimnames(feat.mat) <- list(feat.mat[, 1], NULL)
+  feat.mat <- feat.mat[, -1]
+  
+  N <- dim(feat.mat)[2]
+  for (j in 1:N) {
+    feat.mat[, j] <- as.numeric(feat.mat[, j])
+  }
+  
+  feat.mat
+}
+
 # Consonants
-C <- as.vector(read.table("lib/phoneme/symbols/consonants.txt")[, 1])
+C <- make_phone_vec("lib/phoneme/symbols/consonants.txt")
 
 # Vowels
-V <- as.vector(read.table("lib/phoneme/symbols/vowels.txt")[, 1])
+V <- make_phone_vec("lib/phoneme/symbols/vowels.txt")
 
 # Consonant features
-mat.C.feat <- as.matrix(read.table("lib/phoneme/features/consonants.txt"))
-dimnames(mat.C.feat) <- list(C, NULL)
+mat.C.feat <- make_feat_mat("lib/phoneme/features/consonants.txt")
 
 # Vowel features
-mat.V.feat <- as.matrix(read.table("lib/phoneme/features/vowels.txt"))
-dimnames(mat.V.feat) <- list(V, NULL)
+mat.V.feat <- make_feat_mat("lib/phoneme/features/vowels.txt")
 
-for (j in 1:5) {
+N <- dim(mat.C.feat)[2]
+for (j in 1:N) {
   mat.C.feat[, j] <- paste(j, "C", mat.C.feat[, j], sep="")
+}
+
+N <- dim(mat.V.feat)[2]
+for (j in 1:N) {
   mat.V.feat[, j] <- paste(j, "V", mat.V.feat[, j], sep="")
 }
 
