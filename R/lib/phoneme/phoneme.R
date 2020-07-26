@@ -8,7 +8,7 @@ make_feat_mat <- function(file) {
   feat.mat <- read.table(file, fileEncoding = "utf-8")
   feat.mat <- as.matrix(feat.mat)
   dimnames(feat.mat) <- list(feat.mat[, 1], NULL)
-  feat.mat <- feat.mat[, -1]
+  feat.mat <- feat.mat[, -1, drop = F]
   
   N <- dim(feat.mat)[2]
   for (j in 1:N) {
