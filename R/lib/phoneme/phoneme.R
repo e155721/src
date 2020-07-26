@@ -18,17 +18,20 @@ make_feat_mat <- function(file) {
   feat.mat
 }
 
+cons_file  <- "lib/phoneme/features/consonants.txt"
+vowel_file <- "lib/phoneme/features/vowels.txt"
+
 # Consonants
-C <- make_phone_vec("lib/phoneme/symbols/consonants.txt")
+C <- make_phone_vec(cons_file)
 
 # Vowels
-V <- make_phone_vec("lib/phoneme/symbols/vowels.txt")
+V <- make_phone_vec(vowel_file)
 
 # Consonant features
-mat.C.feat <- make_feat_mat("lib/phoneme/features/consonants.txt")
+mat.C.feat <- make_feat_mat(cons_file)
 
 # Vowel features
-mat.V.feat <- make_feat_mat("lib/phoneme/features/vowels.txt")
+mat.V.feat <- make_feat_mat(vowel_file)
 
 N <- dim(mat.C.feat)[2]
 for (j in 1:N) {
