@@ -1,14 +1,11 @@
-make_phone_vec <- function(file) {
-  vec <- read.table(file, fileEncoding = "utf-8")[, 1]
-  vec <- as.vector(vec)  # for gpu
+make_phone_vec <- function(feat.mat) {
+  vec <- dimnames(feat.mat)[[1]]
   vec
 }
 
 make_feat_mat <- function(file) {
   feat.mat <- read.table(file, fileEncoding = "utf-8")
   feat.mat <- as.matrix(feat.mat)
-  dimnames(feat.mat) <- list(feat.mat[, 1], NULL)
-  feat.mat <- feat.mat[, -1, drop = F]
 
   N <- dim(feat.mat)[2]
   for (j in 1:N) {
@@ -20,17 +17,17 @@ make_feat_mat <- function(file) {
 
 get_phone_info <- function(cons_file, vowel_file) {
 
-  # Consonants
-  C <- make_phone_vec(cons_file)
-
-  # Vowels
-  V <- make_phone_vec(vowel_file)
-
   # Consonant features
   mat.C.feat <- make_feat_mat(cons_file)
 
   # Vowel features
   mat.V.feat <- make_feat_mat(vowel_file)
+
+  # Consonants
+  C <- make_phone_vec(mat.C.feat)
+
+  # Vowels
+  V <- make_phone_vec(mat.V.feat)
 
   N <- dim(mat.C.feat)[2]
   for (j in 1:N) {
