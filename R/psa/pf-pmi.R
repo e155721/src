@@ -25,7 +25,7 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   f.y  <- vector(length = feat.num)
   for (p in 1:feat.num) {
     f.xy[p] <- pair.freq[x[p], y[p]]
-    f.x[p]  <- seg.freq[x[p]]  # frequency of x in the segments
+    f.x[p]  <- seg.freq[x[p]]
     f.y[p]  <- seg.freq[y[p]]
   }
   
@@ -86,11 +86,21 @@ UpdatePFPMI <- function(psa.list, s, p) {
   feat.pair.freq.mat <- MakeFreqMat(feat.vec, feat.pair.mat, corpus.feat)
   feat.freq.vec      <- MakeFreqVec(feat.vec, corpus.feat)
   
-  # Initialization for the Laplace smoothing.
-  N1 <- dim(corpus.feat)[2]  # number of the aligned segments
-  N2 <- N1 * 2  # number of segments in the aligned segments
-  V1 <- length(unique(paste(corpus.feat[1, ], corpus.feat[2, ])))  # number of segment pair types
-  V2 <- length(unique(as.vector(corpus.feat)))  # number of symbol types
+  # Initiallization for a denominator for the PF-PMI.
+  N1 <- dim(corpus.feat)[2] / 5 # number of the aligned features
+  N2 <- N1 * 2  # number of features in the aligned faetures
+  
+  # Initialization for the Laplace smoothing
+  V1.all <- unique(paste(corpus.feat[1, ], corpus.feat[2, ]))  # number of segment pair types
+  V2.all <- unique(as.vector(corpus.feat))  # number of symbol types
+  V1     <- NULL  # The number of feature pair types for each column.
+  V2     <- NULL  # The number of feature types for each column.
+  for (p in 1:5) {
+    V1[p] <- length(c(grep(paste(p, "C", sep = ""), V1.all),
+                      grep(paste(p, "V", sep = ""), V1.all)))
+    V2[p] <- length(c(grep(paste(p, "C", sep = ""), V2.all),
+                      grep(paste(p, "V", sep = ""), V2.all)))
+  }
   
   # Calculate the PF-PMI for all segment pairs.
   pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
