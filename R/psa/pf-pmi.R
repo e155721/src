@@ -71,11 +71,8 @@ UpdatePFPMI <- function(psa.list, s) {
   cat("\n")
   print("Calculate PF-PMI")
 
+  # Make the phones corpus.
   corpus_phone <- MakeCorpus(psa.list)
-  # Removes identical segments from the corpus_phone.
-  if (sum(which(corpus_phone[1, ] == corpus_phone[2, ]) != 0)) {
-    corpus_phone <- corpus_phone[, -which(corpus_phone[1, ] == corpus_phone[2, ]), drop = F]
-  }
 
   # Create the segment vector and the segment pairs matrix.
   phone_vec <- unique(as.vector(corpus_phone))
