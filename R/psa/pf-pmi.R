@@ -10,9 +10,9 @@ sym2feat <- function(x, args) {
 
 convert_corpus <- function(corpus_phone, feat_mat) {
   # Convert from corpus_phone to feature corpus.
-  corpus <- t(apply(corpus_phone, 1, sym2feat, feat_mat))
-  corpus <- apply(corpus, 2, sort)
-  corpus
+  corpus_feat <- t(apply(corpus_phone, 1, sym2feat, feat_mat))
+  corpus_feat <- apply(corpus_feat, 2, sort)
+  corpus_feat
 }
 
 smoothing <- function(corpus) {
@@ -87,29 +87,28 @@ UpdatePFPMI <- function(psa.list, s) {
   phone_pair_num <- dim(phone_pair_mat)[1]
 
   # Initialization for converting the corpus_phone to the feature corpus.
-  gap <- as.vector(matrix("-", 1, feat.num))
+  gap <- matrix("-", 1, feat.num, dimnames = list("-"))
   feat_mat <- rbind(mat.CV.feat, gap)
-  dimnames(feat_mat) <- list(c(C, V, "-"), NULL)
 
   # Convert from corpus_phone to feature corpus.
-  corpus <- convert_corpus(corpus_phone, feat_mat)
+  corpus_feat <- convert_corpus(corpus_phone, feat_mat)
 
   # Create the features vector and the feature pairs matrix.
-  feat_vec <- unique(as.vector(corpus))
+  feat_vec <- unique(as.vector(corpus_feat))
   pair_mat <- combn(x = feat_vec, m = 2)
   pair_mat <- cbind(pair_mat, rbind(feat_vec, feat_vec))  # add the identical feature pairs.
   pair_mat <- t(apply(pair_mat, 2, sort))
 
   # Create the frequency matrix and the vector.
-  pair_freq_mat <- MakeFreqMat(feat_vec, pair_mat, corpus)
-  seg_freq_vec  <- MakeFreqVec(feat_vec, corpus)
+  pair_freq_mat <- MakeFreqMat(feat_vec, pair_mat, corpus_feat)
+  seg_freq_vec  <- MakeFreqVec(feat_vec, corpus_feat)
 
   # Initiallization for a denominator for the PF-PMI.
-  N1 <- dim(corpus)[2] / feat.num # number of the aligned features
+  N1 <- dim(corpus_feat)[2] / feat.num # number of the aligned features
   N2 <- N1 * 2  # number of features in the aligned faetures
 
   # Initialization for the Laplace smoothing
-  V <- smoothing(corpus)
+  V <- smoothing(corpus_feat)
   V1 <- V[[1]]
   V2 <- V[[2]]
 
