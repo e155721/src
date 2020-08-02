@@ -8,14 +8,30 @@ sym2feat <- function(x, args) {
   return(args[x, ])
 }
 
-PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
-  # Computes the PMI of symbol pair (x, y) in the corpus.feat.
+smoothing <- function(corpus) {
+  # Initialization for the Laplace smoothing
+  V1.all <- unique(paste(corpus[1, ], corpus[2, ]))  # number of segment pair types
+  V2.all <- unique(as.vector(corpus))  # number of symbol types
+  V1     <- NULL  # The number of feature pair types for each column.
+  V2     <- NULL  # The number of feature types for each column.
+  for (p in 1:feat.num) {
+    V1[p] <- length(c(grep(paste(p, "C", sep = ""), V1.all),
+                      grep(paste(p, "V", sep = ""), V1.all)))
+    V2[p] <- length(c(grep(paste(p, "C", sep = ""), V2.all),
+                      grep(paste(p, "V", sep = ""), V2.all)))
+  }
+
+  list(V1, V2)
+}
+
+PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
+  # Computes the PMI of symbol pair (x, y) in the corpus.
   # Args:
   #   x, y: the feature vectors
   #   N1, N2: the denominators for the PMI
   #   V1, V2: the paramators for the Laplace smoothing
-  #   pair.freq: the frequency matrix of the feature pairs
-  #   seg.freq: the frequency vector of the features
+  #   pair_freq_mat: the frequency matrix of the feature pairs
+  #   seg_freq_vec: the frequency vector of the features
   #
   # Returns:
   #   The PMI of the symbol pair (x, y).
@@ -24,9 +40,9 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   f.x  <- vector(length = feat.num)
   f.y  <- vector(length = feat.num)
   for (p in 1:feat.num) {
-    f.xy[p] <- pair.freq[x[p], y[p]]
-    f.x[p]  <- seg.freq[x[p]]
-    f.y[p]  <- seg.freq[y[p]]
+    f.xy[p] <- pair_freq_mat[x[p], y[p]]
+    f.x[p]  <- seg_freq_vec[x[p]]
+    f.y[p]  <- seg_freq_vec[y[p]]
   }
 
   p.xy <- vector(length = feat.num)
@@ -38,12 +54,12 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
     p.y[p]  <- (f.y[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of y
   }
 
-  pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
+  pf_pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
 
-  return(pmi)
+  return(pf_pmi)
 }
 
-UpdatePFPMI <- function(psa.list, s, p) {
+UpdatePFPMI <- function(psa.list, s) {
   # Compute the PMI of the PSA list.
   #
   # Args:
@@ -53,86 +69,78 @@ UpdatePFPMI <- function(psa.list, s, p) {
   # Returns:
   #   s: The scoring matrix that was updated by the PMI-weighting.
   cat("\n")
-  print("Calculate PMI")
+  print("Calculate PF-PMI")
 
-  corpus <- MakeCorpus(psa.list)
-  # Removes identical segments from the corpus.
-  if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
-    corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop = F]
+  corpus_phone <- MakeCorpus(psa.list)
+  # Removes identical segments from the corpus_phone.
+  if (sum(which(corpus_phone[1, ] == corpus_phone[2, ]) != 0)) {
+    corpus_phone <- corpus_phone[, -which(corpus_phone[1, ] == corpus_phone[2, ]), drop = F]
   }
 
   # Create the segment vector and the segment pairs matrix.
-  seg.vec <- unique(as.vector(corpus))
-  seg.pair.mat <- t(combn(x = seg.vec, m = 2))
-  seg.pair.num <- dim(seg.pair.mat)[1]
+  phone_vec <- unique(as.vector(corpus_phone))
+  phone_pair_mat <- t(combn(x = phone_vec, m = 2))
+  phone_pair_num <- dim(phone_pair_mat)[1]
 
-  # Initialization for converting the corpus to the feature corpus.
+  # Initialization for converting the corpus_phone to the feature corpus.
   gap <- as.vector(matrix("-", 1, feat.num))
-  feat.mat <- rbind(mat.CV.feat, gap)
-  dimnames(feat.mat) <- list(c(C, V, "-"), NULL)
+  feat_mat <- rbind(mat.CV.feat, gap)
+  dimnames(feat_mat) <- list(c(C, V, "-"), NULL)
 
-  # Convert from corpus to feature corpus.
-  corpus.feat <- t(apply(corpus, 1, sym2feat, feat.mat))
-  corpus.feat <- apply(corpus.feat, 2, sort)
+  # Convert from corpus_phone to feature corpus.
+  corpus <- t(apply(corpus_phone, 1, sym2feat, feat_mat))
+  corpus <- apply(corpus, 2, sort)
 
   # Create the features vector and the feature pairs matrix.
-  feat.vec      <- unique(as.vector(corpus.feat))
-  feat.pair.mat <- combn(x = feat.vec, m = 2)
-  feat.pair.mat <- cbind(feat.pair.mat, rbind(feat.vec, feat.vec))  # add the identical feature pairs.
-  feat.pair.mat <- t(apply(feat.pair.mat, 2, sort))
-  feat.pair.num <- dim(feat.pair.mat)[1]
+  feat_vec <- unique(as.vector(corpus))
+  pair_mat <- combn(x = feat_vec, m = 2)
+  pair_mat <- cbind(pair_mat, rbind(feat_vec, feat_vec))  # add the identical feature pairs.
+  pair_mat <- t(apply(pair_mat, 2, sort))
 
   # Create the frequency matrix and the vector.
-  feat.pair.freq.mat <- MakeFreqMat(feat.vec, feat.pair.mat, corpus.feat)
-  feat.freq.vec      <- MakeFreqVec(feat.vec, corpus.feat)
+  pair_freq_mat <- MakeFreqMat(feat_vec, pair_mat, corpus)
+  seg_freq_vec  <- MakeFreqVec(feat_vec, corpus)
 
   # Initiallization for a denominator for the PF-PMI.
-  N1 <- dim(corpus.feat)[2] / feat.num # number of the aligned features
+  N1 <- dim(corpus)[2] / feat.num # number of the aligned features
   N2 <- N1 * 2  # number of features in the aligned faetures
 
   # Initialization for the Laplace smoothing
-  V1.all <- unique(paste(corpus.feat[1, ], corpus.feat[2, ]))  # number of segment pair types
-  V2.all <- unique(as.vector(corpus.feat))  # number of symbol types
-  V1     <- NULL  # The number of feature pair types for each column.
-  V2     <- NULL  # The number of feature types for each column.
-  for (p in 1:feat.num) {
-    V1[p] <- length(c(grep(paste(p, "C", sep = ""), V1.all),
-                      grep(paste(p, "V", sep = ""), V1.all)))
-    V2[p] <- length(c(grep(paste(p, "C", sep = ""), V2.all),
-                      grep(paste(p, "V", sep = ""), V2.all)))
-  }
+  V <- smoothing(corpus)
+  V1 <- V[[1]]
+  V2 <- V[[2]]
 
   # Calculate the PF-PMI for all segment pairs.
-  pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
+  pf_pmi_list <- foreach(i = 1:phone_pair_num) %dopar% {
 
-    x <- seg.pair.mat[i, 1]
-    y <- seg.pair.mat[i, 2]
+    x <- phone_pair_mat[i, 1]
+    y <- phone_pair_mat[i, 2]
 
-    feat.pair <- rbind(feat.mat[x, ], feat.mat[y, ])
-    feat.pair <- apply(feat.pair, 2, sort)
+    feat_pair_mat <- rbind(feat_mat[x, ], feat_mat[y, ])
+    feat_pair_mat <- apply(feat_pair_mat, 2, sort)
 
-    x.feat <- feat.pair[1, ]
-    y.feat <- feat.pair[2, ]
+    x_feat <- feat_pair_mat[1, ]
+    y_feat <- feat_pair_mat[2, ]
 
-    pf.pmi <- PFPMI(x.feat, y.feat, N1, N2, V1, V2,
-                    pair.freq = feat.pair.freq.mat, seg.freq = feat.freq.vec)
+    pf_pmi <- PFPMI(x_feat, y_feat, N1, N2, V1, V2,
+                    pair_freq_mat = pair_freq_mat, seg_freq_vec = seg_freq_vec)
 
     pmi     <- list()
     pmi$V1  <- x
     pmi$V2  <- y
-    pmi$pmi <- pf.pmi
+    pmi$pmi <- pf_pmi
     return(pmi)
   }
 
   # Invert the PF-PMI for all segment pairs.
-  score.tmp <- foreach(i = 1:seg.pair.num, .combine = c) %dopar% {
-    pmi <- pmi.list[[i]]$pmi
-    #-sum(abs(pmi))  # L1 norm
-    -sqrt(sum(pmi * pmi))  # L2 norm
+  score.tmp <- foreach(i = 1:phone_pair_num, .combine = c) %dopar% {
+    pf_pmi <- pf_pmi_list[[i]]$pmi
+    #-sum(abs(pf_pmi))  # L1 norm
+    -sqrt(sum(pf_pmi * pf_pmi))  # L2 norm
   }
 
   pmi <- list()
-  pmi$pmi.mat <- AggrtPMI(s, pmi.list)
-  pmi$s       <- pmi2dist(score.tmp, pmi.list)
+  pmi$pmi.mat <- AggrtPMI(s, pf_pmi_list)
+  pmi$s       <- pmi2dist(score.tmp, pf_pmi_list)
   return(pmi)
 }
