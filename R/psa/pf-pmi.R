@@ -33,9 +33,9 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   p.x  <- vector(length = feat.num)
   p.y  <- vector(length = feat.num)
   for (p in 1:feat.num) {
-    p.xy[p] <- (f.xy[p] + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
-    p.x[p]  <- (f.x[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of x
-    p.y[p]  <- (f.y[p] + 1) / (N2 + V2)  # probability of the occurrence frequency of y
+    p.xy[p] <- (f.xy[p] + 1) / (N1 + V1[p])  # probability of the co-occurrence frequency of xy
+    p.x[p]  <- (f.x[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of x
+    p.y[p]  <- (f.y[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of y
   }
 
   pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
