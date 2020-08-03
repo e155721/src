@@ -55,7 +55,7 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   return(pf_pmi)
 }
 
-UpdatePFPMI <- function(psa.list, s) {
+UpdatePFPMI <- function(psa.list, s, cv_sep = F) {
   # Compute the PMI of the PSA list.
   #
   # Args:
@@ -70,13 +70,18 @@ UpdatePFPMI <- function(psa.list, s) {
   # Make the phones corpus.
   corpus_phone <- MakeCorpus(psa.list)
 
-  corpus_cons  <- sep_corpus(C, corpus_phone)
-  corpus_vowel <- sep_corpus(V, corpus_phone)
+  if (cv_sep) {
+    corpus_cons  <- sep_corpus(C, corpus_phone)
+    corpus_vowel <- sep_corpus(V, corpus_phone)
 
-  pf_pmi_list_cons  <- calc_pf_pmi(corpus_cons, mat.C.feat)
-  pf_pmi_list_vowel <- calc_pf_pmi(corpus_vowel, mat.V.feat)
+    pf_pmi_list_cons  <- calc_pf_pmi(corpus_cons, mat.C.feat)
+    pf_pmi_list_vowel <- calc_pf_pmi(corpus_vowel, mat.V.feat)
 
-  pf_pmi_list <- c(pf_pmi_list_cons, pf_pmi_list_vowel)
+    pf_pmi_list <- c(pf_pmi_list_cons, pf_pmi_list_vowel)
+  } else {
+    pf_pmi_list  <- calc_pf_pmi(corpus_phone, mat.CV.feat)
+  }
+
   phone_pair_num <- length(pf_pmi_list)
 
   # Invert the PF-PMI for all segment pairs.
