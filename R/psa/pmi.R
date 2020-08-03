@@ -2,23 +2,24 @@ library(gtools)
 
 source("lib/load_phoneme.R")
 source("psa/pmi_tools.R")
+source("psa/calc_pmi.R")
 
-PMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
+PMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   # Computes the PMI of symbol pair (x, y) in the corpus.
   #
   # Args:
   #   x, y: the segment pairs
   #   N1, N2: the parametors for the PMI
   #   V1, V2: the parametors for the Laplace smoothing
-  #   pair.freq: the frequency matrix of the pair of segments
-  #   seg.freq: the frequency vector of the segments
+  #   pair_freq_mat: the frequency matrix of the pair of segments
+  #   seg_freq_vec: the frequency vector of the segments
   #
   # Returns:
   #   the PMI velue of the segment pair (x, y)
 
-  f.xy <- pair.freq[x, y]
-  f.x  <- seg.freq[x]
-  f.y  <- seg.freq[y]
+  f.xy <- pair_freq_mat[x, y]
+  f.x  <- seg_freq_vec[x]
+  f.y  <- seg_freq_vec[y]
 
   p.xy <- (f.xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
   p.x  <- (f.x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
@@ -42,43 +43,16 @@ UpdatePMI <- function(psa.list, s) {
 
   corpus <- MakeCorpus(psa.list)
 
-  # Create the segment vector and the segment pairs matrix.
-  seg.vec      <- unique(as.vector(corpus))
-  seg.pair.mat <- apply(combn(x = seg.vec, m = 2), 2, sort)
-  seg.pair.mat <- t(seg.pair.mat)
-  seg.pair.num <- dim(seg.pair.mat)[1]
-
-  # Create the frequency matrix and the vector.
-  seg.pair.freq.mat <- MakeFreqMat(seg.vec, seg.pair.mat, corpus)
-  seg.freq.vec      <- MakeFreqVec(seg.vec, corpus)
-
-  N1 <- dim(corpus)[2]  # number of the aligned segments
-  N2 <- N1 * 2  # number of segments in the aligned segments
-  V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of segment pair types
-  V2 <- length(unique(as.vector(corpus))) # number of symbol types
-
-  # Calculate the PMI for all segment pairs.
-  pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
-
-    x <- seg.pair.mat[i, 1]
-    y <- seg.pair.mat[i, 2]
-    pmi <- PMI(x = x, y = y, N1 = N1, N2 = N2, V1 = V1, V2 = V2,
-               pair.freq = seg.pair.freq.mat, seg.freq = seg.freq.vec)
-
-    score.vec     <- list()
-    score.vec$V1  <- x
-    score.vec$V2  <- y
-    score.vec$pmi <- pmi
-    return(score.vec)
-  }
+  pmi_list <- calc_pmi(corpus)
+  seg_pair_num <- length(pmi_list)
 
   # Invert the PMI for all segment pairs.
-  score.tmp <- foreach(i = 1:seg.pair.num, .combine = c) %dopar% {
-    -pmi.list[[i]]$pmi
+  score.tmp <- foreach(i = 1:seg_pair_num, .combine = c, .inorder = T) %dopar% {
+    -pmi_list[[i]]$pmi
   }
 
   pmi <- list()
-  pmi$pmi.mat <- AggrtPMI(s, pmi.list)
-  pmi$s       <- pmi2dist(score.tmp, pmi.list)
+  pmi$pmi.mat <- AggrtPMI(s, pmi_list)
+  pmi$s       <- pmi2dist(score.tmp, pmi_list)
   return(pmi)
 }
