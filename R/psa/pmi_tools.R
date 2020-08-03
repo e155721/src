@@ -25,6 +25,7 @@ MakeCorpus <- function(psa.list) {
   if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
     corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop = F]
   }
+  corpus <- apply(corpus, 2, sort)
 
   return(corpus)
 }
