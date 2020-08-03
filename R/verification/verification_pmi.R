@@ -18,7 +18,7 @@ s          <- MakeEditDistance(Inf)
 psa.list   <- PSAforEachWord(list.words, s, dist = T)
 
 # Update the scoring matrix using the PMI.
-pmi.o    <- PairwisePMI(psa.list, list.words, s, UpdatePMI)
+pmi.o    <- PairwisePMI(psa.list, list.words, s, UpdatePMI, cv_sep = F)
 pmi.mat  <- pmi.o$pmi.mat
 s        <- pmi.o$s
 psa.list <- pmi.o$psa.list

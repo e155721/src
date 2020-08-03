@@ -29,7 +29,7 @@ PMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   return(pmi)
 }
 
-UpdatePMI <- function(psa.list, s) {
+UpdatePMI <- function(psa.list, s, cv_sep=F) {
   # Compute the PMI of the PSA list.
   #
   # Args:
@@ -42,6 +42,19 @@ UpdatePMI <- function(psa.list, s) {
   print("Calculate PMI")
 
   corpus <- MakeCorpus(psa.list)
+
+  if (cv_sep) {
+    print("Enabled CV-separation.")
+    corpus_cons  <- sep_corpus(C, corpus)
+    corpus_vowel <- sep_corpus(V, corpus)
+
+    pmi_list_cons  <- calc_pmi(corpus_cons)
+    pmi_list_vowel <- calc_pmi(corpus_vowel)
+
+    pmi_list <- c(pmi_list_cons, pmi_list_vowel)
+  } else {
+    pmi_list  <- calc_pmi(corpus)
+  }
 
   pmi_list <- calc_pmi(corpus)
   seg_pair_num <- length(pmi_list)
