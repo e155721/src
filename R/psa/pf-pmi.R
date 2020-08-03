@@ -5,6 +5,19 @@ source("lib/load_phoneme.R")
 source("psa/pmi_tools.R")
 source("psa/calc_pf_pmi.R")
 
+sep_corpus <- function(X, corpus) {
+  x.idx <- NULL
+  for (x in X) {
+    x.idx <- c(x.idx, which(x == corpus[1, ]))
+    x.idx <- c(x.idx, which(x == corpus[2, ]))
+  }
+  x.idx <- unique(x.idx)
+
+  corpus <- corpus[, x.idx]
+  corpus <- apply(corpus, 2, sort)
+  corpus
+}
+
 PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   # Computes the PMI of symbol pair (x, y) in the corpus.
   # Args:
@@ -57,7 +70,13 @@ UpdatePFPMI <- function(psa.list, s) {
   # Make the phones corpus.
   corpus_phone <- MakeCorpus(psa.list)
 
-  pf_pmi_list <- calc_pf_pmi(corpus_phone, mat.CV.feat)
+  corpus_cons  <- sep_corpus(C, corpus_phone)
+  corpus_vowel <- sep_corpus(V, corpus_phone)
+
+  pf_pmi_list_cons  <- calc_pf_pmi(corpus_cons, mat.C.feat)
+  pf_pmi_list_vowel <- calc_pf_pmi(corpus_vowel, mat.V.feat)
+
+  pf_pmi_list <- c(pf_pmi_list_cons, pf_pmi_list_vowel)
   phone_pair_num <- length(pf_pmi_list)
 
   # Invert the PF-PMI for all segment pairs.
