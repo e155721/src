@@ -1,14 +1,3 @@
-sym2feat <- function(x, args) {
-  return(args[x, ])
-}
-
-convert_corpus <- function(corpus_phone, feat_mat) {
-  # Convert from corpus_phone to feature corpus.
-  corpus_feat <- t(apply(corpus_phone, 1, sym2feat, feat_mat))
-  corpus_feat <- apply(corpus_feat, 2, sort)
-  corpus_feat
-}
-
 smoothing <- function(corpus) {
   # Initialization for the Laplace smoothing
   V1.all <- unique(paste(corpus[1, ], corpus[2, ]))  # number of segment pair types
@@ -36,7 +25,14 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   feat_mat <- rbind(mat.X.feat, gap)
 
   # Convert from corpus_phone to feature corpus.
-  corpus_feat <- convert_corpus(corpus_phone, feat_mat)
+  corpus_feat1 <- NULL
+  corpus_feat2 <- NULL
+  N <- dim(corpus_phone)[2]
+  corpus_feat <- foreach (i = 1:N, .combine = "cbind", .inorder = T) %dopar% {
+    corpus_feat1 <- c(corpus_feat1, feat_mat[corpus_phone[1, i], ])
+    corpus_feat2 <- c(corpus_feat2, feat_mat[corpus_phone[2, i], ])
+    rbind(corpus_feat1, corpus_feat2)
+  }
 
   # Create the features vector and the feature pairs matrix.
   feat_vec <- unique(as.vector(corpus_feat))
