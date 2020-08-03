@@ -15,16 +15,16 @@ PMI <- function(x, y, N1, N2, V1, V2, pair.freq, seg.freq) {
   #
   # Returns:
   #   the PMI velue of the segment pair (x, y)
- 
+
   f.xy <- pair.freq[x, y]
   f.x  <- seg.freq[x]
   f.y  <- seg.freq[y]
-  
+
   p.xy <- (f.xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
   p.x  <- (f.x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
   p.y  <- (f.y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
   pmi  <- log2(p.xy / (p.x * p.y))  # calculating the pmi
-  
+
   return(pmi)
 }
 
@@ -39,24 +39,19 @@ UpdatePMI <- function(psa.list, s) {
   #   s: The scoring matrix that was updated by the PMI-weighting.
   cat("\n")
   print("Calculate PMI")
-  
+
   corpus <- MakeCorpus(psa.list)
-  # Remove identical segments from the corpus.
-  if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
-    corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop = F]
-  }
-  corpus <- apply(corpus, 2, sort)
-  
+
   # Create the segment vector and the segment pairs matrix.
   seg.vec      <- unique(as.vector(corpus))
   seg.pair.mat <- apply(combn(x = seg.vec, m = 2), 2, sort)
   seg.pair.mat <- t(seg.pair.mat)
   seg.pair.num <- dim(seg.pair.mat)[1]
-  
+
   # Create the frequency matrix and the vector.
   seg.pair.freq.mat <- MakeFreqMat(seg.vec, seg.pair.mat, corpus)
   seg.freq.vec      <- MakeFreqVec(seg.vec, corpus)
-  
+
   N1 <- dim(corpus)[2]  # number of the aligned segments
   N2 <- N1 * 2  # number of segments in the aligned segments
   V1 <- length(unique(paste(corpus[1, ], corpus[2, ])))  # number of segment pair types
@@ -64,12 +59,12 @@ UpdatePMI <- function(psa.list, s) {
 
   # Calculate the PMI for all segment pairs.
   pmi.list <- foreach(i = 1:seg.pair.num) %dopar% {
-    
+
     x <- seg.pair.mat[i, 1]
     y <- seg.pair.mat[i, 2]
     pmi <- PMI(x = x, y = y, N1 = N1, N2 = N2, V1 = V1, V2 = V2,
                pair.freq = seg.pair.freq.mat, seg.freq = seg.freq.vec)
-    
+
     score.vec     <- list()
     score.vec$V1  <- x
     score.vec$V2  <- y
@@ -81,7 +76,7 @@ UpdatePMI <- function(psa.list, s) {
   score.tmp <- foreach(i = 1:seg.pair.num, .combine = c) %dopar% {
     -pmi.list[[i]]$pmi
   }
-  
+
   pmi <- list()
   pmi$pmi.mat <- AggrtPMI(s, pmi.list)
   pmi$s       <- pmi2dist(score.tmp, pmi.list)
