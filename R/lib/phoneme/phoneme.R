@@ -29,18 +29,25 @@ get_phone_info <- function(cons_file, vowel_file) {
   # Vowels
   V <- make_phone_vec(mat.V.feat)
 
-  N <- dim(mat.C.feat)[2]
-  for (j in 1:N) {
+  N.cons <- dim(mat.C.feat)[2]
+  for (j in 1:N.cons) {
     mat.C.feat[, j] <- paste(j, "C", mat.C.feat[, j], sep = "")
+  }
+
+  N.vowel <- dim(mat.V.feat)[2]
+  for (j in 1:N.vowel) {
     mat.V.feat[, j] <- paste(j, "V", mat.V.feat[, j], sep = "")
   }
 
-  C.feat <- unique(as.vector(mat.C.feat))
-  V.feat <- unique(as.vector(mat.V.feat))
+  if (N.cons == N.vowel) {
+    C.feat <- unique(as.vector(mat.C.feat))
+    V.feat <- unique(as.vector(mat.V.feat))
 
-  CV <- c(C, V)
-  mat.CV.feat <- rbind(mat.C.feat, mat.V.feat)
-  CV.feat <- c(C.feat, V.feat)
+    CV <- c(C, V)
+    mat.CV.feat <- rbind(mat.C.feat, mat.V.feat)
+    CV.feat <- c(C.feat, V.feat)
+    assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
+  }
 
   # Make global variables.
   assign(x = "C", value = C, envir = .GlobalEnv)
@@ -49,7 +56,6 @@ get_phone_info <- function(cons_file, vowel_file) {
 
   assign(x = "mat.C.feat", value = mat.C.feat, envir = .GlobalEnv)
   assign(x = "mat.V.feat", value = mat.V.feat, envir = .GlobalEnv)
-  assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
 }
 
 cons_file  <- "lib/phoneme/features/consonants.txt"
