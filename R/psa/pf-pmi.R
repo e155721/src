@@ -17,6 +17,8 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   # Returns:
   #   The PMI of the symbol pair (x, y).
 
+  feat.num <- length(x)
+
   f.xy <- vector(length = feat.num)
   f.x  <- vector(length = feat.num)
   f.y  <- vector(length = feat.num)

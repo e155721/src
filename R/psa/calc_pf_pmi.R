@@ -1,4 +1,4 @@
-smoothing <- function(corpus) {
+smoothing <- function(corpus, feat.num) {
   # Initialization for the Laplace smoothing
   V1.all <- unique(paste(corpus[1, ], corpus[2, ]))  # number of segment pair types
   V2.all <- unique(as.vector(corpus))  # number of symbol types
@@ -19,6 +19,8 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   phone_vec <- unique(as.vector(corpus_phone))
   phone_pair_mat <- t(combn(x = phone_vec, m = 2))
   phone_pair_num <- dim(phone_pair_mat)[1]
+
+  feat.num <- dim(mat.X.feat)[2]
 
   # Initialization for converting the corpus_phone to the feature corpus.
   gap <- matrix("-", 1, feat.num, dimnames = list("-"))
@@ -49,7 +51,7 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   N2 <- N1 * 2  # number of features in the aligned faetures
 
   # Initialization for the Laplace smoothing
-  V <- smoothing(corpus_feat)
+  V <- smoothing(corpus_feat, feat.num)
   V1 <- V[[1]]
   V2 <- V[[2]]
 
