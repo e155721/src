@@ -164,7 +164,11 @@ UpdatePFPMI <- function(psa.list, s, cv_sep=F) {
   }
 
   pmi <- list()
-  pmi$pmi.mat <- AggrtPMI(s, pf_pmi_list)
-  pmi$s       <- pmi2dist(s, score.tmp, pf_pmi_list)
+  if (cv_sep) {
+    # NOP
+  } else {
+    pmi$pmi.mat <- AggrtPMI(s, pf_pmi_list)
+  }
+  pmi$s <- pmi2dist(s, score.tmp, pf_pmi_list)
   return(pmi)
 }
