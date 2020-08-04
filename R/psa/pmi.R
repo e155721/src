@@ -91,7 +91,6 @@ UpdatePMI <- function(psa.list, s, cv_sep=F) {
     pmi_list  <- calc_pmi(corpus)
   }
 
-  pmi_list <- calc_pmi(corpus)
   seg_pair_num <- length(pmi_list)
 
   # Invert the PMI for all segment pairs.
