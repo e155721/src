@@ -114,10 +114,11 @@ AggrtPMI <- function(s, pmi.list) {
   return(pmi.mat)
 }
 
-pmi2dist <- function(score.tmp, pmi.list) {
+pmi2dist <- function(s, score.tmp, pmi.list) {
   # Create a scoring matrix based the PMI.
   #
   # Args:
+  #   s: a scoring matrix.
   #   score.tmp: a list of inverted the PMIs for each segment pair.
   #   pmi.list: a list of the PMIs for each segment pair.
   #

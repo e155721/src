@@ -69,6 +69,6 @@ UpdatePFPMI <- function(psa.list, s) {
 
   pmi <- list()
   pmi$pmi.mat <- AggrtPMI(s, pf_pmi_list)
-  pmi$s       <- pmi2dist(score.tmp, pf_pmi_list)
+  pmi$s       <- pmi2dist(s, score.tmp, pf_pmi_list)
   return(pmi)
 }
