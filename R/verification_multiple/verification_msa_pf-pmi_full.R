@@ -24,7 +24,7 @@ path <- MakePath(ansrate, multiple, ext)
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(list.words, s, dist = T)
-s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI)$s
+s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI, cv_sep = F)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
 N <- length(s)
@@ -39,11 +39,11 @@ while (1) {
   } else {
     s.old.main <- s
   }
-  
+
   # For progressive
   s.old <- s
   s.old <- apply(s.old, MARGIN = c(1, 2), zero)
-  
+
   pa.list <- list()
   while (1) {
     print("Second loop")
@@ -58,23 +58,23 @@ while (1) {
       # Make the word list.
       gold.list <- MakeWordList(w["input"])  # gold alignment
       seq.list <- MakeInputSeq(gold.list)  # input sequences
-      
+
       # Computes the MSA using the BestFirst method.
       print(paste("Start:", w["name"]))
       id <- as.numeric(w["id"])
       pa.list[[id]] <- list()
       pa.list[[id]] <- ProgressiveAlignment(seq.list, s, F)
       print(paste("End:", w["name"]))
-    } 
+    }
     #
     psa.list <- ChangeListMSA2PSA(pa.list, s)
-    s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI)$s
+    s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI, cv_sep = F)$s
   }
-  
+
   # For best first
   s.old <- s
   s.old <- apply(s.old, MARGIN = c(1, 2), zero)
-  
+
   msa.list <- list()
   while (1) {
     print("Third loop")
@@ -89,7 +89,7 @@ while (1) {
       # Make the word list.
       gold.list <- MakeWordList(w["input"])  # gold alignment
       seq.list <- MakeInputSeq(gold.list)  # input sequences
-      
+
       # Computes the MSA using the BestFirst method.
       id <- as.numeric(w["id"])
       msa.list[[id]] <- list()
@@ -97,7 +97,7 @@ while (1) {
     }
     #
     psa.list <- ChangeListMSA2PSA(msa.list, s)
-    rlt.pmi <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI)
+    rlt.pmi <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI, cv_sep = F)
     pmi.mat <- rlt.pmi$pmi.mat
     s <- rlt.pmi$s
   }
