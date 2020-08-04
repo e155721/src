@@ -16,14 +16,14 @@ PMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   # Returns:
   #   the PMI velue of the segment pair (x, y)
 
-  f.xy <- pair_freq_mat[x, y]
-  f.x  <- seg_freq_vec[x]
-  f.y  <- seg_freq_vec[y]
+  f_xy <- pair_freq_mat[x, y]
+  f_x  <- seg_freq_vec[x]
+  f_y  <- seg_freq_vec[y]
 
-  p.xy <- (f.xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
-  p.x  <- (f.x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
-  p.y  <- (f.y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
-  pmi  <- log2(p.xy / (p.x * p.y))  # calculating the pmi
+  p_xy <- (f_xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
+  p_x  <- (f_x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
+  p_y  <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
+  pmi  <- log2(p_xy / (p_x * p_y))  # calculating the pmi
 
   return(pmi)
 }
@@ -46,6 +46,7 @@ calc_pmi <- function(corpus) {
   V2 <- length(unique(as.vector(corpus))) # number of symbol types
 
   # Calculate the PMI for all segment pairs.
+  print("Calculating pmi_list")
   pmi_list <- foreach(i = 1:seg_pair_num, .inorder = T) %dopar% {
 
     x <- pair_mat[i, 1]
@@ -74,7 +75,7 @@ UpdatePMI <- function(psa.list, s, cv_sep=F) {
   # Returns:
   #   s: The scoring matrix that was updated by the PMI-weighting.
   cat("\n")
-  print("Calculate PMI")
+  print("Updating PMI")
 
   corpus <- MakeCorpus(psa.list)
 
@@ -94,12 +95,12 @@ UpdatePMI <- function(psa.list, s, cv_sep=F) {
   seg_pair_num <- length(pmi_list)
 
   # Invert the PMI for all segment pairs.
-  score.tmp <- foreach(i = 1:seg_pair_num, .combine = c, .inorder = T) %dopar% {
+  score_tmp <- foreach(i = 1:seg_pair_num, .combine = c, .inorder = T) %dopar% {
     -pmi_list[[i]]$pmi
   }
 
   pmi <- list()
   pmi$pmi.mat <- AggrtPMI(s, pmi_list)
-  pmi$s       <- pmi2dist(s, score.tmp, pmi_list)
+  pmi$s       <- pmi2dist(s, score_tmp, pmi_list)
   return(pmi)
 }
