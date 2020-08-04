@@ -18,25 +18,25 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
 
   feat.num <- length(x)
 
-  f.xy <- vector(length = feat.num)
-  f.x  <- vector(length = feat.num)
-  f.y  <- vector(length = feat.num)
+  f_xy <- vector(length = feat.num)
+  f_x  <- vector(length = feat.num)
+  f_y  <- vector(length = feat.num)
   for (p in 1:feat.num) {
-    f.xy[p] <- pair_freq_mat[x[p], y[p]]
-    f.x[p]  <- seg_freq_vec[x[p]]
-    f.y[p]  <- seg_freq_vec[y[p]]
+    f_xy[p] <- pair_freq_mat[x[p], y[p]]
+    f_x[p]  <- seg_freq_vec[x[p]]
+    f_y[p]  <- seg_freq_vec[y[p]]
   }
 
-  p.xy <- vector(length = feat.num)
-  p.x  <- vector(length = feat.num)
-  p.y  <- vector(length = feat.num)
+  p_xy <- vector(length = feat.num)
+  p_x  <- vector(length = feat.num)
+  p_y  <- vector(length = feat.num)
   for (p in 1:feat.num) {
-    p.xy[p] <- (f.xy[p] + 1) / (N1 + V1[p])  # probability of the co-occurrence frequency of xy
-    p.x[p]  <- (f.x[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of x
-    p.y[p]  <- (f.y[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of y
+    p_xy[p] <- (f_xy[p] + 1) / (N1 + V1[p])  # probability of the co-occurrence frequency of xy
+    p_x[p]  <- (f_x[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of x
+    p_y[p]  <- (f_y[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of y
   }
 
-  pf_pmi <- t(p.xy) %*% ginv(p.x %*% t(p.y))
+  pf_pmi <- t(p_xy) %*% ginv(p_x %*% t(p_y))
 
   return(pf_pmi)
 }
@@ -101,6 +101,7 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   V2 <- V[[2]]
 
   # Calculate the PF-PMI for all segment pairs.
+  print("Calculating pf_pmi_list")
   pf_pmi_list <- foreach(i = 1:phone_pair_num, .inorder = T) %dopar% {
 
     x <- phone_pair_mat[i, 1]
@@ -136,7 +137,7 @@ UpdatePFPMI <- function(psa.list, s, cv_sep=F) {
   # Returns:
   #   s: The scoring matrix that was updated by the PMI-weighting.
   cat("\n")
-  print("Calculate PF-PMI")
+  print("Updating PF-PMI")
 
   # Make the phones corpus.
   corpus_phone <- MakeCorpus(psa.list)
@@ -157,7 +158,7 @@ UpdatePFPMI <- function(psa.list, s, cv_sep=F) {
   phone_pair_num <- length(pf_pmi_list)
 
   # Invert the PF-PMI for all segment pairs.
-  score.tmp <- foreach(i = 1:phone_pair_num, .combine = c, .inorder = T) %dopar% {
+  score_tmp <- foreach(i = 1:phone_pair_num, .combine = c, .inorder = T) %dopar% {
     pf_pmi <- pf_pmi_list[[i]]$pmi
     #-sum(abs(pf_pmi))  # L1 norm
     -sqrt(sum(pf_pmi * pf_pmi))  # L2 norm
@@ -169,6 +170,6 @@ UpdatePFPMI <- function(psa.list, s, cv_sep=F) {
   } else {
     pmi$pmi.mat <- AggrtPMI(s, pf_pmi_list)
   }
-  pmi$s <- pmi2dist(s, score.tmp, pf_pmi_list)
+  pmi$s <- pmi2dist(s, score_tmp, pf_pmi_list)
   return(pmi)
 }
