@@ -30,6 +30,21 @@ MakeCorpus <- function(psa.list) {
   return(corpus)
 }
 
+
+sep_corpus <- function(X, corpus) {
+  x.idx <- NULL
+  for (x in X) {
+    x.idx <- c(x.idx, which(x == corpus[1, ]))
+    x.idx <- c(x.idx, which(x == corpus[2, ]))
+  }
+  x.idx <- unique(x.idx)
+
+  corpus <- corpus[, x.idx]
+  corpus <- apply(corpus, 2, sort)
+  corpus
+}
+
+
 MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
   # Create the matrix of segment pairs frequency from a corpus.
   #
@@ -56,6 +71,7 @@ MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
   return(seg.pair.freq.mat)
 }
 
+
 MakeFreqVec <- function(seg.vec, corpus) {
   # Create the vector of segmens frequency from a corpus.
   #
@@ -78,6 +94,7 @@ MakeFreqVec <- function(seg.vec, corpus) {
 
   return(seg.freq.vec)
 }
+
 
 AggrtPMI <- function(s, pmi.list) {
   # Create the PMI matrix.

@@ -5,19 +5,6 @@ source("lib/load_phoneme.R")
 source("psa/pmi_tools.R")
 source("psa/calc_pf_pmi.R")
 
-sep_corpus <- function(X, corpus) {
-  x.idx <- NULL
-  for (x in X) {
-    x.idx <- c(x.idx, which(x == corpus[1, ]))
-    x.idx <- c(x.idx, which(x == corpus[2, ]))
-  }
-  x.idx <- unique(x.idx)
-
-  corpus <- corpus[, x.idx]
-  corpus <- apply(corpus, 2, sort)
-  corpus
-}
-
 PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   # Computes the PMI of symbol pair (x, y) in the corpus.
   # Args:
@@ -71,6 +58,7 @@ UpdatePFPMI <- function(psa.list, s, cv_sep = F) {
   corpus_phone <- MakeCorpus(psa.list)
 
   if (cv_sep) {
+    print("Enabled CV-separation.")
     corpus_cons  <- sep_corpus(C, corpus_phone)
     corpus_vowel <- sep_corpus(V, corpus_phone)
 
