@@ -6,6 +6,8 @@ MakeCorpus <- function(psa.list) {
   #
   # Returns:
   #   A corpus to calculate PMI.
+  print("MakeCorpus")
+
   M <- length(psa.list)
   seq1 <- NULL
   seq2 <- NULL
@@ -32,6 +34,8 @@ MakeCorpus <- function(psa.list) {
 
 
 sep_corpus <- function(X, corpus) {
+  print("sep_corpus")
+
   x.idx <- NULL
   for (x in X) {
     x.idx <- c(x.idx, which(x == corpus[1, ]))
@@ -55,6 +59,7 @@ MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
   #
   # Return:
   #   the matrix of segment pairs frequency.
+  print("MakeFreqMat")
 
   seg.num      <- length(seg.vec)
   seg.pair.num <- dim(seg.pair.mat)[1]
@@ -81,6 +86,7 @@ MakeFreqVec <- function(seg.vec, corpus) {
   #
   # Return:
   #   the vector of segments frequency.
+  print("MakeFreqVec")
 
   seg.num <- length(seg.vec)
 
@@ -105,6 +111,7 @@ AggrtPMI <- function(s, pmi.list) {
   #
   # Return:
   #   the matrix of the PMIs.
+  print("AggrtPMI")
 
   # The three-dimensional array to save the PF-PMI for each symbol pairs.
   s.dim <- dim(s)[1]
@@ -141,6 +148,7 @@ pmi2dist <- function(s, score.tmp, pmi.list) {
   #
   # Return:
   #   the scoring matrix based the PMIs.
+  print("pmi2dist")
 
   pmi.max <- max(score.tmp)
   pmi.min <- min(score.tmp)
