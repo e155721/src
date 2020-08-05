@@ -61,8 +61,7 @@ smoothing <- function(corpus, feat.num) {
 
 calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   # Create the segment vector and the segment pairs matrix.
-  phone_vec <- unique(as.vector(corpus_phone))
-  phone_pair_mat <- t(combn(x = phone_vec, m = 2))
+  phone_pair_mat <- make_pair_mat(corpus_phone)
   phone_pair_num <- dim(phone_pair_mat)[1]
 
   feat.num <- dim(mat.X.feat)[2]
@@ -81,13 +80,11 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
     rbind(corpus_feat1, corpus_feat2)
   }
 
-  # Create the features vector and the feature pairs matrix.
-  feat_vec <- unique(as.vector(corpus_feat))
-  pair_mat <- combn(x = feat_vec, m = 2)
-  pair_mat <- cbind(pair_mat, rbind(feat_vec, feat_vec))  # add the identical feature pairs.
-  pair_mat <- t(apply(pair_mat, 2, sort))
+  # Create the feature pairs matrix.
+  pair_mat <- make_pair_mat(corpus_feat, identical = T)
 
   # Create the frequency matrix and the vector.
+  feat_vec <- unique(as.vector(corpus_feat))
   pair_freq_mat <- MakeFreqMat(feat_vec, pair_mat, corpus_feat)
   seg_freq_vec  <- MakeFreqVec(feat_vec, corpus_feat)
 

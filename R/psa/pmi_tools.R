@@ -49,6 +49,20 @@ sep_corpus <- function(X, corpus) {
 }
 
 
+make_pair_mat <- function(dat, identical=F){
+  # dat: a matrix or vector
+  seg_vec  <- unique(as.vector(dat))
+  pair_mat <- combn(x = seg_vec, m = 2)
+  pair_mat <- apply(X = pair_mat, MARGIN = 2, FUN = sort)
+  if (identical) {
+    # Add the identical feature pairs.
+    pair_mat <- cbind(pair_mat, rbind(seg_vec, seg_vec))
+  }
+  pair_mat <- t(pair_mat)
+  pair_mat
+}
+
+
 MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
   # Create the matrix of segment pairs frequency from a corpus.
   #

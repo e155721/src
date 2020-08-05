@@ -30,13 +30,12 @@ PMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
 
 
 calc_pmi <- function(corpus) {
-  # Create the segment vector and the segment pairs matrix.
-  seg_vec      <- unique(as.vector(corpus))
-  pair_mat <- apply(combn(x = seg_vec, m = 2), 2, sort)
-  pair_mat <- t(pair_mat)
+  # Create the segment pairs matrix.
+  pair_mat <- make_pair_mat(corpus)
   seg_pair_num <- dim(pair_mat)[1]
 
   # Create the frequency matrix and the vector.
+  seg_vec      <- unique(as.vector(corpus))
   pair_freq_mat <- MakeFreqMat(seg_vec, pair_mat, corpus)
   seg_freq_vec  <- MakeFreqVec(seg_vec, corpus)
 
