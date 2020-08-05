@@ -63,7 +63,7 @@ make_pair_mat <- function(dat, identical=F){
 }
 
 
-MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
+MakeFreqMat <- function(seg.pair.mat, corpus) {
   # Create the matrix of segment pairs frequency from a corpus.
   #
   # Args:
@@ -74,7 +74,7 @@ MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
   # Return:
   #   the matrix of segment pairs frequency.
   print("MakeFreqMat")
-
+  seg.vec      <- unique(as.vector(corpus))
   seg.num      <- length(seg.vec)
   seg.pair.num <- dim(seg.pair.mat)[1]
 
@@ -91,7 +91,7 @@ MakeFreqMat <- function(seg.vec, seg.pair.mat, corpus) {
 }
 
 
-MakeFreqVec <- function(seg.vec, corpus) {
+MakeFreqVec <- function(corpus) {
   # Create the vector of segmens frequency from a corpus.
   #
   # Args:
@@ -102,6 +102,7 @@ MakeFreqVec <- function(seg.vec, corpus) {
   #   the vector of segments frequency.
   print("MakeFreqVec")
 
+  seg.vec <- unique(as.vector(corpus))
   seg.num <- length(seg.vec)
 
   # Calculate the frequency vector for individual segments.

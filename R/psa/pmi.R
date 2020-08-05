@@ -35,9 +35,8 @@ calc_pmi <- function(corpus) {
   seg_pair_num <- dim(pair_mat)[1]
 
   # Create the frequency matrix and the vector.
-  seg_vec      <- unique(as.vector(corpus))
-  pair_freq_mat <- MakeFreqMat(seg_vec, pair_mat, corpus)
-  seg_freq_vec  <- MakeFreqVec(seg_vec, corpus)
+  pair_freq_mat <- MakeFreqMat(pair_mat, corpus)
+  seg_freq_vec  <- MakeFreqVec(corpus)
 
   N1 <- dim(corpus)[2]  # number of the aligned segments
   N2 <- N1 * 2  # number of segments in the aligned segments
