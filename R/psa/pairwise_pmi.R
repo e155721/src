@@ -14,6 +14,7 @@ PairwisePMI <- function(psa.list, list.words, s, method, cv_sep=F) {
   }
   # START OF LOOP
   while(1) {
+    change_cores()
     diff <- N - sum(s == s.old)
     if (diff == 0) break
     # Compute the new scoring matrix that is updated by the PMI-weighting.
