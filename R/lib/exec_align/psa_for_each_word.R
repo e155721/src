@@ -10,18 +10,19 @@ PSAforEachWord <- function(list.words, s, dist = F) {
   #
   # Returns:
   #   The list of PSA for each word.
-  
+
   # START OF LOOP
+  print("PSAforEachWord")
   psa.list <- foreach (f = list.words) %dopar% {
-    
+
     # Make the word list.
     input.list <- MakeInputSeq(MakeWordList(f[["input"]]))
-    
+
     # Compute the PSA for each region.
     psa <- MakePairwise(input.list, s, select.min=dist)
-    
+
     return(psa)
   }
-  
+
   return(psa.list)
 }
