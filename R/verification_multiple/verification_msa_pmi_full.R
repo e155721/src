@@ -29,6 +29,7 @@ N <- length(s)
 s.old.main <- s
 s.old.main <- apply(s.old.main, MARGIN = c(1, 2), zero)
 
+loop <- 0
 while (1) {
   print("First loop")
   diff <- N - sum(s == s.old.main)
@@ -36,6 +37,13 @@ while (1) {
     break
   } else {
     s.old.main <- s
+  }
+
+  if (loop == 10) {
+    print("MAX LOOP!!")
+    break
+  } else {
+    loop <- loop + 1
   }
 
   # For progressive
