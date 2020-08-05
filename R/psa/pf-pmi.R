@@ -74,11 +74,12 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   corpus_feat1 <- NULL
   corpus_feat2 <- NULL
   N <- dim(corpus_phone)[2]
-  corpus_feat <- foreach (i = 1:N, .combine = "cbind", .inorder = T) %dopar% {
+  corpus_feat <- foreach(i = 1:N, .combine = "cbind", .inorder = T) %dopar% {
     corpus_feat1 <- c(corpus_feat1, feat_mat[corpus_phone[1, i], ])
     corpus_feat2 <- c(corpus_feat2, feat_mat[corpus_phone[2, i], ])
     rbind(corpus_feat1, corpus_feat2)
   }
+  corpus_feat <- apply(X = corpus_feat, MARGIN = 2, FUN = sort)
 
   # Create the feature pairs matrix.
   pair_mat <- make_pair_mat(corpus_feat, identical = T)
@@ -88,7 +89,7 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   seg_freq_vec  <- MakeFreqVec(corpus_feat)
 
   # Initiallization for a denominator for the PF-PMI.
-  N1 <- dim(corpus_feat)[2] / feat.num # number of the aligned features
+  N1 <- dim(corpus_phone)[2]  # number of the aligned features
   N2 <- N1 * 2  # number of features in the aligned faetures
 
   # Initialization for the Laplace smoothing
