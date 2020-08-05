@@ -9,11 +9,9 @@ source("psa/pairwise_pmi.R")
 source("lib/load_exec_align.R")
 source("verification_multiple/change_list_msa2psa.R")
 source("verification_multiple/CalcAccMSA.R")
+source("verification_multiple/msa_tools.R")
 source("parallel_config.R")
 
-zero <- function(x) {
-  return(0)
-}
 
 ansrate <- "ansrate_msa_pmi"
 multiple <- "multiple_pmi"
@@ -41,70 +39,24 @@ while (1) {
   }
 
   # For progressive
-  s.old <- s
-  s.old <- apply(s.old, MARGIN = c(1, 2), zero)
+  print("PA loop")
+  pa.o <- msa_loop(list.words, s, pa = T, method = UpdatePMI)
 
-  pa.list <- list()
-  while (1) {
-    print("Second loop")
-    diff <- N - sum(s == s.old)
-    if (diff == 0) {
-      break
-    } else {
-      s.old <- s
-    }
-    #
-    for (w in list.words) {
-      # Make the word list.
-      gold.list <- MakeWordList(w["input"])  # gold alignment
-      seq.list <- MakeInputSeq(gold.list)  # input sequences
-
-      # Computes the MSA using the BestFirst method.
-      print(paste("Start:", w["name"]))
-      id <- as.numeric(w["id"])
-      pa.list[[id]] <- list()
-      pa.list[[id]] <- ProgressiveAlignment(seq.list, s, F)
-      print(paste("End:", w["name"]))
-    }
-    #
-    psa.list <- ChangeListMSA2PSA(pa.list, s)
-    s <- PairwisePMI(psa.list, list.words, s, UpdatePMI, cv_sep = F)$s
-  }
+  pa_list <- pa.o$msa_list
+  s       <- pa.o$s
 
   # For best first
-  s.old <- s
-  s.old <- apply(s.old, MARGIN = c(1, 2), zero)
+  print("BF loop")
+  msa.o <- msa_loop(list.words, s, pa = F, pa_list, method = UpdatePMI)
 
-  msa.list <- list()
-  while (1) {
-    print("Third loop")
-    diff <- N - sum(s == s.old)
-    if (diff == 0) {
-      break
-    } else {
-      s.old <- s
-    }
-    #
-    for (w in list.words) {
-      # Make the word list.
-      gold.list <- MakeWordList(w["input"])  # gold alignment
-      seq.list <- MakeInputSeq(gold.list)  # input sequences
+  msa_list <- msa.o$msa_list
+  s        <- msa.o$s
 
-      # Computes the MSA using the BestFirst method.
-      id <- as.numeric(w["id"])
-      msa.list[[id]] <- list()
-      msa.list[[id]] <- BestFirst(pa.list[[id]], s, F)
-    }
-    #
-    psa.list <- ChangeListMSA2PSA(msa.list, s)
-    rlt.pmi <- PairwisePMI(psa.list, list.words, s, UpdatePMI, cv_sep = F)
-    pmi.mat <- rlt.pmi$pmi.mat
-    s <- rlt.pmi$s
-  }
 }
+pmi.mat <- msa.o$pmi.mat
 
 # Calculate the accuracy of the MSAs.
-CalcAccMSA(msa.list, list.words, path$ansrate.file, path$output.dir)
+CalcAccMSA(msa_list, list.words, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
 rdata.path <- MakeMatPath("matrix_msa_pmi", "score_msa_pmi", ext)
