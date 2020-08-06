@@ -33,7 +33,7 @@ bf_loop <- function(list.words, s, msa_list) {
 }
 
 
-msa_loop <- function(list.words, s, pa=T, msa_list=NULL, method) {
+msa_loop <- function(list.words, s, pa=T, msa_list=NULL, method, cv_sep=F) {
   N     <- length(s)
   s.old <- s
   s.old <- apply(s.old, MARGIN = c(1, 2), zero)
@@ -53,7 +53,7 @@ msa_loop <- function(list.words, s, pa=T, msa_list=NULL, method) {
     }
 
     psa.list <- ChangeListMSA2PSA(msa_list, s)
-    rlt.pmi  <- PairwisePMI(psa.list, list.words, s, method, cv_sep = F)
+    rlt.pmi  <- PairwisePMI(psa.list, list.words, s, method, cv_sep)
     s        <- rlt.pmi$s
   }
 

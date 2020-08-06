@@ -18,11 +18,13 @@ multiple <- "multiple_pf-pmi"
 ext = commandArgs(trailingOnly=TRUE)[1]
 path <- MakePath(ansrate, multiple, ext)
 
+cv_sep <- F  # CV-separation
+
 # Compute the scoring matrix using the PMI method.
 list.words <- GetPathList()
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(list.words, s, dist = T)
-s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI, cv_sep = F)$s
+s <- PairwisePMI(psa.list, list.words, s, UpdatePFPMI, cv_sep)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
 N <- length(s)
@@ -48,14 +50,14 @@ while (1) {
 
   # For progressive
   print("PA loop")
-  pa.o <- msa_loop(list.words, s, pa = T, method = UpdatePFPMI)
+  pa.o <- msa_loop(list.words, s, pa = T, msa_list = NULL, method = UpdatePFPMI, cv_sep = cv_sep)
 
   pa_list <- pa.o$msa_list
   s       <- pa.o$s
 
   # For best first
   print("BF loop")
-  msa.o <- msa_loop(list.words, s, pa = F, pa_list, method = UpdatePFPMI)
+  msa.o <- msa_loop(list.words, s, pa = F, msa_list = pa_list, method = UpdatePFPMI, cv_sep = cv_sep)
 
   msa_list <- msa.o$msa_list
   s        <- msa.o$s
