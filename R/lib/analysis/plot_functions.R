@@ -9,7 +9,7 @@ GetMinMax <- function(list)
   rltVec <- c()
   rltVec["min"] <- min(x)
   rltVec["max"] <- max(x)
-  
+
   return(rltVec)
 }
 
@@ -24,25 +24,30 @@ PlotGraph <- function(x, list, fixValVec, yLim, title, xlab)
 }
 
 # histogram plot function
-PlotHist <- function(inFile) {
+plot_hist <- function(file, by=NULL) {
 
   # Read the data file
-  data <- read.table(inFile)$V2
+  data <- read.table(file)$V2
   mean <- mean(data)
   dataLen <- length(data)
-  
+
   # Configure the font of the histogram.
-  par(font.lab=2, font.axis=2, cex.axis=1.5, cex.lab=1.5)
-  hist(data, breaks = seq(0,100,10), main = inFile,
+  if (is.null(by)) {
+    by <- 10
+  }
+  div <- seq(from = 0, to = 100, by = by)
+
+  par(font.lab = 2, font.axis = 2, cex.axis = 1.5, cex.lab = 1.5)
+  hist(data, breaks = div, main = file,
        right = F,
-       labels = T, 
+       labels = T,
        xaxt = "n",
        ylim = c(0, dataLen),
        xlab = "Matching Rate (%)",
        ylab = "Word Frequency")
-  axis(1, at=seq(0,100,10), pos=-3)
-  abline(v=mean, col=2, lwd=3, lty=2)  # Plot the broken line.
-  text(x = mean(data)-25, y = 110,     # Plot the average matching rate.
-       paste("Average Matching Rate =", round(mean, digits = 3), "%", sep = " "), 
-       col = 2, font=2, cex=1.5)
+  axis(1, at = div, pos = -3)
+  abline(v = mean, col = 2, lwd = 3, lty = 2)  # Plot the broken line.
+  text(x = mean(data) - 25, y = 110,     # Plot the average matching rate.
+       paste("Average Matching Rate =", round(mean, digits = 3), "%", sep = " "),
+       col = 2, font = 2, cex = 1.5)
 }
