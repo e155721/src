@@ -55,12 +55,20 @@ sep_corpus <- function(X, corpus) {
 
 
 make_pair_mat <- function(dat, identical=F){
+  # dat: a matrix or vector
   print("make_pair_mat")
   tic()
 
-  # dat: a matrix or vector
-  seg_vec  <- unique(as.vector(dat))
-  pair_mat <- combn(x = seg_vec, m = 2)
+  # 'idx' will be 'logical(0)' if 'seg_vec' does not include a gap.
+  # It will be FALSE when 'logical(0)' is compared to itself by '=='.
+  # It shows that 'seg_vec' includes a gap if the 'if statement' below will be TRUE.
+  seg_vec <- unique(as.vector(dat))
+  idx <- which(seg_vec == "-")
+  if (isTRUE(idx == idx)) {
+    seg_vec <- seg_vec[-idx]
+  }
+
+  pair_mat <- combn(x = c(seg_vec, "-"), m = 2)
   pair_mat <- apply(X = pair_mat, MARGIN = 2, FUN = sort)
   if (identical) {
     # Add the identical feature pairs.
