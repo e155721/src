@@ -20,7 +20,7 @@ LD <- function(c1, c2, s) {
   k <- 1
   for (i in 1:N1) {
     for (j in 1:N2) {
-      psa           <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = T)
+      psa           <- needleman_wunsch(c1[[i]], c2[[j]], s, select_min = T)
       psa.list[[k]] <- psa
       score.vec     <- c(score.vec, psa$score)
       

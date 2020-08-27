@@ -40,7 +40,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
 
   psa.aln <- list()
   for (p in 1:5)
-    psa.aln[[p]] <- MakePairwise(input.list, s.list[[p]], select.min = T)
+    psa.aln[[p]] <- MakePairwise(input.list, s.list[[p]], select_min = T)
 
   n <- length(psa.aln[[1]])
   score <- c(0, 0, 0, 0, 0)

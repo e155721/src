@@ -37,7 +37,7 @@ Random <- function(word.list, s) {
     seq2 <- msa[R:N, , drop=F]
         
     # Computes the new MSA.
-    msa.tmp <- NeedlemanWunsch(seq1, seq2, s)
+    msa.tmp <- needleman_wunsch(seq1, seq2, s)
     msa.new <- DelGap(msa.tmp$aln)
     score.new <- msa.tmp$score
     

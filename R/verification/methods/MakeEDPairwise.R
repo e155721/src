@@ -1,7 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-MakeEDPairwise <- function(word.list, s, select.min=F)
+MakeEDPairwise <- function(word.list, s, select_min=F)
 {
   regions <- length(word.list)
   
@@ -20,8 +20,8 @@ MakeEDPairwise <- function(word.list, s, select.min=F)
   for (k in 1:(regions-1)) {
     # the start of the alignment for each the region pair
     for (l in m:regions) {
-      psa <- NeedlemanWunsch(as.matrix(word.list[[k]], drop = F),
-                             as.matrix(word.list[[l]], drop = F), s, select.min)
+      psa <- needleman_wunsch(as.matrix(word.list[[k]], drop = F),
+                             as.matrix(word.list[[l]], drop = F), s, select_min)
       psa.aln[[n]] <- psa$seq1
       psa.aln[[n+1]] <- psa$seq2
       ed <- ed+psa$score

@@ -18,7 +18,7 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   }
   
   # Compute the pairwise alignment score for each regions pair.
-  psa <- MakePairwise(word.list, s, select.min=min)
+  psa <- MakePairwise(word.list, s, select_min=min)
   
   # Make the similarity matrix.
   num.regions <- length(word.list)  # number of sequences
@@ -34,7 +34,7 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   # Calculate the PSA of identical pairs.  
   if (similarity) {
     for (i in 1:num.regions) {
-      dist.mat[i, i] <- NeedlemanWunsch(word.list[[i]], word.list[[i]], s, select.min=min)$score
+      dist.mat[i, i] <- needleman_wunsch(word.list[[i]], word.list[[i]], s, select_min=min)$score
     }
   }
   
@@ -62,18 +62,18 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     if (flg == 2) {
       seq1 <- gtree[i, 1] * -1
       seq2 <- gtree[i, 2] * -1
-      pa <- NeedlemanWunsch(word.list[[seq1]], word.list[[seq2]], s, select.min=min)
+      pa <- needleman_wunsch(word.list[[seq1]], word.list[[seq2]], s, select_min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     } 
     else if(flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
-      pa <- NeedlemanWunsch(pa.list[[clt]], word.list[[seq2]], s, select.min=min)
+      pa <- needleman_wunsch(pa.list[[clt]], word.list[[seq2]], s, select_min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     } else {
       clt1 <- gtree[i, 1]
       clt2 <- gtree[i, 2]
-      pa <- NeedlemanWunsch(pa.list[[clt1]], pa.list[[clt2]], s, select.min=min)
+      pa <- needleman_wunsch(pa.list[[clt1]], pa.list[[clt2]], s, select_min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     }
   }

@@ -7,7 +7,7 @@ SelectMSA <- function(seq1, seq2, s.list, min) {
   
   s.len <- length(s.list)
   msa.list <- foreach (p = 1:s.len) %dopar% {
-    NeedlemanWunsch(seq1, seq2, s.list[[p]], select.min=min)
+    needleman_wunsch(seq1, seq2, s.list[[p]], select_min=min)
   }
   score.vec <- NULL
   for (i in 1:s.len) {

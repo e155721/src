@@ -39,7 +39,7 @@ RemoveFirst <- function(msa.o, s, similarity=T) {
     seq2 <- msa[-i, , drop = F]
     
     # Make the new multiple alignment.
-    msa.tmp<- NeedlemanWunsch(seq1, seq2, s)
+    msa.tmp<- needleman_wunsch(seq1, seq2, s)
     msa.new <- DelGap(msa.tmp$aln)
     score.new <- msa.tmp$score
     

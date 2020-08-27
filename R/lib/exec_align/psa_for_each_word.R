@@ -19,7 +19,7 @@ PSAforEachWord <- function(list.words, s, dist = F) {
     input.list <- MakeInputSeq(MakeWordList(f[["input"]]))
 
     # Compute the PSA for each region.
-    psa <- MakePairwise(input.list, s, select.min=dist)
+    psa <- MakePairwise(input.list, s, select_min=dist)
 
     return(psa)
   }

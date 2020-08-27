@@ -9,7 +9,7 @@ SelectPSA <- function(word.list, s.list, min) {
   # PSA for each pair.
   s.len <- length(s.list)
   psa.list <- foreach (p = 1:s.len) %dopar% {
-    MakePairwise(word.list, s.list[[p]], select.min=min)
+    MakePairwise(word.list, s.list[[p]], select_min=min)
   }
   
   N <- length(psa.list[[1]])

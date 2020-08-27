@@ -17,11 +17,11 @@ CheckNwunsch <- function(f)
   wl.len <- length(wordList)
   s <- MakeFeatureMatrix(-10, -3)
   
-  seq1 <- NeedlemanWunsch(wordList[[1]], wordList[[2]], s)
+  seq1 <- needleman_wunsch(wordList[[1]], wordList[[2]], s)
   
   if (wl.len >= 3) {
     for (i in 3:wl.len) {
-      seq1 <- NeedlemanWunsch(seq1$multi, wordList[[i]], s)
+      seq1 <- needleman_wunsch(seq1$multi, wordList[[i]], s)
     }
   }
   if (seq1$score != tmp(seq1$multi)) {

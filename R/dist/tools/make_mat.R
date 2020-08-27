@@ -23,7 +23,7 @@ psa_for_each_form <- function(c1, c2, method, s) {
   asn.vec  <- NULL
   for (i in 1:N1) {
     for (j in 1:N2) {
-      psa           <- NeedlemanWunsch(c1[[i]], c2[[j]], s, select.min = dist)
+      psa           <- needleman_wunsch(c1[[i]], c2[[j]], s, select_min = dist)
       k             <- i + (j - 1) * N1
       psa.list[[k]] <- psa
       

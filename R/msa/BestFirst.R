@@ -38,7 +38,7 @@ BestFirst <- function(msa, s, similarity=T) {
       # Removes the ith sequence.
       seq1 <- msa$aln[drop = F, i, ]
       seq2 <- msa$aln[drop = F, -i, ]
-      NeedlemanWunsch(seq1, seq2, s, select.min=min)
+      needleman_wunsch(seq1, seq2, s, select_min=min)
     }
     
     score.vec <- c()
