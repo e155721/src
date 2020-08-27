@@ -1,17 +1,17 @@
 calc_score <- function(prof1, prof2, s) {
   # make profiles
   prof <- rbind(prof1, prof2)
-  prof_len <- length(prof)
-  len1 <- prof_len - 1
-  len2 <- prof_len
+  prof_len <- dim(prof)[1]
+  M <- prof_len - 1
+  N <- prof_len
 
   score <- 0
-  l <- 2
-  for (k in 1:len1) {
-    for (m in l:len2) {
-      score <- score + s[prof[k], prof[m]]
+  k <- 2
+  for (i in 1:M) {
+    for (j in k:N) {
+      score <- score + s[prof[i], prof[j]]
     }
-    l <- l + 1
+    k <- k + 1
   }
 
   return(score)
@@ -116,57 +116,42 @@ needleman_wunsch <- function(seq1, seq2, s, select_min=F) {
     }
   }
 
-  # trace back
-  trace <- c()
-  i <- len_seq1
-  j <- len_seq2
-
-  while (TRUE) {
-    if (i == 1 && j == 1) break
-    trace <- append(trace, mat[i, j, 2])
-    path <- mat[i, j, 2]
-    if (path == 0) {
-      i <- i - 1
-      j <- j - 1
-    } else if (path == 1) {
-      i <- i - 1
-    } else if (path == -1) {
-      j <- j - 1
-    }
-  }
-  trace <- rev(trace)
-
-  # make alignment
+  # trace back and making alignment
   align1 <- matrix(seq1[, 1], nrow = dim(seq1)[1])
   align2 <- matrix(seq2[, 1], nrow = dim(seq2)[1])
 
-  i <- j <- 2
-  for (t in trace) {
-    if (t == 0) {
+  i <- len_seq1
+  j <- len_seq2
+  while (TRUE) {
+    if (i == 1 && j == 1) break
+    path <- mat[i, j, 2]
+    if (path == 0) {
       align1 <- cbind(align1, seq1[, i])
       align2 <- cbind(align2, seq2[, j])
-      i <- i + 1
-      j <- j + 1
-    } else if (t == 1) {
+      i <- i - 1
+      j <- j - 1
+    } else if (path == 1) {
       align1 <- cbind(align1, seq1[, i])
       align2 <- cbind(align2, g2)
-      i <- i + 1
-    } else {
+      i <- i - 1
+    } else if (path == -1) {
       align1 <- cbind(align1, g1)
       align2 <- cbind(align2, seq2[, j])
-      j <- j + 1
+      j <- j - 1
     }
   }
 
-  align <- list(NA, NA)
-  align[[1]] <- align1
-  align[[2]] <- align2
+  align <- rbind(align1, align2)
+  ncol <- dim(align)[2]
+  align[, 2:ncol] <- align[, ncol:2]
+  align1 <- align[1, , drop = F]
+  align2 <- align[2, , drop = F]
 
   # return
   psa <- list()
-  psa$seq1 <- align[[1]]
-  psa$seq2 <- align[[2]]
-  psa$aln <- rbind(align[[1]], align[[2]])
+  psa$seq1 <- align1
+  psa$seq2 <- align2
+  psa$aln <- align
   psa$score <- mat[len_seq1, len_seq2, 1]
 
   return(psa)
