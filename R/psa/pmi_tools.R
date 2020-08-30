@@ -83,10 +83,13 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
   # Calculate the frequency matrix for aligned segments.
   seg.pair.freq.mat <- matrix(0, seg.num, seg.num,
                               dimnames = list(seg.vec, seg.vec))
+
+  seg_pair_tmp <- paste(seg.pair.mat[, 1], seg.pair.mat[, 2])
+  corpus_tmp <- paste(corpus[1, ], corpus[2, ], sep = " ")
   for (i in 1:seg.pair.num) {
     x <- seg.pair.mat[i, 1]
     y <- seg.pair.mat[i, 2]
-    seg.pair.freq.mat[x, y] <- sum((x == corpus[1, ]) * (y == (corpus[2, ])))  # frequency of xy in the segmentpairs
+    seg.pair.freq.mat[x, y] <- sum(seg_pair_tmp[i] == corpus_tmp)
   }
 
   return(seg.pair.freq.mat)
