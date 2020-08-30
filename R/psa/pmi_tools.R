@@ -9,19 +9,21 @@ MakeCorpus <- function(psa.list) {
   print("MakeCorpus")
 
   M <- length(psa.list)
-  seq1 <- NULL
-  seq2 <- NULL
-  corpus <- NULL
-
+  seq1_list <- list()
+  seq2_list <- list()
+  k <- 1
   for (i in 1:M) {
     N <- length(psa.list[[i]])
-    corpus.tmp <- foreach (j = 1:N, .combine = cbind) %dopar% {
-      seq1 <- cbind(seq1, psa.list[[i]][[j]]$seq1[1, -1, drop=F])
-      seq2 <- cbind(seq2, psa.list[[i]][[j]]$seq2[1, -1, drop=F])
-      rbind(seq1, seq2)
+    for (j in 1:N) {
+      seq1_list[[k]] <- psa.list[[i]][[j]]$seq1[1, -1, drop = F]
+      seq2_list[[k]] <- psa.list[[i]][[j]]$seq2[1, -1, drop = F]
+      k <- k + 1
     }
-    corpus <- cbind(corpus, corpus.tmp)
   }
+
+  seq1 <- unlist(seq1_list)
+  seq2 <- unlist(seq2_list)
+  corpus <- rbind(seq1, seq2)
 
   # Removes identical segments from the corpus.
   if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
