@@ -1,5 +1,3 @@
-library(gtools)
-
 source("lib/load_phoneme.R")
 source("psa/pmi_tools.R")
 
