@@ -8,17 +8,13 @@ MakeCorpus <- function(psa.list) {
   #   A corpus to calculate PMI.
   print("MakeCorpus")
 
+  psa.list <- unlist(psa.list, recursive = F)
   M <- length(psa.list)
   seq1_list <- list()
   seq2_list <- list()
-  k <- 1
   for (i in 1:M) {
-    N <- length(psa.list[[i]])
-    for (j in 1:N) {
-      seq1_list[[k]] <- psa.list[[i]][[j]]$seq1[1, -1, drop = F]
-      seq2_list[[k]] <- psa.list[[i]][[j]]$seq2[1, -1, drop = F]
-      k <- k + 1
-    }
+    seq1_list[[i]] <- psa.list[[i]]$seq1[1, -1, drop = F]
+    seq2_list[[i]] <- psa.list[[i]]$seq2[1, -1, drop = F]
   }
 
   seq1 <- unlist(seq1_list)
