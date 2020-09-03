@@ -8,9 +8,7 @@ calc_score <- function(prof1, prof2, s) {
   score <- 0
   k <- 2
   for (i in 1:M) {
-    for (j in k:N) {
-      score <- score + s[prof[i], prof[j]]
-    }
+    score <- score + sum(s[prof[i], prof[k:N]])
     k <- k + 1
   }
 
