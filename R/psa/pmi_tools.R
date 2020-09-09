@@ -48,6 +48,8 @@ sep_corpus <- function(X, corpus) {
 
 
 make_pair_mat <- function(dat, identical=F){
+  print("make_pair_mat")
+
   # dat: a matrix or vector
   seg_vec  <- unique(as.vector(dat))
   pair_mat <- combn(x = seg_vec, m = 2)
