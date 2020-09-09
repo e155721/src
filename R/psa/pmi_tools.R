@@ -1,3 +1,5 @@
+library(tictoc)
+
 MakeCorpus <- function(psa.list) {
   # Makes the corpus to calculate PMI.
   #
@@ -7,6 +9,7 @@ MakeCorpus <- function(psa.list) {
   # Returns:
   #   A corpus to calculate PMI.
   print("MakeCorpus")
+  tic()
 
   psa.list <- unlist(psa.list, recursive = F)
   M <- length(psa.list)
@@ -27,12 +30,14 @@ MakeCorpus <- function(psa.list) {
   }
   corpus <- apply(corpus, 2, sort)
 
+  toc()
   return(corpus)
 }
 
 
 sep_corpus <- function(X, corpus) {
   print("sep_corpus")
+  tic()
 
   x.idx <- NULL
   for (x in X) {
@@ -43,12 +48,15 @@ sep_corpus <- function(X, corpus) {
 
   corpus <- corpus[, x.idx]
   corpus <- apply(corpus, 2, sort)
-  corpus
+
+  toc()
+  return(corpus)
 }
 
 
 make_pair_mat <- function(dat, identical=F){
   print("make_pair_mat")
+  tic()
 
   # dat: a matrix or vector
   seg_vec  <- unique(as.vector(dat))
@@ -59,7 +67,9 @@ make_pair_mat <- function(dat, identical=F){
     pair_mat <- cbind(pair_mat, rbind(seg_vec, seg_vec))
   }
   pair_mat <- t(pair_mat)
-  pair_mat
+
+  toc()
+  return(pair_mat)
 }
 
 
@@ -74,6 +84,8 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
   # Return:
   #   the matrix of segment pairs frequency.
   print("MakeFreqMat")
+  tic()
+
   seg.vec      <- unique(as.vector(corpus))
   seg.num      <- length(seg.vec)
   seg.pair.num <- dim(seg.pair.mat)[1]
@@ -90,6 +102,7 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
     seg.pair.freq.mat[x, y] <- sum(seg_pair_tmp[i] == corpus_tmp)
   }
 
+  toc()
   return(seg.pair.freq.mat)
 }
 
@@ -104,6 +117,7 @@ MakeFreqVec <- function(corpus) {
   # Return:
   #   the vector of segments frequency.
   print("MakeFreqVec")
+  tic()
 
   seg.vec <- unique(as.vector(corpus))
   seg.num <- length(seg.vec)
@@ -116,6 +130,7 @@ MakeFreqVec <- function(corpus) {
     seg.freq.vec[x] <- sum(x == corpus)
   }
 
+  toc()
   return(seg.freq.vec)
 }
 
@@ -130,6 +145,7 @@ AggrtPMI <- function(s, pmi.list) {
   # Return:
   #   the matrix of the PMIs.
   print("AggrtPMI")
+  tic()
 
   # The three-dimensional array to save the PF-PMI for each symbol pairs.
   s.dim <- dim(s)[1]
@@ -153,6 +169,7 @@ AggrtPMI <- function(s, pmi.list) {
     pmi.mat <- as.matrix(pmi.mat[, , 1])
   }
 
+  toc()
   return(pmi.mat)
 }
 
@@ -167,6 +184,7 @@ pmi2dist <- function(s, score.tmp, pmi.list) {
   # Return:
   #   the scoring matrix based the PMIs.
   print("pmi2dist")
+  tic()
 
   pmi.max <- max(score.tmp)
   pmi.min <- min(score.tmp)
@@ -181,5 +199,6 @@ pmi2dist <- function(s, score.tmp, pmi.list) {
   s[C, V] <- Inf
   s[V, C] <- Inf
 
+  toc()
   return(s)
 }
