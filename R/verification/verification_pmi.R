@@ -9,16 +9,16 @@ source("parallel_config.R")
 
 file <- "ansrate_pmi"
 dir <- "pairwise_pmi"
-ext = commandArgs(trailingOnly=TRUE)[1]
+ext = commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(file, dir, ext)
 
 # Create an itnitial scoring matrix and a list of PSAs.
-list.words <- GetPathList()
-s          <- MakeEditDistance(Inf)
-psa.list   <- PSAforEachWord(list.words, s, dist = T)
+word_list <- make_word_list()
+s         <- MakeEditDistance(Inf)
+psa.list  <- PSAforEachWord(word_list, s, dist = T)
 
 # Update the scoring matrix using the PMI.
-pmi.o    <- PairwisePMI(psa.list, list.words, s, UpdatePMI, cv_sep = F)
+pmi.o    <- PairwisePMI(psa.list, word_list, s, UpdatePMI, cv_sep = F)
 pmi.mat  <- pmi.o$pmi.mat
 s        <- pmi.o$s
 psa.list <- pmi.o$psa.list

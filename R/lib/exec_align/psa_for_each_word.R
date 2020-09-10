@@ -2,7 +2,7 @@ library(doMC)
 
 source("lib/load_verif_lib.R")
 
-PSAforEachWord <- function(list.words, s, dist = F) {
+PSAforEachWord <- function(word_list, s, dist = F) {
   # Compute the PSA for each word.
   # Args:
   #   s: The scoring matrix.
@@ -13,13 +13,10 @@ PSAforEachWord <- function(list.words, s, dist = F) {
 
   # START OF LOOP
   print("PSAforEachWord")
-  psa.list <- foreach (f = list.words) %dopar% {
-
-    # Make the word list.
-    input.list <- MakeInputSeq(MakeWordList(f[["input"]]))
+  psa.list <- foreach(seq_list = word_list) %dopar% {
 
     # Compute the PSA for each region.
-    psa <- MakePairwise(input.list, s, select_min=dist)
+    psa <- MakePairwise(seq_list, s, select_min=dist)
 
     return(psa)
   }

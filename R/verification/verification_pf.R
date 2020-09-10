@@ -6,21 +6,21 @@ source("parallel_config.R")
 
 file <- "ansrate_pf"
 dir <- "pairwise_pf"
-ext = commandArgs(trailingOnly=TRUE)[1]
+ext = commandArgs(trailingOnly = TRUE)[1]
 
 for (pen in -1) {
-  
+
   if (is.na(ext)) {
     ext <- pen
   } else {
     ext <- paste(pen, "_", ext, sep = "")
   }
   path <- MakePath(file, dir, ext)
-  
+
   # Make the scoring matrix.
-  list.words <- GetPathList()
+  word_list <- make_word_list()
   s <- MakeFeatureMatrix(-Inf, pen)
-  psa.list <- PSAforEachWord(list.words, s, dist = F)
+  psa.list <- PSAforEachWord(word_list, s, dist = F)
   VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
-  
+
 }

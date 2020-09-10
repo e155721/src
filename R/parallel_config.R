@@ -18,3 +18,12 @@ change_cores <- function() {
 }
 
 change_cores()
+
+source("lib/load_data_processing.R")
+make_word_list <- function() {
+  file_list <- GetPathList()
+  word_list <- lapply(file_list, (function(x){
+    MakeInputSeq(MakeWordList(x["input"]))
+  }))
+  return(word_list)
+}

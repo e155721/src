@@ -6,23 +6,22 @@ source("parallel_config.R")
 
 ansrate <- "ansrate_msa_pf"
 multiple <- "multiple_pf"
-ext = commandArgs(trailingOnly=TRUE)[1]
-
-list.words <- GetPathList()  # the list of words
+ext = commandArgs(trailingOnly = TRUE)[1]
 
 for (pen in (-1)) {
-  
+
   if (is.na(ext)) {
     ext <- pen
   } else {
     ext <- paste(pen, "_", ext, sep = "")
   }
   path <- MakePath(ansrate, multiple, ext)
-  
+
   # Make the list of the MSAs.
+  word_list <- make_word_list()
   s <- MakeFeatureMatrix(-Inf, pen)
-  msa.list <- MSAforEachWord(list.words, s, similarity=T)
+  msa.list <- MSAforEachWord(word_list, s, similarity = T)
   # Calculate the accuracy of the MSAs.
-  CalcAccMSA(msa.list, list.words, path$ansrate.file, path$output.dir)
-  
+  CalcAccMSA(msa.list, path$ansrate.file, path$output.dir)
+
 }

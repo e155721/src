@@ -15,16 +15,16 @@ source("parallel_config.R")
 
 ansrate <- "ansrate_msa_pmi"
 multiple <- "multiple_pmi"
-ext = commandArgs(trailingOnly=TRUE)[1]
+ext = commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(ansrate, multiple, ext)
 
 cv_sep <- F  # CV-separation
 
 # Compute the scoring matrix using the PMI method.
-list.words <- GetPathList()
+word_list <- make_word_list()
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforEachWord(list.words, s, dist = T)
-s <- PairwisePMI(psa.list, list.words, s, UpdatePMI, cv_sep)$s
+psa.list <- PSAforEachWord(word_list, s, dist = T)
+s <- PairwisePMI(psa.list, word_list, s, UpdatePMI, cv_sep)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
 N <- length(s)
@@ -50,14 +50,14 @@ while (1) {
 
   # For progressive
   print("PA loop")
-  pa.o <- msa_loop(list.words, s, pa = T, msa_list = NULL, method = UpdatePMI, cv_sep = cv_sep)
+  pa.o <- msa_loop(word_list, s, pa = T, msa_list = NULL, method = UpdatePMI, cv_sep = cv_sep)
 
   pa_list <- pa.o$msa_list
   s       <- pa.o$s
 
   # For best first
   print("BF loop")
-  msa.o <- msa_loop(list.words, s, pa = F, msa_list = pa_list, method = UpdatePMI, cv_sep = cv_sep)
+  msa.o <- msa_loop(word_list, s, pa = F, msa_list = pa_list, method = UpdatePMI, cv_sep = cv_sep)
 
   msa_list <- msa.o$msa_list
   s        <- msa.o$s
@@ -66,7 +66,7 @@ while (1) {
 pmi.mat <- msa.o$pmi.mat
 
 # Calculate the accuracy of the MSAs.
-CalcAccMSA(msa_list, list.words, path$ansrate.file, path$output.dir)
+CalcAccMSA(msa_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
 rdata.path <- MakeMatPath("matrix_msa_pmi", "score_msa_pmi", ext)

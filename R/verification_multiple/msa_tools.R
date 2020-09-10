@@ -3,37 +3,29 @@ zero <- function(x) {
 }
 
 
-pa_loop <- function(list.words, s) {
+pa_loop <- function(word_list, s) {
 
-  pa_list <- list()
-  for (w in list.words) {
-    # Make the word list.
-    gold.list <- MakeWordList(w["input"])  # gold alignment
-    seq.list <- MakeInputSeq(gold.list)  # input sequences
+  pa_list <- lapply(word_list, (function(seq_list, s){
+    pa_list <- ProgressiveAlignment(seq_list, s, F)
+    return(pa_list)
+  }), s)
 
-    # Computes the MSA using the BestFirst method.
-    id <- as.numeric(w["id"])
-    pa_list[[id]] <- list()
-    pa_list[[id]] <- ProgressiveAlignment(seq.list, s, F)
-  }
-
-  pa_list
+  return(pa_list)
 }
 
 
-bf_loop <- function(list.words, s, msa_list) {
+bf_loop <- function(msa_list, s) {
 
-  for (w in list.words) {
-    # Computes the MSA using the BestFirst method.
-    id <- as.numeric(w["id"])
-    msa_list[[id]] <- BestFirst(msa_list[[id]], s, F)
-  }
+  bf_list <- lapply(msa_list, (function(msa, s){
+    bf_list <- BestFirst(msa, s, F)
+    return(bf_list)
+  }), s)
 
-  msa_list
+  return(bf_list)
 }
 
 
-msa_loop <- function(list.words, s, pa=T, msa_list=NULL, method, cv_sep=F) {
+msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
   N     <- length(s)
   s.old <- s
   s.old <- apply(s.old, MARGIN = c(1, 2), zero)
@@ -47,13 +39,13 @@ msa_loop <- function(list.words, s, pa=T, msa_list=NULL, method, cv_sep=F) {
     }
 
     if (pa) {
-      msa_list <- pa_loop(list.words, s)
+      msa_list <- pa_loop(word_list, s)
     } else {
-      msa_list <- bf_loop(list.words, s, msa_list)
+      msa_list <- bf_loop(msa_list, s)
     }
 
     psa.list <- ChangeListMSA2PSA(msa_list, s)
-    rlt.pmi  <- PairwisePMI(psa.list, list.words, s, method, cv_sep)
+    rlt.pmi  <- PairwisePMI(psa.list, word_list, s, method, cv_sep)
     s        <- rlt.pmi$s
   }
 
