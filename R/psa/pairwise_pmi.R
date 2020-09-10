@@ -13,12 +13,25 @@ PairwisePMI <- function(psa.list, list.words, s, method, cv_sep=F) {
     s.old[i] <- 0
   }
   # START OF LOOP
-  while(1) {
+  loop <- 0
+  while (1) {
+
     change_cores()
     diff <- N - sum(s == s.old)
-    if (diff == 0) break
+    if (diff == 0) {
+      break
+    } else {
+      s.old <- s
+    }
+
+    if (loop == 10) {
+      print("MAX LOOP!!")
+      break
+    } else {
+      loop <- loop + 1
+    }
+
     # Compute the new scoring matrix that is updated by the PMI-weighting.
-    s.old <- s
     rlt.pmi <- method(psa.list, s, cv_sep)
     pmi.mat <- rlt.pmi$pmi.mat
     s <- rlt.pmi$s
