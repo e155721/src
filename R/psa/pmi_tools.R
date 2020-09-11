@@ -104,10 +104,14 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
 
   seg_pair_tmp <- paste(seg.pair.mat[, 1], seg.pair.mat[, 2])
   corpus_tmp <- paste(corpus[1, ], corpus[2, ], sep = " ")
+  tmp_list <- mclapply(1:seg.pair.num, (function(i, x, y){
+    return(sum(x[i] == y))
+  }), seg_pair_tmp, corpus_tmp)
+
   for (i in 1:seg.pair.num) {
     x <- seg.pair.mat[i, 1]
     y <- seg.pair.mat[i, 2]
-    seg.pair.freq.mat[x, y] <- sum(seg_pair_tmp[i] == corpus_tmp)
+    seg.pair.freq.mat[x, y] <- tmp_list[[i]]
   }
 
   toc()
