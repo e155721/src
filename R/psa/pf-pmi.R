@@ -72,21 +72,25 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   feat_mat <- rbind(mat.X.feat, gap)
 
   # Convert from corpus_phone to feature corpus.
-  corpus_feat1 <- NULL
-  corpus_feat2 <- NULL
   N <- dim(corpus_phone)[2]
   print("corpus_feat")
   tic()
-  corpus_feat <- foreach(i = 1:N, .combine = "cbind", .inorder = T) %dopar% {
-    corpus_feat1 <- c(corpus_feat1, feat_mat[corpus_phone[1, i], ])
-    corpus_feat2 <- c(corpus_feat2, feat_mat[corpus_phone[2, i], ])
-    rbind(corpus_feat1, corpus_feat2)
-  }
-  toc()
 
-  print("sort")
-  tic()
-  corpus_feat <- apply(X = corpus_feat, MARGIN = 2, FUN = sort)
+  corpus_feat <- mclapply(1:N, (function(j, x, y){
+    mat <- rbind(x[y[1, j], ], x[y[2, j], ])
+    mat <- apply(mat, 2, sort)
+    return(mat)
+  }), feat_mat, corpus_phone)
+
+  corpus_feat1 <- mclapply(corpus_feat, (function(x){
+    return(x[1, ])
+  }))
+
+  corpus_feat2 <- mclapply(corpus_feat, (function(x){
+    return(x[2, ])
+  }))
+
+  corpus_feat <- rbind(unlist(corpus_feat1), unlist(corpus_feat2))
   toc()
 
   # Create the feature pairs matrix.
