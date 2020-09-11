@@ -3,6 +3,8 @@ library(MASS)
 source("lib/load_phoneme.R")
 source("psa/pmi_tools.R")
 
+library(tictoc)
+
 PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   # Computes the PMI of symbol pair (x, y) in the corpus.
   # Args:
@@ -73,12 +75,19 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   corpus_feat1 <- NULL
   corpus_feat2 <- NULL
   N <- dim(corpus_phone)[2]
+  print("corpus_feat")
+  tic()
   corpus_feat <- foreach(i = 1:N, .combine = "cbind", .inorder = T) %dopar% {
     corpus_feat1 <- c(corpus_feat1, feat_mat[corpus_phone[1, i], ])
     corpus_feat2 <- c(corpus_feat2, feat_mat[corpus_phone[2, i], ])
     rbind(corpus_feat1, corpus_feat2)
   }
+  toc()
+
+  print("sort")
+  tic()
   corpus_feat <- apply(X = corpus_feat, MARGIN = 2, FUN = sort)
+  toc()
 
   # Create the feature pairs matrix.
   pair_mat <- make_pair_mat(corpus_feat, identical = T)
