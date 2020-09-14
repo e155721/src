@@ -24,12 +24,12 @@ PlotGraph <- function(x, list, fixValVec, yLim, title, xlab)
 }
 
 # histogram plot function
-plot_hist <- function(file, by=NULL) {
+plot_hist <- function(x, title=NULL, by=NULL) {
+  # x: a data vector.
 
   # Read the data file
-  data <- read.table(file)$V2
-  mean <- mean(data)
-  dataLen <- length(data)
+  mean <- mean(x)
+  N <- length(x)
 
   # Configure the font of the histogram.
   if (is.null(by)) {
@@ -38,16 +38,16 @@ plot_hist <- function(file, by=NULL) {
   div <- seq(from = 0, to = 100, by = by)
 
   par(font.lab = 2, font.axis = 2, cex.axis = 1.5, cex.lab = 1.5)
-  hist(data, breaks = div, main = file,
+  hist(x, breaks = div, main = title,
        right = F,
        labels = T,
        xaxt = "n",
-       ylim = c(0, dataLen),
+       ylim = c(0, N),
        xlab = "Matching Rate (%)",
        ylab = "Word Frequency")
   axis(1, at = div, pos = -3)
   abline(v = mean, col = 2, lwd = 3, lty = 2)  # Plot the broken line.
-  text(x = mean(data) - 25, y = 110,     # Plot the average matching rate.
+  text(x = mean(x) - 25, y = 110,     # Plot the average matching rate.
        paste("Average Matching Rate =", round(mean, digits = 3), "%", sep = " "),
        col = 2, font = 2, cex = 1.5)
 }
