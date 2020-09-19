@@ -22,14 +22,13 @@ ChangeListMSA2PSA <- function(msa.list, s) {
       aln <- rbind(msa.list[[i]]$aln[comb.reg[1, j], ],
                    msa.list[[i]]$aln[comb.reg[2, j], ])
       aln <- DelGap(aln)
-      seq1 <- aln[1, , drop=F]
-      seq2 <- aln[2, , drop=F]
+      seq1 <- aln[1, , drop = F]
+      seq2 <- aln[2, , drop = F]
 
       psa.list[[i]][[j]] <- list()
       psa.list[[i]][[j]]$seq1 <- seq1
       psa.list[[i]][[j]]$seq2 <- seq2
       psa.list[[i]][[j]]$aln <- aln
-      psa.list[[i]][[j]]$score <- CheckScore(aln, s)
     }
   }
 
