@@ -5,3 +5,4 @@ tmp/
 *.pdf
 *.Rproj
 .Rproj.user
+scripts/
