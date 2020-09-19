@@ -5,9 +5,7 @@ source("lib/load_exec_align.R")
 source("lib/load_pmi.R")
 source("lib/load_msa.R")
 source("lib/load_exec_align.R")
-source("verification_multiple/change_list_msa2psa.R")
 source("verification_multiple/verification_msa.R")
-source("verification_multiple/msa_tools.R")
 source("parallel_config.R")
 
 
@@ -25,43 +23,11 @@ psa.list <- PSAforEachWord(word_list, s, dist = T)
 s <- PairwisePMI(psa.list, word_list, s, UpdatePFPMI, cv_sep)$s
 #save(s, file="scoring_matrix_msa_pmi.RData")
 
-N <- length(s)
-s.old.main <- s
-s.old.main <- apply(s.old.main, MARGIN = c(1, 2), zero)
+msa_pmi <- MultiplePMI(word_list, s, UpdatePFPMI)
 
-loop <- 0
-while (1) {
-  print("Main loop")
-  diff <- N - sum(s == s.old.main)
-  if (diff == 0) {
-    break
-  } else {
-    s.old.main <- s
-  }
-
-  if (loop == 10) {
-    print("MAX LOOP!!")
-    break
-  } else {
-    loop <- loop + 1
-  }
-
-  # For progressive
-  print("PA loop")
-  pa.o <- msa_loop(word_list, s, pa = T, msa_list = NULL, method = UpdatePFPMI, cv_sep = cv_sep)
-
-  pa_list <- pa.o$msa_list
-  s       <- pa.o$s
-
-  # For best first
-  print("BF loop")
-  msa.o <- msa_loop(word_list, s, pa = F, msa_list = pa_list, method = UpdatePFPMI, cv_sep = cv_sep)
-
-  msa_list <- msa.o$msa_list
-  s        <- msa.o$s
-
-}
-pmi.mat <- msa.o$pmi.mat
+msa_list <- msa_pmi$msa_list
+pmi.mat <- msa_pmi$pmi.mat
+s <- msa_pmi$s
 
 # Calculate the accuracy of the MSAs.
 verification_msa(msa_list, path$ansrate.file, path$output.dir)
