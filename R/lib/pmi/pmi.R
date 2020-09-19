@@ -1,5 +1,5 @@
 source("lib/load_phoneme.R")
-source("psa/pmi_tools.R")
+source("lib/pmi/pmi_tools.R")
 
 PMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   # Computes the PMI of symbol pair (x, y) in the corpus.

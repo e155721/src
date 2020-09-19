@@ -1,7 +1,7 @@
 library(MASS)
 
 source("lib/load_phoneme.R")
-source("psa/pmi_tools.R")
+source("lib/pmi/pmi_tools.R")
 
 library(tictoc)
 
