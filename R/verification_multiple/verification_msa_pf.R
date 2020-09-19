@@ -1,7 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_scoring_matrix.R")
 source("lib/load_exec_align.R")
-source("verification_multiple/CalcAccMSA.R")
+source("verification_multiple/verification_msa.R")
 source("parallel_config.R")
 
 ansrate <- "ansrate_msa_pf"
@@ -22,6 +22,6 @@ for (pen in (-1)) {
   s <- MakeFeatureMatrix(-Inf, pen)
   msa.list <- MSAforEachWord(word_list, s, similarity = T)
   # Calculate the accuracy of the MSAs.
-  CalcAccMSA(msa.list, path$ansrate.file, path$output.dir)
+  verification_msa(msa.list, path$ansrate.file, path$output.dir)
 
 }

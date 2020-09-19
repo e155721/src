@@ -32,7 +32,7 @@ Convert <- function(msa) {
   return(msa)
 }
 
-CalcAccMSA <- function(msa.list, ansrate.file, output.dir) {
+verification_msa <- function(msa.list, ansrate.file, output.dir) {
   # Compute the MSA for each word.
   #
   # Args:

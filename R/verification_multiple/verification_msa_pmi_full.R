@@ -6,7 +6,7 @@ source("lib/load_pmi.R")
 source("lib/load_msa.R")
 source("lib/load_exec_align.R")
 source("verification_multiple/change_list_msa2psa.R")
-source("verification_multiple/CalcAccMSA.R")
+source("verification_multiple/verification_msa.R")
 source("verification_multiple/msa_tools.R")
 source("parallel_config.R")
 
@@ -64,7 +64,7 @@ while (1) {
 pmi.mat <- msa.o$pmi.mat
 
 # Calculate the accuracy of the MSAs.
-CalcAccMSA(msa_list, path$ansrate.file, path$output.dir)
+verification_msa(msa_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
 rdata.path <- MakeMatPath("matrix_msa_pmi", "score_msa_pmi", ext)
