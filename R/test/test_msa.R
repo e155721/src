@@ -1,8 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("lib/load_scoring_matrix.R")
-
-LoadLib("msa/")
+source("lib/load_msa.R")
 
 #word.list <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org")
 word.list <- MakeWordList("../../Alignment/org_data/01-003首(2-2).org", csv=F)

@@ -1,7 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
-source("msa/ProgressiveAlignment.R")
-source("msa/BestFirst.R")
+source("lib/msa/ProgressiveAlignment.R")
+source("lib/msa/BestFirst.R")
 
 MSAforEachWord <- function(word_list, s, similarity=F) {
   # Compute the MSA for each word.
