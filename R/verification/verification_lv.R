@@ -6,12 +6,12 @@ source("parallel_config.R")
 
 file <- "ansrate_lv"
 dir <- "pairwise_lv"
-ext = commandArgs(trailingOnly = TRUE)[1]
+ext <- commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(file, dir, ext)
 
 # Execute the PSA for each word.
 file_list <- GetPathList()
 word_list <- make_word_list(file_list)
 s <- MakeEditDistance(Inf)
-psa.list <- PSAforEachWord(word_list, s, dist = T)
-VerificationPSA(psa.list, file_list, path$ansrate.file, path$output.dir)
+psa_list <- PSAforEachWord(word_list, s, dist = T)
+VerificationPSA(psa_list, file_list, path$ansrate.file, path$output.dir)

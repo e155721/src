@@ -6,7 +6,7 @@ source("parallel_config.R")
 
 file <- "ansrate_pf"
 dir <- "pairwise_pf"
-ext = commandArgs(trailingOnly = TRUE)[1]
+ext <- commandArgs(trailingOnly = TRUE)[1]
 
 for (pen in -1) {
 
@@ -21,7 +21,7 @@ for (pen in -1) {
   file_list <- GetPathList()
   word_list <- make_word_list(file_list)
   s <- MakeFeatureMatrix(-Inf, pen)
-  psa.list <- PSAforEachWord(word_list, s, dist = F)
-  VerificationPSA(psa.list, file_list, path$ansrate.file, path$output.dir)
+  psa_list <- PSAforEachWord(word_list, s, dist = F)
+  VerificationPSA(psa_list, file_list, path$ansrate.file, path$output.dir)
 
 }

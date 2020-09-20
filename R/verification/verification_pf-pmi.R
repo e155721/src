@@ -8,25 +8,25 @@ source("parallel_config.R")
 
 file <- "ansrate_pf-pmi"
 dir <- "pairwise_pf-pmi"
-ext = commandArgs(trailingOnly = TRUE)[1]
+ext <- commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(file, dir, ext)
 
 # Create an itnitial scoring matrix and a list of PSAs.
 file_list <- GetPathList()
 word_list <- make_word_list(file_list)
 s         <- MakeEditDistance(Inf)
-psa.list  <- PSAforEachWord(word_list, s, dist = T)
+psa_list  <- PSAforEachWord(word_list, s, dist = T)
 
 # Update the scoring matrix using the PF-PMI.
-pmi.o    <- PairwisePMI(psa.list, word_list, s, UpdatePFPMI, cv_sep = F)
-pmi.mat  <- pmi.o$pmi.mat
-s        <- pmi.o$s
-psa.list <- pmi.o$psa.list
+pmi_rlt  <- PairwisePMI(psa_list, word_list, s, UpdatePFPMI, cv_sep = F)
+pmi_mat  <- pmi_rlt$pmi.mat
+s        <- pmi_rlt$s
+psa_list <- pmi_rlt$psa.list
 
 # Execute the PSA for each word.
-VerificationPSA(psa.list, file_list, path$ansrate.file, path$output.dir)
+VerificationPSA(psa_list, file_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
-rdata.path <- MakeMatPath("matrix_psa_pf-pmi", "score_psa_pf-pmi", ext)
-save(pmi.mat, file = rdata.path$rdata1)
-save(s, file = rdata.path$rdata2)
+rdata_path <- MakeMatPath("matrix_psa_pf-pmi", "score_psa_pf-pmi", ext)
+save(pmi_mat, file = rdata_path$rdata1)
+save(s, file = rdata_path$rdata2)
