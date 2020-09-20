@@ -1,5 +1,4 @@
-source("lib/verif_lib/VerifAcc.R")
-source("parallel_config.R")
+source("lib/load_data_processing.R")
 
 OutputPSA <- function(psa_list, file.list, output.dir) {
   # Compute the PSA for each word.
@@ -31,7 +30,7 @@ OutputPSA <- function(psa_list, file.list, output.dir) {
     # Unification the PSAs.
     N <- length(psa)
     for (i in 1:N) {
-      psa[[i]] <- Convert(psa[[i]])
+      psa[[i]]$aln <- Convert(psa[[i]]$aln)
     }
 
     # Output the results.
