@@ -6,7 +6,7 @@ source("parallel_config.R")
 
 ansrate <- "ansrate_msa_pf"
 multiple <- "multiple_pf"
-ext = commandArgs(trailingOnly = TRUE)[1]
+ext <- commandArgs(trailingOnly = TRUE)[1]
 
 for (pen in (-1)) {
 
@@ -21,8 +21,8 @@ for (pen in (-1)) {
   file_list <- GetPathList()
   word_list <- make_word_list(file_list)
   s <- MakeFeatureMatrix(-Inf, pen)
-  msa.list <- MSAforEachWord(word_list, s, similarity = T)
+  msa_list <- MSAforEachWord(word_list, s, similarity = T)
   # Calculate the accuracy of the MSAs.
-  verification_msa(msa.list, file_list, path$ansrate.file, path$output.dir)
+  verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
 
 }

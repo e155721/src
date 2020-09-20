@@ -7,12 +7,12 @@ source("parallel_config.R")
 
 ansrate <- "ansrate_msa_lv"
 multiple <- "multiple_lv"
-ext = commandArgs(trailingOnly = TRUE)[1]
+ext <- commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(ansrate, multiple, ext)
 
 # Get the all of files path.
 file_list <- GetPathList()
 word_list <- make_word_list(file_list)
 s <- MakeEditDistance(Inf)
-msa.list <- MSAforEachWord(word_list, s)
-verification_msa(msa.list, file_list, path$ansrate.file, path$output.dir)
+msa_list <- MSAforEachWord(word_list, s)
+verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
