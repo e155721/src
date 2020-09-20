@@ -26,5 +26,5 @@ psa_list <- pmi_rlt$psa_list
 OutputPSA(psa_list, file_list, output_dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
-save(pmi_mat, file = paste(output_dir, "pf-pmi_mat.RData", sep = ""))
-save(s, file = paste(output_dir, "scoring_mat.RData", sep = ""))
+save(pmi_mat, file = paste(output_dir, "matrix_pf-pmi.RData", sep = ""))
+save(s, file = paste(output_dir, "score_pf-pmi.RData", sep = ""))
