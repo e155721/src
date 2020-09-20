@@ -4,8 +4,8 @@ source("lib/load_exec_align.R")
 source("lib/load_verif_lib.R")
 source("parallel_config.R")
 
-input.dir  <- commandArgs(trailingOnly = TRUE)[1]
-output.dir <- commandArgs(trailingOnly = TRUE)[2]
+input_dir  <- commandArgs(trailingOnly = TRUE)[1]
+output_dir <- commandArgs(trailingOnly = TRUE)[2]
 pen        <- commandArgs(trailingOnly = TRUE)[3]
 
 if (is.na(pen)) {
@@ -14,11 +14,11 @@ if (is.na(pen)) {
   pen <- as.numeric(pen)
 }
 
-input.dir  <- paste(input.dir, "/", sep = "")
-output.dir <- paste(output.dir, "/", sep = "")
+input_dir  <- paste(input_dir, "/", sep = "")
+output_dir <- paste(output_dir, "/", sep = "")
 
-file_list <- GetPathList(input.dir)
+file_list <- GetPathList(input_dir)
 word_list <- make_word_list(file_list)
 s <- MakeFeatureMatrix(-Inf, pen)
-psa.list <- PSAforEachWord(word_list, s, dist = F)
-OutputPSA(psa.list, file_list, output.dir)
+psa_list <- PSAforEachWord(word_list, s, dist = F)
+OutputPSA(psa_list, file_list, output_dir)
