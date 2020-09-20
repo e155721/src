@@ -28,18 +28,18 @@ dist_for_all <- function(method="lv") {
     tmp$pair   <- paste(regions[k], regions[l])  # for using UTF-8.
     tmp$pair   <- unlist(strsplit(tmp$pair, " "))
     
-    tmp$psa.list <- mat.o$psa.list
+    tmp$psa_list <- mat.o$psa_list
     tmp$mat      <- mat.o$mat
     tmp$ranks    <- nr.vec
     tmp$dist     <- d
     tmp
   }
   
-  psa.list <- foreach (i = 1:N) %dopar% {
+  psa_list <- foreach (i = 1:N) %dopar% {
     psa      <- list()
     psa$pair <- tmp.list[[i]]$pair
     
-    psa$psa.list <- tmp.list[[i]]$psa.list
+    psa$psa_list <- tmp.list[[i]]$psa_list
     psa
   }
   
@@ -53,11 +53,11 @@ dist_for_all <- function(method="lv") {
     dist
   }
   
-  psa.list$method  <- method
+  psa_list$method  <- method
   dist.list$method <- method
   
   dist.o           <- list()
-  dist.o$psa.list  <- psa.list
+  dist.o$psa_list  <- psa_list
   dist.o$dist.list <- dist.list
   dist.o
 }

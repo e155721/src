@@ -15,18 +15,18 @@ LD <- function(c1, c2, s) {
   N2 <- length(c2)
 
   score.vec   <- NULL
-  psa.list <- list()
+  psa_list <- list()
   k <- 1
   for (i in 1:N1) {
     for (j in 1:N2) {
       psa           <- needleman_wunsch(c1[[i]], c2[[j]], s, select_min = T)
-      psa.list[[k]] <- psa
+      psa_list[[k]] <- psa
       score.vec     <- c(score.vec, psa$score)
 
       k <- k + 1
     }
   }
-  psa.list[[which(score.vec == min(score.vec))[1]]]
+  psa_list[[which(score.vec == min(score.vec))[1]]]
 }
 
 PSAforEachConcept <- function(r1, r2, s) {
@@ -50,18 +50,18 @@ PSAforEachConcept <- function(r1, r2, s) {
   N <- length(r1)
 
   concepts <- names(r1)
-  psa.list <- list()
+  psa_list <- list()
   k <- 1
   for (i in 1:N) {
     for (j in 1:N) {
 
-      psa.list[[k]] <- LD(r1[[i]], r2[[j]], s)
+      psa_list[[k]] <- LD(r1[[i]], r2[[j]], s)
       k <- k + 1
 
     }
   }
 
-  psa.list
+  psa_list
 }
 
 PSAforEachResion <- function(all.list, s) {
@@ -70,7 +70,7 @@ PSAforEachResion <- function(all.list, s) {
   r <- t(combn(95, 2))
   N <- dim(r)[1]
 
-  psa.list <- foreach (i = 1:N) %dopar% {
+  psa_list <- foreach (i = 1:N) %dopar% {
 
     k <- r[i, 1]
     l <- r[i, 2]
@@ -82,12 +82,12 @@ PSAforEachResion <- function(all.list, s) {
     PSAforEachConcept(r1, r2, s)
   }
 
-  psa.list
+  psa_list
 }
 
 # Update the scoring matrix using the PMI.
 s <- MakeEditDistance(Inf)  # the initial scoring matrix
-psa.list <- PSAforEachResion(all.list, s)  # the initial alignments
+psa_list <- PSAforEachResion(all.list, s)  # the initial alignments
 
 s.old <- s
 N <- length(s.old)
@@ -100,11 +100,11 @@ while(1) {
   if (diff == 0) break
   # Compute the new scoring matrix that is updated by the PMI-weighting.
   s.old <- s
-  rlt.pmi <- UpdatePMI(psa.list, s)
+  rlt.pmi <- UpdatePMI(psa_list, s)
   pmi.mat <- rlt.pmi$pmi.mat
   s <- rlt.pmi$s
   # Compute the new PSA using the new scoring matrix.
-  psa.list <- PSAforEachResion(all.list, s)
+  psa_list <- PSAforEachResion(all.list, s)
 }
 
 save(pmi.mat, file = "pmi_mat.RData")

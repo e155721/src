@@ -1,23 +1,23 @@
 library(tictoc)
 
-MakeCorpus <- function(psa.list) {
+MakeCorpus <- function(psa_list) {
   # Makes the corpus to calculate PMI.
   #
   # Args:
-  #   psa.list: A list of the PSA lists.
+  #   psa_list: A list of the PSA lists.
   #
   # Returns:
   #   A corpus to calculate PMI.
   print("MakeCorpus")
   tic()
 
-  psa.list <- unlist(psa.list, recursive = F)
-  M <- length(psa.list)
+  psa_list <- unlist(psa_list, recursive = F)
+  M <- length(psa_list)
   seq1_list <- list()
   seq2_list <- list()
   for (i in 1:M) {
-    seq1_list[[i]] <- psa.list[[i]]$seq1[1, -1, drop = F]
-    seq2_list[[i]] <- psa.list[[i]]$seq2[1, -1, drop = F]
+    seq1_list[[i]] <- psa_list[[i]]$seq1[1, -1, drop = F]
+    seq2_list[[i]] <- psa_list[[i]]$seq2[1, -1, drop = F]
   }
 
   seq1 <- unlist(seq1_list)

@@ -9,14 +9,14 @@ ChangeListMSA2PSA <- function(msa.list, s) {
   #   files: The files path of all the words.
   #
   # Returns:
-  #   psa.list: The word list of all the words.
-  psa.list <- list()
+  #   psa_list: The word list of all the words.
+  psa_list <- list()
   num.msa <- length(msa.list)
   for (i in 1:num.msa) {
     num.reg <- dim(msa.list[[i]]$aln)[1]
     comb.reg <- combn(1:num.reg, 2)
     N <- dim(comb.reg)[2]
-    psa.list[[i]] <- list()
+    psa_list[[i]] <- list()
 
     for (j in 1:N) {
       aln <- rbind(msa.list[[i]]$aln[comb.reg[1, j], ],
@@ -25,14 +25,14 @@ ChangeListMSA2PSA <- function(msa.list, s) {
       seq1 <- aln[1, , drop = F]
       seq2 <- aln[2, , drop = F]
 
-      psa.list[[i]][[j]] <- list()
-      psa.list[[i]][[j]]$seq1 <- seq1
-      psa.list[[i]][[j]]$seq2 <- seq2
-      psa.list[[i]][[j]]$aln <- aln
+      psa_list[[i]][[j]] <- list()
+      psa_list[[i]][[j]]$seq1 <- seq1
+      psa_list[[i]][[j]]$seq2 <- seq2
+      psa_list[[i]][[j]]$aln <- aln
     }
   }
 
-  return(psa.list)
+  return(psa_list)
 }
 
 
@@ -82,8 +82,8 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
       msa_list <- bf_loop(msa_list, s)
     }
 
-    psa.list <- ChangeListMSA2PSA(msa_list, s)
-    rlt.pmi  <- PairwisePMI(psa.list, word_list, s, method, cv_sep)
+    psa_list <- ChangeListMSA2PSA(msa_list, s)
+    rlt.pmi  <- PairwisePMI(psa_list, word_list, s, method, cv_sep)
     s        <- rlt.pmi$s
   }
 

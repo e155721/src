@@ -19,13 +19,13 @@ psa_for_each_form <- function(c1, c2, method, s) {
   
   dist <- is.dist(method)
   
-  psa.list <- list()
+  psa_list <- list()
   asn.vec  <- NULL
   for (i in 1:N1) {
     for (j in 1:N2) {
       psa           <- needleman_wunsch(c1[[i]], c2[[j]], s, select_min = dist)
       k             <- i + (j - 1) * N1
-      psa.list[[k]] <- psa
+      psa_list[[k]] <- psa
       
       as       <- psa$score
       seq1.len <- length(psa$seq1) - 1
@@ -34,7 +34,7 @@ psa_for_each_form <- function(c1, c2, method, s) {
       asn      <- as / max(seq1.len, seq2.len)
       asn.vec  <- c(asn.vec, asn)
       
-      psa.list[[k]]$asn <- asn
+      psa_list[[k]]$asn <- asn
     }
   }
   
@@ -44,7 +44,7 @@ psa_for_each_form <- function(c1, c2, method, s) {
     best <- which(asn.vec == max(asn.vec))[1]
   }
   
-  return(psa.list[[best]])
+  return(psa_list[[best]])
 }
 
 MakeMat <- function(r1, r2, method="lv") {
@@ -75,7 +75,7 @@ MakeMat <- function(r1, r2, method="lv") {
   )
   
   concepts <- names(r1)  
-  psa.list <- list()
+  psa_list <- list()
   mat <- matrix(NA, N, N, dimnames = list(concepts, concepts))
   for (i in 1:N) {
     for (j in 1:N) {
@@ -84,13 +84,13 @@ MakeMat <- function(r1, r2, method="lv") {
       
       psa           <- psa_for_each_form(c1, c2, method, s)
       k             <- i + (j - 1) * N
-      psa.list[[k]] <- psa
+      psa_list[[k]] <- psa
       mat[i, j]     <- psa$asn
     }
   }
   
   mat.o          <- list()
-  mat.o$psa.list <- psa.list
+  mat.o$psa_list <- psa_list
   mat.o$mat      <- mat
   return(mat.o)
 }

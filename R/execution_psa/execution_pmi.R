@@ -21,7 +21,7 @@ psa_list  <- PSAforEachWord(word_list, s, dist = T)
 pmi_rlt  <- PairwisePMI(psa_list, word_list, s, UpdatePMI)
 pmi_mat  <- pmi_rlt$pmi.mat
 s        <- pmi_rlt$s
-psa_list <- pmi_rlt$psa.list
+psa_list <- pmi_rlt$psa_list
 
 # Execute the PSA for each word.
 OutputPSA(psa_list, file_list, output_dir)

@@ -61,11 +61,11 @@ calc_pmi <- function(corpus) {
 }
 
 
-UpdatePMI <- function(psa.list, s, cv_sep=F) {
+UpdatePMI <- function(psa_list, s, cv_sep=F) {
   # Compute the PMI of the PSA list.
   #
   # Args:
-  #   psa.list: THe PSA list of all the words.
+  #   psa_list: THe PSA list of all the words.
   #   s: The scoring matrix.
   #
   # Returns:
@@ -73,7 +73,7 @@ UpdatePMI <- function(psa.list, s, cv_sep=F) {
   cat("\n")
   print("Updating PMI")
 
-  corpus <- MakeCorpus(psa.list)
+  corpus <- MakeCorpus(psa_list)
 
   if (cv_sep) {
     print("Enabled CV-separation.")

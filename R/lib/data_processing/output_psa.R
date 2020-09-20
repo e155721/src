@@ -1,7 +1,7 @@
 source("lib/verif_lib/VerifAcc.R")
 source("parallel_config.R")
 
-OutputPSA <- function(psa.list, file.list, output.dir) {
+OutputPSA <- function(psa_list, file.list, output.dir) {
   # Compute the PSA for each word.
   # Args:
   #   ansrate.file: The path of the matching rate file.
@@ -26,7 +26,7 @@ OutputPSA <- function(psa.list, file.list, output.dir) {
 
     # Get the PSA about same word.
     id <- as.numeric(f[["id"]])
-    psa <- psa.list[[id]]
+    psa <- psa_list[[id]]
 
     # Unification the PSAs.
     N <- length(psa)

@@ -136,11 +136,11 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
 }
 
 
-UpdatePFPMI <- function(psa.list, s, cv_sep=F) {
+UpdatePFPMI <- function(psa_list, s, cv_sep=F) {
   # Compute the PMI of the PSA list.
   #
   # Args:
-  #   psa.list: THe PSA list of all the words.
+  #   psa_list: THe PSA list of all the words.
   #   s: The scoring matrix.
   #
   # Returns:
@@ -149,7 +149,7 @@ UpdatePFPMI <- function(psa.list, s, cv_sep=F) {
   print("Updating PF-PMI")
 
   # Make the phones corpus.
-  corpus_phone <- MakeCorpus(psa.list)
+  corpus_phone <- MakeCorpus(psa_list)
 
   if (cv_sep) {
     print("Enabled CV-separation.")

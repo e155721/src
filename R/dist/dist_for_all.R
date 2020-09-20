@@ -29,7 +29,7 @@ dist_for_all <- function(method="lv") {
     dist$pair   <- paste(regions[k], regions[l])  # for using UTF-8.
     dist$pair   <- unlist(strsplit(dist$pair, " "))
     
-    dist$psa.list <- mat.o$psa.list
+    dist$psa_list <- mat.o$psa_list
     dist$mat      <- mat.o$mat
     dist$ranks    <- nr.vec
     dist$dist     <- d
