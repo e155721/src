@@ -32,7 +32,7 @@ Convert <- function(msa) {
   return(msa)
 }
 
-verification_msa <- function(msa.list, ansrate.file, output.dir) {
+verification_msa <- function(msa.list, file_list, ansrate.file, output.dir) {
   # Compute the MSA for each word.
   #
   # Args:
@@ -44,7 +44,6 @@ verification_msa <- function(msa.list, ansrate.file, output.dir) {
   # Returns:
   #   Nothing.
 
-  file_list <- GetPathList()
   accuracy.mat <- matrix(NA, length(file_list), 2)
 
   for (f in file_list) {

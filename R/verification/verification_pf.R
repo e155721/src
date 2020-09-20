@@ -18,9 +18,10 @@ for (pen in -1) {
   path <- MakePath(file, dir, ext)
 
   # Make the scoring matrix.
-  word_list <- make_word_list()
+  file_list <- GetPathList()
+  word_list <- make_word_list(file_list)
   s <- MakeFeatureMatrix(-Inf, pen)
   psa.list <- PSAforEachWord(word_list, s, dist = F)
-  VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
+  VerificationPSA(psa.list, file_list, path$ansrate.file, path$output.dir)
 
 }

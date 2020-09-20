@@ -17,7 +17,8 @@ path <- MakePath(ansrate, multiple, ext)
 cv_sep <- F  # CV-separation
 
 # Compute the scoring matrix using the PMI method.
-word_list <- make_word_list()
+file_list <- GetPathList()
+word_list <- make_word_list(file_list)
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(word_list, s, dist = T)
 s <- PairwisePMI(psa.list, word_list, s, UpdatePFPMI, cv_sep)$s
@@ -30,7 +31,7 @@ pmi.mat <- msa_pmi$pmi.mat
 s <- msa_pmi$s
 
 # Calculate the accuracy of the MSAs.
-verification_msa(msa_list, path$ansrate.file, path$output.dir)
+verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
 rdata.path <- MakeMatPath("matrix_msa_pf-pmi", "score_msa_pf-pmi", ext)

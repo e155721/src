@@ -6,7 +6,7 @@ source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 
 
-VerificationPSA <- function(psa.list, ansrate.file, output.dir) {
+VerificationPSA <- function(psa.list, file.list, ansrate.file, output.dir) {
   # Compute the PSA for each word.
   # Args:
   #   ansrate.file: The path of the matching rate file.
@@ -16,8 +16,6 @@ VerificationPSA <- function(psa.list, ansrate.file, output.dir) {
   # Returns:
   #   Nothing.
 
-  # Get the all of files path.
-  file.list <- GetPathList()
   N <- length(file.list)
 
   # START OF LOOP

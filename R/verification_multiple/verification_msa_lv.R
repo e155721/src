@@ -11,7 +11,8 @@ ext = commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(ansrate, multiple, ext)
 
 # Get the all of files path.
-word_list <- make_word_list()
+file_list <- GetPathList()
+word_list <- make_word_list(file_list)
 s <- MakeEditDistance(Inf)
 msa.list <- MSAforEachWord(word_list, s)
-verification_msa(msa.list, path$ansrate.file, path$output.dir)
+verification_msa(msa.list, file_list, path$ansrate.file, path$output.dir)

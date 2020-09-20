@@ -12,7 +12,8 @@ ext = commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(file, dir, ext)
 
 # Create an itnitial scoring matrix and a list of PSAs.
-word_list <- make_word_list()
+file_list <- GetPathList()
+word_list <- make_word_list(file_list)
 s         <- MakeEditDistance(Inf)
 psa.list  <- PSAforEachWord(word_list, s, dist = T)
 
@@ -23,7 +24,7 @@ s        <- pmi.o$s
 psa.list <- pmi.o$psa.list
 
 # Execute the PSA for each word.
-VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
+VerificationPSA(psa.list, file_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
 rdata.path <- MakeMatPath("matrix_psa_pmi", "score_psa_pmi", ext)

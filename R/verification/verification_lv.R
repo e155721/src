@@ -10,7 +10,8 @@ ext = commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(file, dir, ext)
 
 # Execute the PSA for each word.
-word_list <- make_word_list()
+file_list <- GetPathList()
+word_list <- make_word_list(file_list)
 s <- MakeEditDistance(Inf)
 psa.list <- PSAforEachWord(word_list, s, dist = T)
-VerificationPSA(psa.list, path$ansrate.file, path$output.dir)
+VerificationPSA(psa.list, file_list, path$ansrate.file, path$output.dir)
