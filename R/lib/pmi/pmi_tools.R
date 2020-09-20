@@ -162,27 +162,27 @@ AggrtPMI <- function(s, pmi.list) {
   # The three-dimensional array to save the PF-PMI for each symbol pairs.
   s.dim <- dim(s)[1]
   s.names <- dimnames(s)[[1]]
-  pmi.mat <- array(NA, dim = c(s.dim, s.dim, dim(mat.C.feat)[2]), dimnames = list(s.names, s.names))
+  pmi_mat <- array(NA, dim = c(s.dim, s.dim, dim(mat.C.feat)[2]), dimnames = list(s.names, s.names))
 
   seg.pair.num <- length(pmi.list)
   for (i in 1:seg.pair.num) {
-    pmi.mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
-    pmi.mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
+    pmi_mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
+    pmi_mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
   }
 
   # Prevent pairs of CV.
-  pmi.mat[C, V, ] <- NA
-  pmi.mat[V, C, ] <- NA
+  pmi_mat[C, V, ] <- NA
+  pmi_mat[V, C, ] <- NA
 
   # If the symbol pair PMI has been used,
   # the matrix of the PMIs is changed
   # from a three-dimensional array to a matrix.
   if (length(pmi.list[[1]]$pmi) == 1) {
-    pmi.mat <- as.matrix(pmi.mat[, , 1])
+    pmi_mat <- as.matrix(pmi_mat[, , 1])
   }
 
   toc()
-  return(pmi.mat)
+  return(pmi_mat)
 }
 
 pmi2dist <- function(s, score.tmp, pmi.list) {

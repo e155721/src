@@ -19,7 +19,7 @@ psa_list  <- PSAforEachWord(word_list, s, dist = T)
 
 # Update the scoring matrix using the PMI.
 pmi_rlt  <- PairwisePMI(psa_list, word_list, s, UpdatePMI)
-pmi_mat  <- pmi_rlt$pmi.mat
+pmi_mat  <- pmi_rlt$pmi_mat
 s        <- pmi_rlt$s
 psa_list <- pmi_rlt$psa_list
 

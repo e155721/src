@@ -33,7 +33,7 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
 
     # Compute the new scoring matrix that is updated by the PMI-weighting.
     rlt.pmi <- method(psa_list, s, cv_sep)
-    pmi.mat <- rlt.pmi$pmi.mat
+    pmi_mat <- rlt.pmi$pmi_mat
     s <- rlt.pmi$s
     # Compute the new PSA using the new scoring matrix.
     psa_list <- PSAforEachWord(list.words, s, dist = T)
@@ -42,7 +42,7 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
 
   pmi <- list()
   pmi$psa_list <- psa_list
-  pmi$pmi.mat <- pmi.mat
+  pmi$pmi_mat <- pmi_mat
   pmi$s <- s
   return(pmi)
 }

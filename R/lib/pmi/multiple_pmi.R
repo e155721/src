@@ -89,7 +89,7 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
 
   msa.o          <- list()
   msa.o$msa_list <- msa_list
-  msa.o$pmi.mat  <- rlt.pmi$pmi.mat
+  msa.o$pmi_mat  <- rlt.pmi$pmi_mat
   msa.o$s        <- s
   msa.o
 }

@@ -101,11 +101,11 @@ while(1) {
   # Compute the new scoring matrix that is updated by the PMI-weighting.
   s.old <- s
   rlt.pmi <- UpdatePMI(psa_list, s)
-  pmi.mat <- rlt.pmi$pmi.mat
+  pmi_mat <- rlt.pmi$pmi_mat
   s <- rlt.pmi$s
   # Compute the new PSA using the new scoring matrix.
   psa_list <- PSAforEachResion(all.list, s)
 }
 
-save(pmi.mat, file = "pmi_mat.RData")
+save(pmi_mat, file = "pmi_mat.RData")
 save(s, file = "pmi_score.RData")

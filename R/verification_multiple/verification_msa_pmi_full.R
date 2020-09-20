@@ -26,7 +26,7 @@ s <- PairwisePMI(psa_list, word_list, s, UpdatePMI, cv_sep)$s
 msa_pmi <- MultiplePMI(word_list, s, UpdatePMI)
 
 msa_list <- msa_pmi$msa_list
-pmi_mat <- msa_pmi$pmi.mat
+pmi_mat <- msa_pmi$pmi_mat
 s <- msa_pmi$s
 
 # Calculate the accuracy of the MSAs.
