@@ -1,12 +1,7 @@
+source("msa/msa_pmi.R")
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
-source("lib/load_scoring_matrix.R")
-source("lib/load_exec_align.R")
-source("lib/load_pmi.R")
-source("lib/load_msa.R")
-source("lib/load_exec_align.R")
 source("verification_multiple/verification_msa.R")
-source("parallel_config.R")
 
 
 ansrate <- "ansrate_msa_pmi"
@@ -14,20 +9,13 @@ multiple <- "multiple_pmi"
 ext <- commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(ansrate, multiple, ext)
 
-cv_sep <- F  # CV-separation
-
-# Compute the scoring matrix using the PMI method.
 file_list <- GetPathList()
 word_list <- make_word_list(file_list)
-s <- MakeEditDistance(Inf)
-psa_list <- PSAforEachWord(word_list, s, dist = T)
-s <- PairwisePMI(psa_list, word_list, s, UpdatePMI, cv_sep)$s
 
-msa_pmi <- MultiplePMI(word_list, s, UpdatePMI)
-
-msa_list <- msa_pmi$msa_list
-pmi_mat <- msa_pmi$pmi_mat
-s <- msa_pmi$s
+pmi_rlt  <- msa_pmi(word_list, cv_sep = F)
+pmi_mat  <- pmi_rlt$pmi_mat
+s        <- pmi_rlt$s
+msa_list <- pmi_rlt$msa_list
 
 # Calculate the accuracy of the MSAs.
 verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
