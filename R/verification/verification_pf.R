@@ -1,8 +1,7 @@
-source("lib/load_scoring_matrix.R")
+source("psa/psa_pf.R")
+source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
-source("lib/load_exec_align.R")
 source("verification/verification_psa.R")
-source("parallel_config.R")
 
 file <- "ansrate_pf"
 dir <- "pairwise_pf"
@@ -17,11 +16,11 @@ for (pen in -1) {
   }
   path <- MakePath(file, dir, ext)
 
-  # Make the scoring matrix.
   file_list <- GetPathList()
   word_list <- make_word_list(file_list)
-  s <- MakeFeatureMatrix(-Inf, pen)
-  psa_list <- PSAforEachWord(word_list, s, dist = F)
+
+  psa_list <- psa_pf(word_list, pen)
+
   VerificationPSA(psa_list, file_list, path$ansrate.file, path$output.dir)
 
 }
