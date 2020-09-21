@@ -94,7 +94,7 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
   msa.o
 }
 
-MultiplePMI <- function(word_list, s, method) {
+MultiplePMI <- function(word_list, s, method, cv_sep=F) {
 
   N <- length(s)
   s.old.main <- s
