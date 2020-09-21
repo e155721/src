@@ -1,5 +1,4 @@
 source("lib/load_data_processing.R")
-source("test/check_score.R")
 
 
 ChangeListMSA2PSA <- function(msa.list, s) {
