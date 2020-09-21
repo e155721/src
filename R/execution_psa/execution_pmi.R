@@ -11,7 +11,8 @@ output_dir <- paste(output_dir, "/", sep = "")
 file_list <- GetPathList(input_dir)
 word_list <- make_word_list(file_list)
 
+# Execute the PSA.
 psa_list <- psa_pmi(word_list)$psa_list
 
-# Execute the PSA for each word.
+# Output the PSA.
 OutputPSA(psa_list, file_list, output_dir)

@@ -10,12 +10,16 @@ input_dir  <- paste(input_dir, "/", sep = "")
 output_dir <- paste(output_dir, "/", sep = "")
 
 if (is.na(pen)) {
-  pen <- -1
+  pen <- -1  # the default gap penalty
 } else {
-  pen <- as.numeric(pen)
+  pen <- as.numeric(pen)  # the user gap penalty
 }
 
 file_list <- GetPathList(input_dir)
 word_list <- make_word_list(file_list)
+
+# Execute the PSA.
 psa_list <- psa_pf(word_list, pen)
+
+# Output the PSA.
 OutputPSA(psa_list, file_list, output_dir)
