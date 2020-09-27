@@ -11,7 +11,7 @@ msa_pf_pmi <- function(word_list, cv_sep=F) {
   s        <- MakeEditDistance(Inf)
   psa_list <- PSAforEachWord(word_list, s, dist = T)
   s        <- PairwisePMI(psa_list, word_list, s, UpdatePFPMI, cv_sep)$s
-  msa_pmi  <- MultiplePMI(word_list, s, UpdatePFPMI)
+  msa_pmi  <- MultiplePMI(word_list, s, UpdatePFPMI, cv_sep)
 
   return(msa_pmi)
 }
