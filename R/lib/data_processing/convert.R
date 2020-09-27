@@ -18,8 +18,18 @@ Convert <- function(msa) {
 
     rev <- sum((col1 != "-") + (col2 != "-") == 2)
     if (rev == 0) {
-      if (num_gap1 <= num_gap2) {
+      if (num_gap1 < num_gap2) {
         # NOP
+      } else if (num_gap1 == num_gap2) {
+
+        # for PSA
+        if (col1[1] == "-") {
+          # NOP
+        } else {
+          msa[, j] <- col2
+          msa[, j + 1] <- col1
+        }
+
       } else {
         msa[, j] <- col2
         msa[, j + 1] <- col1
