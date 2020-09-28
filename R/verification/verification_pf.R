@@ -2,6 +2,8 @@ source("psa/psa_pf.R")
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("verification/verification_psa.R")
+source("parallel_config.R")
+
 
 file <- "ansrate_pf"
 dir <- "pairwise_pf"

@@ -2,6 +2,8 @@ source("psa/psa_lv.R")
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 source("verification/verification_psa.R")
+source("parallel_config.R")
+
 
 file <- "ansrate_lv"
 dir <- "pairwise_lv"
