@@ -9,6 +9,8 @@ Convert <- function(msa) {
   dim_msa <- dim(msa)
   N <- dim_msa[2]
 
+  if (N == 2) return(msa)
+
   for (j in 2:(N - 1)) {
     col1 <- msa[, j]
     col2 <- msa[, j + 1]
