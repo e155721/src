@@ -1,4 +1,4 @@
-source("lib/needleman_wunsch/scoring_function/general.R")
+source("lib/needleman_wunsch/scoring_function/special.R")
 
 
 needleman_wunsch <- function(seq1, seq2, s) {
@@ -18,13 +18,13 @@ needleman_wunsch <- function(seq1, seq2, s) {
 
   # vertical gap
   for (i in 2:len_seq1) {
-    mat[i, 1, 1] <- calc_d2(mat, i, 1, s, seq1, g2)
+    mat[i, 1, 1] <- calc_d2(mat, i, 1, s, seq1, g2, seq2)
     mat[i, 1, 2] <- 1
   }
 
   # horizontal gap
   for (j in 2:len_seq2) {
-    mat[1, j, 1] <- calc_d3(mat, 1, j, s, g1, seq2)
+    mat[1, j, 1] <- calc_d3(mat, 1, j, s, g1, seq2, seq1)
     mat[1, j, 2] <- -1
   }
 
@@ -33,8 +33,8 @@ needleman_wunsch <- function(seq1, seq2, s) {
     for (j in 2:len_seq2) {
 
       d1 <- calc_d1(mat, i, j, s, seq1, seq2)
-      d2 <- calc_d2(mat, i, j, s, seq1, g2)
-      d3 <- calc_d3(mat, i, j, s, g1, seq2)
+      d2 <- calc_d2(mat, i, j, s, seq1, g2, seq2)
+      d3 <- calc_d3(mat, i, j, s, g1, seq2, seq1)
 
       d <- c(NA, NA)
       d[1] <- min(d1, d2, d3)
