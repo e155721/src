@@ -35,8 +35,8 @@ BestFirst <- function(msa, s, similarity=T) {
     # Makes the multiple alignment.
     msa.new <- foreach (i = 1:N) %dopar% {
       # Removes the ith sequence.
-      seq1 <- msa$aln[drop = F, i, ]
-      seq2 <- msa$aln[drop = F, -i, ]
+      seq1 <- DelGap(msa$aln[drop = F, i, ])
+      seq2 <- DelGap(msa$aln[drop = F, -i, ])
       needleman_wunsch(seq1, seq2, s, select_min=min)
     }
 
