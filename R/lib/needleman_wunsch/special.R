@@ -34,8 +34,14 @@ calc_d2 <- function(x, i, j, s, seq1, g2, seq2) {
   score <- calc_score(prof1, prof2, s)
 
   if ((j + 1) <= dim(seq2)[2]) {
-    x1 <- sum(seq2[, j][1] == C)
-    x2 <- sum(seq2[, (j + 1)][1] == V)
+    a <- seq2[, j]
+    a <- a[which(a != "-")][1]
+
+    b <- seq2[, (j + 1)]
+    b <- b[which(b != "-")][1]
+
+    x1 <- sum(a == C)
+    x2 <- sum(b == V)
     if (x1 + x2 == 2) {
       score <- Inf
     }
@@ -54,8 +60,14 @@ calc_d3 <- function(x, i, j, s, g1, seq2, seq1) {
   score <- calc_score(prof1, prof2, s)
 
   if ((i + 1) <= dim(seq1)[2]) {
-    x1 <- sum(seq1[, i][1] == C)
-    x2 <- sum(seq1[, (i + 1)][1] == V)
+    a <- seq1[, i]
+    a <- a[which(a != "-")][1]
+
+    b <- seq1[, (i + 1)]
+    b <- b[which(b != "-")][1]
+
+    x1 <- sum(a == C)
+    x2 <- sum(b == V)
     if (x1 + x2 == 2) {
       score <- Inf
     }
