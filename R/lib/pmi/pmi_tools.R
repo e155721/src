@@ -147,7 +147,7 @@ MakeFreqVec <- function(corpus) {
 }
 
 
-AggrtPMI <- function(s, pmi.list) {
+AggrtPMI <- function(s, pmi.list, mat.X.feat) {
   # Create the PMI matrix.
   #
   # Args:
@@ -162,7 +162,7 @@ AggrtPMI <- function(s, pmi.list) {
   # The three-dimensional array to save the PF-PMI for each symbol pairs.
   s.dim <- dim(s)[1]
   s.names <- dimnames(s)[[1]]
-  pmi_mat <- array(NA, dim = c(s.dim, s.dim, dim(mat.C.feat)[2]), dimnames = list(s.names, s.names))
+  pmi_mat <- array(NA, dim = c(s.dim, s.dim, dim(mat.X.feat)[2]), dimnames = list(s.names, s.names))
 
   seg.pair.num <- length(pmi.list)
   for (i in 1:seg.pair.num) {
