@@ -1,5 +1,4 @@
-source("lib/needleman_wunsch/general.R")
-#source("lib/needleman_wunsch/special.R")
+source("lib/needleman_wunsch/scoring_function/general.R")
 
 
 needleman_wunsch <- function(seq1, seq2, s, select_min=F) {
