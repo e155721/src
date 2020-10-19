@@ -96,7 +96,7 @@ UpdatePMI <- function(psa_list, s, cv_sep=F) {
   }
 
   pmi <- list()
-  pmi$pmi_mat <- AggrtPMI(s, pmi_list)
+  pmi$pmi_mat <- AggrtPMI(s, pmi_list, mat.CV.feat)
   pmi$s       <- pmi2dist(s, score_tmp, pmi_list)
   return(pmi)
 }
