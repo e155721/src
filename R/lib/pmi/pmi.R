@@ -27,7 +27,7 @@ PMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
 }
 
 
-calc_pmi <- function(corpus) {
+UpdatePMI <- function(corpus) {
   # Create the segment pairs matrix.
   pair_mat <- make_pair_mat(corpus)
   seg_pair_num <- dim(pair_mat)[1]
@@ -58,45 +58,4 @@ calc_pmi <- function(corpus) {
   }
 
   pmi_list
-}
-
-
-UpdatePMI <- function(psa_list, s, cv_sep=F) {
-  # Compute the PMI of the PSA list.
-  #
-  # Args:
-  #   psa_list: THe PSA list of all the words.
-  #   s: The scoring matrix.
-  #
-  # Returns:
-  #   s: The scoring matrix that was updated by the PMI-weighting.
-  cat("\n")
-  print("Updating PMI")
-
-  corpus <- MakeCorpus(psa_list)
-
-  if (cv_sep) {
-    print("Enabled CV-separation.")
-    corpus_cons  <- sep_corpus(C, corpus)
-    corpus_vowel <- sep_corpus(V, corpus)
-
-    pmi_list_cons  <- calc_pmi(corpus_cons)
-    pmi_list_vowel <- calc_pmi(corpus_vowel)
-
-    pmi_list <- c(pmi_list_cons, pmi_list_vowel)
-  } else {
-    pmi_list  <- calc_pmi(corpus)
-  }
-
-  seg_pair_num <- length(pmi_list)
-
-  # Invert the PMI for all segment pairs.
-  score_tmp <- foreach(i = 1:seg_pair_num, .combine = c, .inorder = T) %dopar% {
-    -pmi_list[[i]]$pmi
-  }
-
-  pmi <- list()
-  pmi$pmi_mat <- AggrtPMI(s, pmi_list, mat.CV.feat)
-  pmi$s       <- pmi2dist(s, score_tmp, pmi_list)
-  return(pmi)
 }

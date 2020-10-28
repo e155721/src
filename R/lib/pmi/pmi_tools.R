@@ -35,9 +35,15 @@ MakeCorpus <- function(psa_list) {
 }
 
 
-sep_corpus <- function(X, corpus) {
+sep_corpus <- function(sound, corpus) {
   print("sep_corpus")
   tic()
+
+  if (sound == "C") {
+    X <- C
+  } else {
+    X <- V
+  }
 
   x.idx <- NULL
   for (x in X) {
@@ -48,6 +54,7 @@ sep_corpus <- function(X, corpus) {
 
   corpus <- corpus[, x.idx]
   corpus <- apply(corpus, 2, sort)
+  attributes(corpus) <- list(sound = sound, dim = dim(corpus))
 
   toc()
   return(corpus)
@@ -184,27 +191,43 @@ AggrtPMI <- function(s, pmi.list, mat.X.feat) {
   return(pmi_mat)
 }
 
-pmi2dist <- function(s, score.tmp, pmi.list) {
+pmi2dist <- function(s, pmi_list) {
   # Create a scoring matrix based the PMI.
   #
   # Args:
   #   s: a scoring matrix.
-  #   score.tmp: a list of inverted the PMIs for each segment pair.
-  #   pmi.list: a list of the PMIs for each segment pair.
+  #   score_tmp: a list of inverted the PMIs for each segment pair.
+  #   pmi_list: a list of the PMIs for each segment pair.
   #
   # Return:
   #   the scoring matrix based the PMIs.
   print("pmi2dist")
   tic()
 
-  pmi.max <- max(score.tmp)
-  pmi.min <- min(score.tmp)
+  seg_pair_num <- length(pmi_list)
+
+  if (length(pmi_list[[1]]$pmi) == 1) {
+    # Invert the PMI for all segment pairs.
+    score_tmp <- foreach(i = 1:seg_pair_num, .combine = c, .inorder = T) %dopar% {
+      pmi_list[[i]]$pmi
+    }
+  } else {
+    # Invert the PF-PMI for all segment pairs.
+    score_tmp <- foreach(i = 1:seg_pair_num, .combine = c, .inorder = T) %dopar% {
+      pmi <- pmi_list[[i]]$pmi
+      #sum(abs(pmi))  # L1 norm
+      sqrt(sum(pmi * pmi))  # L2 norm
+    }
+  }
+
+  score_tmp <- -score_tmp
+  pmi_max <- max(score_tmp)
+  pmi_min <- min(score_tmp)
 
   # Convert the PMI to the weight of edit operations.
-  seg.pair.num <- length(pmi.list)
-  for (i in 1:seg.pair.num) {
-    s[pmi.list[[i]]$V1, pmi.list[[i]]$V2] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
-    s[pmi.list[[i]]$V2, pmi.list[[i]]$V1] <- (score.tmp[[i]] - pmi.min) / (pmi.max - pmi.min)
+  for (i in 1:seg_pair_num) {
+    s[pmi_list[[i]]$V1, pmi_list[[i]]$V2] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
+    s[pmi_list[[i]]$V2, pmi_list[[i]]$V1] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
   }
 
   s[C, V] <- Inf

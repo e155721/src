@@ -60,11 +60,19 @@ smoothing <- function(corpus, feat.num) {
 }
 
 
-calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
+UpdatePFPMI <- function(corpus_phone) {
   # Create the segment vector and the segment pairs matrix.
   phone_pair_mat <- make_pair_mat(corpus_phone)
   phone_pair_num <- dim(phone_pair_mat)[1]
 
+  sound <- attributes(corpus_phone)$sound
+  if (is.null(sound)) {
+    mat.X.feat <- mat.CV.feat
+  } else if (sound == "C") {
+    mat.X.feat <- mat.C.feat
+  } else if (sound == "V") {
+    mat.X.feat <- mat.V.feat
+  }
   feat.num <- dim(mat.X.feat)[2]
 
   # Initialization for converting the corpus_phone to the feature corpus.
@@ -133,53 +141,4 @@ calc_pf_pmi <- function(corpus_phone, mat.X.feat) {
   }
 
   pf_pmi_list
-}
-
-
-UpdatePFPMI <- function(psa_list, s, cv_sep=F) {
-  # Compute the PMI of the PSA list.
-  #
-  # Args:
-  #   psa_list: THe PSA list of all the words.
-  #   s: The scoring matrix.
-  #
-  # Returns:
-  #   s: The scoring matrix that was updated by the PMI-weighting.
-  cat("\n")
-  print("Updating PF-PMI")
-
-  # Make the phones corpus.
-  corpus_phone <- MakeCorpus(psa_list)
-
-  if (cv_sep) {
-    print("Enabled CV-separation.")
-    corpus_cons  <- sep_corpus(C, corpus_phone)
-    corpus_vowel <- sep_corpus(V, corpus_phone)
-
-    pf_pmi_list_cons  <- calc_pf_pmi(corpus_cons, mat.C.feat)
-    pf_pmi_list_vowel <- calc_pf_pmi(corpus_vowel, mat.V.feat)
-
-    pf_pmi_list <- c(pf_pmi_list_cons, pf_pmi_list_vowel)
-  } else {
-    pf_pmi_list  <- calc_pf_pmi(corpus_phone, mat.CV.feat)
-  }
-
-  phone_pair_num <- length(pf_pmi_list)
-
-  # Invert the PF-PMI for all segment pairs.
-  score_tmp <- foreach(i = 1:phone_pair_num, .combine = c, .inorder = T) %dopar% {
-    pf_pmi <- pf_pmi_list[[i]]$pmi
-    #-sum(abs(pf_pmi))  # L1 norm
-    -sqrt(sum(pf_pmi * pf_pmi))  # L2 norm
-  }
-
-  pmi <- list()
-  if (cv_sep) {
-    pmi$pmi_mat$c <- AggrtPMI(s, pf_pmi_list_cons, mat.C.feat)
-    pmi$pmi_mat$v <- AggrtPMI(s, pf_pmi_list_vowel, mat.V.feat)
-  } else {
-    pmi$pmi_mat <- AggrtPMI(s, pf_pmi_list, mat.CV.feat)
-  }
-  pmi$s <- pmi2dist(s, score_tmp, pf_pmi_list)
-  return(pmi)
 }
