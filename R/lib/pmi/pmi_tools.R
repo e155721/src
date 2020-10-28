@@ -191,18 +191,8 @@ AggrtPMI <- function(s, pmi.list, mat.X.feat) {
   return(pmi_mat)
 }
 
-pmi2dist <- function(s, pmi_list) {
-  # Create a scoring matrix based the PMI.
-  #
-  # Args:
-  #   s: a scoring matrix.
-  #   score_tmp: a list of inverted the PMIs for each segment pair.
-  #   pmi_list: a list of the PMIs for each segment pair.
-  #
-  # Return:
-  #   the scoring matrix based the PMIs.
-  print("pmi2dist")
-  tic()
+
+conv_pmi <- function(pmi_list) {
 
   seg_pair_num <- length(pmi_list)
 
@@ -220,19 +210,13 @@ pmi2dist <- function(s, pmi_list) {
     }
   }
 
-  score_tmp <- -score_tmp
-  pmi_max <- max(score_tmp)
-  pmi_min <- min(score_tmp)
-
-  # Convert the PMI to the weight of edit operations.
-  for (i in 1:seg_pair_num) {
-    s[pmi_list[[i]]$V1, pmi_list[[i]]$V2] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
-    s[pmi_list[[i]]$V2, pmi_list[[i]]$V1] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
+  sound <- attributes(pmi_list)$sound
+  if (is.null(sound)) {
+    score_tmp <- score_tmp
+  } else {
+    score_tmp <- scale(score_tmp)
   }
+  score_tmp <- -score_tmp
 
-  s[C, V] <- Inf
-  s[V, C] <- Inf
-
-  toc()
-  return(s)
+  return(score_tmp)
 }
