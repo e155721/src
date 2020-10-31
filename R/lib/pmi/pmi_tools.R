@@ -101,7 +101,7 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
   print("MakeFreqMat")
   tic()
 
-  seg.vec      <- unique(as.vector(corpus))
+  seg.vec      <- unique(as.vector(seg.pair.mat))
   seg.num      <- length(seg.vec)
   seg.pair.num <- dim(seg.pair.mat)[1]
 
