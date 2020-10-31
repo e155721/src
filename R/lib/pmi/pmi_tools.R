@@ -70,8 +70,6 @@ make_pair_mat <- function(dat, identical=F){
   pair_mat <- combn(x = seg_vec, m = 2)
   pair_mat <- apply(X = pair_mat, MARGIN = 2, FUN = sort)
   if (identical) {
-    # Add the identical feature pairs.
-    pair_mat <- cbind(pair_mat, rbind(seg_vec, seg_vec))
     # 'idx' will be 'logical(0)' if 'seg_vec' does not include a gap.
     # It will be FALSE when 'logical(0)' is compared to itself by '=='.
     # It shows that 'seg_vec' includes a gap if the 'if statement' below will be TRUE.
@@ -79,6 +77,9 @@ make_pair_mat <- function(dat, identical=F){
     if (isTRUE(idx == idx)) {
       seg_vec <- seg_vec[-idx]
     }
+
+    # Add the identical feature pairs.
+    pair_mat <- cbind(pair_mat, rbind(seg_vec, seg_vec))
   }
   pair_mat <- t(pair_mat)
 
