@@ -19,19 +19,21 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
 
   feat.num <- length(x)
 
-  f_xy <- diag(pair_freq_mat[x, y])
+  f_xy <- pair_freq_mat[x, y]
   f_x  <- seg_freq_vec[x]
   f_y  <- seg_freq_vec[y]
 
-  p_xy <- (f_xy + 1) / (N1 + V1) # probability of the co-occurrence frequency of xy
+  A    <- (f_xy + 1) / (N1 + V1) # probability of the co-occurrence frequency of xy
+  A[lower.tri(A)] <- t(A[upper.tri(A)])
   p_x  <- (f_x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
   p_y  <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
+  B    <- p_x %*% t(p_y)
 
-  B <- p_x %*% t(p_y)
+  pf_pmi <- t(A) %*% ginv(B)
 
   pf_pmi      <- list()
-  pf_pmi$pmi  <- t(p_xy) %*% ginv(B)
-  pf_pmi$p_xy <- p_xy
+  pf_pmi$pmi  <- t(A) %*% ginv(B)
+  pf_pmi$A    <- A
   pf_pmi$p_x  <- p_x
   pf_pmi$p_y  <- p_y
   pf_pmi$B    <- B
@@ -95,14 +97,30 @@ UpdatePFPMI <- function(corpus_phone) {
     return(x[2, ])
   }))
 
-  corpus_feat <- rbind(unlist(corpus_feat1), unlist(corpus_feat2))
+  #####
+  a <- unlist(corpus_feat1)
+  b <- unlist(corpus_feat2)
+
+  mat_a <- matrix(NA, N, feat.num)
+  mat_b <- matrix(NA, N, feat.num)
+
+  len <- N * feat.num
+  for (j in 1:feat.num) {
+    mat_a[, j] <- a[seq(j, len, feat.num)]
+    mat_b[, j] <- b[seq(j, len, feat.num)]
+  }
+
+  corpus_feat <- matrix(NA, (N * 2), feat.num)
+  corpus_feat[seq(1, dim(corpus_feat)[1], 2), ] <- mat_a
+  corpus_feat[seq(2, dim(corpus_feat)[1], 2), ] <- mat_b
+  #####
   toc()
 
   # Create the feature pairs matrix.
   pair_mat <- make_pair_mat(corpus_feat, identical = T)
 
   # Create the frequency matrix and the vector.
-  pair_freq_mat <- MakeFreqMat(pair_mat, corpus_feat)
+  pair_freq_mat <- MakeFreqMat2(pair_mat, corpus_feat)
   seg_freq_vec  <- MakeFreqVec(corpus_feat)
 
   # Initiallization for a denominator for the PF-PMI.
@@ -110,9 +128,11 @@ UpdatePFPMI <- function(corpus_phone) {
   N2 <- N1 * 2  # number of features in the aligned faetures
 
   # Initialization for the Laplace smoothing
-  V <- smoothing(pair_mat, feat.num)
-  V1 <- V[[1]]
-  V2 <- V[[2]]
+  V1 <- NULL
+  V2 <- NULL
+
+  V1[1:feat.num] <- dim(pair_mat)[1]
+  V2[1:feat.num] <- length(unique(as.vector(pair_mat)))
 
   # Calculate the PF-PMI for all segment pairs.
   print("Calculating pf_pmi_list")

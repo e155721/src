@@ -187,7 +187,8 @@ conv_pmi <- function(pmi_list) {
     score_tmp <- foreach(i = 1:seg_pair_num, .combine = c, .inorder = T) %dopar% {
       pmi <- pmi_list[[i]]$pmi
       #sum(abs(pmi))  # L1 norm
-      sqrt(sum(pmi * pmi))  # L2 norm
+      #sqrt(sum(pmi * pmi))  # L2 norm
+      norm(pmi, "2")
     }
   }
 
