@@ -19,23 +19,13 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
 
   feat.num <- length(x)
 
-  f_xy <- vector(length = feat.num)
-  f_x  <- vector(length = feat.num)
-  f_y  <- vector(length = feat.num)
-  for (p in 1:feat.num) {
-    f_xy[p] <- pair_freq_mat[x[p], y[p]]
-    f_x[p]  <- seg_freq_vec[x[p]]
-    f_y[p]  <- seg_freq_vec[y[p]]
-  }
+  f_xy <- diag(pair_freq_mat[x, y])
+  f_x  <- seg_freq_vec[x]
+  f_y  <- seg_freq_vec[y]
 
-  p_xy <- vector(length = feat.num)
-  p_x  <- vector(length = feat.num)
-  p_y  <- vector(length = feat.num)
-  for (p in 1:feat.num) {
-    p_xy[p] <- (f_xy[p] + 1) / (N1 + V1[p])  # probability of the co-occurrence frequency of xy
-    p_x[p]  <- (f_x[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of x
-    p_y[p]  <- (f_y[p] + 1) / (N2 + V2[p])  # probability of the occurrence frequency of y
-  }
+  p_xy <- (f_xy + 1) / (N1 + V1) # probability of the co-occurrence frequency of xy
+  p_x  <- (f_x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
+  p_y  <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
 
   pf_pmi <- t(p_xy) %*% ginv(p_x %*% t(p_y))
 
