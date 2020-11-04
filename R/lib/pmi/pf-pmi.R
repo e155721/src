@@ -43,10 +43,10 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
 }
 
 
-smoothing <- function(corpus, feat.num) {
+smoothing <- function(pair_mat, feat.num) {
   # Initialization for the Laplace smoothing
-  V1.all <- unique(paste(corpus[1, ], corpus[2, ]))  # number of segment pair types
-  V2.all <- unique(as.vector(corpus))  # number of symbol types
+  V1.all <- unique(paste(pair_mat[, 1], pair_mat[1, 2]))  # number of segment pair types
+  V2.all <- unique(as.vector(pair_mat))  # number of symbol types
   V1     <- NULL  # The number of feature pair types for each column.
   V2     <- NULL  # The number of feature types for each column.
   for (p in 1:feat.num) {
@@ -113,7 +113,7 @@ UpdatePFPMI <- function(corpus_phone) {
   N2 <- N1 * 2  # number of features in the aligned faetures
 
   # Initialization for the Laplace smoothing
-  V <- smoothing(corpus_feat, feat.num)
+  V <- smoothing(pair_mat, feat.num)
   V1 <- V[[1]]
   V2 <- V[[2]]
 
