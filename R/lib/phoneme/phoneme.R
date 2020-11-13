@@ -46,13 +46,14 @@ get_phone_info <- function(cons_file, vowel_file) {
     CV <- c(C, V)
     mat.CV.feat <- rbind(mat.C.feat, mat.V.feat)
     CV.feat <- c(C.feat, V.feat)
+
+    assign(x = "CV", value = CV, envir = .GlobalEnv)
     assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
   }
 
   # Make global variables.
   assign(x = "C", value = C, envir = .GlobalEnv)
   assign(x = "V", value = V, envir = .GlobalEnv)
-  assign(x = "CV", value = CV, envir = .GlobalEnv)
 
   assign(x = "mat.C.feat", value = mat.C.feat, envir = .GlobalEnv)
   assign(x = "mat.V.feat", value = mat.V.feat, envir = .GlobalEnv)
