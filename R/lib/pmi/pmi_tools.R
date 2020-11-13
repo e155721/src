@@ -154,45 +154,6 @@ MakeFreqVec <- function(corpus) {
 }
 
 
-AggrtPMI <- function(s, pmi.list, mat.X.feat) {
-  # Create the PMI matrix.
-  #
-  # Args:
-  #   s: a scoring matrix
-  #   pmi.list: a list of the PMIs for each segment pair.
-  #
-  # Return:
-  #   the matrix of the PMIs.
-  print("AggrtPMI")
-  tic()
-
-  # The three-dimensional array to save the PF-PMI for each symbol pairs.
-  s.dim <- dim(s)[1]
-  s.names <- dimnames(s)[[1]]
-  pmi_mat <- array(NA, dim = c(s.dim, s.dim, dim(mat.X.feat)[2]), dimnames = list(s.names, s.names))
-
-  seg.pair.num <- length(pmi.list)
-  for (i in 1:seg.pair.num) {
-    pmi_mat[pmi.list[[i]]$V1, pmi.list[[i]]$V2, ] <- pmi.list[[i]]$pmi
-    pmi_mat[pmi.list[[i]]$V2, pmi.list[[i]]$V1, ] <- pmi.list[[i]]$pmi
-  }
-
-  # Prevent pairs of CV.
-  pmi_mat[C, V, ] <- NA
-  pmi_mat[V, C, ] <- NA
-
-  # If the symbol pair PMI has been used,
-  # the matrix of the PMIs is changed
-  # from a three-dimensional array to a matrix.
-  if (length(pmi.list[[1]]$pmi) == 1) {
-    pmi_mat <- as.matrix(pmi_mat[, , 1])
-  }
-
-  toc()
-  return(pmi_mat)
-}
-
-
 conv_pmi <- function(pmi_list) {
 
   seg_pair_num <- length(pmi_list)
