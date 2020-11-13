@@ -14,7 +14,7 @@ file_list <- GetPathList()
 word_list <- make_word_list(file_list)
 
 pmi_rlt  <- psa_pf_pmi(word_list, cv_sep = F)
-pmi_mat  <- pmi_rlt$pmi_mat
+pmi_list  <- pmi_rlt$pmi_list
 s        <- pmi_rlt$s
 psa_list <- pmi_rlt$psa_list
 
@@ -23,5 +23,5 @@ VerificationPSA(psa_list, file_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
 rdata_path <- MakeMatPath("matrix_psa_pf-pmi", "score_psa_pf-pmi", ext)
-save(pmi_mat, file = rdata_path$rdata1)
+save(pmi_list, file = rdata_path$rdata1)
 save(s, file = rdata_path$rdata2)

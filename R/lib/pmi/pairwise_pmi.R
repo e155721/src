@@ -71,14 +71,6 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
     s[C, V] <- Inf
     s[V, C] <- Inf
 
-    if (cv_sep) {
-      pmi_mat   <- list()
-      pmi_mat$c <- AggrtPMI(s, pmi_list_cons, mat.C.feat)
-      pmi_mat$v <- AggrtPMI(s, pmi_list_vowel, mat.V.feat)
-    } else {
-      pmi_mat <- AggrtPMI(s, pmi_list, mat.CV.feat)
-    }
-
     # Compute the new PSA using the new scoring matrix.
     psa_list <- PSAforEachWord(list.words, s, dist = T)
   }
@@ -86,7 +78,7 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
 
   pmi <- list()
   pmi$psa_list <- psa_list
-  pmi$pmi_mat <- pmi_mat
+  pmi$pmi_list <- pmi_list
   pmi$s <- s
   return(pmi)
 }
