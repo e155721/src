@@ -22,6 +22,6 @@ psa_list <- pmi_rlt$psa_list
 VerificationPSA(psa_list, file_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
-rdata_path <- MakeMatPath("matrix_psa_pmi", "score_psa_pmi", ext)
+rdata_path <- MakeMatPath("list_psa_pmi", "score_psa_pmi", ext)
 save(pmi_list, file = rdata_path$rdata1)
 save(s, file = rdata_path$rdata2)

@@ -22,6 +22,6 @@ msa_list <- pmi_rlt$msa_list
 verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
-rdata_path <- MakeMatPath("matrix_msa_pmi", "score_msa_pmi", ext)
+rdata_path <- MakeMatPath("list_msa_pmi", "score_msa_pmi", ext)
 save(pmi_list, file = rdata_path$rdata1)
 save(s, file = rdata_path$rdata2)
