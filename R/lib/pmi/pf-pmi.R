@@ -27,7 +27,14 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   p_x  <- (f_x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
   p_y  <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
 
-  pf_pmi <- t(p_xy) %*% ginv(p_x %*% t(p_y))
+  B <- p_x %*% t(p_y)
+
+  pf_pmi      <- list()
+  pf_pmi$pmi  <- t(p_xy) %*% ginv(B)
+  pf_pmi$p_xy <- p_xy
+  pf_pmi$p_x  <- p_x
+  pf_pmi$p_y  <- p_y
+  pf_pmi$B    <- B
 
   return(pf_pmi)
 }
@@ -123,11 +130,10 @@ UpdatePFPMI <- function(corpus_phone) {
     pf_pmi <- PFPMI(x_feat, y_feat, N1, N2, V1, V2,
                     pair_freq_mat = pair_freq_mat, seg_freq_vec = seg_freq_vec)
 
-    pmi     <- list()
-    pmi$V1  <- x
-    pmi$V2  <- y
-    pmi$pmi <- pf_pmi
-    return(pmi)
+    pf_pmi$V1 <- x
+    pf_pmi$V2 <- y
+
+    return(pf_pmi)
   }
 
   pf_pmi_list
