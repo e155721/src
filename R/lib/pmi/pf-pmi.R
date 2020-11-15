@@ -24,7 +24,6 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   f_y  <- seg_freq_vec[y]
 
   A    <- (f_xy + 1) / (N1 + V1) # probability of the co-occurrence frequency of xy
-  A[lower.tri(A)] <- t(A[upper.tri(A)])
   p_x  <- (f_x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
   p_y  <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
   B    <- p_x %*% t(p_y)

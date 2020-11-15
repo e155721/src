@@ -90,6 +90,10 @@ MakeFreqMat2 <- function(seg.pair.mat, corpus) {
     seg.pair.freq.mat[x, y] <- tmp_list[[i]]
   }
 
+  t_seg.pair.freq.mat <- t(seg.pair.freq.mat)
+  diag(t_seg.pair.freq.mat) <- 0
+  seg.pair.freq.mat <- seg.pair.freq.mat + t_seg.pair.freq.mat
+
   toc()
   return(seg.pair.freq.mat)
 }
