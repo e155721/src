@@ -122,7 +122,6 @@ UpdatePFPMI <- function(corpus_phone) {
     y <- phone_pair_mat[i, 2]
 
     feat_pair_mat <- rbind(feat_mat[x, ], feat_mat[y, ])
-    feat_pair_mat <- apply(feat_pair_mat, 2, sort)
 
     x_feat <- feat_pair_mat[1, ]
     y_feat <- feat_pair_mat[2, ]
