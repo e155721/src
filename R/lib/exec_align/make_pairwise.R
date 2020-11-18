@@ -13,13 +13,13 @@ MakePairwise <- function(seq.list, s, select_min=F) {
   num.regs <- length(seq.list)
   combs.regs <- combn(1:num.regs, 2)
   N <- dim(combs.regs)[2]
-  
+
   psa_list <- list()
   for (i in 1:N) {
     pair.regs <- combs.regs[, i]
     psa_list[[i]] <- needleman_wunsch(as.matrix(seq.list[[pair.regs[1]]], drop = F),
-                                     as.matrix(seq.list[[pair.regs[2]]], drop = F), s, select_min)
+                                      as.matrix(seq.list[[pair.regs[2]]], drop = F), s, select_min)
   }
-  
+
   return(psa_list)
 }
