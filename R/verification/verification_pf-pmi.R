@@ -10,8 +10,8 @@ dir <- "pairwise_pf-pmi"
 ext <- commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(file, dir, ext)
 
-file_list <- GetPathList()
-word_list <- make_word_list(file_list)
+word_list <- make_word_list("../../Alignment/org_data/input.csv")
+gold_list <- make_word_list("../../Alignment/org_data/gold.csv")
 
 pmi_rlt  <- psa_pf_pmi(word_list, cv_sep = T)
 pmi_list  <- pmi_rlt$pmi_list
@@ -19,7 +19,7 @@ s        <- pmi_rlt$s
 psa_list <- pmi_rlt$psa_list
 
 # Execute the PSA for each word.
-VerificationPSA(psa_list, file_list, path$ansrate.file, path$output.dir)
+VerificationPSA(psa_list, gold_list, path$ansrate.file, path$output.dir)
 
 # Save the matrix of the PMIs and the scoring matrix.
 rdata_path <- MakeMatPath("list_psa_pf-pmi", "score_psa_pf-pmi", ext)

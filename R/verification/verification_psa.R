@@ -6,7 +6,7 @@ source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 
 
-VerificationPSA <- function(psa_list, file_list, ansrate_file, output_dir) {
+VerificationPSA <- function(psa_list, gold_list, ansrate_file, output_dir) {
   # Compute the PSA for each word.
   # Args:
   #   ansrate_file: The path of the matching rate file.
@@ -16,33 +16,33 @@ VerificationPSA <- function(psa_list, file_list, ansrate_file, output_dir) {
   # Returns:
   #   Nothing.
 
-  N <- length(file_list)
+  M <- length(gold_list)
 
   # START OF LOOP
-  foreach.rlt <- foreach(f = file_list) %dopar% {
+  foreach.rlt <- foreach(i = 1:M) %dopar% {
 
-    gold.list <- MakeWordList(f[["input"]])  # making the list of gold standard sequences
-    gold.aln  <- MakeGoldStandard(gold.list)  # making the gold standard alignments
+    word <- unlist(attributes(gold_list[[i]]))
+
+    gold.aln  <- MakeGoldStandard(gold_list[[i]])  # making the gold standard alignments
 
     # Get the PSA about same word.
-    id <- as.numeric(f[["id"]])
-    psa <- psa_list[[id]]
+    psa <- psa_list[[i]]
 
     # Unification the PSAs.
     N <- length(gold.aln)
-    for (i in 1:N) {
-      psa[[i]]$aln      <- Convert(psa[[i]]$aln)
-      gold.aln[[i]]$aln <- Convert(gold.aln[[i]]$aln)
+    for (j in 1:N) {
+      psa[[j]]$aln      <- Convert(psa[[j]]$aln)
+      gold.aln[[j]]$aln <- Convert(gold.aln[[j]]$aln)
     }
 
     # Output the results.
     matching.rate <- VerifAcc(psa, gold.aln)  # calculating the matching rate
-    OutputAlignment(f[["name"]], output_dir, ".lg", gold.aln)  # writing the gold standard
-    OutputAlignment(f[["name"]], output_dir, ".aln", psa)  # writing the PSA
-    OutputAlignmentCheck(f[["name"]], output_dir, ".check", psa, gold.aln)  # writing the match or mismatch
+    OutputAlignment(word, output_dir, ".lg", gold.aln)  # writing the gold standard
+    OutputAlignment(word, output_dir, ".aln", psa)  # writing the PSA
+    OutputAlignmentCheck(word, output_dir, ".check", psa, gold.aln)  # writing the match or mismatch
 
     # Returns the matching rate to the list of foreach.
-    c(f[["name"]], matching.rate)
+    c(word, matching.rate)
   }
   # END OF LOOP
 
