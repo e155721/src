@@ -42,10 +42,9 @@ zero <- function(x) {
 
 pa_loop <- function(word_list, s) {
 
-  pa_list <- lapply(word_list, (function(seq_list, s){
-    pa_list <- ProgressiveAlignment(seq_list, s, F)
-    return(pa_list)
-  }), s)
+  pa_list <- foreach(seq_list = word_list) %dopar% {
+    ProgressiveAlignment(seq_list, s, F)
+  }
 
   return(pa_list)
 }
