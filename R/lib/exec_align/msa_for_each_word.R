@@ -13,10 +13,13 @@ MSAforEachWord <- function(word_list, s, similarity=F) {
   # Returns:
   #   The list of MSA for each word.
 
-  msa_list <- lapply(word_list, (function(seq_list, s, similarity){
+  msa_list <- foreach(seq_list = word_list) %dopar% {
+    ProgressiveAlignment(seq_list, s, similarity)
+  }
+
+  msa_list <- lapply(msa_list, (function(msa_init, s, similarity){
     # Computes the MSA using the BestFirst method.
-    msa_init <- ProgressiveAlignment(seq_list, s, similarity)
-    msa      <- BestFirst(msa_init, s, similarity)
+    msa <- BestFirst(msa_init, s, similarity)
     return(msa)
   }), s, similarity)
 
