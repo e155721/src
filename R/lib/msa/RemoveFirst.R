@@ -1,7 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-RemoveFirst <- function(msa.o, s, similarity=T) {
+RemoveFirst <- function(msa, s, similarity=T) {
   # Compute the multiple alignment using remove first method.
   #
   # Args:
@@ -12,10 +12,8 @@ RemoveFirst <- function(msa.o, s, similarity=T) {
   #   The multiple alignment by remove first method.
 
   # Compute the initial multiple alignment using the progressive method.
-  msa <- msa.o$aln
-  score <- msa.o$score
-
-  N <- dim(msa)[1]   # number of sequences
+  N <- dim(msa$aln)[1]   # number of sequences
+  score <- msa$score
   count <- 0         # loop counter
   kMax <- 2 * N * N  # max iteration
 
@@ -34,11 +32,11 @@ RemoveFirst <- function(msa.o, s, similarity=T) {
       break
 
     # Remove the first sequence.
-    seq1 <- msa[i, , drop = F]
-    seq2 <- msa[-i, , drop = F]
+    seq1 <- DelGap(msa$aln[i, , drop = F])
+    seq2 <- DelGap(msa$aln[-i, , drop = F])
 
     # Make the new multiple alignment.
-    msa.tmp<- needleman_wunsch(seq1, seq2, s)
+    msa.tmp <- needleman_wunsch(seq1, seq2, s)
     msa.new <- DelGap(msa.tmp$aln)
     score.new <- msa.tmp$score
 
