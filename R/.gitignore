@@ -6,3 +6,4 @@ tmp/
 *.Rproj
 .Rproj.user
 scripts/
+test/
