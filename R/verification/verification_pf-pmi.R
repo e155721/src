@@ -13,7 +13,7 @@ path <- MakePath(file, dir, ext)
 file_list <- GetPathList()
 word_list <- make_word_list(file_list)
 
-pmi_rlt  <- psa_pf_pmi(word_list, cv_sep = F)
+pmi_rlt  <- psa_pf_pmi(word_list, cv_sep = T)
 pmi_list  <- pmi_rlt$pmi_list
 s        <- pmi_rlt$s
 psa_list <- pmi_rlt$psa_list

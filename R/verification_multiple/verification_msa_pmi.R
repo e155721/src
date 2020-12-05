@@ -13,7 +13,7 @@ path <- MakePath(ansrate, multiple, ext)
 file_list <- GetPathList()
 word_list <- make_word_list(file_list)
 
-pmi_rlt  <- msa_pmi(word_list, cv_sep = F)
+pmi_rlt  <- msa_pmi(word_list, cv_sep = T)
 pmi_list  <- pmi_rlt$pmi_list
 s        <- pmi_rlt$s
 msa_list <- pmi_rlt$msa_list

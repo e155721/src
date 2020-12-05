@@ -12,7 +12,7 @@ file_list <- GetPathList(input_dir)
 word_list <- make_word_list(file_list)
 
 # Execute the PSA.
-msa_list <- msa_pmi(word_list)$msa_list
+msa_list <- msa_pmi(word_list, cv_sep = T)$msa_list
 
 # Output the PSA.
 OutputMSA(msa_list, file_list, output_dir)
