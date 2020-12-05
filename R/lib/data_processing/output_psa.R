@@ -1,18 +1,22 @@
 source("lib/load_data_processing.R")
 
-OutputPSA <- function(psa_list, file.list, output.dir) {
+OutputPSA <- function(psa_list, word_list, output.dir) {
   # Compute the PSA for each word.
   # Args:
   #   ansrate.file: The path of the matching rate file.
   #   output.dir:   The path of the PSA directory.
   #   s:            The scoring matrix.
-  #
   # Returns:
   #   Nothing.
 
   # Get the all of files path.
-  #file.list <- GetPathList()
-  N <- length(file.list)
+  #word_list <- GetPathList()
+  N <- length(word_list)
+
+  word_vec <- NULL
+  for (i in 1:N) {
+    word_vec[i] <- attributes(word_list[[i]])$word
+  }
 
   if (dir.exists(paths = output.dir)) {
     # Do not create the directory.
@@ -21,11 +25,10 @@ OutputPSA <- function(psa_list, file.list, output.dir) {
   }
 
   # START OF LOOP
-  foreach.rlt <- foreach (f = file.list) %dopar% {
+  foreach.rlt <- foreach(i = 1:N) %dopar% {
 
     # Get the PSA about same word.
-    id <- as.numeric(f[["id"]])
-    psa <- psa_list[[id]]
+    psa <- psa_list[[i]]
 
     # Unification the PSAs.
     N <- length(psa)
@@ -36,10 +39,10 @@ OutputPSA <- function(psa_list, file.list, output.dir) {
     # Output the results.
     for (i in 1:N) {
       # by The Needleman-Wunsch
-      sink(paste(output.dir, gsub("\\..*$", "", f["name"]), ".aln", sep = ""), append = T)
+      sink(paste(output.dir, word_vec[i], ".aln", sep = ""), append = T)
       cat(paste(i, " "))
       print(paste(psa[[i]]$seq1, collapse = " "), quote = F)
-      cat(paste(i+1, " "))
+      cat(paste(i + 1, " "))
       print(paste(psa[[i]]$seq2, collapse = " "), quote = F)
       cat("\n")
       sink()
