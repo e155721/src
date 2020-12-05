@@ -4,17 +4,15 @@
 
 ・execution_psa ディレクトリに，ペアワイズアラインメントを実行するためのスクリプトがあります．
   execution_lv.R:     Levenshtein距離アラインメント
-  execution_pf.R:     PFアラインメント
   execution_pmi.R:    PMIアラインメント
   execution_pf-pmi.R: PF-PMIアラインメント
 
 ・execution_msa ディレクトリに，マルチプルアラインメントを実行するためのスクリプトがあります．
   execution_msa_lv.R:     Levenshtein距離アラインメント
-  execution_msa_pf.R:     PFアラインメント
   execution_msa_pmi.R:    PMIアラインメント
   execution_msa_pf-pmi.R: PF-PMIアラインメント
 
-・test.sh を実行することで，上記8つのスクリプトを実行することができます．
+・test.sh を実行することで，上記6つのスクリプトを実行することができます．
 
 ・各Rスクリプトは，引数として「入力ディレクトリ名」と「出力ディレクトリ名」の2つを必要とします．
   出力ディレクトリの中に，単語ごとのアラインメント結果が拡張子'.aln'を付けて保存されます．
@@ -36,10 +34,6 @@
   2. で1で作成したリストのパスを参照し，各入力ファイルの発音記号列を取得します．
   3. で2のリストの発音記号列に対してアラインメントを行い，その結果をリストとして取得します．
   4. でアラインメント結果を，output_dir に指定したディレクトリへ，ファイルごとに書き出します．
-
-  PFアラインメントでは，ギャップペナルティーという値が必要になるため，別途与える必要があります．
-  従って，3は以下のようになっています（pen はギャップペナルティー）．
-  3. psa_list <- psa_pf(word_list, pen)
 
   また，PMI，およびPF-PMIアラインメントでは，3は以下のようになっています．
   3. psa_list <- psa_pmi(word_list)$psa_list
