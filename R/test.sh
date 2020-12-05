@@ -7,10 +7,6 @@ echo "PSA LV"
 Rscript execution_psa/execution_lv.R "data/" "psa_lv/" >/dev/null
 echo
 
-echo "PSA PF"
-Rscript execution_psa/execution_pf.R "data/" "psa_pf/" >/dev/null
-echo
-
 echo "PSA PMI"
 Rscript execution_psa/execution_pmi.R "data/" "psa_pmi/" >/dev/null
 echo
@@ -23,10 +19,6 @@ echo
 # MSA
 echo "MSA LV"
 Rscript execution_msa/execution_msa_lv.R "data/" "msa_lv/" >/dev/null
-echo
-
-echo "MSA PF"
-Rscript execution_msa/execution_msa_pf.R "data/" "msa_pf/" >/dev/null
 echo
 
 echo "MSA PMI"
