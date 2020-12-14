@@ -9,9 +9,8 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
   #   s: The new scoring matrix by updating PMI iteratively.
   s.old <- s
   N <- length(s.old)
-  for (i in 1:N) {
-    s.old[i] <- 0
-  }
+  dim_s <- dim(s)[1]
+  s.old[1:dim_s, 1:dim_s] <- 0
   # START OF LOOP
   loop <- 0
   while (1) {

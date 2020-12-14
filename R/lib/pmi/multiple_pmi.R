@@ -35,11 +35,6 @@ ChangeListMSA2PSA <- function(msa.list, s) {
 }
 
 
-zero <- function(x) {
-  return(0)
-}
-
-
 pa_loop <- function(word_list, s) {
 
   pa_list <- foreach(seq_list = word_list) %dopar% {
@@ -64,7 +59,8 @@ bf_loop <- function(msa_list, s) {
 msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
   N     <- length(s)
   s.old <- s
-  s.old <- apply(s.old, MARGIN = c(1, 2), zero)
+  dim_s <- dim(s)[1]
+  s.old[1:dim_s, 1:dim_s] <- 0
 
   while (1) {
     diff <- N - sum(s == s.old)
@@ -96,7 +92,8 @@ MultiplePMI <- function(word_list, s, method, cv_sep=F) {
 
   N <- length(s)
   s.old.main <- s
-  s.old.main <- apply(s.old.main, MARGIN = c(1, 2), zero)
+  dim_s <- dim(s)[1]
+  s.old.main[1:dim_s, 1:dim_s] <- 0
 
   loop <- 0
   while (1) {
