@@ -51,8 +51,19 @@ sep_corpus <- function(sound, corpus) {
 
   x.idx <- NULL
   for (x in X) {
-    x.idx <- c(x.idx, which(x == corpus[1, ]))
-    x.idx <- c(x.idx, which(x == corpus[2, ]))
+    tmp1 <- which(x == corpus[1, ])
+    M1 <- length(x.idx)
+    N1 <- length(tmp1)
+    if (sum(tmp1 == tmp1) != 0) {
+      x.idx[(M1 + 1):(M1 + N1)] <- tmp1
+    }
+
+    tmp2 <- which(x == corpus[2, ])
+    M2 <- length(x.idx)
+    N2 <- length(tmp2)
+    if (sum(tmp2 == tmp2) != 0) {
+      x.idx[(M2 + 1):(M2 + N2)] <- tmp2
+    }
   }
   x.idx <- unique(x.idx)
 
