@@ -22,7 +22,11 @@ MakeCorpus <- function(psa_list) {
 
   seq1 <- unlist(seq1_list)
   seq2 <- unlist(seq2_list)
-  corpus <- rbind(seq1, seq2)
+
+  M <- length(seq1)
+  corpus <- matrix(NA, 2, M)
+  corpus[1, ] <- seq1
+  corpus[2, ] <- seq2
 
   # Removes identical segments from the corpus.
   if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
