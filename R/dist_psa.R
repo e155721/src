@@ -131,5 +131,7 @@ make_region_dist <- function(output_dir, method, s) {
   ldnd_mat <- del_na(ldnd_mat)
   save(ldnd_mat, file = paste(output_dir, "/", "reg_dist_", method, ".RData", sep = ""))
 
+  write.nexus.dist(ldnd_mat, file = paste(output_dir, "/", "reg_dist_", method, ".nexus", sep = ""))
+
   return(0)
 }
