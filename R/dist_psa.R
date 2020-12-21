@@ -21,17 +21,7 @@ del_na <- function(x) {
   return(x)
 }
 
-if (0) {
-  file <- "ansrate_lv"
-  dir <- "pairwise_lv"
-  ext <- commandArgs(trailingOnly = TRUE)[1]
-  path <- MakePath(file, dir, ext)
-
-  file_list <- GetPathList()
-  word_list <- make_word_list(file_list)
-}
-
-make_region_dist <- function(file_list, output_dir, method, s) {
+make_region_dist <- function(output_dir, method, s) {
   # Make
   word_vec <- NULL
   for (word in word_list) {

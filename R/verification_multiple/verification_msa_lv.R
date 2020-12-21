@@ -23,4 +23,4 @@ verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
 
 Plot(msa_list = msa_list, output_dir = path$output.dir, method = "ld", s = MakeEditDistance(Inf))
 
-make_region_dist(file_list = file_list, output_dir = path$output.dir, method = "ld", s = MakeEditDistance(Inf))
+make_region_dist(output_dir = path$output.dir, method = "ld", s = MakeEditDistance(Inf))
