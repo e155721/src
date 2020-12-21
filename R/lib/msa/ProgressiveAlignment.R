@@ -10,6 +10,9 @@ ProgressiveAlignment <- function(seq_list, s, similarity=T) {
   #   s: The scoring matrix.
   #
   # Returns:
+
+  word <- attributes(seq_list)$word
+
   #   The multiple alignment using progressive method.
   if (similarity) {
     min <- F
@@ -80,5 +83,7 @@ ProgressiveAlignment <- function(seq_list, s, similarity=T) {
   msa$aln <- tail(pa.list, n = 1)[[1]]
   msa$score <- pa$score
   msa$gtree <- gtree
+
+  attributes(msa) <- list(names = attributes(msa)$names, word = word)
   return(msa)
 }
