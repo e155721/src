@@ -15,10 +15,14 @@ path <- MakePath(ansrate, multiple, ext)
 file_list <- GetPathList()
 word_list <- make_word_list(file_list)
 
+# Make the MSAs for each word.
 msa_list <- msa_lv(word_list)
 
+#Verification for the MSAs accuracy.
 verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
 
+# Plot the phylogenetic trees and the networks.
 Plot(msa_list = msa_list, output_dir = path$output.dir, method = "ld", s = MakeEditDistance(Inf))
 
+# Calculate the regional distance matrix.
 make_region_dist(output_dir = path$output.dir, method = "ld", s = MakeEditDistance(Inf))
