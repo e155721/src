@@ -4,6 +4,7 @@ source("lib/load_verif_lib.R")
 source("verification_multiple/verification_msa.R")
 source("parallel_config.R")
 
+source("plot_graphs.R")
 source("dist_psa.R")
 
 
@@ -19,5 +20,7 @@ word_list <- make_word_list(file_list)
 msa_list <- msa_lv(word_list)
 
 verification_msa(msa_list, file_list, path$ansrate.file, path$output.dir)
+
+Plot(msa_list = msa_list, output_dir = path$output.dir, method = "ld", s = MakeEditDistance(Inf))
 
 make_region_dist(file_list = file_list, output_dir = path$output.dir, method = "ld", s = MakeEditDistance(Inf))
