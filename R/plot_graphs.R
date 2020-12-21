@@ -24,7 +24,6 @@ make_msa_dist <- function(msa, s) {
 
       as <- 0
       for (k in 2:N) {
-        print(k)
         as <- as + s[seq1[, k], seq2[, k]]
       }
 
@@ -36,55 +35,89 @@ make_msa_dist <- function(msa, s) {
 }
 
 
-plot_tree <- function(phylo, tree_method, out_file) {
-  # Rooted Tree
-  pdf(paste(out_file, "_", tree_method, "_rooted.pdf", sep = ""), width = 25, height = 25)
-  plot.phylo(phylo, type = "c")
-  dev.off()
-  # Unrooted Tree
-  pdf(paste(out_file, "_", tree_method, "_unrooted.pdf", sep = ""), width = 25, height = 25)
-  plot.phylo(phylo, type = "u", lab4ut = "axial")
+plot_tree <- function(phylo, tree_type, out_file) {
+  # Plot the tre
+  pdf(out_file, width = 25, height = 25)
+  plot.phylo(phylo, type = tree_type, lab4ut = "axial")
   dev.off()
 }
 
 
 Plot <- function(msa_list, output_dir, method, s) {
 
+  # Set the directory path for the average tree.
+  output_dir_ave   <- paste(output_dir, "tree_ave", sep = "/")
+  output_dir_ave_r <- paste(output_dir, "rooted", sep = "/")
+  output_dir_ave_u <- paste(output_dir, "unrooted", sep = "/")
+
+  # Set the directory path for the NJ tree.
+  output_dir_nj   <- paste(output_dir, "tree_nj", sep = "/")
+  output_dir_nj_r <- paste(output_dir_nj, "rooted", sep = "/")
+  output_dir_nj_u <- paste(output_dir_nj, "unrooted", sep = "/")
+
+  # Set the directory path for the Neighbor Network.
+  output_dir_nnet <- paste(output_dir, "nnet", sep = "/")
+
   M <- length(msa_list)
 
   rlt <- foreach(i = 1:M) %dopar% {
 
     f <- file_list[[i]]
-    out_file <- paste(output_dir, "/", gsub(".org", "", f["name"]), sep = "")
-    msa <- msa_list[[i]]$aln
 
-    msa_dist <- make_msa_dist(msa, s)
+    msa        <- msa_list[[i]]$aln
+    msa_dist   <- make_msa_dist(msa, s)
     msa_dist_d <- as.dist(msa_dist)
 
-    if (1) {
-      msa_nj <- try(nj(msa_dist_d), silent = F)
-      if (attributes(msa_nj)$class == "try-error") {
-        print(f["name"])
-      } else {
-        msa_nj_phy <- as.phylo(msa_nj)
-        plot_tree(msa_nj_phy, "nj", out_file)
-      }
-
+    # Phylogenetic Tree
+    # Make the NJ tree.
+    msa_nj <- try(nj(msa_dist_d), silent = F)
+    if (attributes(msa_nj)$class == "try-error") {
+      # Make the average tree.
       msa_hc <- hclust(msa_dist_d, "average")
+      # Make the 'phylo' object for the average tree.
       msa_hc_phy <- as.phylo(msa_hc)
-      plot_tree(msa_hc_phy, "average", out_file)
+
+      # Make the directory for the average trees of the rooted and the unrooted.
+      if (!dir.exists(output_dir_ave)) dir.create(output_dir_ave)
+      if (!dir.exists(output_dir_ave_r)) dir.create(output_dir_ave_r)
+      if (!dir.exists(output_dir_ave_u)) dir.create(output_dir_ave_u)
+
+      # Plot the average trees of the rooted and the unrooted.
+      out_file_r <- paste(output_dir_ave_r, "/", gsub(".org", "", f["name"]), "_ave_rooted.pdf", sep = "")
+      out_file_u <- paste(output_dir_ave_u, "/", gsub(".org", "", f["name"]), "_ave_unrooted.pdf", sep = "")
+      plot_tree(msa_hc_phy, tree_type = "p", out_file_r)
+      plot_tree(msa_hc_phy, tree_type = "u", out_file_u)
+    } else {
+      # Make the 'phylo' object for the NJ tree.
+      msa_nj_phy <- as.phylo(msa_nj)
+
+      # Make the directory for the NJ trees of the rooted and the unrooted.
+      if (!dir.exists(output_dir_nj)) dir.create(output_dir_nj)
+      if (!dir.exists(output_dir_nj_r)) dir.create(output_dir_nj_r)
+      if (!dir.exists(output_dir_nj_u)) dir.create(output_dir_nj_u)
+
+      # Plot the NJ trees of the rooted and the unrooted.
+      out_file_r <- paste(output_dir_nj_r, "/", gsub(".org", "", f["name"]), "_nj_rooted.pdf", sep = "")
+      out_file_u <- paste(output_dir_nj_u, "/", gsub(".org", "", f["name"]), "_nj_unrooted.pdf", sep = "")
+      plot_tree(msa_nj_phy, "p", out_file_r)
+      plot_tree(msa_nj_phy, "u", out_file_u)
     }
 
     # Neighbor Net
-    if (1) {
-      nnet <- try(neighborNet(msa_dist_d), silent = F)
-      if (attributes(nnet)$class == "try-error") {
-        print(out_file["name"])
-      } else {
-        pdf(paste(out_file, "_nnet.pdf", sep = ""), width = 25, height = 25)
-        plot(nnet, "2D")
-        dev.off()
-      }
+    # Make the Neighbor Network.
+    nnet <- try(neighborNet(msa_dist_d), silent = F)
+    if (attributes(nnet)$class == "try-error") {
+
+    } else {
+      # Make the directory for the Neighbor Network.
+      if (!dir.exists(output_dir_nnet)) dir.create(output_dir_nnet)
+
+      # Plot the Neighbor Network.
+      out_file_nnet <- paste(output_dir_nnet, "/", gsub(".org", "", f["name"]), "_nnet.pdf", sep = "")
+      pdf(paste(out_file_nnet, "_nnet.pdf", sep = ""), width = 25, height = 25)
+      plot(nnet, "equal angle")
+      dev.off()
     }
+
   }
 }
