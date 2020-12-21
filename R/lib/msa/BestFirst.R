@@ -33,7 +33,7 @@ BestFirst <- function(msa, s, similarity=T) {
     }
 
     # Makes the multiple alignment.
-    msa.new <- foreach (i = 1:N) %dopar% {
+    msa.new <- foreach(i = 1:N) %dopar% {
       # Removes the ith sequence.
       seq1 <- DelGap(msa$aln[drop = F, i, ])
       seq2 <- DelGap(msa$aln[drop = F, -i, ])
