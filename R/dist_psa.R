@@ -136,7 +136,7 @@ make_region_dist <- function(file_list, output_dir, method, s) {
 
   }
 
-  save(L, file = paste(output_dir, "/", "aln_list_", method, ".RData", sep = "s"))
+  save(L, file = paste(output_dir, "/", "aln_list_", method, ".RData", sep = ""))
   diag(ldnd_mat) <- 0
   ldnd_mat <- del_na(ldnd_mat)
   save(ldnd_mat, file = paste(output_dir, "/", "reg_dist_", method, ".RData", sep = ""))
