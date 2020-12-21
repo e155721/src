@@ -1,11 +1,9 @@
 source("msa/msa_lv.R")
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
+source("lib/load_phylo.R")
 source("verification_multiple/verification_msa.R")
 source("parallel_config.R")
-
-source("plot_graphs.R")
-source("dist_psa.R")
 
 
 ansrate <- "ansrate_msa_lv"
