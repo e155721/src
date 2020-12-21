@@ -13,6 +13,8 @@ BestFirst <- function(msa, s, similarity=T) {
   # Returns:
   #   The multiple alignment using best first method.
 
+  word <- attributes(msa)$word
+
   # Computes the initial multiple alignment using the progressive method.
   N <- dim(msa$aln)[1]  # number of sequences
   count <- 0  # loop counter
@@ -78,5 +80,6 @@ BestFirst <- function(msa, s, similarity=T) {
   }
   # END OF ITERATION
 
+  attributes(msa) <- list(names = attributes(msa)$names, word = word)
   return(msa)
 }
