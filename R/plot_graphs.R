@@ -62,7 +62,7 @@ Plot <- function(msa_list, output_dir, method, s) {
 
   rlt <- foreach(i = 1:M) %dopar% {
 
-    f <- file_list[[i]]
+    word <- attributes(msa_list[[i]])$word
 
     msa        <- msa_list[[i]]$aln
     msa_dist   <- make_msa_dist(msa, s)
@@ -83,8 +83,8 @@ Plot <- function(msa_list, output_dir, method, s) {
       if (!dir.exists(output_dir_ave_u)) dir.create(output_dir_ave_u)
 
       # Plot the average trees of the rooted and the unrooted.
-      out_file_r <- paste(output_dir_ave_r, "/", gsub(".org", "", f["name"]), "_ave_rooted.pdf", sep = "")
-      out_file_u <- paste(output_dir_ave_u, "/", gsub(".org", "", f["name"]), "_ave_unrooted.pdf", sep = "")
+      out_file_r <- paste(output_dir_ave_r, "/", word, "_ave_rooted.pdf", sep = "")
+      out_file_u <- paste(output_dir_ave_u, "/", word, "_ave_unrooted.pdf", sep = "")
       plot_tree(msa_hc_phy, tree_type = "p", out_file_r)
       plot_tree(msa_hc_phy, tree_type = "u", out_file_u)
     } else {
@@ -97,8 +97,8 @@ Plot <- function(msa_list, output_dir, method, s) {
       if (!dir.exists(output_dir_nj_u)) dir.create(output_dir_nj_u)
 
       # Plot the NJ trees of the rooted and the unrooted.
-      out_file_r <- paste(output_dir_nj_r, "/", gsub(".org", "", f["name"]), "_nj_rooted.pdf", sep = "")
-      out_file_u <- paste(output_dir_nj_u, "/", gsub(".org", "", f["name"]), "_nj_unrooted.pdf", sep = "")
+      out_file_r <- paste(output_dir_nj_r, "/", word, "_nj_rooted.pdf", sep = "")
+      out_file_u <- paste(output_dir_nj_u, "/", word, "_nj_unrooted.pdf", sep = "")
       plot_tree(msa_nj_phy, "p", out_file_r)
       plot_tree(msa_nj_phy, "u", out_file_u)
     }
@@ -113,7 +113,7 @@ Plot <- function(msa_list, output_dir, method, s) {
       if (!dir.exists(output_dir_nnet)) dir.create(output_dir_nnet)
 
       # Plot the Neighbor Network.
-      out_file_nnet <- paste(output_dir_nnet, "/", gsub(".org", "", f["name"]), "_nnet.pdf", sep = "")
+      out_file_nnet <- paste(output_dir_nnet, "/", word, "_nnet.pdf", sep = "")
       pdf(paste(out_file_nnet, "_nnet.pdf", sep = ""), width = 25, height = 25)
       plot(nnet, "equal angle")
       dev.off()
