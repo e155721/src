@@ -2,11 +2,11 @@ source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 source("lib/load_verif_lib.R")
 
-ProgressiveAlignment <- function(word.list, s, similarity=T) {
+ProgressiveAlignment <- function(seq_list, s, similarity=T) {
   # Compute the multiple alignment using progressive method.
   #
   # Args:
-  #   word.list: The list of sequences.
+  #   seq_list: The list of sequences.
   #   s: The scoring matrix.
   #
   # Returns:
@@ -18,10 +18,10 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
   }
 
   # Compute the pairwise alignment score for each regions pair.
-  psa <- MakePairwise(word.list, s, select_min=min)
+  psa <- MakePairwise(seq_list, s, select_min=min)
 
   # Make the similarity matrix.
-  num.regions <- length(word.list)  # number of sequences
+  num.regions <- length(seq_list)  # number of sequences
   dist.mat <- matrix(0, num.regions, num.regions)
   reg.comb <- combn(1:num.regions, 2)
   N <- dim(reg.comb)[2]
@@ -58,13 +58,13 @@ ProgressiveAlignment <- function(word.list, s, similarity=T) {
     if (flg == 2) {
       seq1 <- gtree[i, 1] * -1
       seq2 <- gtree[i, 2] * -1
-      pa <- needleman_wunsch(word.list[[seq1]], word.list[[seq2]], s, select_min=min)
+      pa <- needleman_wunsch(seq_list[[seq1]], seq_list[[seq2]], s, select_min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     }
-    else if(flg == 1) {
+    else if (flg == 1) {
       clt <- gtree[i, 2]
       seq2 <- gtree[i, 1] * -1
-      pa <- needleman_wunsch(pa.list[[clt]], word.list[[seq2]], s, select_min=min)
+      pa <- needleman_wunsch(pa.list[[clt]], seq_list[[seq2]], s, select_min=min)
       pa.list[[i]] <- DelGap(pa$aln)
     } else {
       clt1 <- gtree[i, 1]
