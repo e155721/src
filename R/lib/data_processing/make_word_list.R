@@ -1,6 +1,6 @@
 make_word_list <- function(file) {
 
-  csv <- read.csv(file, fileEncoding = "UTF-8")
+  csv <- read.csv(file, fileEncoding = "UTF-8", stringsAsFactors = F)
 
   word_vec <- sort(unique(csv[, 6]))
   word_list <- list()
