@@ -43,8 +43,13 @@ verification_msa <- function(msa_list, gold_list, ansrate_file, output_dir) {
     acc_mat <- rbind(acc_mat, c(word, acc))
 
     # Outputs the MSA.
-    write.table(msa, paste(output_dir, gsub("\\..*$", "", word), ".aln", sep = ""), quote = F)
-    write.table(gold_mat, paste(output_dir, gsub("\\..*$", "", word), ".lg", sep = ""), quote = F)
+    write.csv(msa, file = paste(output_dir, gsub("\\..*$", "", word), ".csv", sep = ""),
+              quote = T, eol = "\n", na = "NA", row.names = F,
+              fileEncoding = "UTF-8")
+
+    write.csv(gold_mat, file = paste(output_dir, gsub("\\..*$", "", word), "_lg.csv", sep = ""),
+              quote = T, eol = "\n", na = "NA", row.names = F,
+              fileEncoding = "UTF-8")
   }
 
   # Outputs the accuracy file.
