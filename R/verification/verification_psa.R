@@ -35,8 +35,18 @@ VerificationPSA <- function(psa_list, gold_list, ansrate_file, output_dir) {
       gold.aln[[j]]$aln <- Convert(gold.aln[[j]]$aln)
     }
 
-    # Output the results.
-    matching.rate <- VerifAcc(psa, gold.aln)  # calculating the matching rate
+    # Count the number of matched alignments.
+    match <- 0
+    for (i in 1:N) {
+      psa_tmp <- paste(psa[[i]]$aln, collapse = "")
+      gold_tmp <- paste(gold.aln[[i]]$aln, collapse = "")
+      if (psa_tmp == gold_tmp)
+        match <- match + 1
+    }
+
+    # Calculate the matching rate.
+    matching.rate <- (match / N) * 100
+
     OutputAlignment(word, output_dir, ".lg", gold.aln)  # writing the gold standard
     OutputAlignment(word, output_dir, ".aln", psa)  # writing the PSA
     OutputAlignmentCheck(word, output_dir, ".check", psa, gold.aln)  # writing the match or mismatch
