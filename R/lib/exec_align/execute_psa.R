@@ -13,7 +13,7 @@ psa_ld <- function(word_list) {
 }
 
 
-psa_pmi <- function(method, word_list, cv_sep) {
+psa_pmi <- function(word_list, output_dir, cv_sep) {
 
   # Create an itnitial scoring matrix and a list of PSAs.
   s         <- MakeEditDistance(Inf)
@@ -21,8 +21,15 @@ psa_pmi <- function(method, word_list, cv_sep) {
 
   # Update the scoring matrix using the PMI.
   pmi_rlt  <- PairwisePMI(psa_list, word_list, s, UpdatePMI, cv_sep)
+  pmi_list <- pmi_rlt$pmi_list
+  s        <- pmi_rlt$s
+  psa_list <- pmi_rlt$psa_list
 
-  return(pmi_rlt)
+  # Save the matrix of the PMIs and the scoring matrix.
+  save(pmi_list, file = paste(output_dir, "/", "list_psa_pmi.RData", sep = ""))
+  save(s, file = paste(output_dir, "/", "score_psa_pmi.RData", sep = ""))
+
+  return(psa_list)
 }
 
 
@@ -35,7 +42,8 @@ execute_psa <- function(method, word_list, output_dir, cv_sep=T) {
   )
 
   psa_list <- switch(num,
-                     "1" = psa_ld(word_list)
+                     "1" = psa_ld(word_list),
+                     "2" = psa_pmi(word_list, output_dir, cv_sep)
   )
 
   return(psa_list)
