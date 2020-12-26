@@ -21,5 +21,7 @@ MakePairwise <- function(seq.list, s, select_min=F) {
                                       as.matrix(seq.list[[pair.regs[2]]], drop = F), s, select_min)
   }
 
+  attributes(psa_list) <- list(word = attributes(seq.list)$word)
+
   return(psa_list)
 }
