@@ -1,7 +1,6 @@
 source("msa/msa_pmi.R")
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
-source("verification_multiple/verification_msa.R")
 source("parallel_config.R")
 
 
