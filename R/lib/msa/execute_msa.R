@@ -67,7 +67,7 @@ execute_msa <- function(method, word_list, output_dir, cv_sep=T) {
   msa_list <- switch(num,
                      "1" = msa_ld(word_list),
                      "2" = msa_pmi(UpdatePMI, word_list, output_dir, cv_sep),
-                     #"3" = psa_pmi(UpdatePFPMI, word_list, output_dir, cv_sep)
+                     "3" = psa_pmi(UpdatePFPMI, word_list, output_dir, cv_sep)
   )
 
   return(msa_list)
