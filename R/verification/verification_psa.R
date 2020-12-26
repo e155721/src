@@ -6,7 +6,7 @@ source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 
 
-VerificationPSA <- function(psa_list, gold_list, ansrate_file, output_dir) {
+VerificationPSA <- function(psa_list, psa_list_gold, ansrate_file, output_dir) {
   # Compute the PSA for each word.
   # Args:
   #   ansrate_file: The path of the matching rate file.
@@ -16,30 +16,29 @@ VerificationPSA <- function(psa_list, gold_list, ansrate_file, output_dir) {
   # Returns:
   #   Nothing.
 
-  M <- length(gold_list)
+  M <- length(psa_list)
 
   # START OF LOOP
   foreach.rlt <- foreach(i = 1:M) %dopar% {
 
-    word <- unlist(attributes(gold_list[[i]]))
-
-    gold.aln  <- MakeGoldStandard(gold_list[[i]])  # making the gold standard alignments
+    word <- attributes(psa_list[[i]])$word
 
     # Get the PSA about same word.
-    psa <- psa_list[[i]]
+    psa      <- psa_list[[i]]
+    psa_gold <- psa_list_gold[[i]]
 
     # Unification the PSAs.
-    N <- length(gold.aln)
+    N <- length(psa_gold)
     for (j in 1:N) {
       psa[[j]]$aln      <- Convert(psa[[j]]$aln)
-      gold.aln[[j]]$aln <- Convert(gold.aln[[j]]$aln)
+      psa_gold[[j]]$aln <- Convert(psa_gold[[j]]$aln)
     }
 
     # Count the number of matched alignments.
     match <- 0
     for (i in 1:N) {
       psa_tmp <- paste(psa[[i]]$aln, collapse = "")
-      gold_tmp <- paste(gold.aln[[i]]$aln, collapse = "")
+      gold_tmp <- paste(psa_gold[[i]]$aln, collapse = "")
       if (psa_tmp == gold_tmp)
         match <- match + 1
     }
@@ -47,9 +46,7 @@ VerificationPSA <- function(psa_list, gold_list, ansrate_file, output_dir) {
     # Calculate the matching rate.
     matching.rate <- (match / N) * 100
 
-    OutputAlignment(word, output_dir, ".lg", gold.aln)  # writing the gold standard
-    OutputAlignment(word, output_dir, ".aln", psa)  # writing the PSA
-    OutputAlignmentCheck(word, output_dir, ".check", psa, gold.aln)  # writing the match or mismatch
+    OutputAlignmentCheck(word, output_dir, ".check", psa, psa_gold)  # writing the match or mismatch
 
     # Returns the matching rate to the list of foreach.
     c(word, matching.rate)

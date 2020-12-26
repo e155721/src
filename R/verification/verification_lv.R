@@ -10,9 +10,10 @@ dir <- "pairwise_lv"
 ext <- commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(file, dir, ext)
 
-word_list <- make_word_list("../../Alignment/org_data/input.csv")
-gold_list <- make_word_list("../../Alignment/org_data/gold.csv")
+word_list      <- make_word_list("../../Alignment/org_data/input.csv")
+word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
 
-psa_list <- psa_lv(word_list)
+psa_list      <- psa_lv(word_list)
+psa_list_gold <- lapply(word_list_gold, MakeGoldStandard)
 
-VerificationPSA(psa_list, gold_list, path$ansrate.file, path$output.dir)
+VerificationPSA(psa_list, psa_list_gold, path$ansrate.file, path$output.dir)
