@@ -12,6 +12,10 @@ verification_msa <- function(msa_list, msa_list_gold, ansrate_file, output_dir) 
   # Returns:
   #   Nothing.
 
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir)
+  }
+
   acc_mat <- matrix(NA, length(msa_list), 2)
 
   M <- length(msa_list_gold)
