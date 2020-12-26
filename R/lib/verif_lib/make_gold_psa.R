@@ -1,6 +1,6 @@
 source("lib/load_data_processing.R")
 
-MakeGoldStandard <- function(x) {
+make_gold_psa <- function(x) {
   # x: The list of gold standard sequences.
 
   regions <- combn(1:length(x), 2)

@@ -13,7 +13,7 @@ word_list      <- make_word_list("../../Alignment/org_data/input.csv")
 word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
 
 psa_list      <- psa_lv(word_list)
-psa_list_gold <- lapply(word_list_gold, MakeGoldStandard)
+psa_list_gold <- lapply(word_list_gold, make_gold_psa)
 
 # Calculate the PSAs accuracy.
 VerificationPSA(psa_list, psa_list_gold, path$ansrate.file, path$output.dir)

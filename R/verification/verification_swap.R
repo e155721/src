@@ -30,7 +30,7 @@ foreach.rlt <- foreach (f = filesPath) %dopar% {
   word.list <- MakeInputSeq(gold.list)
   
   # making the gold standard alignments
-  gold.aln <- MakeGoldStandard(gold.list)
+  gold.aln <- make_gold_psa(gold.list)
   
   # making the pairwise alignment in all regions
   psa.aln <- MakeSwap(word.list, s)

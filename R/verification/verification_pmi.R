@@ -17,7 +17,7 @@ pmi_list <- pmi_rlt$pmi_list
 s        <- pmi_rlt$s
 psa_list <- pmi_rlt$psa_list
 
-psa_list_gold <- lapply(word_list_gold, MakeGoldStandard)
+psa_list_gold <- lapply(word_list_gold, make_gold_psa)
 
 # Calculate the PSAs accuracy.
 VerificationPSA(psa_list, psa_list_gold, path$ansrate.file, path$output.dir)
