@@ -17,13 +17,7 @@ pmi_list <- pmi_rlt$pmi_list
 s        <- pmi_rlt$s
 msa_list <- pmi_rlt$msa_list
 
-msa_list_gold <- lapply(word_list_gold, (function(x){
-  x_tmp             <- DelGap(list2mat(x))
-  attributes(x_tmp) <- list(dim = dim(x_tmp), word = attributes(x)$word)
-  y     <- list()
-  y$aln <- x_tmp
-  return(y)
-}))
+msa_list_gold <- lapply(word_list_gold, make_gold_msa)
 
 # Calculate the MSAs accuracy.
 verification_msa(msa_list, msa_list_gold, path$ansrate.file, path$output.dir)
