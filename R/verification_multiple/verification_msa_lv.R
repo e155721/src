@@ -19,4 +19,9 @@ msa_list_gold <- lapply(word_list_gold, (function(x){
   return(DelGap(list2mat(x)))
 }))
 
+# Calculate the MSAs accuracy.
 verification_msa(msa_list, msa_list_gold, path$ansrate.file, path$output.dir)
+
+# Output the MSAs.
+output_msa(msa_list, path$output.dir, ".csv")
+output_msa(msa_list, path$output.dir, "_lg.csv")
