@@ -14,8 +14,8 @@ pmi_rlt   <- msa_pmi(word_list, cv_sep = T)
 msa_list  <- pmi_rlt$msa_list
 score_pmi <- pmi_rlt$s
 
-# Output the PSA.
-OutputMSA(msa_list, word_list, output_dir)
+# Output the MSAs.
+output_msa(msa_list, output_dir, ".csv")
 
 # Output the updated scoring matrix.
 save(score_pmi, file = paste(output_dir, "msa_pmi_score_mat.RData", sep = ""))
