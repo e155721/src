@@ -1,23 +1,21 @@
 source("lib/load_data_processing.R")
-source("lib/load_nwunsch.R")
 
-MakeGoldStandard <- function(gold.list)
-{
-  
-  regions <- length(gold.list)
-  reg.comb <- combn(1:regions, 2)
-  N <- dim(reg.comb)[2]
-  
-  gold.aln <- list()
-  gold.tmp <- list()
-  psa_list <- foreach (j = 1:N) %do% {
-    i <- reg.comb[, j]
-    gold.mat <- DelGap(rbind(gold.list[[i[1]]], gold.list[[i[2]]]))
-    gold.tmp$seq1 <- gold.mat[1, , drop=F]
-    gold.tmp$seq2 <- gold.mat[2, , drop=F]
-    gold.tmp$aln <- gold.mat
-    gold.aln[[j]] <- gold.tmp
+MakeGoldStandard <- function(x) {
+  # x: The list of gold standard sequences.
+
+  regions <- combn(1:length(x), 2)
+  N <- dim(regions)[2]
+
+  psa      <- list()
+  psa_list <- list()
+  for (j in 1:N) {
+    i <- regions[, j]
+    x_psa <- DelGap(rbind(x[[i[1]]], x[[i[2]]]))
+    psa$seq1 <- x_psa[1, , drop = F]
+    psa$seq2 <- x_psa[2, , drop = F]
+    psa$aln <- x_psa
+    psa_list[[j]] <- psa
   }
-  
-  return(gold.aln)  
+
+  return(psa_list)
 }
