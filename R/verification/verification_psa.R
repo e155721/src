@@ -33,7 +33,7 @@ if (method == "ld") {
 }
 
 # Calculate the PSAs accuracy.
-VerificationPSA(psa_list, psa_list_gold, acc_file, output_dir)
+verify_psa(psa_list, psa_list_gold, acc_file, output_dir)
 
 # Output the PSAs.
 output_psa(psa_list, output_dir = output_dir, ext = ".csv")

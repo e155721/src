@@ -6,7 +6,7 @@ source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
 
 
-VerificationPSA <- function(psa_list, psa_list_gold, ansrate_file, output_dir) {
+verify_psa <- function(psa_list, psa_list_gold, ansrate_file, output_dir) {
   # Compute the PSA for each word.
   # Args:
   #   ansrate_file: The path of the matching rate file.
