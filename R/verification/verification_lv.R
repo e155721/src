@@ -20,4 +20,4 @@ VerificationPSA(psa_list, psa_list_gold, path$ansrate.file, path$output.dir)
 
 # Output the PSAs.
 output_psa(psa_list, output_dir = path$output.dir, ext = ".csv")
-output_psa(psa_list, output_dir = path$output.dir, ext = "_lg.csv")
+output_psa(psa_list_gold, output_dir = path$output.dir, ext = "_lg.csv")
