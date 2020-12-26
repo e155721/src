@@ -13,5 +13,5 @@ word_list <- make_word_list(input_file)
 # Execute the PSA.
 msa_list <- msa_lv(word_list)
 
-# Output the PSA.
-OutputMSA(msa_list, word_list, output_dir)
+# Output the MSAs.
+output_msa(msa_list, output_dir, ".csv")
