@@ -26,8 +26,9 @@ psa_pmi <- function(fun, word_list, output_dir, cv_sep) {
   psa_list <- pmi_rlt$psa_list
 
   # Save the matrix of the PMIs and the scoring matrix.
-  save(pmi_list, file = paste(output_dir, "/", "list_psa_pmi.RData", sep = ""))
-  save(s, file = paste(output_dir, "/", "score_psa_pmi.RData", sep = ""))
+  method <- attributes(fun)$method
+  save(pmi_list, file = paste(output_dir, "/", "list_psa_", method, ".RData", sep = ""))
+  save(s, file = paste(output_dir, "/", "score_psa_", method, ".RData", sep = ""))
 
   return(psa_list)
 }
