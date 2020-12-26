@@ -11,9 +11,12 @@ ext <- commandArgs(trailingOnly = TRUE)[1]
 path <- MakePath(ansrate, multiple, ext)
 
 # Get the all of files path.
-word_list <- make_word_list("../../Alignment/org_data/input.csv")
-gold_list <- make_word_list("../../Alignment/org_data/gold.csv")
+word_list      <- make_word_list("../../Alignment/org_data/input.csv")
+word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
 
-msa_list <- msa_lv(word_list)
+msa_list      <- msa_lv(word_list)
+msa_list_gold <- lapply(word_list_gold, (function(x){
+  return(DelGap(list2mat(x)))
+}))
 
-verification_msa(msa_list, gold_list, path$ansrate.file, path$output.dir)
+verification_msa(msa_list, msa_list_gold, path$ansrate.file, path$output.dir)
