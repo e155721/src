@@ -41,6 +41,10 @@ output_psa <- function(psa_list, output_dir, ext) {
   # Returns:
   #   Nothing.
 
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir)
+  }
+
   M <- length(psa_list)
 
   # START OF LOOP
