@@ -15,7 +15,7 @@ psa_list     <- pf_pmi_rlt$psa_list
 score_pf_pmi <- pf_pmi_rlt$s
 
 # Output the PSA.
-OutputPSA(psa_list, word_list, output_dir)
+output_psa(psa_list, output_dir, ext = ".csv")
 
 # Output the updated scoring matrix.
 save(score_pf_pmi, file = paste(output_dir, "psa_pf-pmi_score_mat.RData", sep = ""))
