@@ -29,7 +29,7 @@ psa_pmi <- function(fun, word_list, output_dir, cv_sep) {
 }
 
 
-execute_psa <- function(method, word_list, output_dir, cv_sep=T) {
+execute_psa <- function(method, word_list, output_dir, cv_sep) {
 
   num <- switch(method,
                 "ld"     = 1,
