@@ -25,7 +25,7 @@ verification_msa <- function(msa_list, msa_list_gold, ansrate_file, output_dir) 
     word <- attributes(msa_list[[i]])$word
 
     # Checks the accuracy of MSA.
-    msa_gold <- msa_list_gold[[i]]
+    msa_gold <- msa_list_gold[[i]]$aln
     msa_gold <- msa_gold[order(msa_gold[, 1]), ]
     msa <- msa_list[[i]]$aln
     msa <- msa[order(msa[, 1]), ]
