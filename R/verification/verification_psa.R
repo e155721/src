@@ -16,6 +16,10 @@ VerificationPSA <- function(psa_list, psa_list_gold, ansrate_file, output_dir) {
   # Returns:
   #   Nothing.
 
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir)
+  }
+
   M <- length(psa_list)
 
   # START OF LOOP
