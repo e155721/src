@@ -30,7 +30,7 @@ msa_pmi <- function(fun, word_list, output_dir, cv_sep) {
 }
 
 
-execute_msa <- function(method, word_list, output_dir, cv_sep=T) {
+execute_msa <- function(method, word_list, output_dir, cv_sep) {
 
   num <- switch(method,
                 "ld"     = 1,

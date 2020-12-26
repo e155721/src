@@ -6,6 +6,7 @@ source("parallel_config.R")
 
 method     <- commandArgs(trailingOnly = TRUE)[1]
 output_dir <- commandArgs(trailingOnly = TRUE)[2]
+cv_sep     <- commandArgs(trailingOnly = TRUE)[3]
 
 output_dir <- paste(output_dir, "/", "msa_", method, "/", sep = "")
 if (!dir.exists(output_dir))
@@ -16,7 +17,7 @@ acc_file <- paste(output_dir, "/", "acc_msa_", method, ".txt", sep = "")
 word_list      <- make_word_list("../../Alignment/org_data/input.csv")
 word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
 
-msa_rlt       <- execute_msa(method, word_list, output_dir)
+msa_rlt       <- execute_msa(method, word_list, output_dir, cv_sep)
 msa_list_gold <- lapply(word_list_gold, make_gold_msa)
 
 if (method == "ld") {
