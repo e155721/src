@@ -1,53 +1,68 @@
+library(foreach)
+library(doParallel)
+registerDoParallel(detectCores())
+
 source("lib/load_data_processing.R")
 
-OutputPSA <- function(psa_list, word_list, output.dir) {
+
+make_psa_mat <- function(psa) {
+  # output alignments
+
+  len_list <- lapply(psa, (function(x){
+    return(dim(x$aln)[2])
+  }))
+
+  M_tmp <- length(psa)
+  M <- (M_tmp * 2) + (M_tmp - 1)
+  N <- max(unlist(len_list))
+
+  psa_mat <- matrix("", M, N)
+  idx <- seq(1, M, 3)
+
+  j <- 1
+  for (i in idx) {
+    psa[[j]]$aln[1:2, 1] <- paste(j, ": ", psa[[j]]$aln[1:2, 1], sep = "")
+    psa_len <- dim(psa[[j]]$aln)[2]
+    psa_mat[i:(i + 1), 1:psa_len] <- psa[[j]]$aln
+    j <- j + 1
+  }
+
+  return(psa_mat)
+}
+
+
+output_psa <- function(psa_list, output_dir, ext) {
   # Compute the PSA for each word.
   # Args:
-  #   ansrate.file: The path of the matching rate file.
-  #   output.dir:   The path of the PSA directory.
+  #   ansrate_file: The path of the matching rate file.
+  #   output_dir:   The path of the PSA directory.
   #   s:            The scoring matrix.
+  #
   # Returns:
   #   Nothing.
 
-  # Get the all of files path.
-  #word_list <- GetPathList()
-  N <- length(word_list)
-
-  word_vec <- NULL
-  for (i in 1:N) {
-    word_vec[i] <- attributes(word_list[[i]])$word
-  }
-
-  if (dir.exists(paths = output.dir)) {
-    # Do not create the directory.
-  } else {
-    dir.create(output.dir)
-  }
+  M <- length(psa_list)
 
   # START OF LOOP
-  foreach.rlt <- foreach(i = 1:N) %dopar% {
+  foreach.rlt <- foreach(i = 1:M) %dopar% {
+
+    word <- attributes(psa_list[[i]])$word
 
     # Get the PSA about same word.
     psa <- psa_list[[i]]
 
     # Unification the PSAs.
     N <- length(psa)
-    for (i in 1:N) {
-      psa[[i]]$aln <- Convert(psa[[i]]$aln)
+    for (j in 1:N) {
+      psa[[j]]$aln <- Convert(psa[[j]]$aln)
     }
 
-    # Output the results.
-    for (i in 1:N) {
-      # by The Needleman-Wunsch
-      sink(paste(output.dir, word_vec[i], ".aln", sep = ""), append = T)
-      cat(paste(i, " "))
-      print(paste(psa[[i]]$seq1, collapse = " "), quote = F)
-      cat(paste(i + 1, " "))
-      print(paste(psa[[i]]$seq2, collapse = " "), quote = F)
-      cat("\n")
-      sink()
-    }
+    psa_mat <- make_psa_mat(psa)
 
+    write.csv(psa_mat, file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
+              append = F, quote = T, sep = " ",
+              eol = "\n", na = "NA", dec = ".", row.names = F,
+              col.names = T, qmethod = "double", fileEncoding = "UTF-8")
   }
   # END OF LOOP
 
