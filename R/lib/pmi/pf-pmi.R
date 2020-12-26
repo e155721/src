@@ -135,3 +135,6 @@ UpdatePFPMI <- function(corpus_phone) {
 
   pf_pmi_list
 }
+
+attributes(UpdatePFPMI) <- list(method = "pf-pmi")
+
