@@ -43,7 +43,8 @@ execute_psa <- function(method, word_list, output_dir, cv_sep=T) {
 
   psa_list <- switch(num,
                      "1" = psa_ld(word_list),
-                     "2" = psa_pmi(UpdatePMI, word_list, output_dir, cv_sep)
+                     "2" = psa_pmi(UpdatePMI, word_list, output_dir, cv_sep),
+                     "3" = psa_pmi(UpdatePFPMI, word_list, output_dir, cv_sep)
   )
 
   return(psa_list)
