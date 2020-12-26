@@ -59,3 +59,5 @@ UpdatePMI <- function(corpus) {
 
   pmi_list
 }
+
+attributes(UpdatePMI) <- list(method = "pmi")
