@@ -17,5 +17,7 @@ make_gold_psa <- function(x) {
     psa_list[[j]] <- psa
   }
 
+  attributes(psa_list) <- list(word = attributes(x)$word)
+
   return(psa_list)
 }
