@@ -9,6 +9,8 @@ output_dir <- commandArgs(trailingOnly = TRUE)[3]
 cv_sep     <- commandArgs(trailingOnly = TRUE)[4]
 
 output_dir <- paste(output_dir, "/", "psa_", method, "/", sep = "")
+if (!dir.exists(output_dir))
+  dir.create(output_dir)
 
 # Execute the PSA.
 word_list <- make_word_list(input_file)
