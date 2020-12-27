@@ -47,8 +47,8 @@ Plot <- function(msa_list, output_dir, method, s) {
 
   # Set the directory path for the average tree.
   output_dir_ave   <- paste(output_dir, "tree_ave", sep = "/")
-  output_dir_ave_r <- paste(output_dir, "rooted", sep = "/")
-  output_dir_ave_u <- paste(output_dir, "unrooted", sep = "/")
+  output_dir_ave_r <- paste(output_dir_ave, "rooted", sep = "/")
+  output_dir_ave_u <- paste(output_dir_ave, "unrooted", sep = "/")
 
   # Set the directory path for the NJ tree.
   output_dir_nj   <- paste(output_dir, "tree_nj", sep = "/")
