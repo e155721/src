@@ -1,5 +1,6 @@
 source("lib/load_msa.R")
 source("lib/load_data_processing.R")
+source("lib/load_phylo.R")
 source("parallel_config.R")
 
 
@@ -31,3 +32,10 @@ if (method == "ld") {
 
 # Output the MSAs.
 output_msa(msa_list, output_dir, ext = ".csv")
+
+# Plot the phylogenetic trees and the networks.
+psa_list <- ChangeListMSA2PSA(msa_list, s)
+Plot(psa_list, output_dir, method, s)
+
+# Calculate the regional distance matrix.
+make_region_dist(word_list, method, s, output_dir)

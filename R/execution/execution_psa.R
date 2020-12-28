@@ -1,5 +1,6 @@
 source("lib/load_exec_align.R")
 source("lib/load_data_processing.R")
+source("lib/load_phylo.R")
 source("parallel_config.R")
 
 
@@ -31,3 +32,9 @@ if (method == "ld") {
 
 # Output the PSAs.
 output_psa(psa_list, output_dir = output_dir, ext = ".csv")
+
+# Plot the phylogenetic trees and the networks.
+Plot(psa_list, output_dir, method, s)
+
+# Calculate the regional distance matrix.
+make_region_dist(word_list, method, s, output_dir)
