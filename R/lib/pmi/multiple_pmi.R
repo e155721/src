@@ -29,6 +29,7 @@ ChangeListMSA2PSA <- function(msa.list, s) {
       psa_list[[i]][[j]]$seq2 <- seq2
       psa_list[[i]][[j]]$aln <- aln
     }
+    attributes(psa_list[[i]]) <- list(word = attributes(msa.list[[i]])$word)
   }
 
   return(psa_list)
