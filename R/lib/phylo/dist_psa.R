@@ -3,20 +3,33 @@ source("parallel_config.R")
 
 del_na <- function(x) {
 
-  row <- dim(x)[1]
-  for (p in row:1) {
-    if (is.na(x[p, 1]))
-      x <- x[-p, , drop = F]
+  N <- dim(x)[1]
+
+  na_idx1 <- NULL
+  k <- 1
+  for (i in 1:N) {
+    num_na <- sum(is.na(x[i, ]))
+    if (num_na == N) {
+      na_idx1[k] <- i
+      k <- k + 1
+    }
   }
 
-  col <- dim(x)[2]
-  for (q in col:1) {
-    if (is.na(x[1, q]))
-      x <- x[, -q, drop = F]
+  na_idx2 <- NULL
+  k <- 1
+  for (j in 1:N) {
+    num_na <- sum(is.na(x[, j]))
+    if (num_na == N) {
+      na_idx2[k] <- j
+      k <- k + 1
+    }
   }
+
+  x <- x[-na_idx1, -na_idx2]
 
   return(x)
 }
+
 
 make_region_dist <- function(word_list, method, s, output_dir) {
   # Make
