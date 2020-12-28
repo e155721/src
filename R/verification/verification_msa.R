@@ -42,7 +42,8 @@ output_msa(msa_list, output_dir, ext = ".csv")
 output_msa(msa_list_gold, output_dir, ext = "_lg.csv")
 
 # Plot the phylogenetic trees and the networks.
-Plot(msa_list, output_dir, method, s)
+psa_list <- ChangeListMSA2PSA(msa_list, s)
+Plot(psa_list, output_dir, method, s)
 
 # Calculate the regional distance matrix.
 make_region_dist(output_dir, method, s)
