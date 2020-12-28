@@ -48,18 +48,21 @@ plot_tree <- function(phylo, tree_type, out_file) {
 
 Plot <- function(psa_list, output_dir, method, s) {
 
+  output_tree <- paste(output_dir, "tree_word", sep = "/")
+  if (!dir.exists(output_tree)) dir.create(output_tree)
+
   # Set the directory path for the average tree.
-  output_dir_ave   <- paste(output_dir, "tree_ave", sep = "/")
-  output_dir_ave_r <- paste(output_dir_ave, "rooted", sep = "/")
-  output_dir_ave_u <- paste(output_dir_ave, "unrooted", sep = "/")
+  output_tree_ave   <- paste(output_tree, "ave", sep = "/")
+  output_tree_ave_r <- paste(output_tree_ave, "rooted", sep = "/")
+  output_tree_ave_u <- paste(output_tree_ave, "unrooted", sep = "/")
 
   # Set the directory path for the NJ tree.
-  output_dir_nj   <- paste(output_dir, "tree_nj", sep = "/")
-  output_dir_nj_r <- paste(output_dir_nj, "rooted", sep = "/")
-  output_dir_nj_u <- paste(output_dir_nj, "unrooted", sep = "/")
+  output_tree_nj   <- paste(output_tree, "nj", sep = "/")
+  output_tree_nj_r <- paste(output_tree_nj, "rooted", sep = "/")
+  output_tree_nj_u <- paste(output_tree_nj, "unrooted", sep = "/")
 
   # Set the directory path for the Neighbor Network.
-  output_dir_nnet <- paste(output_dir, "nnet", sep = "/")
+  output_nnet <- paste(output_dir, "network_word", sep = "/")
 
   M <- length(psa_list)
 
@@ -81,13 +84,13 @@ Plot <- function(psa_list, output_dir, method, s) {
       msa_hc_phy <- as.phylo(msa_hc)
 
       # Make the directory for the average trees of the rooted and the unrooted.
-      if (!dir.exists(output_dir_ave)) dir.create(output_dir_ave)
-      if (!dir.exists(output_dir_ave_r)) dir.create(output_dir_ave_r)
-      if (!dir.exists(output_dir_ave_u)) dir.create(output_dir_ave_u)
+      if (!dir.exists(output_tree_ave)) dir.create(output_tree_ave)
+      if (!dir.exists(output_tree_ave_r)) dir.create(output_tree_ave_r)
+      if (!dir.exists(output_tree_ave_u)) dir.create(output_tree_ave_u)
 
       # Plot the average trees of the rooted and the unrooted.
-      out_file_r <- paste(output_dir_ave_r, "/", word, "_ave_rooted.pdf", sep = "")
-      out_file_u <- paste(output_dir_ave_u, "/", word, "_ave_unrooted.pdf", sep = "")
+      out_file_r <- paste(output_tree_ave_r, "/", word, "_ave_rooted.pdf", sep = "")
+      out_file_u <- paste(output_tree_ave_u, "/", word, "_ave_unrooted.pdf", sep = "")
       plot_tree(msa_hc_phy, tree_type = "p", out_file_r)
       plot_tree(msa_hc_phy, tree_type = "u", out_file_u)
     } else {
@@ -95,13 +98,13 @@ Plot <- function(psa_list, output_dir, method, s) {
       msa_nj_phy <- as.phylo(msa_nj)
 
       # Make the directory for the NJ trees of the rooted and the unrooted.
-      if (!dir.exists(output_dir_nj)) dir.create(output_dir_nj)
-      if (!dir.exists(output_dir_nj_r)) dir.create(output_dir_nj_r)
-      if (!dir.exists(output_dir_nj_u)) dir.create(output_dir_nj_u)
+      if (!dir.exists(output_tree_nj)) dir.create(output_tree_nj)
+      if (!dir.exists(output_tree_nj_r)) dir.create(output_tree_nj_r)
+      if (!dir.exists(output_tree_nj_u)) dir.create(output_tree_nj_u)
 
       # Plot the NJ trees of the rooted and the unrooted.
-      out_file_r <- paste(output_dir_nj_r, "/", word, "_nj_rooted.pdf", sep = "")
-      out_file_u <- paste(output_dir_nj_u, "/", word, "_nj_unrooted.pdf", sep = "")
+      out_file_r <- paste(output_tree_nj_r, "/", word, "_nj_rooted.pdf", sep = "")
+      out_file_u <- paste(output_tree_nj_u, "/", word, "_nj_unrooted.pdf", sep = "")
       plot_tree(msa_nj_phy, "p", out_file_r)
       plot_tree(msa_nj_phy, "u", out_file_u)
     }
@@ -113,10 +116,10 @@ Plot <- function(psa_list, output_dir, method, s) {
 
     } else {
       # Make the directory for the Neighbor Network.
-      if (!dir.exists(output_dir_nnet)) dir.create(output_dir_nnet)
+      if (!dir.exists(output_nnet)) dir.create(output_nnet)
 
       # Plot the Neighbor Network.
-      out_file_nnet <- paste(output_dir_nnet, "/", word, "_nnet.pdf", sep = "")
+      out_file_nnet <- paste(output_nnet, "/", word, "_nnet.pdf", sep = "")
       pdf(out_file_nnet, width = 25, height = 25)
       plot(nnet, "equal angle")
       dev.off()
