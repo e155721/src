@@ -18,7 +18,7 @@ del_na <- function(x) {
   return(x)
 }
 
-make_region_dist <- function(output_dir, method, s) {
+make_region_dist <- function(word_list, method, s, output_dir) {
   # Make
   word_vec <- NULL
   for (word in word_list) {

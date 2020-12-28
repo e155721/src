@@ -45,4 +45,4 @@ output_psa(psa_list_gold, output_dir = output_dir, ext = "_lg.csv")
 Plot(psa_list, output_dir, method, s)
 
 # Calculate the regional distance matrix.
-make_region_dist(output_dir, method, s)
+make_region_dist(word_list, method, s, output_dir)
