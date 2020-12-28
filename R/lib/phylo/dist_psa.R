@@ -101,11 +101,13 @@ make_region_dist <- function(word_list, method, s, output_dir) {
       }
     }
 
-    ldn_mat <- del_na(ldn_mat)
+    diag_vec <- diag(ldn_mat)
+    diag_vec <- diag_vec[!is.na(diag_vec)]
+    non_diag <- c(ldn_mat[upper.tri(ldn_mat, diag = F)], ldn_mat[lower.tri(ldn_mat, diag = F)])
+    non_diag <- non_diag[!is.na(non_diag)]
 
-    dim <- dim(ldn_mat)[1]
-    D1 <- sum(diag(ldn_mat)) / length(diag(ldn_mat))
-    G <- sum(ldn_mat[upper.tri(ldn_mat, diag = F)], ldn_mat[lower.tri(ldn_mat, diag = F)]) / (dim^2 - dim)
+    D1 <- sum(diag_vec) / length(diag_vec)
+    G  <- sum(non_diag) / length(non_diag)
     D2 <- D1 / G
 
     attributes(D2) <- list(i = i, j = j)
