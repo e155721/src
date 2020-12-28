@@ -5,30 +5,33 @@ source("lib/load_scoring_matrix.R")
 
 source("parallel_config.R")
 
-make_msa_dist <- function(msa, s) {
+make_pair_dist <- function(psa, s) {
 
-  M <- dim(msa)[1]
-  N <- dim(msa)[2]
+  M <- length(psa)
 
-  reg_vec <- as.vector(msa[, 1])
-
-  mat <- matrix(NA, M, M, dimnames = list(reg_vec, reg_vec))
-
-  comb_reg <- combn(M, 2)
-  comb_reg_num <- dim(comb_reg)[2]
-
+  regions <- NULL
+  j <- 1
   for (i in 1:M) {
-    for (j in 1:M) {
-      seq1 <- msa[i, , drop = F]
-      seq2 <- msa[j, , drop = F]
+    regions[j] <- psa[[i]]$seq1[, 1]
+    j <- j + 1
+    regions[j] <- psa[[i]]$seq2[, 1]
+    j <- j + 1
+  }
+  regions <- unique(regions)
 
-      as <- 0
-      for (k in 2:N) {
-        as <- as + s[seq1[, k], seq2[, k]]
-      }
+  N <- length(regions)
+  mat <- matrix(NA, N, N, dimnames = list(regions, regions))
+  for (i in 1:M) {
+    seq1 <- psa[[i]]$seq1
+    seq2 <- psa[[i]]$seq2
 
-      mat[i, j] <- as
-    }
+    r1 <- seq1[, 1]
+    r2 <- seq2[, 2]
+
+    len <- length(seq1)
+
+    mat[r1, r2] <- sum(diag(s[seq1[, 2:len], seq2[, 2:len]]))
+
   }
 
   return(mat)
@@ -43,7 +46,7 @@ plot_tree <- function(phylo, tree_type, out_file) {
 }
 
 
-Plot <- function(msa_list, output_dir, method, s) {
+Plot <- function(psa_list, output_dir, method, s) {
 
   # Set the directory path for the average tree.
   output_dir_ave   <- paste(output_dir, "tree_ave", sep = "/")
@@ -58,22 +61,22 @@ Plot <- function(msa_list, output_dir, method, s) {
   # Set the directory path for the Neighbor Network.
   output_dir_nnet <- paste(output_dir, "nnet", sep = "/")
 
-  M <- length(msa_list)
+  M <- length(psa_list)
 
   rlt <- foreach(i = 1:M) %dopar% {
 
-    word <- attributes(msa_list[[i]])$word
+    word <- attributes(psa_list[[i]])$word
 
-    msa        <- msa_list[[i]]$aln
-    msa_dist   <- make_msa_dist(msa, s)
-    msa_dist_d <- as.dist(msa_dist)
+    psa        <- psa_list[[i]]$aln
+    psa_dist   <- make_pair_dist(psa, s)
+    psa_dist_d <- as.dist(psa_dist)
 
     # Phylogenetic Tree
     # Make the NJ tree.
-    msa_nj <- try(nj(msa_dist_d), silent = F)
+    msa_nj <- try(nj(psa_dist_d), silent = F)
     if (attributes(msa_nj)$class == "try-error") {
       # Make the average tree.
-      msa_hc <- hclust(msa_dist_d, "average")
+      msa_hc <- hclust(psa_dist_d, "average")
       # Make the 'phylo' object for the average tree.
       msa_hc_phy <- as.phylo(msa_hc)
 
@@ -105,7 +108,7 @@ Plot <- function(msa_list, output_dir, method, s) {
 
     # Neighbor Net
     # Make the Neighbor Network.
-    nnet <- try(neighborNet(msa_dist_d), silent = F)
+    nnet <- try(neighborNet(psa_dist_d), silent = F)
     if (attributes(nnet)$class == "try-error") {
 
     } else {
