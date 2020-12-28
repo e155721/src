@@ -142,8 +142,8 @@ make_region_dist <- function(word_list, method, s, output_dir) {
   if (!dir.exists(output_nnet)) dir.create(output_nnet)
 
   save(L, file = paste(output_nnet, "/", "aln_list_", method, ".RData", sep = ""))
-  diag(ldnd_mat) <- 0
   ldnd_mat <- del_na(ldnd_mat)
+  diag(ldnd_mat) <- 0
   save(ldnd_mat, file = paste(output_nnet, "/", "reg_dist_", method, ".RData", sep = ""))
 
   write.nexus.dist(ldnd_mat, file = paste(output_nnet, "/", "reg_dist_", method, ".nexus", sep = ""))
