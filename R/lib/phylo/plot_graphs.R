@@ -20,13 +20,13 @@ make_pair_dist <- function(psa, s) {
   regions <- unique(regions)
 
   N <- length(regions)
-  mat <- matrix(NA, N, N, dimnames = list(regions, regions))
+  mat <- matrix(0, N, N, dimnames = list(regions, regions))
   for (i in 1:M) {
     seq1 <- psa[[i]]$seq1
     seq2 <- psa[[i]]$seq2
 
     r1 <- seq1[, 1]
-    r2 <- seq2[, 2]
+    r2 <- seq2[, 1]
 
     len <- length(seq1)
 
@@ -67,7 +67,7 @@ Plot <- function(psa_list, output_dir, method, s) {
 
     word <- attributes(psa_list[[i]])$word
 
-    psa        <- psa_list[[i]]$aln
+    psa        <- psa_list[[i]]
     psa_dist   <- make_pair_dist(psa, s)
     psa_dist_d <- as.dist(psa_dist)
 
