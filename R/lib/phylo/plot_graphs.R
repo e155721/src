@@ -117,7 +117,7 @@ Plot <- function(psa_list, output_dir, method, s) {
 
       # Plot the Neighbor Network.
       out_file_nnet <- paste(output_dir_nnet, "/", word, "_nnet.pdf", sep = "")
-      pdf(paste(out_file_nnet, "_nnet.pdf", sep = ""), width = 25, height = 25)
+      pdf(out_file_nnet, width = 25, height = 25)
       plot(nnet, "equal angle")
       dev.off()
     }
