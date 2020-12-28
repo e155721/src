@@ -1,6 +1,7 @@
 source("lib/load_exec_align.R")
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
+source("lib/load_phylo.R")
 source("parallel_config.R")
 
 
@@ -39,3 +40,9 @@ verify_psa(psa_list, psa_list_gold, acc_file, output_dir)
 # Output the PSAs.
 output_psa(psa_list, output_dir = output_dir, ext = ".csv")
 output_psa(psa_list_gold, output_dir = output_dir, ext = "_lg.csv")
+
+# Plot the phylogenetic trees and the networks.
+Plot(psa_list, output_dir, method, s)
+
+# Calculate the regional distance matrix.
+make_region_dist(output_dir, method, s)
