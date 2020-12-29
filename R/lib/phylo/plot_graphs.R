@@ -5,7 +5,7 @@ source("lib/load_scoring_matrix.R")
 
 source("parallel_config.R")
 
-make_pair_dist <- function(psa, s) {
+make_psa_dist <- function(psa, s) {
 
   M <- length(psa)
 
@@ -74,19 +74,19 @@ Plot <- function(psa_list, output_dir, method, s) {
     word <- attributes(psa_list[[i]])$word
 
     psa        <- psa_list[[i]]
-    psa_dist   <- make_pair_dist(psa, s)
+    psa_dist   <- make_psa_dist(psa, s)
     psa_dist_d <- as.dist(psa_dist)
 
     write.nexus.dist(psa_dist_d, file = paste(output_tree, "/", word, "_dist_mat.nexus", sep = ""))
 
     # Phylogenetic Tree
     # Make the NJ tree.
-    msa_nj <- try(nj(psa_dist_d), silent = F)
-    if (attributes(msa_nj)$class == "try-error") {
+    psa_nj <- try(nj(psa_dist_d), silent = F)
+    if (attributes(psa_nj)$class == "try-error") {
       # Make the average tree.
-      msa_hc <- hclust(psa_dist_d, "average")
+      psa_hc <- hclust(psa_dist_d, "average")
       # Make the 'phylo' object for the average tree.
-      msa_hc_phy <- as.phylo(msa_hc)
+      psa_hc_phy <- as.phylo(psa_hc)
 
       # Make the directory for the average trees of the rooted and the unrooted.
       if (!dir.exists(output_tree_ave)) dir.create(output_tree_ave)
@@ -96,11 +96,11 @@ Plot <- function(psa_list, output_dir, method, s) {
       # Plot the average trees of the rooted and the unrooted.
       out_file_r <- paste(output_tree_ave_r, "/", word, "_ave_rooted.pdf", sep = "")
       out_file_u <- paste(output_tree_ave_u, "/", word, "_ave_unrooted.pdf", sep = "")
-      plot_tree(msa_hc_phy, tree_type = "p", out_file_r)
-      plot_tree(msa_hc_phy, tree_type = "u", out_file_u)
+      plot_tree(psa_hc_phy, tree_type = "p", out_file_r)
+      plot_tree(psa_hc_phy, tree_type = "u", out_file_u)
     } else {
       # Make the 'phylo' object for the NJ tree.
-      msa_nj_phy <- as.phylo(msa_nj)
+      psa_nj_phy <- as.phylo(psa_nj)
 
       # Make the directory for the NJ trees of the rooted and the unrooted.
       if (!dir.exists(output_tree_nj)) dir.create(output_tree_nj)
@@ -110,8 +110,8 @@ Plot <- function(psa_list, output_dir, method, s) {
       # Plot the NJ trees of the rooted and the unrooted.
       out_file_r <- paste(output_tree_nj_r, "/", word, "_nj_rooted.pdf", sep = "")
       out_file_u <- paste(output_tree_nj_u, "/", word, "_nj_unrooted.pdf", sep = "")
-      plot_tree(msa_nj_phy, "p", out_file_r)
-      plot_tree(msa_nj_phy, "u", out_file_u)
+      plot_tree(psa_nj_phy, "p", out_file_r)
+      plot_tree(psa_nj_phy, "u", out_file_u)
     }
 
     # Neighbor Net
