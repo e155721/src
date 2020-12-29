@@ -34,12 +34,14 @@ if (method == "ld") {
   save(s, file = paste(output_dir, "/", "score_msa_", method, ".RData", sep = ""))
 }
 
+output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
+
 # Calculate the MSAs accuracy.
-verification_msa(msa_list, msa_list_gold, acc_file, output_dir)
+verification_msa(msa_list, msa_list_gold, acc_file, output_dir_aln)
 
 # Output the PSAs.
-output_msa(msa_list, output_dir, ext = ".csv")
-output_msa(msa_list_gold, output_dir, ext = "_lg.csv")
+output_msa(msa_list, output_dir_aln, ext = ".csv")
+output_msa(msa_list_gold, output_dir_aln, ext = "_lg.csv")
 
 # Plot the phylogenetic trees and the networks.
 psa_list <- ChangeListMSA2PSA(msa_list, s)
