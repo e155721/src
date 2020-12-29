@@ -138,15 +138,15 @@ make_region_dist <- function(word_list, method, s, output_dir) {
 
   }
 
-  output_nnet <- paste(output_dir, "/", "network", sep = "")
-  if (!dir.exists(output_nnet)) dir.create(output_nnet)
+  output_dir <- paste(output_dir, "/", "graph2", sep = "")
+  if (!dir.exists(output_dir)) dir.create(output_dir)
 
-  save(L, file = paste(output_nnet, "/", "aln_list_", method, ".RData", sep = ""))
+  save(L, file = paste(output_dir, "/", "aln_list_", method, ".RData", sep = ""))
   ldnd_mat <- del_na(ldnd_mat)
   diag(ldnd_mat) <- 0
-  save(ldnd_mat, file = paste(output_nnet, "/", "reg_dist_", method, ".RData", sep = ""))
+  save(ldnd_mat, file = paste(output_dir, "/", "dist_mat", method, ".RData", sep = ""))
 
-  write.nexus.dist(ldnd_mat, file = paste(output_nnet, "/", "reg_dist_", method, ".nexus", sep = ""))
+  write.nexus.dist(ldnd_mat, file = paste(output_dir, "/", "dist_mat", method, ".nexus", sep = ""))
 
   return(0)
 }
