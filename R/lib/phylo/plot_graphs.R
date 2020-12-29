@@ -90,7 +90,7 @@ phylo_each_word <- function(psa_list, output_dir, method, s) {
 
     # Phylogenetic Tree
     # Make the NJ tree.
-    psa_nj <- try(nj(psa_dist_d), silent = F)
+    psa_nj <- try(nj(psa_dist_d), silent = T)
     if (attributes(psa_nj)$class == "try-error") {
       # Make the average tree.
       psa_hc <- hclust(psa_dist_d, "average")
