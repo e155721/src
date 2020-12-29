@@ -74,6 +74,8 @@ Plot <- function(psa_list, output_dir, method, s) {
     psa_dist   <- make_pair_dist(psa, s)
     psa_dist_d <- as.dist(psa_dist)
 
+    write.nexus.dist(psa_dist_d, file = paste(output_tree, "/", word, "_dist_mat.nexus", sep = ""))
+
     # Phylogenetic Tree
     # Make the NJ tree.
     msa_nj <- try(nj(psa_dist_d), silent = F)
