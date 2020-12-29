@@ -34,6 +34,9 @@ make_pair_dist <- function(psa, s) {
 
   }
 
+  mat_t <- t(mat)
+  mat[lower.tri(mat)] <- mat_t[lower.tri(mat_t)]
+
   return(mat)
 }
 
