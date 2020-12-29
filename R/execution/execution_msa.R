@@ -30,8 +30,10 @@ if (method == "ld") {
   save(s, file = paste(output_dir, "/", "score_msa_", method, ".RData", sep = ""))
 }
 
+output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
+
 # Output the MSAs.
-output_msa(msa_list, output_dir, ext = ".csv")
+output_msa(msa_list, output_dir_aln, ext = ".csv")
 
 # Plot the phylogenetic trees and the networks.
 psa_list <- ChangeListMSA2PSA(msa_list, s)
