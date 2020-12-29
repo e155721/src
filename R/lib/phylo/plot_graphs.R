@@ -51,7 +51,10 @@ plot_tree <- function(phylo, tree_type, out_file) {
 
 Plot <- function(psa_list, output_dir, method, s) {
 
-  output_tree <- paste(output_dir, "tree_word", sep = "/")
+  output_dir  <- paste(output_dir, "graph1", sep = "/")
+  if (!dir.exists(output_dir)) dir.create(output_dir)
+
+  output_tree <- paste(output_dir, "tree", sep = "/")
   if (!dir.exists(output_tree)) dir.create(output_tree)
 
   # Set the directory path for the average tree.
@@ -65,7 +68,11 @@ Plot <- function(psa_list, output_dir, method, s) {
   output_tree_nj_u <- paste(output_tree_nj, "unrooted", sep = "/")
 
   # Set the directory path for the Neighbor Network.
-  output_nnet <- paste(output_dir, "network_word", sep = "/")
+  output_nnet <- paste(output_dir, "network", sep = "/")
+
+  # Set the directory path for the distance matrix.
+  output_dist <- paste(output_dir, "dist_mat", sep = "/")
+  if (!dir.exists(output_dist)) dir.create(output_dist)
 
   M <- length(psa_list)
 
@@ -77,7 +84,7 @@ Plot <- function(psa_list, output_dir, method, s) {
     psa_dist   <- make_psa_dist(psa, s)
     psa_dist_d <- as.dist(psa_dist)
 
-    write.nexus.dist(psa_dist_d, file = paste(output_tree, "/", word, "_dist_mat.nexus", sep = ""))
+    write.nexus.dist(psa_dist_d, file = paste(output_dist, "/", word, "_dist_mat.nexus", sep = ""))
 
     # Phylogenetic Tree
     # Make the NJ tree.
