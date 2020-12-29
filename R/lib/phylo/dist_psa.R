@@ -144,9 +144,27 @@ make_region_dist <- function(word_list, method, s, output_dir) {
   save(L, file = paste(output_dir, "/", "aln_list_", method, ".RData", sep = ""))
   ldnd_mat <- del_na(ldnd_mat)
   diag(ldnd_mat) <- 0
-  save(ldnd_mat, file = paste(output_dir, "/", "dist_mat", method, ".RData", sep = ""))
+  save(ldnd_mat, file = paste(output_dir, "/", "dist_mat_", method, ".RData", sep = ""))
 
-  write.nexus.dist(ldnd_mat, file = paste(output_dir, "/", "dist_mat", method, ".nexus", sep = ""))
+  write.nexus.dist(ldnd_mat, file = paste(output_dir, "/", "dist_mat_", method, ".nexus", sep = ""))
+
+  # To output the PDF files.
+  ldnd_mat_t <- t(ldnd_mat)
+  ldnd_mat[lower.tri(ldnd_mat)] <- ldnd_mat_t[lower.tri(ldnd_mat_t)]
+
+  ldnd_mat_d  <- as.dist(ldnd_mat)
+
+  # Tree
+  ldnd_nj     <- nj(ldnd_mat_d)
+  ldnd_nj_phy <- as.phylo(ldnd_nj)
+  plot_tree(ldnd_nj_phy, "p", paste(output_dir, "/", "nj_rooted.pdf", sep = ""))
+  plot_tree(ldnd_nj_phy, "u", paste(output_dir, "/", "nj_unrooted.pdf", sep = ""))
+
+  # Netwok
+  ldnd_nnet <- neighborNet(ldnd_mat_d)
+  pdf(paste(output_dir, "/", "nnet.pdf", sep = ""), width = 25, height = 25)
+  plot(ldnd_nnet, "equal angle")
+  dev.off()
 
   return(0)
 }
