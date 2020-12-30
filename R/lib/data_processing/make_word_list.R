@@ -2,13 +2,13 @@ make_word_list <- function(file) {
 
   csv <- read.csv(file, fileEncoding = "UTF-8", stringsAsFactors = F)
 
-  word_vec <- sort(unique(csv[, 6]))
+  word_vec <- sort(unique(csv[, 2]))
   word_list <- list()
   M <- length(word_vec)
 
   for (i in 1:M) {
 
-    idx <- csv[, 6] == word_vec[i]
+    idx <- csv[, 2] == word_vec[i]
     word_list[[i]] <- strsplit(csv[idx, 11], split = "_")
     region_list    <- strsplit(csv[idx, 19], split = "_")
     N <- length(word_list[[i]])
