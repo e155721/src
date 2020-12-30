@@ -51,6 +51,8 @@ output_psa <- function(psa_list, output_dir, ext) {
   foreach.rlt <- foreach(i = 1:M) %dopar% {
 
     word <- attributes(psa_list[[i]])$word
+    word <- unlist(strsplit(word, split = "_"))
+    word <- paste(word[c(1, 3)], collapse = "_")  # combine the word ID and the assumed form.
 
     # Get the PSA about same word.
     psa <- psa_list[[i]]

@@ -19,6 +19,8 @@ output_msa <- function(msa_list, output_dir, ext) {
   for (i in 1:M) {
 
     word <- attributes(msa_list[[i]])$word
+    word <- unlist(strsplit(word, split = "_"))
+    word <- paste(word[c(1, 3)], collapse = "_")  # combine the word ID and the assumed form.
 
     #The MSA will be sorted by the regions.
     msa <- msa_list[[i]]$aln
