@@ -88,7 +88,7 @@ make_region_dist <- function(word_list, method, s, output_dir) {
 
   }
 
-  pair_mat <- combn(1:N, 2)
+  pair_mat <- combn(1:M, 2)
   comb_num <- dim(pair_mat)[2]
 
   ldnd_list <- foreach(idx = 1:comb_num, .inorder = T) %dopar% {
