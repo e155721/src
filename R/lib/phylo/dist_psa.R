@@ -25,7 +25,8 @@ del_na <- function(x) {
     }
   }
 
-  x <- x[-na_idx1, -na_idx2]
+  if (!is.null(na_idx1)) x <- x[-na_idx1, ]
+  if (!is.null(na_idx2)) x <- x[, -na_idx2]
 
   return(x)
 }
