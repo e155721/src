@@ -32,9 +32,15 @@ Random <- function(word.list, s) {
       break
 
     # Separates the MSA at random point.
-    R <- floor(runif(1, min=2, max=N+1))
-    seq1 <- msa[1:(R - 1), , drop=F]
-    seq2 <- msa[R:N, , drop=F]
+    R <- floor(runif(1, min = 2, max = N + 1))
+    seq1 <- msa[1:(R - 1), , drop = F]
+    seq2 <- msa[R:N, , drop = F]
+
+    seq1_row <- dim(seq1)[1]
+    seq2_row <- dim(seq2)[1]
+
+    if (seq1_row != 1) seq1 <- DelGap(seq1)
+    if (seq2_row != 1) seq2 <- DelGap(seq2)
 
     # Computes the new MSA.
     msa.tmp <- needleman_wunsch(seq1, seq2, s)

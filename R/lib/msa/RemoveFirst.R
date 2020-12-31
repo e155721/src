@@ -32,7 +32,7 @@ RemoveFirst <- function(msa, s, similarity=T) {
       break
 
     # Remove the first sequence.
-    seq1 <- DelGap(msa$aln[i, , drop = F])
+    seq1 <- msa$aln[i, , drop = F]
     seq2 <- DelGap(msa$aln[-i, , drop = F])
 
     # Make the new multiple alignment.
