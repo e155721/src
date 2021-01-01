@@ -8,12 +8,19 @@ source("parallel_config.R")
 method     <- commandArgs(trailingOnly = TRUE)[1]
 output_dir <- commandArgs(trailingOnly = TRUE)[2]
 cv_sep     <- commandArgs(trailingOnly = TRUE)[3]
+ext_name   <- commandArgs(trailingOnly = TRUE)[4]
 
-output_dir <- paste(output_dir, "/", "psa_", method, "/", sep = "")
+if (is.na(ext_name)) {
+  ext_name <- NULL
+} else {
+  ext_name <- paste("_", ext_name, sep = "")
+}
+
+output_dir <- paste(output_dir, "/", "psa_", method, ext_name, "/", sep = "")
 if (!dir.exists(output_dir))
   dir.create(output_dir)
 
-acc_file <- paste(output_dir, "/", "acc_psa_", method, ".txt", sep = "")
+acc_file <- paste(output_dir, "/", "acc_psa_", method, ext_name, ".txt", sep = "")
 
 word_list      <- make_word_list("../../Alignment/org_data/input.csv")
 word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
