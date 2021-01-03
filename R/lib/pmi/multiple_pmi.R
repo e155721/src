@@ -73,11 +73,12 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
     }
 
     if (loop == 10) {
-      print("MAX LOOP!!")
+      print(paste("msa_loop:", "MAX LOOP"))
       break
     } else {
       loop <- loop + 1
     }
+    print(paste("msa_loop:", loop))
 
     if (pa) {
       msa_list <- pa_loop(word_list, s)
@@ -115,11 +116,12 @@ MultiplePMI <- function(word_list, s, method, cv_sep=F) {
     }
 
     if (loop == 10) {
-      print("MAX LOOP!!")
+      print(paste("MultiplePMI:", "MAX LOOP"))
       break
     } else {
       loop <- loop + 1
     }
+    print(paste("MultiplePMI:", loop))
 
     # For progressive
     print("PA loop")
