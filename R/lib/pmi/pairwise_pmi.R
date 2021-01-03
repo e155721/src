@@ -24,11 +24,12 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
     }
 
     if (loop == 10) {
-      print("MAX LOOP!!")
+      print(paste("PairwisePMI:", "MAX LOOP"))
       break
     } else {
       loop <- loop + 1
     }
+    print(paste("PairwisePMI:", loop))
 
     # Compute the new scoring matrix that is updated by the PMI-weighting.
     cat("\n")
