@@ -63,12 +63,20 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
   dim_s <- dim(s)[1]
   s.old[1:dim_s, 1:dim_s] <- 0
 
+  loop <- 0
   while (1) {
     diff <- N - sum(s == s.old)
     if (diff == 0) {
       break
     } else {
       s.old <- s
+    }
+
+    if (loop == 10) {
+      print("MAX LOOP!!")
+      break
+    } else {
+      loop <- loop + 1
     }
 
     if (pa) {
