@@ -161,11 +161,5 @@ make_region_dist <- function(word_list, method, s, output_dir) {
   plot_tree(ldnd_nj_phy, "p", paste(output_dir, "/", "nj_rooted.pdf", sep = ""))
   plot_tree(ldnd_nj_phy, "u", paste(output_dir, "/", "nj_unrooted.pdf", sep = ""))
 
-  # Netwok
-  ldnd_nnet <- neighborNet(ldnd_mat_d)
-  pdf(paste(output_dir, "/", "nnet.pdf", sep = ""), width = 25, height = 25)
-  plot(ldnd_nnet, "equal angle")
-  dev.off()
-
   return(0)
 }

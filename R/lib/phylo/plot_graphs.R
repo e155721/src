@@ -123,21 +123,5 @@ Plot <- function(psa_list, output_dir, method, s) {
       plot_tree(psa_nj_phy, "u", out_file_u)
     }
 
-    # Neighbor Net
-    # Make the Neighbor Network.
-    nnet <- try(neighborNet(psa_dist_d), silent = F)
-    if (attributes(nnet)$class == "try-error") {
-
-    } else {
-      # Make the directory for the Neighbor Network.
-      if (!dir.exists(output_nnet)) dir.create(output_nnet)
-
-      # Plot the Neighbor Network.
-      out_file_nnet <- paste(output_nnet, "/", word, "_nnet.pdf", sep = "")
-      pdf(out_file_nnet, width = 25, height = 25)
-      plot(nnet, "equal angle")
-      dev.off()
-    }
-
   }
 }
