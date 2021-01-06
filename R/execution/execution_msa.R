@@ -9,6 +9,8 @@ input_file <- commandArgs(trailingOnly = TRUE)[2]
 output_dir <- commandArgs(trailingOnly = TRUE)[3]
 cv_sep     <- commandArgs(trailingOnly = TRUE)[4]
 
+read_me_path <- paste(output_dir, "/", "README.txt",  sep = "")
+
 output_dir <- paste(output_dir, "/", "msa_", method, "/", sep = "")
 if (!dir.exists(output_dir))
   dir.create(output_dir)
@@ -41,3 +43,37 @@ Plot(psa_list, output_dir, method, s)
 
 # Calculate the regional distance matrix.
 make_region_dist(word_list, method, s, output_dir)
+
+# Output the README.txt
+read_me <- ("
+・出力ディレクトリ
+  出力ディレクトリの構成は，PSAとMSAでそれぞれ以下のようになっています．
+  psa_アラインメントメソッド
+  msa_アラインメントメソッド
+
+  アラインメントメソッドは以下の3つがあります．
+  ld:     Levenshtein距離
+  pmi:    PMI
+  pf-pmi: 素性PMI
+
+  各ディレクトリの構成，及びファイル名は以下の通りです．
+
+  |-alignment:      アラインメント結果が格納されます．（ファイル名：語彙ID_想定形.csv）
+  |-graph1:         単語ごとの系統樹・系統ネットワーク，距離行列が格納されるディレクトリです．
+  | |-tree:         単語ごとの系統樹が格納されます．
+  | | |-ave:        UPGMAによる系統樹が格納されます（NJ法による系統樹が作成できなかった場合）．
+  | | | |-rooted:   単語ごとの有根系統樹が格納されます．（ファイル名：語彙ID_想定形_ave_rooted.pdf）
+  | | | |-unrooted: 単語ごとの無根系統樹が格納されます．（ファイル名：語彙ID_想定形_ave_unrooted.pdf）
+  | | |-nj:　　　　 NJ法による系統樹が格納されます．
+  | | | |-rooted:   単語ごとの有根系統樹が格納されます．（ファイル名：語彙ID_想定形_nj_rooted.pdf）
+  | | | |-unrooted: 単語ごとの無根系統樹が格納されます．（ファイル名：語彙ID_想定形_nj_unrooted.pdf）
+  | |-dist_mat:     単語ごとの距離行列が格納されます．（ファイル名：語彙ID_想定形_dist_mat.nexus）
+  | |-network:      単語ごとの系統ネットワークが格納されます．（ファイル名：語彙ID_想定形_nnet.pdf）
+  |-graph2:         全単語の結果をまとめた系統樹・系統ネットワークが格納されます．
+                    ファイルは全部で4つあります．
+                    dist_mat.nexus:  距離行列
+                    nj_rooted.pdf:   NJ法による有根系統樹
+                    nj_unrooted.pdf: NJ法による無根系統樹
+                    nnet.pdf:        系統ネットワーク")
+
+write.table(read_me, file = read_me_path, quote = F, row.names = F, col.names = F)
