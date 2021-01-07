@@ -58,6 +58,10 @@ read_me <- ("
   pmi:    PMI
   pf-pmi: 素性PMI
 
+  PSA，MSAともに，PMIと素性PMIのディレクトリには更新されたスコア行列がCSVファイルで保存されます．
+  score_psa_アラインメントメソッド.csv
+  score_msa_アラインメントメソッド.csv
+
   各ディレクトリの構成，及びファイル名は以下の通りです．
 
   |-alignment:      アラインメント結果が格納されます．（ファイル名：語彙ID_想定形.csv）
@@ -73,9 +77,9 @@ read_me <- ("
   | |-network:      単語ごとの系統ネットワークが格納されます．（ファイル名：語彙ID_想定形_nnet.pdf）
   |-graph2:         全単語の結果をまとめた系統樹・系統ネットワークが格納されます．
                     ファイルは全部で4つあります．
-                    dist_mat.nexus:  距離行列
-                    nj_rooted.pdf:   NJ法による有根系統樹
-                    nj_unrooted.pdf: NJ法による無根系統樹
-                    nnet.pdf:        系統ネットワーク")
+                    dist_mat_アラインメントメソッド.nexus:  距離行列
+                    nj_rooted.pdf:                          NJ法による有根系統樹
+                    nj_unrooted.pdf:                        NJ法による無根系統樹
+                    nnet.pdf:                               系統ネットワーク")
 
 write.table(read_me, file = read_me_path, quote = F, row.names = F, col.names = F)
