@@ -1,3 +1,5 @@
+library(readr)
+
 source("lib/load_msa.R")
 source("lib/load_data_processing.R")
 source("lib/load_phylo.R")
@@ -28,7 +30,8 @@ if (method == "ld") {
   msa_list <- msa_rlt$msa_list
 
   # Save the matrix of the PMIs and the scoring matrix.
-  save(s, file = paste(output_dir, "/", "score_msa_", method, ".RData", sep = ""))
+  write.csv(s, file = paste(output_dir, "/", "score_msa_", method, ".csv", sep = ""),
+            quote = T, eol = "\n", na = "NA", row.names = T, fileEncoding = "UTF-8")
 }
 
 output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
