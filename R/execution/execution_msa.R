@@ -28,7 +28,6 @@ if (method == "ld") {
   msa_list <- msa_rlt$msa_list
 
   # Save the matrix of the PMIs and the scoring matrix.
-  save(pmi_list, file = paste(output_dir, "/", "list_msa_", method, ".RData", sep = ""))
   save(s, file = paste(output_dir, "/", "score_msa_", method, ".RData", sep = ""))
 }
 
