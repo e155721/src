@@ -1,6 +1,6 @@
 source("lib/load_data_processing.R")
 
-output_msa <- function(msa_list, output_dir, ext) {
+output_msa <- function(msa_list, output_dir, ext, excel=F) {
   # Compute the MSA for each word.
   #
   # Args:
@@ -30,9 +30,14 @@ output_msa <- function(msa_list, output_dir, ext) {
     msa <- Convert(msa)
 
     # Outputs the MSA.
-    write.csv(msa, file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
-              quote = T, eol = "\n", na = "NA", row.names = F,
-              fileEncoding = "UTF-8")
+    if (excel) {
+      write_excel_csv(as.data.frame(msa), file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
+                      eol = "\n", na = "NA", )
+    } else {
+      write.csv(msa, file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
+                quote = T, eol = "\n", na = "NA", row.names = F,
+                fileEncoding = "UTF-8")
+    }
   }
 
   return(0)

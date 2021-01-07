@@ -31,7 +31,7 @@ make_psa_mat <- function(psa) {
 }
 
 
-output_psa <- function(psa_list, output_dir, ext) {
+output_psa <- function(psa_list, output_dir, ext, excel=F) {
   # Compute the PSA for each word.
   # Args:
   #   ansrate_file: The path of the matching rate file.
@@ -65,10 +65,15 @@ output_psa <- function(psa_list, output_dir, ext) {
 
     psa_mat <- make_psa_mat(psa)
 
-    write.csv(psa_mat, file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
-              append = F, quote = T, sep = " ",
-              eol = "\n", na = "NA", dec = ".", row.names = F,
-              col.names = T, qmethod = "double", fileEncoding = "UTF-8")
+    if (excel) {
+      write_excel_csv(as.data.frame(psa_mat), file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
+                      eol = "\n", na = "NA")
+    } else {
+      write.csv(psa_mat, file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
+                append = F, quote = T, sep = " ",
+                eol = "\n", na = "NA", dec = ".", row.names = F,
+                col.names = T, qmethod = "double", fileEncoding = "UTF-8")
+    }
   }
   # END OF LOOP
 

@@ -37,7 +37,7 @@ if (method == "ld") {
 output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
 
 # Output the MSAs.
-output_msa(msa_list, output_dir_aln, ext = ".csv")
+output_msa(msa_list, output_dir_aln, ext = ".csv", excel = T)
 
 # Plot the phylogenetic trees and the networks.
 psa_list <- ChangeListMSA2PSA(msa_list, s)

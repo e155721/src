@@ -37,7 +37,7 @@ if (method == "ld") {
 output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
 
 # Output the PSAs.
-output_psa(psa_list, output_dir = output_dir_aln, ext = ".csv")
+output_psa(psa_list, output_dir = output_dir_aln, ext = ".csv", excel = T)
 
 # Plot the phylogenetic trees and the networks.
 Plot(psa_list, output_dir, method, s)
