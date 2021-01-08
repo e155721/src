@@ -15,7 +15,6 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
   loop <- 0
   while (1) {
 
-    change_cores()
     diff <- N - sum(s == s.old)
     if (diff == 0) {
       break
