@@ -78,6 +78,6 @@ get_phone_info <- function(cons_file, vowel_file) {
   assign(x = "mat.V.feat", value = mat.V.feat, envir = .GlobalEnv)
 }
 
-cons_file  <- "lib/phoneme/features/consonants.txt"
-vowel_file <- "lib/phoneme/features/vowels.txt"
+cons_file  <- "lib/phoneme/phoible/consonants.txt"
+vowel_file <- "lib/phoneme/phoible/vowels.txt"
 get_phone_info(cons_file, vowel_file)
