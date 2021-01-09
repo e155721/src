@@ -36,24 +36,37 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
 
     # Make the phones corpus.
     corpus_phone <- MakeCorpus(psa_list)
+    rm(psa_list)
+    gc()
+    gc()
 
     if (cv_sep) {
       print("Enabled CV-separation.")
       corpus_cons  <- sep_corpus("C", corpus_phone)
       corpus_vowel <- sep_corpus("V", corpus_phone)
+      rm(corpus_phone)
+      gc()
+      gc()
 
       pmi_list_cons  <- method(corpus_cons)
       pmi_list_vowel <- method(corpus_vowel)
 
-      attributes(pmi_list_cons) <- list(sound = "C")
+      attributes(pmi_list_cons)  <- list(sound = "C")
       attributes(pmi_list_vowel) <- list(sound = "V")
 
       score_tmp <- c(conv_pmi(pmi_list_cons),
                      conv_pmi(pmi_list_vowel))
 
       pmi_list <- c(pmi_list_cons, pmi_list_vowel)
+      rm(pmi_list_cons)
+      rm(pmi_list_vowel)
+      gc()
+      gc()
     } else {
       pmi_list  <- method(corpus_phone)
+      rm(corpus_phone)
+      gc()
+      gc()
       score_tmp <- conv_pmi(pmi_list)
     }
 
@@ -66,6 +79,9 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
       s[pmi_list[[i]]$V1, pmi_list[[i]]$V2] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
       s[pmi_list[[i]]$V2, pmi_list[[i]]$V1] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
     }
+    rm(score_tmp)
+    gc()
+    gc()
 
     s[C, V] <- Inf
     s[V, C] <- Inf

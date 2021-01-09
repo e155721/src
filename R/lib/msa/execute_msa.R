@@ -24,6 +24,9 @@ msa_pmi <- function(fun, word_list, output_dir, cv_sep) {
 
   # Update the scoring matrix using the PMI.
   s        <- PairwisePMI(psa_list, word_list, s, fun, cv_sep)$s
+  rm(psa_list)
+  gc()
+  gc()
   msa_rlt  <- MultiplePMI(word_list, s, fun, cv_sep)
 
   return(msa_rlt)

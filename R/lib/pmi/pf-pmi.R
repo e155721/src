@@ -109,9 +109,16 @@ UpdatePFPMI <- function(corpus_phone) {
   # Initiallization for a denominator for the PF-PMI.
   N1 <- dim(corpus_phone)[2]  # number of the aligned features
   N2 <- N1 * 2  # number of features in the aligned faetures
+  rm(corpus_phone)
+  gc()
+  gc()
 
   # Initialization for the Laplace smoothing
   V <- smoothing(pair_mat, feat.num)
+  rm(pair_mat)
+  gc()
+  gc()
+
   V1 <- V[[1]]
   V2 <- V[[2]]
 

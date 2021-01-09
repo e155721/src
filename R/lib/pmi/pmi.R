@@ -41,6 +41,9 @@ UpdatePMI <- function(corpus) {
   N2 <- N1 * 2  # number of segments in the aligned segments
   V1 <- dim(pair_mat)[1]  # number of segment pair types
   V2 <- length(pair_mat) # number of symbol types
+  rm(corpus)
+  gc()
+  gc()
 
   # Calculate the PMI for all segment pairs.
   print("Calculating pmi_list")

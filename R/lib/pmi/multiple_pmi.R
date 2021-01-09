@@ -33,6 +33,7 @@ ChangeListMSA2PSA <- function(msa.list, s) {
     }
     attributes(psa) <- list(word = attributes(msa.list[[i]])$word)
     return(psa)
+    msa.list[[i]] <- NA
   }
 
   return(psa_list)
@@ -94,11 +95,14 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
     toc()
     rlt.pmi  <- PairwisePMI(psa_list, word_list, s, method, cv_sep)
     s        <- rlt.pmi$s
+    rm(psa_list)
+    gc()
+    gc()
   }
 
   msa.o          <- list()
   msa.o$msa_list <- msa_list
-  msa.o$pmi_list  <- rlt.pmi$pmi_list
+  msa.o$pmi_list <- rlt.pmi$pmi_list
   msa.o$s        <- s
   msa.o
 }
@@ -134,14 +138,18 @@ MultiplePMI <- function(word_list, s, method, cv_sep=F) {
 
     pa_list <- pa.o$msa_list
     s       <- pa.o$s
+    rm(pa.o)
+    gc()
+    gc()
 
     # For best first
     print("BF loop")
     msa.o <- msa_loop(word_list, s, pa = F, msa_list = pa_list, method, cv_sep = cv_sep)
 
-    msa_list <- msa.o$msa_list
-    s        <- msa.o$s
-
+    s <- msa.o$s
+    rm(pa_list)
+    gc()
+    gc()
   }
 
   return(msa.o)
