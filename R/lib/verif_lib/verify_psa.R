@@ -1,6 +1,4 @@
-library(foreach)
-library(doParallel)
-registerDoParallel(detectCores())
+library(doMC)
 
 source("lib/load_data_processing.R")
 source("lib/load_verif_lib.R")
