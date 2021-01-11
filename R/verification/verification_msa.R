@@ -50,6 +50,9 @@ verification_msa(msa_list, msa_list_gold, acc_file, output_dir_aln)
 output_msa(msa_list, output_dir_aln, ext = ".csv")
 output_msa(msa_list_gold, output_dir_aln, ext = "_lg.csv")
 
+save(msa_list, file = paste(output_dir_aln, "msa_", method, ".RData", sep = ""))
+save(msa_list_gold, file = paste(output_dir_aln, "msa_", method, "_lg.RData", sep = ""))
+
 # Plot the phylogenetic trees and the networks.
 psa_list <- ChangeListMSA2PSA(msa_list, s)
 Plot(psa_list, output_dir, method, s)

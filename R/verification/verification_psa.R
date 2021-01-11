@@ -50,6 +50,9 @@ verify_psa(psa_list, psa_list_gold, acc_file, output_dir_aln)
 output_psa(psa_list, output_dir = output_dir_aln, ext = ".csv")
 output_psa(psa_list_gold, output_dir = output_dir_aln, ext = "_lg.csv")
 
+save(psa_list, file = paste(output_dir_aln, "psa_", method, ".RData", sep = ""))
+save(psa_list_gold, file = paste(output_dir_aln, "psa_", method, "_lg.RData", sep = ""))
+
 # Plot the phylogenetic trees and the networks.
 Plot(psa_list, output_dir, method, s)
 
