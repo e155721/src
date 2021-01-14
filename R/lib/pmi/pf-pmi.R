@@ -28,8 +28,6 @@ PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
   p_y  <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
   B    <- p_x %*% t(p_y)
 
-  pf_pmi <- t(A) %*% ginv(B)
-
   pf_pmi      <- list()
   pf_pmi$pmi  <- t(A) %*% ginv(B)
   pf_pmi$A    <- A
