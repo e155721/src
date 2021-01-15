@@ -11,6 +11,8 @@ RemoveFirst <- function(msa, s, similarity=T) {
   # Returns:
   #   The multiple alignment by remove first method.
 
+  word <- attributes(msa)$word
+
   # Compute the initial multiple alignment using the progressive method.
   N <- dim(msa$aln)[1]   # number of sequences
   score <- msa$score
@@ -62,5 +64,6 @@ RemoveFirst <- function(msa, s, similarity=T) {
   }
   # END OF ITERATION
 
+  attributes(msa) <- list(names = attributes(msa)$names, word = word)
   return(msa)
 }
