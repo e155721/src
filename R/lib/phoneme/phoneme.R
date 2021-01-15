@@ -33,11 +33,15 @@ get_phone_info <- function(cons_file, vowel_file) {
   for (j in 1:N.cons) {
     mat.C.feat[, j] <- paste(j, "C", mat.C.feat[, j], sep = "")
   }
+  gap <- matrix(paste(1:N.cons, "C", 0, sep = ""), 1, N.cons, dimnames = list("-"))
+  mat.C.feat <- rbind(mat.C.feat, gap)
 
   N.vowel <- dim(mat.V.feat)[2]
   for (j in 1:N.vowel) {
     mat.V.feat[, j] <- paste(j, "V", mat.V.feat[, j], sep = "")
   }
+  gap <- matrix(paste(1:N.vowel, "V", 0, sep = ""), 1, N.vowel, dimnames = list("-"))
+  mat.V.feat <- rbind(mat.V.feat, gap)
 
   if (N.cons == N.vowel) {
     C.feat <- unique(as.vector(mat.C.feat))
@@ -46,6 +50,9 @@ get_phone_info <- function(cons_file, vowel_file) {
     CV <- c(C, V)
     mat.CV.feat <- rbind(mat.C.feat, mat.V.feat)
     CV.feat <- c(C.feat, V.feat)
+
+    gap <- matrix(paste(1:N.cons, "CV", 0, sep = ""), 1, N.cons, dimnames = list("-"))
+    mat.CV.feat <- rbind(mat.CV.feat, gap)
 
     assign(x = "CV", value = CV, envir = .GlobalEnv)
     assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
