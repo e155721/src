@@ -2,7 +2,7 @@ source("lib/msa/ProgressiveAlignment.R")
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-Random <- function(word.list, s) {
+Random <- function(msa, s, similarity=F) {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -11,17 +11,14 @@ Random <- function(word.list, s) {
   #
   # Returns:
   #   The multiple alignment using random method.
-  N <- length(word.list)  # number of sequences
+
+  word <- attributes(msa)$word
+
   # Computes the initial multiple alignment using the progressive method.
-  msa.tmp <- ProgressiveAlignment(word.list, s)
-  msa <- msa.tmp$aln
-  score <- msa.tmp$score
-
-  # number of sequences
-  N <- dim(msa)[1]
-
+  N <- dim(msa$aln)[1]  # number of sequences
+  score <- msa$score
   count <- 0  # loop counter
-  max <- 2 * N * N  # number of max iteration
+  max <- 2 * N * N  # max iteration
 
   # --> START OF ITERATION
   i <- 0
@@ -33,8 +30,8 @@ Random <- function(word.list, s) {
 
     # Separates the MSA at random point.
     R <- floor(runif(1, min = 2, max = N + 1))
-    seq1 <- msa[1:(R - 1), , drop = F]
-    seq2 <- msa[R:N, , drop = F]
+    seq1 <- msa$aln[1:(R - 1), , drop = F]
+    seq2 <- msa$aln[R:N, , drop = F]
 
     seq1_row <- dim(seq1)[1]
     seq2_row <- dim(seq2)[1]
@@ -47,17 +44,28 @@ Random <- function(word.list, s) {
     msa.new <- DelGap(msa.tmp$aln)
     score.new <- msa.tmp$score
 
-    # Refines alignment score.
-    if (score.new > score) {
-      count <- count + 1
-      msa <- msa.new
-      score <- score.new
+    # Refine the alignment score.
+    if (similarity) {
+      if (score.new > msa$score) {
+        count <- count + 1
+        msa <- msa.new
+        score <- score.new
+      } else {
+        i <- i + 1
+      }
     } else {
-      i <- i + 1
+      if (score.new < msa$score) {
+        count <- count + 1
+        msa <- msa.new
+        score <- score.new
+      } else {
+        i <- i + 1
+      }
     }
 
   }
   # END OF ITERATION <--
 
+  attributes(msa) <- list(names = attributes(msa)$names, word = word)
   return(msa)
 }
