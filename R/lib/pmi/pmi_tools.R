@@ -1,5 +1,15 @@
 library(tictoc)
 
+
+remove_identical <- function(corpus) {
+  # Removes identical segments from the corpus.
+  if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
+    corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop = F]
+  }
+  return(corpus)
+}
+
+
 MakeCorpus <- function(psa_list) {
   # Makes the corpus to calculate PMI.
   #
@@ -28,10 +38,7 @@ MakeCorpus <- function(psa_list) {
   corpus[1, ] <- seq1
   corpus[2, ] <- seq2
 
-  # Removes identical segments from the corpus.
-  if (sum(which(corpus[1, ] == corpus[2, ]) != 0)) {
-    corpus <- corpus[, -which(corpus[1, ] == corpus[2, ]), drop = F]
-  }
+  corpus <- remove_identical(corpus)
   corpus <- apply(corpus, 2, sort)
 
   toc()
@@ -116,7 +123,7 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
   print("MakeFreqMat")
   tic()
 
-  seg.vec      <- unique(as.vector(seg.pair.mat))
+  seg.vec      <- sort(unique(as.vector(seg.pair.mat)))
   seg.num      <- length(seg.vec)
   seg.pair.num <- dim(seg.pair.mat)[1]
 
