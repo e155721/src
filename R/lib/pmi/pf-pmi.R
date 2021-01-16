@@ -5,40 +5,6 @@ source("lib/pmi/pmi_tools.R")
 
 library(tictoc)
 
-PFPMI <- function(x, y, N1, N2, V1, V2, pair_freq_mat, seg_freq_vec) {
-  # Computes the PMI of symbol pair (x, y) in the corpus.
-  # Args:
-  #   x, y: the feature vectors
-  #   N1, N2: the denominators for the PMI
-  #   V1, V2: the paramators for the Laplace smoothing
-  #   pair_freq_mat: the frequency matrix of the feature pairs
-  #   seg_freq_vec: the frequency vector of the features
-  #
-  # Returns:
-  #   The PMI of the symbol pair (x, y).
-
-  feat.num <- length(x)
-
-  f_xy <- diag(pair_freq_mat[x, y])
-  f_x  <- seg_freq_vec[x]
-  f_y  <- seg_freq_vec[y]
-
-  p_xy <- (f_xy + 1) / (N1 + V1) # probability of the co-occurrence frequency of xy
-  p_x  <- (f_x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
-  p_y  <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
-
-  B <- p_x %*% t(p_y)
-
-  pf_pmi      <- list()
-  pf_pmi$pmi  <- t(p_xy) %*% ginv(B)
-  pf_pmi$p_xy <- p_xy
-  pf_pmi$p_x  <- p_x
-  pf_pmi$p_y  <- p_y
-  pf_pmi$B    <- B
-
-  return(pf_pmi)
-}
-
 
 smoothing <- function(pair_mat, feat.num) {
   # Initialization for the Laplace smoothing
@@ -98,8 +64,9 @@ UpdatePFPMI <- function(corpus_phone) {
   toc()
 
   # Create the feature pairs matrix.
-  pair_mat <- make_pair_mat(corpus_feat, identical = T)
+  pair_mat <- make_pair_mat(corpus_feat, identical = F)
   seg_vec  <- sort(unique(as.vector(pair_mat)))
+  corpus_feat <- remove_identical(corpus_feat)
 
   # Create the frequency matrix and the vector.
   pair_freq_mat <- MakeFreqMat(pair_mat, corpus_feat)
@@ -113,35 +80,32 @@ UpdatePFPMI <- function(corpus_phone) {
   gc()
 
   # Initialization for the Laplace smoothing
-  V <- smoothing(pair_mat, feat.num)
-  rm(pair_mat)
-  gc()
-  gc()
-
-  V1 <- V[[1]]
-  V2 <- V[[2]]
+  V_tmp <- smoothing(pair_mat, feat.num)
+  V1 <- V_tmp[[1]]
+  V2 <- V_tmp[[2]]
 
   # Calculate the PF-PMI for all segment pairs.
   print("Calculating pf_pmi_list")
-  pf_pmi_list <- foreach(i = 1:phone_pair_num, .inorder = T) %dopar% {
+  feat_vec <- sort(unique(as.vector(pair_mat)))
+  len <- length(feat_vec)
+  pf_pmi_mat <- matrix(NA, len, len, dimnames = list(feat_vec, feat_vec))
+  pair_num <- dim(pair_mat)[1]
+  for (i in 1:pair_num) {
 
-    x <- phone_pair_mat[i, 1]
-    y <- phone_pair_mat[i, 2]
+    x <- pair_mat[i, 1]
+    y <- pair_mat[i, 2]
 
-    x_feat <- feat_mat[x, ]
-    y_feat <- feat_mat[y, ]
+    pfx <- as.numeric(unlist(strsplit(x, split = sound))[1])
+    pfy <- as.numeric(unlist(strsplit(y, split = sound))[1])
 
-    pf_pmi <- PFPMI(x_feat, y_feat, N1, N2, V1, V2,
-                    pair_freq_mat = pair_freq_mat, seg_freq_vec = seg_freq_vec)
+    pf_pmi_mat[x, y] <- PMI(x, y, N1, N2, V1[pfx], V2[pfy],
+                            pair_freq_mat = pair_freq_mat, seg_freq_vec = seg_freq_vec)
 
-    pf_pmi$V1 <- x
-    pf_pmi$V2 <- y
-
-    return(pf_pmi)
   }
 
-  pf_pmi_list
+  pf_pmi_mat[lower.tri(pf_pmi_mat)] <- t(pf_pmi_mat)[lower.tri(pf_pmi_mat)]
+
+  pf_pmi_mat
 }
 
 attributes(UpdatePFPMI) <- list(method = "pf-pmi")
-

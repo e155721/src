@@ -93,8 +93,13 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
     tic("ChangeListMSA2PSA")
     psa_list <- ChangeListMSA2PSA(msa_list, s)
     toc()
-    rlt.pmi  <- PairwisePMI(psa_list, word_list, s, method, cv_sep)
-    s        <- rlt.pmi$s
+    if (attributes(method)$method == "pmi") {
+      rlt.pmi  <- PairwisePMI(psa_list, word_list, s, method, cv_sep)
+    }
+    else if (attributes(method)$method == "pf-pmi") {
+      rlt.pmi  <- PairwisePFPMI(psa_list, word_list, s, method, cv_sep)
+    }
+    s <- rlt.pmi$s
     rm(psa_list)
     gc()
     gc()
