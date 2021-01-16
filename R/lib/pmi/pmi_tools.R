@@ -145,7 +145,7 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
 }
 
 
-MakeFreqVec <- function(corpus) {
+MakeFreqVec <- function(seg.vec, corpus) {
   # Create the vector of segmens frequency from a corpus.
   #
   # Args:
@@ -157,7 +157,6 @@ MakeFreqVec <- function(corpus) {
   print("MakeFreqVec")
   tic()
 
-  seg.vec <- unique(as.vector(corpus))
   seg.num <- length(seg.vec)
 
   # Calculate the frequency vector for individual segments.
