@@ -105,7 +105,11 @@ UpdatePFPMI <- function(corpus_phone) {
 
   pf_pmi_mat[lower.tri(pf_pmi_mat)] <- t(pf_pmi_mat)[lower.tri(pf_pmi_mat)]
 
-  pf_pmi_mat
+  pf_pmi_list <- list()
+  pf_pmi_list$mat <- pf_pmi_mat
+  pf_pmi_list$pair_freq_mat <- pair_freq_mat
+  pf_pmi_list$seg_freq_vec <- seg_freq_vec
+  return(pf_pmi_list)
 }
 
 attributes(UpdatePFPMI) <- list(method = "pf-pmi")

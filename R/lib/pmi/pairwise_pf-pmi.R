@@ -70,48 +70,62 @@ PairwisePFPMI <- function(psa_list, list.words, s, method, cv_sep=F) {
       gc()
       gc()
 
-      pmi_mat_c <- -UpdatePFPMI(corpus_cons)
-      pmi_mat_v <- -UpdatePFPMI(corpus_vowel)
+      pf_pmi_list_c <- UpdatePFPMI(corpus_cons)
+      pf_pmi_list_v <- UpdatePFPMI(corpus_vowel)
+
+      pmi_mat_c <- -pf_pmi_list_c$mat
+      pmi_mat_v <- -pf_pmi_list_v$mat
 
       attributes(pmi_mat_c) <- list(sound = "C", dim = dim(pmi_mat_c), dimnames = dimnames(pmi_mat_c))
       attributes(pmi_mat_v) <- list(sound = "V", dim = dim(pmi_mat_v), dimnames = dimnames(pmi_mat_v))
 
       min_c <- min(pmi_mat_c[!is.na(pmi_mat_c)])
       max_c <- max(pmi_mat_c[!is.na(pmi_mat_c)])
-      pmi_mat_c <- apply(pmi_mat_c, c(1,2), min_max, min_c, max_c)
-      diag(pmi_mat_c) <- 0
+      pmi_mat_d_c <- apply(pmi_mat_c, c(1,2), min_max, min_c, max_c)
+      diag(pmi_mat_d_c) <- 0
 
       min_v <- min(pmi_mat_v[!is.na(pmi_mat_v)])
       max_v <- max(pmi_mat_v[!is.na(pmi_mat_v)])
-      pmi_mat_v <- apply(pmi_mat_v, c(1,2), min_max, min_v, max_v)
-      diag(pmi_mat_v) <- 0
+      pmi_mat_d_v <- apply(pmi_mat_v, c(1,2), min_max, min_v, max_v)
+      diag(pmi_mat_d_v) <- 0
 
-      s <- pf2phone(s, pmi_mat_c, corpus_cons, mat.C.feat)
-      s <- pf2phone(s, pmi_mat_v, corpus_vowel, mat.V.feat)
+      s <- pf2phone(s, pmi_mat_d_c, corpus_cons, mat.C.feat)
+      s <- pf2phone(s, pmi_mat_d_v, corpus_vowel, mat.V.feat)
 
       s[C, V] <- Inf
       s[V, C] <- Inf
 
       pmi <- list()
       pmi$psa_list <- psa_list
-      pmi$pmi_list$c <- pmi_mat_c
-      pmi$pmi_list$v <- pmi_mat_v
+      pmi$pmi_list$pmi_mat_c   <- pmi_mat_c
+      pmi$pmi_list$pmi_mat_v   <- pmi_mat_v
+      pmi$pmi_list$pair_freq_mat_c <- pf_pmi_list_c$pair_freq_mat
+      pmi$pmi_list$seg_freq_vec_c  <- pf_pmi_list_c$seg_freq_vec
+      pmi$pmi_list$pair_freq_mat_v <- pf_pmi_list_v$pair_freq_mat
+      pmi$pmi_list$seg_freq_vec_v  <- pf_pmi_list_v$seg_freq_vec
+      pmi$pmi_list$pmi_mat_d_c <- pmi_mat_d_c
+      pmi$pmi_list$pmi_mat_d_v <- pmi_mat_d_v
       pmi$s <- s
 
     } else {
 
-      pmi_mat <- -UpdatePFPMI(corpus_phone)
+      pf_pmi_list <- UpdatePFPMI(corpus_phone)
+
+      pmi_mat <- -pf_pmi_list$mat
 
       min_phone <- min(pmi_mat[!is.na(pmi_mat)])
       max_phone <- max(pmi_mat[!is.na(pmi_mat)])
-      pmi_mat <- apply(pmi_mat, c(1,2), min_max, min_phone, max_phone)
+      pmi_mat_d <- apply(pmi_mat, c(1,2), min_max, min_phone, max_phone)
       diag(pmi_mat) <- 0
 
-      s <- pf2phone(s, pmi_mat, corpus_phone, mat.CV.feat)
+      s <- pf2phone(s, pmi_mat_d, corpus_phone, mat.CV.feat)
 
       pmi <- list()
       pmi$psa_list <- psa_list
-      pmi$pmi_list <- pmi_mat
+      pmi$pmi_list$pmi_mat <- pmi_mat
+      pmi$pmi_list$pair_freq_mat <- pf_pmi_list$pair_freq_mat
+      pmi$pmi_list$seg_freq_vec  <- pf_pmi_list$seg_freq_vec
+      pmi$pmi_list$pmi_mat_d <- pmi_mat_d
       pmi$s <- s
 
     }
