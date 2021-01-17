@@ -128,7 +128,7 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
   seg.pair.num <- dim(seg.pair.mat)[1]
 
   # Calculate the frequency matrix for aligned segments.
-  seg.pair.freq.mat <- matrix(0, seg.num, seg.num,
+  seg.pair.freq.mat <- matrix(NA, seg.num, seg.num,
                               dimnames = list(seg.vec, seg.vec))
 
   seg_pair_tmp <- paste(seg.pair.mat[, 1], seg.pair.mat[, 2])
@@ -143,9 +143,7 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
     seg.pair.freq.mat[x, y] <- tmp_list[[i]]
   }
 
-  t_seg.pair.freq.mat <- t(seg.pair.freq.mat)
-  diag(t_seg.pair.freq.mat) <- 0
-  seg.pair.freq.mat <- seg.pair.freq.mat + t_seg.pair.freq.mat
+  seg.pair.freq.mat[lower.tri(seg.pair.freq.mat)] <- t(seg.pair.freq.mat)[lower.tri(seg.pair.freq.mat)]
 
   toc()
   return(seg.pair.freq.mat)

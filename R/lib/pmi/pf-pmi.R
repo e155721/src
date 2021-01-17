@@ -66,8 +66,29 @@ UpdatePFPMI <- function(corpus_phone) {
   gc()
   gc()
 
+  feat_vec <- unique(as.vector(corpus_feat))
+  feat_list <- list()
+  for (f in feat_vec) {
+    i <- as.numeric(unlist(strsplit(f, split = sound))[1])
+    feat_list[[i]] <- NA
+  }
+
+  for (f in feat_vec) {
+    i <- as.numeric(unlist(strsplit(f, split = sound))[1])
+    feat_list[[i]] <- c(feat_list[[i]], f)
+  }
+
+  for (i in 1:length(feat_list)) {
+    feat_list[[i]] <- feat_list[[i]][-1]
+  }
+
+  pair_list <- lapply(feat_list, make_pair_mat, F)
+  pair_mat <- NULL
+  for (pair in pair_list) {
+    pair_mat <- rbind(pair_mat, pair)
+  }
+
   # Create the feature pairs matrix.
-  pair_mat <- make_pair_mat(corpus_feat, identical = F)
   seg_vec <- sort(unique(as.vector(pair_mat)))
   corpus_feat <- remove_identical(corpus_feat)
 
