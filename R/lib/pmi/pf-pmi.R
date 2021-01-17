@@ -1,17 +1,16 @@
 library(MASS)
+library(tictoc)
 
 source("lib/load_phoneme.R")
 source("lib/pmi/pmi_tools.R")
-
-library(tictoc)
 
 
 smoothing <- function(pair_mat, feat.num) {
   # Initialization for the Laplace smoothing
   V1.all <- unique(paste(pair_mat[, 1], pair_mat[1, 2]))  # number of segment pair types
   V2.all <- unique(as.vector(pair_mat))  # number of symbol types
-  V1     <- NULL  # The number of feature pair types for each column.
-  V2     <- NULL  # The number of feature types for each column.
+  V1 <- NULL  # The number of feature pair types for each column.
+  V2 <- NULL  # The number of feature types for each column.
   for (p in 1:feat.num) {
     V1[p] <- length(c(grep(paste(p, "C", sep = ""), V1.all),
                       grep(paste(p, "V", sep = ""), V1.all)))
@@ -38,19 +37,19 @@ UpdatePFPMI <- function(corpus_phone) {
   }
   feat.num <- dim(mat.X.feat)[2]
 
-  # Initialization for converting the corpus_phone to the feature corpus.
-  feat_mat <- mat.X.feat
-
   # Convert from corpus_phone to feature corpus.
   N <- dim(corpus_phone)[2]
-  print("corpus_feat")
-  tic()
+  # Initiallization for a denominator for the PF-PMI.
+  N1 <- dim(corpus_phone)[2]  # number of the aligned features
+  N2 <- N1 * 2  # number of features in the aligned faetures
 
+  tic("corpus_feat")
+  # The 'corpus_phone' is converted to the 'corpu_feat'.
   corpus_feat <- mclapply(1:N, (function(j, x, y){
     mat <- rbind(x[y[1, j], ], x[y[2, j], ])
     mat <- apply(mat, 2, sort)
     return(mat)
-  }), feat_mat, corpus_phone)
+  }), mat.X.feat, corpus_phone)
 
   corpus_feat1 <- mclapply(corpus_feat, (function(x){
     return(x[1, ])
@@ -63,23 +62,20 @@ UpdatePFPMI <- function(corpus_phone) {
   corpus_feat <- rbind(unlist(corpus_feat1), unlist(corpus_feat2))
   toc()
 
-  # Create the feature pairs matrix.
-  pair_mat <- make_pair_mat(corpus_feat, identical = F)
-  seg_vec  <- sort(unique(as.vector(pair_mat)))
-  corpus_feat <- remove_identical(corpus_feat)
-
-  # Create the frequency matrix and the vector.
-  pair_freq_mat <- MakeFreqMat(pair_mat, corpus_feat)
-  seg_freq_vec  <- MakeFreqVec(seg_vec, corpus_feat)
-
-  # Initiallization for a denominator for the PF-PMI.
-  N1 <- dim(corpus_phone)[2]  # number of the aligned features
-  N2 <- N1 * 2  # number of features in the aligned faetures
   rm(corpus_phone)
   gc()
   gc()
 
-  # Initialization for the Laplace smoothing
+  # Create the feature pairs matrix.
+  pair_mat <- make_pair_mat(corpus_feat, identical = F)
+  seg_vec <- sort(unique(as.vector(pair_mat)))
+  corpus_feat <- remove_identical(corpus_feat)
+
+  # Create the frequency matrix and the vector.
+  pair_freq_mat <- MakeFreqMat(pair_mat, corpus_feat)
+  seg_freq_vec <- MakeFreqVec(seg_vec, corpus_feat)
+
+  # Initialization for the Laplace smoothing.
   V_tmp <- smoothing(pair_mat, feat.num)
   V1 <- V_tmp[[1]]
   V2 <- V_tmp[[2]]
@@ -103,6 +99,7 @@ UpdatePFPMI <- function(corpus_phone) {
 
   }
 
+  # The PF-PMI matrix is converted to the symmetry matrix.
   pf_pmi_mat[lower.tri(pf_pmi_mat)] <- t(pf_pmi_mat)[lower.tri(pf_pmi_mat)]
 
   pf_pmi_list <- list()
