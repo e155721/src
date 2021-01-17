@@ -13,12 +13,11 @@ pf2phone <- function(s, pmi_mat, corpus_phone, mat.X.feat) {
   nump <- dim(phone_pair)[2]
   for (i in 1:nump) {
     p <- phone_pair[, i]
-
     pf1 <- mat.X.feat[p[1], ]
     pf2 <- mat.X.feat[p[2], ]
-
     s[p[1], p[2]] <- norm(diag(pmi_mat[pf1, pf2]), type = "2")
   }
+
   return(s)
 }
 
@@ -26,7 +25,7 @@ PairwisePFPMI <- function(psa_list, list.words, s, method, cv_sep=F) {
   # Compute the new scoring matrix by updating PMI iteratively.
   #
   # Args:
-  #   input.list: The word list of all the words.
+  #   psa_list: The list of the PSAs for each word.
   #   s: The scoring matrix.
   #
   # Returns:
@@ -64,21 +63,24 @@ PairwisePFPMI <- function(psa_list, list.words, s, method, cv_sep=F) {
     if (cv_sep) {
 
       print("Enabled CV-separation.")
-      corpus_cons <- sep_corpus("C", corpus_phone)
-      corpus_vowel <- sep_corpus("V", corpus_phone)
+      corpus_c <- sep_corpus("C", corpus_phone)
+      corpus_v <- sep_corpus("V", corpus_phone)
       rm(corpus_phone)
       gc()
       gc()
 
-      pf_pmi_list_c <- UpdatePFPMI(corpus_cons)
-      pf_pmi_list_v <- UpdatePFPMI(corpus_vowel)
+      # Get the PF-PMI results.
+      pf_pmi_list_c <- UpdatePFPMI(corpus_c)
+      pf_pmi_list_v <- UpdatePFPMI(corpus_v)
 
+      # Reverse the PF-PMI values.
       pmi_mat_c <- -pf_pmi_list_c$mat
       pmi_mat_v <- -pf_pmi_list_v$mat
 
       attributes(pmi_mat_c) <- list(sound = "C", dim = dim(pmi_mat_c), dimnames = dimnames(pmi_mat_c))
       attributes(pmi_mat_v) <- list(sound = "V", dim = dim(pmi_mat_v), dimnames = dimnames(pmi_mat_v))
 
+      # The PF-PMI values are converted to the distances.
       min_c <- min(pmi_mat_c[!is.na(pmi_mat_c)])
       max_c <- max(pmi_mat_c[!is.na(pmi_mat_c)])
       pmi_mat_d_c <- apply(pmi_mat_c, c(1,2), min_max, min_c, max_c)
@@ -89,8 +91,9 @@ PairwisePFPMI <- function(psa_list, list.words, s, method, cv_sep=F) {
       pmi_mat_d_v <- apply(pmi_mat_v, c(1,2), min_max, min_v, max_v)
       diag(pmi_mat_d_v) <- 0
 
-      s <- pf2phone(s, pmi_mat_d_c, corpus_cons, mat.C.feat)
-      s <- pf2phone(s, pmi_mat_d_v, corpus_vowel, mat.V.feat)
+      # The phoneme features distance are changed to the phonetic symbols distance.
+      s <- pf2phone(s, pmi_mat_d_c, corpus_c, mat.C.feat)
+      s <- pf2phone(s, pmi_mat_d_v, corpus_v, mat.V.feat)
 
       s[C, V] <- Inf
       s[V, C] <- Inf
@@ -109,15 +112,19 @@ PairwisePFPMI <- function(psa_list, list.words, s, method, cv_sep=F) {
 
     } else {
 
+      # Get the PF-PMI results.
       pf_pmi_list <- UpdatePFPMI(corpus_phone)
 
+      # Reverse the PF-PMI values.
       pmi_mat <- -pf_pmi_list$mat
 
+      # The PF-PMI values are converted to the distances.
       min_phone <- min(pmi_mat[!is.na(pmi_mat)])
       max_phone <- max(pmi_mat[!is.na(pmi_mat)])
       pmi_mat_d <- apply(pmi_mat, c(1,2), min_max, min_phone, max_phone)
       diag(pmi_mat) <- 0
 
+      # The phoneme features distance are changed to the phonetic symbols distance.
       s <- pf2phone(s, pmi_mat_d, corpus_phone, mat.CV.feat)
 
       pmi <- list()
