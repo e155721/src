@@ -99,6 +99,9 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
     else if (attributes(method)$method == "pf-pmi0") {
       rlt.pmi  <- PairwisePFPMI(psa_list, word_list, s, method, cv_sep)
     }
+    else if (attributes(method)$method == "pf-pmi") {
+      rlt.pmi  <- PairwisePMI(psa_list, word_list, s, method, cv_sep)
+    }
     s <- rlt.pmi$s
     rm(psa_list)
     gc()
