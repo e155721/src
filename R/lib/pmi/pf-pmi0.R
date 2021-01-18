@@ -22,7 +22,7 @@ smoothing <- function(pair_mat, feat.num) {
 }
 
 
-UpdatePFPMI <- function(corpus_phone) {
+UpdatePFPMI0 <- function(corpus_phone) {
   # Create the segment vector and the segment pairs matrix.
   phone_pair_mat <- make_pair_mat(corpus_phone)
   phone_pair_num <- dim(phone_pair_mat)[1]
@@ -130,4 +130,4 @@ UpdatePFPMI <- function(corpus_phone) {
   return(pf_pmi_list)
 }
 
-attributes(UpdatePFPMI) <- list(method = "pf-pmi")
+attributes(UpdatePFPMI0) <- list(method = "pf-pmi0")

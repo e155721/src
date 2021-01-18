@@ -70,8 +70,8 @@ PairwisePFPMI <- function(psa_list, list.words, s, method, cv_sep=F) {
       gc()
 
       # Get the PF-PMI results.
-      pf_pmi_list_c <- UpdatePFPMI(corpus_c)
-      pf_pmi_list_v <- UpdatePFPMI(corpus_v)
+      pf_pmi_list_c <- UpdatePFPMI0(corpus_c)
+      pf_pmi_list_v <- UpdatePFPMI0(corpus_v)
 
       # Reverse the PF-PMI values.
       pmi_mat_c <- -pf_pmi_list_c$mat
@@ -113,7 +113,7 @@ PairwisePFPMI <- function(psa_list, list.words, s, method, cv_sep=F) {
     } else {
 
       # Get the PF-PMI results.
-      pf_pmi_list <- UpdatePFPMI(corpus_phone)
+      pf_pmi_list <- UpdatePFPMI0(corpus_phone)
 
       # Reverse the PF-PMI values.
       pmi_mat <- -pf_pmi_list$mat
