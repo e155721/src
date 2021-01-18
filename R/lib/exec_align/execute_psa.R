@@ -29,7 +29,7 @@ psa_pmi <- function(fun, word_list, output_dir, cv_sep) {
 }
 
 
-psa_pf_pmi <- function(fun, word_list, output_dir, cv_sep) {
+psa_pf_pmi0 <- function(fun, word_list, output_dir, cv_sep) {
 
   # Create an itnitial scoring matrix and a list of PSAs.
   s         <- MakeEditDistance(Inf)
@@ -47,13 +47,13 @@ execute_psa <- function(method, word_list, output_dir, cv_sep) {
   num <- switch(method,
                 "ld"     = 1,
                 "pmi"    = 2,
-                "pf-pmi" = 3
+                "pf-pmi0" = 3
   )
 
   psa_rlt <- switch(num,
-                     "1" = psa_ld(word_list),
-                     "2" = psa_pmi(UpdatePMI, word_list, output_dir, cv_sep),
-                     "3" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep)
+                    "1" = psa_ld(word_list),
+                    "2" = psa_pmi(UpdatePMI, word_list, output_dir, cv_sep),
+                    "3" = psa_pf_pmi0(UpdatePFPMI, word_list, output_dir, cv_sep)
   )
 
   return(psa_rlt)
