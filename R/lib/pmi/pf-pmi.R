@@ -100,10 +100,11 @@ UpdatePFPMI <- function(corpus_phone) {
 
   # Create the feature pairs matrix.
   pair_mat <- make_pair_mat(corpus_feat, identical = T)
+  seg_vec <- sort(unique(as.vector(pair_mat)))
 
   # Create the frequency matrix and the vector.
   pair_freq_mat <- MakeFreqMat(pair_mat, corpus_feat)
-  seg_freq_vec  <- MakeFreqVec(corpus_feat)
+  seg_freq_vec <- MakeFreqVec(seg_vec, corpus_feat)
 
   # Initiallization for a denominator for the PF-PMI.
   N1 <- dim(corpus_phone)[2]  # number of the aligned features
