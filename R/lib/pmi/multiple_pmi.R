@@ -132,7 +132,7 @@ MultiplePMI <- function(word_list, s, method, cv_sep=F) {
       s.old.main <- s
     }
 
-    if (loop == 10) {
+    if (loop == 5) {
       print(paste("MultiplePMI:", "MAX LOOP"))
       break
     } else {
