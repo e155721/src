@@ -1,6 +1,6 @@
 source("lib/load_phoneme.R")
 
-MakeEditDistance <- function(cv=Inf) {
+MakeEditDistance <- function(cv=Inf, p=1) {
   # Make the scoring matrix using the phoneme features.
   #
   # Args:
@@ -23,8 +23,8 @@ MakeEditDistance <- function(cv=Inf) {
 
   s[C, C] <- 1
   s[V, V] <- 1
-  s["-", ] <- 1
-  s[, "-"] <- 1
+  s["-", ] <- p
+  s[, "-"] <- p
   diag(s) <- 0
 
   return(s)
