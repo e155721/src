@@ -44,18 +44,19 @@ get_phone_info <- function(cons_file, vowel_file) {
   mat.V.feat <- rbind(mat.V.feat, gap)
 
   if (N.cons == N.vowel) {
-    C.feat <- unique(as.vector(mat.C.feat))
-    V.feat <- unique(as.vector(mat.V.feat))
 
+    mat.CV.feat <- rbind(make_feat_mat(cons_file), make_feat_mat(vowel_file))
     CV <- c(C, V)
-    mat.CV.feat <- rbind(mat.C.feat, mat.V.feat)
-    CV.feat <- c(C.feat, V.feat)
 
+    for (j in 1:N.cons) {
+      mat.CV.feat[, j] <- paste(j, "CV", mat.CV.feat[, j], sep = "")
+    }
     gap <- matrix(paste(1:N.cons, "CV", 0, sep = ""), 1, N.cons, dimnames = list("-"))
     mat.CV.feat <- rbind(mat.CV.feat, gap)
 
     assign(x = "CV", value = CV, envir = .GlobalEnv)
     assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
+
   }
 
   # Make global variables.
