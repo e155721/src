@@ -73,8 +73,7 @@ UpdatePFPMI <- function(corpus_phone) {
   feat.num <- dim(mat.X.feat)[2]
 
   # Initialization for converting the corpus_phone to the feature corpus.
-  gap <- matrix("-", 1, feat.num, dimnames = list("-"))
-  feat_mat <- rbind(mat.X.feat, gap)
+  feat_mat <- mat.X.feat
 
   # Convert from corpus_phone to feature corpus.
   N <- dim(corpus_phone)[2]
