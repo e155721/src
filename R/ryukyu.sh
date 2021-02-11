@@ -2,11 +2,13 @@
 
 # 引数：出力ディレクトリ名
 
-dir_name=$1
-input_file="../data/${dir_name}/input.csv"
-output_dir="../data/${dir_name}"
+base="/var/www/html"
 
-cd r
+dir_name=$1
+input_file="${base}/data/${dir_name}/input.csv"
+output_dir="${base}/data/${dir_name}"
+
+cd ${base}/r
 
 # MSA
 echo "MSA LD"
