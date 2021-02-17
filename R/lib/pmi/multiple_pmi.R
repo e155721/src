@@ -1,4 +1,3 @@
-library(tictoc)
 library(doMC)
 
 source("lib/load_data_processing.R")
@@ -90,9 +89,7 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
       msa_list <- bf_loop(msa_list, s)
     }
 
-    tic("ChangeListMSA2PSA")
     psa_list <- ChangeListMSA2PSA(msa_list, s)
-    toc()
     if (attributes(method)$method == "pmi") {
       rlt.pmi  <- PairwisePMI(psa_list, word_list, s, method, cv_sep)
     }
@@ -106,7 +103,7 @@ msa_loop <- function(word_list, s, pa=T, msa_list=NULL, method, cv_sep=F) {
     rm(psa_list)
     gc()
     gc()
-  }
+ }
 
   msa.o          <- list()
   msa.o$msa_list <- msa_list

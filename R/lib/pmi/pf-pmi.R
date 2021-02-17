@@ -3,7 +3,7 @@ library(MASS)
 source("lib/load_phoneme.R")
 source("lib/pmi/pmi_tools.R")
 
-library(tictoc)
+
 
 
 PFPMI <- function(x, y, N1, N2, smp, pair_freq_mat, seg_freq_vec) {
@@ -74,7 +74,7 @@ UpdatePFPMI <- function(corpus_phone) {
   # Convert from corpus_phone to feature corpus.
   N <- dim(corpus_phone)[2]
   print("corpus_feat")
-  tic()
+  
 
   corpus_feat <- mclapply(1:N, (function(j, x, y){
     # Make the corpus of the feature vector pairs.
@@ -125,7 +125,6 @@ UpdatePFPMI <- function(corpus_phone) {
   corpus_feat <- matrix(NA, (N * 2), feat_num)
   corpus_feat[seq(1, dim(corpus_feat)[1], 2), ] <- mat_a
   corpus_feat[seq(2, dim(corpus_feat)[1], 2), ] <- mat_b
-  toc()
 
   # Create the feature pairs matrix.
   pair_mat <- make_pair_mat(corpus_feat, identical = T)

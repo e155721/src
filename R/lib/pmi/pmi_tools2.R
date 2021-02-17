@@ -61,7 +61,6 @@ MakeFreqMat2 <- function(feat_pair_mat, corpus) {
   # Return:
   #   the matrix of segment pairs frequency.
   print("MakeFreqMat")
-  tic()
 
   feat_vec      <- unique(as.vector(feat_pair_mat))
   feat_num      <- length(feat_vec)
@@ -112,6 +111,5 @@ MakeFreqMat2 <- function(feat_pair_mat, corpus) {
   diag(t_seg_pair_freq_mat) <- 0
   seg_pair_freq_mat <- seg_pair_freq_mat + t_seg_pair_freq_mat
 
-  toc()
   return(seg_pair_freq_mat)
 }

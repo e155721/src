@@ -1,4 +1,4 @@
-library(tictoc)
+
 
 
 remove_identical <- function(corpus) {
@@ -19,7 +19,7 @@ MakeCorpus <- function(psa_list) {
   # Returns:
   #   A corpus to calculate PMI.
   print("MakeCorpus")
-  tic()
+  
 
   psa_list <- unlist(psa_list, recursive = F)
   M <- length(psa_list)
@@ -41,14 +41,14 @@ MakeCorpus <- function(psa_list) {
   corpus <- remove_identical(corpus)
   corpus <- apply(corpus, 2, sort)
 
-  toc()
+  
   return(corpus)
 }
 
 
 sep_corpus <- function(sound, corpus) {
   print("sep_corpus")
-  tic()
+  
 
   if (sound == "C") {
     X <- C
@@ -78,7 +78,7 @@ sep_corpus <- function(sound, corpus) {
   corpus <- apply(corpus, 2, sort)
   attributes(corpus) <- list(sound = sound, dim = dim(corpus))
 
-  toc()
+  
   return(corpus)
 }
 
@@ -86,7 +86,7 @@ sep_corpus <- function(sound, corpus) {
 make_pair_mat <- function(dat, identical=F){
   # dat: a matrix or vector
   print("make_pair_mat")
-  tic()
+  
 
   seg_vec <- unique(as.vector(dat))
   pair_mat <- combn(x = seg_vec, m = 2)
@@ -105,7 +105,7 @@ make_pair_mat <- function(dat, identical=F){
   }
   pair_mat <- t(pair_mat)
 
-  toc()
+  
   return(pair_mat)
 }
 
@@ -121,7 +121,7 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
   # Return:
   #   the matrix of segment pairs frequency.
   print("MakeFreqMat")
-  tic()
+  
 
   seg.vec      <- sort(unique(as.vector(seg.pair.mat)))
   seg.num      <- length(seg.vec)
@@ -145,7 +145,6 @@ MakeFreqMat <- function(seg.pair.mat, corpus) {
 
   seg.pair.freq.mat[lower.tri(seg.pair.freq.mat)] <- t(seg.pair.freq.mat)[lower.tri(seg.pair.freq.mat)]
 
-  toc()
   return(seg.pair.freq.mat)
 }
 
@@ -160,7 +159,7 @@ MakeFreqVec <- function(seg.vec, corpus) {
   # Return:
   #   the vector of segments frequency.
   print("MakeFreqVec")
-  tic()
+  
 
   seg.num <- length(seg.vec)
 
@@ -172,7 +171,7 @@ MakeFreqVec <- function(seg.vec, corpus) {
     seg.freq.vec[x] <- sum(x == corpus)
   }
 
-  toc()
+  
   return(seg.freq.vec)
 }
 

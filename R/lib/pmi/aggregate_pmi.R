@@ -8,7 +8,6 @@ aggregate_pmi <- function(pmi_list, sound) {
   # Return:
   #   the matrix of the PMIs.
   print("AggrtPMI")
-  tic()
 
   switch(sound,
          "C" = X <- C,
@@ -58,6 +57,5 @@ aggregate_pmi <- function(pmi_list, sound) {
     pmi_mat <- as.matrix(pmi_mat[, , 1])
   }
 
-  toc()
   return(pmi_mat)
 }

@@ -1,5 +1,4 @@
 library(MASS)
-library(tictoc)
 
 source("lib/load_phoneme.R")
 source("lib/pmi/pmi_tools.R")
@@ -26,7 +25,6 @@ UpdatePFPMI0 <- function(corpus_phone) {
   N1 <- dim(corpus_phone)[2]  # number of the aligned features
   N2 <- N1 * 2  # number of features in the aligned faetures
 
-  tic("corpus_feat")
   # The 'corpus_phone' is converted to the 'corpu_feat'.
   corpus_feat <- mclapply(1:N, (function(j, x, y){
     mat <- rbind(x[y[1, j], ], x[y[2, j], ])
@@ -43,7 +41,6 @@ UpdatePFPMI0 <- function(corpus_phone) {
   }))
 
   corpus_feat <- rbind(unlist(corpus_feat1), unlist(corpus_feat2))
-  toc()
 
   rm(corpus_phone)
   gc()
