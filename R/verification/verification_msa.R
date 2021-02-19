@@ -28,7 +28,7 @@ word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
 msa_rlt       <- execute_msa(method, word_list, output_dir, cv_sep)
 msa_list_gold <- lapply(word_list_gold, make_gold_msa)
 
-if (method == "ld") {
+if ((method == "ld") || (method == "ld2")) {
   s        <- msa_rlt$s
   msa_list <- msa_rlt$msa_list
 } else {
