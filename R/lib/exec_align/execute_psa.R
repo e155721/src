@@ -42,7 +42,12 @@ psa_pf_pmi0 <- function(fun, word_list, output_dir, cv_sep) {
 }
 
 
-psa_pf_pmi <- function(fun, word_list, output_dir, cv_sep) {
+psa_pf_pmi <- function(fun, word_list, output_dir, cv_sep, method) {
+
+  message(paste("The PF-PMI", method, " was selected.", sep = ""))
+
+  # Select a method for the PF-PMI.
+  assign("g_pf_pmi", method, envir = .GlobalEnv)
 
   # Create an itnitial scoring matrix and a list of PSAs.
   s         <- MakeEditDistance(Inf)
@@ -61,14 +66,18 @@ execute_psa <- function(method, word_list, output_dir, cv_sep) {
                 "ld"     = 1,
                 "pmi"    = 2,
                 "pf-pmi0" = 3,
-                "pf-pmi" = 4
+                "pf-pmi1" = 4,
+                "pf-pmi2" = 5,
+                "pf-pmi3" = 6
   )
 
   psa_rlt <- switch(num,
                     "1" = psa_ld(word_list),
                     "2" = psa_pmi(UpdatePMI, word_list, output_dir, cv_sep),
                     "3" = psa_pf_pmi0(UpdatePFPMI0, word_list, output_dir, cv_sep),
-                    "4" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep)
+                    "4" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "1"),
+                    "5" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "2"),
+                    "6" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "3")
   )
 
   return(psa_rlt)
