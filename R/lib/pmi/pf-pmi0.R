@@ -7,7 +7,7 @@ source("lib/pmi/pmi_tools.R")
 
 smoothing <- function(pair_mat, feat.num) {
   # Initialization for the Laplace smoothing
-  V1.all <- unique(paste(pair_mat[, 1], pair_mat[1, 2]))  # number of segment pair types
+  V1.all <- unique(paste(pair_mat[, 1], pair_mat[, 2]))  # number of segment pair types
   V2.all <- unique(as.vector(pair_mat))  # number of symbol types
   V1 <- NULL  # The number of feature pair types for each column.
   V2 <- NULL  # The number of feature types for each column.
