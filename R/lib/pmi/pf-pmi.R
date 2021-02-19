@@ -20,21 +20,29 @@ PFPMI <- function(x, y, N1, N2, pair_freq_mat, seg_freq_vec) {
   feat.num <- length(x)
 
   f_xy <- pair_freq_mat[x, y]
-  f_x  <- seg_freq_vec[x]
-  f_y  <- seg_freq_vec[y]
+  if (g_pf_pmi == "1") {
+    f_xy <- diag(f_xy)
+  }
 
-  A    <- (f_xy) / (N1) # probability of the co-occurrence frequency of xy
-  p_x  <- (f_x) / (N2)  # probability of the occurrence frequency of x
-  p_y  <- (f_y) / (N2)  # probability of the occurrence frequency of y
+  f_x <- seg_freq_vec[x]
+  f_y <- seg_freq_vec[y]
 
-  B <- p_x %*% t(p_y)
+  A   <- (f_xy) / (N1) # probability of the co-occurrence frequency of xy
+  p_x <- (f_x) / (N2)  # probability of the occurrence frequency of x
+  p_y <- (f_y) / (N2)  # probability of the occurrence frequency of y
+  B   <- p_x %*% t(p_y)
+  AB  <- t(A) %*% ginv(B)
 
-  pf_pmi      <- list()
-  pf_pmi$pmi  <- t(A) %*% ginv(B)
-  pf_pmi$A    <- A
-  pf_pmi$p_x  <- p_x
-  pf_pmi$p_y  <- p_y
-  pf_pmi$B    <- B
+  if (g_pf_pmi == "3") {
+    AB <- diag(AB)
+  }
+
+  pf_pmi     <- list()
+  pf_pmi$pmi <- AB
+  pf_pmi$A   <- A
+  pf_pmi$p_x <- p_x
+  pf_pmi$p_y <- p_y
+  pf_pmi$B   <- B
 
   return(pf_pmi)
 }
