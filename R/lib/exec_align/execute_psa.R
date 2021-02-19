@@ -4,9 +4,14 @@ source("lib/load_exec_align.R")
 source("parallel_config.R")
 
 
-psa_ld <- function(word_list) {
+psa_ld <- function(word_list, feat) {
 
-  s <- MakeEditDistance(Inf)
+  if (feat) {
+    message("The LD used the features.")
+    s <- MakeEditDistance2(Inf)  # using features
+  } else {
+    s <- MakeEditDistance(Inf)
+  }
 
   psa_rlt          <- list()
   psa_rlt$s        <- s
@@ -63,21 +68,23 @@ psa_pf_pmi <- function(fun, word_list, output_dir, cv_sep, method) {
 execute_psa <- function(method, word_list, output_dir, cv_sep) {
 
   num <- switch(method,
-                "ld"     = 1,
-                "pmi"    = 2,
-                "pf-pmi0" = 3,
-                "pf-pmi1" = 4,
-                "pf-pmi2" = 5,
-                "pf-pmi3" = 6
+                "ld"      = 1,
+                "ld2"     = 2,
+                "pmi"     = 3,
+                "pf-pmi0" = 4,
+                "pf-pmi1" = 5,
+                "pf-pmi2" = 6,
+                "pf-pmi3" = 7
   )
 
   psa_rlt <- switch(num,
-                    "1" = psa_ld(word_list),
-                    "2" = psa_pmi(UpdatePMI, word_list, output_dir, cv_sep),
-                    "3" = psa_pf_pmi0(UpdatePFPMI0, word_list, output_dir, cv_sep),
-                    "4" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "1"),
-                    "5" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "2"),
-                    "6" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "3")
+                    "1" = psa_ld(word_list, feat = F),
+                    "2" = psa_ld(word_list, feat = T),
+                    "3" = psa_pmi(UpdatePMI, word_list, output_dir, cv_sep),
+                    "4" = psa_pf_pmi0(UpdatePFPMI0, word_list, output_dir, cv_sep),
+                    "5" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "1"),
+                    "6" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "2"),
+                    "7" = psa_pf_pmi(UpdatePFPMI, word_list, output_dir, cv_sep, method = "3")
   )
 
   return(psa_rlt)

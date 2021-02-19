@@ -28,7 +28,7 @@ word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
 psa_rlt       <- execute_psa(method, word_list, output_dir, cv_sep)
 psa_list_gold <- lapply(word_list_gold, make_gold_psa)
 
-if (method == "ld") {
+if ((method == "ld") || (method == "ld2")) {
   s        <- psa_rlt$s
   psa_list <- psa_rlt$psa_list
 } else {
