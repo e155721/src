@@ -1,5 +1,6 @@
 make_phone_vec <- function(feat.mat) {
   vec <- dimnames(feat.mat)[[1]]
+  vec <- vec[-which(vec == "-")]  # removing the gap symbols
   vec
 }
 
@@ -11,6 +12,8 @@ make_feat_mat <- function(file) {
   for (j in 1:N) {
     feat.mat[, j] <- gsub(pattern = "*[ ]*", replacement = "", feat.mat[, j])
   }
+  gap <- matrix(rep("0", N), 1, N, dimnames = list("-"))
+  feat.mat <- rbind(feat.mat, gap)
 
   feat.mat
 }
@@ -33,15 +36,11 @@ get_phone_info <- function(cons_file, vowel_file) {
   for (j in 1:N.cons) {
     mat.C.feat[, j] <- paste(j, "C", mat.C.feat[, j], sep = "")
   }
-  gap <- matrix(paste(1:N.cons, "C", 0, sep = ""), 1, N.cons, dimnames = list("-"))
-  mat.C.feat <- rbind(mat.C.feat, gap)
 
   N.vowel <- dim(mat.V.feat)[2]
   for (j in 1:N.vowel) {
     mat.V.feat[, j] <- paste(j, "V", mat.V.feat[, j], sep = "")
   }
-  gap <- matrix(paste(1:N.vowel, "V", 0, sep = ""), 1, N.vowel, dimnames = list("-"))
-  mat.V.feat <- rbind(mat.V.feat, gap)
 
   if (N.cons == N.vowel) {
 
@@ -51,8 +50,6 @@ get_phone_info <- function(cons_file, vowel_file) {
     for (j in 1:N.cons) {
       mat.CV.feat[, j] <- paste(j, "CV", mat.CV.feat[, j], sep = "")
     }
-    gap <- matrix(paste(1:N.cons, "CV", 0, sep = ""), 1, N.cons, dimnames = list("-"))
-    mat.CV.feat <- rbind(mat.CV.feat, gap)
 
     assign(x = "CV", value = CV, envir = .GlobalEnv)
     assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
