@@ -48,11 +48,13 @@ get_phone_info <- function(cons_file, vowel_file) {
   for (j in 1:N.cons) {
     mat.C.feat[, j] <- paste(j, "C", mat.C.feat[, j], sep = "")
   }
+  mat.C.feat <- add_attr(mat.C.feat, list(sound = "C"))
 
   N.vowel <- dim(mat.V.feat)[2]
   for (j in 1:N.vowel) {
     mat.V.feat[, j] <- paste(j, "V", mat.V.feat[, j], sep = "")
   }
+  mat.V.feat <- add_attr(mat.V.feat, list(sound = "V"))
 
   if (N.cons == N.vowel) {
 
@@ -62,6 +64,7 @@ get_phone_info <- function(cons_file, vowel_file) {
     for (j in 1:N.cons) {
       mat.CV.feat[, j] <- paste(j, "CV", mat.CV.feat[, j], sep = "")
     }
+    mat.CV.feat <- add_attr(mat.CV.feat, list(sound = "CV"))
 
     assign(x = "CV", value = CV, envir = .GlobalEnv)
     assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
