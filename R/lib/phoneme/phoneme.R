@@ -18,6 +18,18 @@ make_feat_mat <- function(file) {
   feat.mat
 }
 
+
+add_attr <- function(x, attr) {
+  # attr: A list of new attributes.
+
+  attr_list <- attributes(x)
+  attr_list <- c(attr_list, attr)
+  attributes(x) <- attr_list
+
+  return(x)
+}
+
+
 get_phone_info <- function(cons_file, vowel_file) {
 
   # Consonant features
