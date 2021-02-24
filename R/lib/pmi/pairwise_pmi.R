@@ -14,28 +14,29 @@ pmi2dist <- function(score_tmp, pmi_list, s) {
 }
 
 
-PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
-  # Compute the new scoring matrix by updating PMI iteratively.
+PairwisePMI <- function(psa_list, list_words, s, method, cv_sep=F) {
+  # Update the scoring matrix by calculating the PMI iteratively.
   #
   # Args:
-  #   input.list: The word list of all the words.
+  #   psa_list: The list of the PSAs of all input words.
+  #   list_words: The list of all input words.
   #   s: The scoring matrix.
   #
   # Returns:
-  #   s: The new scoring matrix by updating PMI iteratively.
-  s.old <- s
-  N <- length(s.old)
+  #   s: The new scoring matrix.
+  s_old <- s
+  N <- length(s_old)
   dim_s <- dim(s)[1]
-  s.old[1:dim_s, 1:dim_s] <- 0
+  s_old[1:dim_s, 1:dim_s] <- 0
   # START OF LOOP
   loop <- 0
   while (1) {
 
-    diff <- N - sum(s == s.old)
+    diff <- N - sum(s == s_old)
     if (diff == 0) {
       break
     } else {
-      s.old <- s
+      s_old <- s
     }
 
     if (loop == 10) {
@@ -99,7 +100,7 @@ PairwisePMI <- function(psa_list, list.words, s, method, cv_sep=F) {
     }
 
     # Compute the new PSA using the new scoring matrix.
-    psa_list <- PSAforEachWord(list.words, s, dist = T)
+    psa_list <- PSAforEachWord(list_words, s, dist = T)
   }
   # END OF LOOP
 
