@@ -177,7 +177,7 @@ MakeFreqVec <- function(seg.vec, corpus) {
 }
 
 
-conv_pmi <- function(pmi_list) {
+conv_pmi <- function(pmi_list, s) {
 
   seg_pair_num <- length(pmi_list)
 
@@ -203,5 +203,15 @@ conv_pmi <- function(pmi_list) {
   }
   score_tmp <- -score_tmp
 
-  return(score_tmp)
+  pmi_max <- max(score_tmp)
+  pmi_min <- min(score_tmp)
+
+  # Convert the PMI to the weight of edit operations.
+  seg_pair_num <- length(score_tmp)
+  for (i in 1:seg_pair_num) {
+    s[pmi_list[[i]]$V1, pmi_list[[i]]$V2] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
+    s[pmi_list[[i]]$V2, pmi_list[[i]]$V1] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
+  }
+
+  return(s)
 }

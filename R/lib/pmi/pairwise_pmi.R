@@ -1,19 +1,3 @@
-pmi2dist <- function(score_tmp, pmi_list, s) {
-
-  pmi_max <- max(score_tmp)
-  pmi_min <- min(score_tmp)
-
-  # Convert the PMI to the weight of edit operations.
-  seg_pair_num <- length(score_tmp)
-  for (i in 1:seg_pair_num) {
-    s[pmi_list[[i]]$V1, pmi_list[[i]]$V2] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
-    s[pmi_list[[i]]$V2, pmi_list[[i]]$V1] <- (score_tmp[[i]] - pmi_min) / (pmi_max - pmi_min)
-  }
-
-  return(s)
-}
-
-
 PairwisePMI <- function(psa_list, list_words, s, method, cv_sep=F) {
   # Update the scoring matrix by calculating the PMI iteratively.
   #
@@ -71,11 +55,8 @@ PairwisePMI <- function(psa_list, list_words, s, method, cv_sep=F) {
       attributes(pmi_list_cons)  <- list(sound = "C")
       attributes(pmi_list_vowel) <- list(sound = "V")
 
-      score_tmp_c <- conv_pmi(pmi_list_cons)
-      score_tmp_v <- conv_pmi(pmi_list_vowel)
-
-      s <- pmi2dist(score_tmp_c, pmi_list_cons, s)
-      s <- pmi2dist(score_tmp_v, pmi_list_vowel, s)
+      s <- conv_pmi(pmi_list_cons, s)
+      s <- conv_pmi(pmi_list_vowel, s)
 
       s[C, V] <- Inf
       s[V, C] <- Inf
@@ -83,8 +64,6 @@ PairwisePMI <- function(psa_list, list_words, s, method, cv_sep=F) {
       pmi_list <- c(pmi_list_cons, pmi_list_vowel)
       rm(pmi_list_cons)
       rm(pmi_list_vowel)
-      rm(score_tmp_c)
-      rm(score_tmp_v)
       gc()
       gc()
     } else {
@@ -92,11 +71,7 @@ PairwisePMI <- function(psa_list, list_words, s, method, cv_sep=F) {
       rm(corpus_phone)
       gc()
       gc()
-      score_tmp <- conv_pmi(pmi_list)
-      s <- pmi2dist(score_tmp, pmi_list, s)
-      rm(score_tmp)
-      gc()
-      gc()
+      s <- conv_pmi(pmi_list, s)
     }
 
     # Compute the new PSA using the new scoring matrix.
