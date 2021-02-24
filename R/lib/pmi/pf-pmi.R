@@ -6,20 +6,19 @@ source("lib/pmi/pmi_tools.R")
 library(tictoc)
 
 PFPMI <- function(x, y, N1, N2, pair_freq_mat, seg_freq_vec) {
-  # Computes the PMI of symbol pair (x, y) in the corpus.
+  # Computes the PF-PMI of the feature vector pair (x, y) in the corpus.
   # Args:
-  #   x, y: the feature vectors
-  #   N1, N2: the denominators for the PMI
-  #   V1, V2: the paramators for the Laplace smoothing
-  #   pair_freq_mat: the frequency matrix of the feature pairs
-  #   seg_freq_vec: the frequency vector of the features
+  #   x, y: the feature vectors.
+  #   N1: the number of the feature pairs in the corpus.
+  #   N2: the number of the features.
+  #   pair_freq_mat: the frequency matrix of the feature pairs.
+  #   seg_freq_vec: the frequency vector of the features.
   #
   # Returns:
-  #   The PMI of the symbol pair (x, y).
-
-  feat.num <- length(x)
+  #   The list of the PF-PMI vector and the elements which were used for calculating the PF-PMI.
 
   f_xy <- pair_freq_mat[x, y]
+  # It is taken the diagonal of matrix A is if the PF-PMI1 is selected.
   if (g_pf_pmi == "1") {
     f_xy <- diag(f_xy)
   }
@@ -27,12 +26,13 @@ PFPMI <- function(x, y, N1, N2, pair_freq_mat, seg_freq_vec) {
   f_x <- seg_freq_vec[x]
   f_y <- seg_freq_vec[y]
 
-  A   <- (f_xy) / (N1) # probability of the co-occurrence frequency of xy
+  A <- (f_xy) / (N1)  # probability of the co-occurrence frequency of xy
   p_x <- (f_x) / (N2)  # probability of the occurrence frequency of x
   p_y <- (f_y) / (N2)  # probability of the occurrence frequency of y
-  B   <- p_x %*% t(p_y)
-  AB  <- t(A) %*% ginv(B)
+  B <- p_x %*% t(p_y)
+  AB <- t(A) %*% ginv(B)
 
+  # It is taken the diagonal of the PF-PMI matrix if the PF-PMI3 is selected.
   if (g_pf_pmi == "3") {
     AB <- diag(AB)
   }
@@ -61,7 +61,7 @@ UpdatePFPMI <- function(corpus_phone) {
   } else if (sound == "V") {
     mat.X.feat <- mat.V.feat
   }
-  feat.num <- dim(mat.X.feat)[2]
+  feat_num <- dim(mat.X.feat)[2]
 
   # Initialization for converting the corpus_phone to the feature corpus.
   feat_mat <- mat.X.feat
@@ -72,36 +72,54 @@ UpdatePFPMI <- function(corpus_phone) {
   tic()
 
   corpus_feat <- mclapply(1:N, (function(j, x, y){
+    # Make the corpus of the feature vector pairs.
+    # Args:
+    #   x: feat_mat
+    #   y: corpus_phone
+    #
+    # Returns:
+    #   The corpus of the feature vector pairs.
     mat <- rbind(x[y[1, j], ], x[y[2, j], ])
     mat <- apply(mat, 2, sort)
     return(mat)
   }), feat_mat, corpus_phone)
 
   corpus_feat1 <- mclapply(corpus_feat, (function(x){
+    # Make the list of all first vectors in all feature vector pairs.
+    # Args:
+    #   x: corpus_feat
+    #
+    # Returns:
+    #   The list of all first vectors in all feature vector pairs.
     return(x[1, ])
   }))
 
   corpus_feat2 <- mclapply(corpus_feat, (function(x){
+    # Make the list of all second vectors in all feature vector pairs.
+    # Args:
+    #   x: corpus_feat
+    #
+    # Returns:
+    #   The list of all second vectors in all feature vector pairs.
     return(x[2, ])
   }))
 
-  #####
-  a <- unlist(corpus_feat1)
-  b <- unlist(corpus_feat2)
+  a <- unlist(corpus_feat1)  # The vector of the corpus_feat1.
+  b <- unlist(corpus_feat2)  # The vector of the corpus_feat2.
 
-  mat_a <- matrix(NA, N, feat.num)
-  mat_b <- matrix(NA, N, feat.num)
+  mat_a <- matrix(NA, N, feat_num)
+  mat_b <- matrix(NA, N, feat_num)
 
-  len <- N * feat.num
-  for (j in 1:feat.num) {
-    mat_a[, j] <- a[seq(j, len, feat.num)]
-    mat_b[, j] <- b[seq(j, len, feat.num)]
+  len <- N * feat_num
+  for (j in 1:feat_num) {
+    mat_a[, j] <- a[seq(j, len, feat_num)]
+    mat_b[, j] <- b[seq(j, len, feat_num)]
   }
 
-  corpus_feat <- matrix(NA, (N * 2), feat.num)
+  # Remake the feature corpus as a matrix.
+  corpus_feat <- matrix(NA, (N * 2), feat_num)
   corpus_feat[seq(1, dim(corpus_feat)[1], 2), ] <- mat_a
   corpus_feat[seq(2, dim(corpus_feat)[1], 2), ] <- mat_b
-  #####
   toc()
 
   # Create the feature pairs matrix.
