@@ -1,14 +1,19 @@
-make_idx_mat <- function(pair_mat) {
+make_feat_idx_mat <- function(feat_pair_mat) {
+  # Make the matrix of the feature indexes.
+  # Args:
+  #   feat_pair_mat: The matrix of the feature pairs.
+  #
+  # Returns:
+  #   The matrix of the feature indexes.
 
-  M <- dim(pair_mat)[1]
-  N <- dim(pair_mat)[2]
+  M <- dim(feat_pair_mat)[1]
 
-  pair_mat_idx <- matrix(NA, M, N)
+  feat_idx_mat <- matrix(NA, M, 2)
 
   for (i in 1:M) {
 
-    pf1 <- pair_mat[i, 1]
-    pf2 <- pair_mat[i, 2]
+    pf1 <- feat_pair_mat[i, 1]
+    pf2 <- feat_pair_mat[i, 2]
 
     if (sum(grep("C", pf1)) == 1) {
       X1 <- "C"
@@ -29,29 +34,28 @@ make_idx_mat <- function(pair_mat) {
     if (is.null(X1)) {
       seg1 <- 1
     } else {
-      seg1 <- as.numeric(unlist(strsplit(pair_mat[i, 1], X1))[1])
+      seg1 <- as.numeric(unlist(strsplit(feat_pair_mat[i, 1], X1))[1])
     }
 
     if (is.null(X2)) {
       seg2 <- 1
     } else {
-      seg2 <- as.numeric(unlist(strsplit(pair_mat[i, 2], X2))[1])
+      seg2 <- as.numeric(unlist(strsplit(feat_pair_mat[i, 2], X2))[1])
     }
-    pair_mat_idx[i, 1] <- seg1
-    pair_mat_idx[i, 2] <- seg2
+    feat_idx_mat[i, 1] <- seg1
+    feat_idx_mat[i, 2] <- seg2
 
   }
 
-  return(pair_mat_idx)
+  return(feat_idx_mat)
 }
 
 
-MakeFreqMat2 <- function(seg.pair.mat, corpus) {
+MakeFreqMat2 <- function(feat_pair_mat, corpus) {
   # Create the matrix of segment pairs frequency from a corpus.
   #
   # Args:
-  #   seg.vec: a segment vector
-  #   seg.pair.mat: a segment pairs matrix
+  #   feat_pair_mat: a segment pairs matrix
   #   corpus: a corpus
   #
   # Return:
@@ -59,41 +63,55 @@ MakeFreqMat2 <- function(seg.pair.mat, corpus) {
   print("MakeFreqMat")
   tic()
 
-  seg.vec      <- unique(as.vector(seg.pair.mat))
-  seg.num      <- length(seg.vec)
-  seg.pair.num <- dim(seg.pair.mat)[1]
+  feat_vec      <- unique(as.vector(feat_pair_mat))
+  feat_num      <- length(feat_vec)
+  feat_pair_num <- dim(feat_pair_mat)[1]
 
   # Calculate the frequency matrix for aligned segments.
-  seg.pair.freq.mat <- matrix(0, seg.num, seg.num,
-                              dimnames = list(seg.vec, seg.vec))
+  seg_pair_freq_mat <- matrix(0, feat_num, feat_num,
+                              dimnames = list(feat_vec, feat_vec))
 
+  # Make the matrix of the feature indexes.
+  feat_idx_mat <- make_feat_idx_mat(feat_pair_mat)
 
-  pair_mat_idx <- make_idx_mat(seg.pair.mat)
+  tmp_list <- mclapply(1:feat_pair_num, (function(i, x, y, z){
+    # Compute the number of all combinations of the features.
+    # Args:
+    #   x: feat_pair_mat
+    #   y: feat_idx_mat
+    #   z: corpus
+    #
+    # Returns:
+    #   The list of the number of the feature pairs in the corpus.
 
-  tmp_list <- mclapply(1:seg.pair.num, (function(i, x, y, z){
+    pf1 <- x[i, 1]  # The first feature of the feature pair.
+    pf2 <- x[i, 2]  # The second feature of the feature pair.
 
-    pf1 <- x[i, 1]
-    pf2 <- x[i, 2]
+    pf_num1 <- y[i, 1]  # Get the number of the first feature.
+    pf_num2 <- y[i, 2]  # Get the number of the second feature.
 
-    pf_idx1 <- y[i, 1]
-    pf_idx2 <- y[i, 2]
+    feat_vec_idx1 <- seq(1, dim(z)[1], 2)  # The indexes of all first feature vectors of all feature vector pairs.
+    feat_vec_idx2 <- seq(2, dim(z)[1], 2)  # The indexes of all second feature vectors of all feature vector pairs.
 
-    a <- z[seq(1, dim(z)[1], 2), pf_idx1] == pf1
-    b <- z[seq(2, dim(z)[1], 2), pf_idx2] == pf2
+    a <- z[feat_vec_idx1, pf_num1] == pf1
+    b <- z[feat_vec_idx2, pf_num2] == pf2
 
-    return(sum(a * b))
-  }), seg.pair.mat, pair_mat_idx, corpus)
+    # The total number of the feature pair of the 'pf1' and the 'pf2' in the corpus.
+    feat_pair_freq <- sum(a * b)
 
-  for (i in 1:seg.pair.num) {
-    x <- seg.pair.mat[i, 1]
-    y <- seg.pair.mat[i, 2]
-    seg.pair.freq.mat[x, y] <- tmp_list[[i]]
+    return(feat_pair_freq)
+  }), feat_pair_mat, feat_idx_mat, corpus)
+
+  for (i in 1:feat_pair_num) {
+    x <- feat_pair_mat[i, 1]
+    y <- feat_pair_mat[i, 2]
+    seg_pair_freq_mat[x, y] <- tmp_list[[i]]
   }
 
-  t_seg.pair.freq.mat <- t(seg.pair.freq.mat)
-  diag(t_seg.pair.freq.mat) <- 0
-  seg.pair.freq.mat <- seg.pair.freq.mat + t_seg.pair.freq.mat
+  t_seg_pair_freq_mat <- t(seg_pair_freq_mat)
+  diag(t_seg_pair_freq_mat) <- 0
+  seg_pair_freq_mat <- seg_pair_freq_mat + t_seg_pair_freq_mat
 
   toc()
-  return(seg.pair.freq.mat)
+  return(seg_pair_freq_mat)
 }
