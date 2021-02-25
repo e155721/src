@@ -6,21 +6,21 @@ source("lib/pmi/pmi_tools.R")
 library(tictoc)
 
 
-PFPMI <- function(x, y, N1, N2, V, pair_freq_mat, seg_freq_vec) {
+PFPMI <- function(x, y, N1, N2, smp, pair_freq_mat, seg_freq_vec) {
   # Computes the PF-PMI of the feature vector pair (x, y) in the corpus.
   # Args:
   #   x, y: the feature vectors.
   #   N1: the number of the feature pairs in the corpus.
   #   N2: the number of the features.
-  #   V: the list of the smoothing parameters.
+  #   smp: the list of the smoothing parameters.
   #   pair_freq_mat: the frequency matrix of the feature pairs.
   #   seg_freq_vec: the frequency vector of the features.
   #
   # Returns:
   #   The list of the PF-PMI vector and the elements which were used for calculating the PF-PMI.
 
-  V1 <- V[[1]]  # the vector that each element is the number of the feature pair types.
-  V2 <- V[[2]]  # the vector that each element is the number of the feature types.
+  V1 <- smp[[1]]  # the smoothing parameter about the number of the feature pair types.
+  V2 <- smp[[2]]  # the smoothing parameter about the number of the feature types.
 
   f_xy <- pair_freq_mat[x, y]
   # It is taken the diagonal of matrix A is if the PF-PMI1 is selected.
@@ -140,7 +140,13 @@ UpdatePFPMI <- function(corpus_phone) {
   N2 <- N1 * 2  # number of features in the aligned faetures
 
   # Initialization for the Laplace smoothing
-  V <- smoothing(pair_mat, mat.X.feat)
+  if (g_pf_pmi == "1") {
+    smp <- smoothing(pair_mat, mat.X.feat)
+  } else {
+    smp <- list()
+    smp[[1]] <- dim(pair_mat)[1]  # the number of the feature pair types.
+    smp[[2]] <- length(unique(as.vector(pair_mat)))  # the number of the feature types.
+  }
 
   # Calculate the PF-PMI for all segment pairs.
   print("Calculating pf_pmi_list")
@@ -152,7 +158,7 @@ UpdatePFPMI <- function(corpus_phone) {
     x_feat <- feat_mat[x, ]
     y_feat <- feat_mat[y, ]
 
-    pf_pmi <- PFPMI(x_feat, y_feat, N1, N2, V,
+    pf_pmi <- PFPMI(x_feat, y_feat, N1, N2, smp,
                     pair_freq_mat = pair_freq_mat, seg_freq_vec = seg_freq_vec)
 
     pf_pmi$V1 <- x
