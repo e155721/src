@@ -5,17 +5,22 @@ source("lib/pmi/pmi_tools.R")
 
 library(tictoc)
 
-PFPMI <- function(x, y, N1, N2, pair_freq_mat, seg_freq_vec) {
+
+PFPMI <- function(x, y, N1, N2, V, pair_freq_mat, seg_freq_vec) {
   # Computes the PF-PMI of the feature vector pair (x, y) in the corpus.
   # Args:
   #   x, y: the feature vectors.
   #   N1: the number of the feature pairs in the corpus.
   #   N2: the number of the features.
+  #   V: the list of the smoothing parameters.
   #   pair_freq_mat: the frequency matrix of the feature pairs.
   #   seg_freq_vec: the frequency vector of the features.
   #
   # Returns:
   #   The list of the PF-PMI vector and the elements which were used for calculating the PF-PMI.
+
+  V1 <- V[[1]]  # the vector that each element is the number of the feature pair types.
+  V2 <- V[[2]]  # the vector that each element is the number of the feature types.
 
   f_xy <- pair_freq_mat[x, y]
   # It is taken the diagonal of matrix A is if the PF-PMI1 is selected.
@@ -26,9 +31,9 @@ PFPMI <- function(x, y, N1, N2, pair_freq_mat, seg_freq_vec) {
   f_x <- seg_freq_vec[x]
   f_y <- seg_freq_vec[y]
 
-  A <- (f_xy) / (N1)  # probability of the co-occurrence frequency of xy
-  p_x <- (f_x) / (N2)  # probability of the occurrence frequency of x
-  p_y <- (f_y) / (N2)  # probability of the occurrence frequency of y
+  A <- (f_xy + 1) / (N1 + V1)  # probability of the co-occurrence frequency of xy
+  p_x <- (f_x + 1) / (N2 + V2)  # probability of the occurrence frequency of x
+  p_y <- (f_y + 1) / (N2 + V2)  # probability of the occurrence frequency of y
   B <- p_x %*% t(p_y)
   AB <- t(A) %*% ginv(B)
 
@@ -134,6 +139,9 @@ UpdatePFPMI <- function(corpus_phone) {
   N1 <- dim(corpus_phone)[2]  # number of the aligned features
   N2 <- N1 * 2  # number of features in the aligned faetures
 
+  # Initialization for the Laplace smoothing
+  V <- smoothing(pair_mat, mat.X.feat)
+
   # Calculate the PF-PMI for all segment pairs.
   print("Calculating pf_pmi_list")
   pf_pmi_list <- foreach(i = 1:phone_pair_num, .inorder = T) %dopar% {
@@ -144,7 +152,7 @@ UpdatePFPMI <- function(corpus_phone) {
     x_feat <- feat_mat[x, ]
     y_feat <- feat_mat[y, ]
 
-    pf_pmi <- PFPMI(x_feat, y_feat, N1, N2,
+    pf_pmi <- PFPMI(x_feat, y_feat, N1, N2, V,
                     pair_freq_mat = pair_freq_mat, seg_freq_vec = seg_freq_vec)
 
     pf_pmi$V1 <- x

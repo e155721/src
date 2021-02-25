@@ -5,23 +5,6 @@ source("lib/load_phoneme.R")
 source("lib/pmi/pmi_tools.R")
 
 
-smoothing <- function(pair_mat, feat.num) {
-  # Initialization for the Laplace smoothing
-  V1.all <- unique(paste(pair_mat[, 1], pair_mat[, 2]))  # number of segment pair types
-  V2.all <- unique(as.vector(pair_mat))  # number of symbol types
-  V1 <- NULL  # The number of feature pair types for each column.
-  V2 <- NULL  # The number of feature types for each column.
-  for (p in 1:feat.num) {
-    V1[p] <- length(c(grep(paste(p, "C", sep = ""), V1.all),
-                      grep(paste(p, "V", sep = ""), V1.all)))
-    V2[p] <- length(c(grep(paste(p, "C", sep = ""), V2.all),
-                      grep(paste(p, "V", sep = ""), V2.all)))
-  }
-
-  list(V1, V2)
-}
-
-
 UpdatePFPMI0 <- function(corpus_phone) {
   # Create the segment vector and the segment pairs matrix.
   phone_pair_mat <- make_pair_mat(corpus_phone)

@@ -215,3 +215,33 @@ conv_pmi <- function(pmi_list, s) {
 
   return(s)
 }
+
+
+smoothing <- function(pair_mat, mat.X.feat) {
+
+
+  sound <- attributes(mat.X.feat)$sound
+
+  feat_vec <- unique(as.vector(pair_mat))  # number of symbol types
+
+  pf1 <- unlist(strsplit(pair_mat[, 1], split = sound))
+  pf1 <- pf1[seq(1, length(pf1), 2)]
+  pf2 <- unlist(strsplit(pair_mat[, 2], split = sound))
+  pf2 <- pf2[seq(1, length(pf2), 2)]
+
+  feat_num <- dim(mat.X.feat)[2]
+  V1 <- NULL  # The number of feature pair types for each column.
+  V2 <- NULL  # The number of feature types for each column.
+
+  # Initialization for the Laplace smoothing
+  for (p in 1:feat_num) {
+    idx1 <- pf1 == p
+    idx2 <- pf2 == p
+
+    V1[p] <- sum(idx1 * idx2)
+    V2[p] <- length(grep(paste(p, sound, sep = ""), feat_vec))
+
+  }
+
+  list(V1, V2)
+}
