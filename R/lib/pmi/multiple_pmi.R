@@ -43,7 +43,7 @@ ChangeListMSA2PSA <- function(msa.list, s) {
 pa_loop <- function(word_list, s) {
 
   pa_list <- foreach(seq_list = word_list) %dopar% {
-    ProgressiveAlignment(seq_list, s, F)
+    ProgressiveAlignment(seq_list, s)
   }
 
   return(pa_list)
@@ -53,7 +53,7 @@ pa_loop <- function(word_list, s) {
 bf_loop <- function(msa_list, s) {
 
   bf_list <- lapply(msa_list, (function(msa, s){
-    bf_list <- BestFirst(msa, s, F)
+    bf_list <- BestFirst(msa, s)
     return(bf_list)
   }), s)
 

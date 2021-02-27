@@ -109,7 +109,7 @@ make_region_dist <- function(word_list, method, s, output_dir) {
 
         } else {
           len <- max(length(DelGap(seq1)), length(DelGap(seq2))) - 1
-          ldn_mat[p, q] <- needleman_wunsch(DelGap(seq1), DelGap(seq2), s, select_min = T)$score / len
+          ldn_mat[p, q] <- needleman_wunsch(DelGap(seq1), DelGap(seq2), s)$score / len
         }
 
       }

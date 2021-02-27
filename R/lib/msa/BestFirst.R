@@ -3,7 +3,7 @@ source("lib/load_nwunsch.R")
 
 source("lib/load_scoring_matrix.R")
 
-BestFirst <- function(msa, s, similarity=T) {
+BestFirst <- function(msa, s) {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -20,12 +20,6 @@ BestFirst <- function(msa, s, similarity=T) {
   count <- 0  # loop counter
   max <- 2 * N * N  # max iteration
 
-  if (similarity) {
-    min <- F
-  } else {
-    min <- T
-  }
-
   # START OF ITERATION
   while (1) {
 
@@ -39,7 +33,7 @@ BestFirst <- function(msa, s, similarity=T) {
       # Removes the ith sequence.
       seq1 <- msa$aln[drop = F, i, ]
       seq2 <- DelGap(msa$aln[drop = F, -i, ])
-      needleman_wunsch(seq1, seq2, s, select_min = min)
+      needleman_wunsch(seq1, seq2, s)
     }
 
     score.vec <- c()
@@ -47,34 +41,17 @@ BestFirst <- function(msa, s, similarity=T) {
       score.vec[i] <- msa.new[[i]]$score
 
     # Refines the alignment score.
-    if (similarity) {
-      # Find a maximum MSA score.
-      score.max <- grep(score.vec, pattern = max(score.vec))
-      score.max <- score.max[1]
-      score.new <- score.vec[score.max]
+    score.min <- grep(score.vec, pattern = min(score.vec))
+    score.min <- score.min[1]
+    score.new <- score.vec[score.min]
 
-      if (score.new > msa$score) {
-        count <- count + 1
-        msa <- list()
-        msa$aln <- DelGap(msa.new[[score.max]]$aln)
-        msa$score <- score.new
-      } else {
-        break
-      }
+    if (score.new < msa$score) {
+      count <- count + 1
+      msa <- list()
+      msa$aln <- DelGap(msa.new[[score.min]]$aln)
+      msa$score <- score.new
     } else {
-      # Find a minimum MSA score.
-      score.min <- grep(score.vec, pattern = min(score.vec))
-      score.min <- score.min[1]
-      score.new <- score.vec[score.min]
-
-      if (score.new < msa$score) {
-        count <- count + 1
-        msa <- list()
-        msa$aln <- DelGap(msa.new[[score.min]]$aln)
-        msa$score <- score.new
-      } else {
-        break
-      }
+      break
     }
 
   }

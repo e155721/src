@@ -1,7 +1,7 @@
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-RemoveFirst <- function(msa, s, similarity=T) {
+RemoveFirst <- function(msa, s) {
   # Compute the multiple alignment using remove first method.
   #
   # Args:
@@ -18,12 +18,6 @@ RemoveFirst <- function(msa, s, similarity=T) {
   score <- msa$score
   count <- 0         # loop counter
   kMax <- 2 * N * N  # max iteration
-
-  if (similarity) {
-    min <- F
-  } else {
-    min <- T
-  }
 
   # START OF ITERATION
   i <- 1
@@ -43,22 +37,12 @@ RemoveFirst <- function(msa, s, similarity=T) {
     score.new <- msa.tmp$score
 
     # Refine the alignment score.
-    if (similarity) {
-      if (score.new > score) {
-        count <- count + 1
-        msa <- msa.new
-        score <- score.new
-      } else {
-        i <- i + 1
-      }
+    if (score.new < score) {
+      count <- count + 1
+      msa <- msa.new
+      score <- score.new
     } else {
-      if (score.new < score) {
-        count <- count + 1
-        msa <- msa.new
-        score <- score.new
-      } else {
-        i <- i + 1
-      }
+      i <- i + 1
     }
 
   }

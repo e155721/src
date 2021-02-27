@@ -1,7 +1,7 @@
 source("lib/needleman_wunsch/scoring_function/general.R")
 
 
-needleman_wunsch <- function(seq1, seq2, s, select_min=F) {
+needleman_wunsch <- function(seq1, seq2, s) {
   # get the lengths of sequences
   len_seq1 <- dim(seq1)[2]
   len_seq2 <- dim(seq2)[2]
@@ -37,11 +37,7 @@ needleman_wunsch <- function(seq1, seq2, s, select_min=F) {
       d3 <- calc_d3(mat, i, j, s, g1, seq2)
 
       d <- c(NA, NA)
-      if (select_min) {
-        d[1] <- min(d1, d2, d3)
-      } else {
-        d[1] <- max(d1, d2, d3)
-      }
+      d[1] <- min(d1, d2, d3)
 
       if (len_seq1 <= len_seq2) {
         if (d[1] == d3) {

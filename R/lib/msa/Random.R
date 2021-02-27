@@ -2,7 +2,7 @@ source("lib/msa/ProgressiveAlignment.R")
 source("lib/load_data_processing.R")
 source("lib/load_nwunsch.R")
 
-Random <- function(msa, s, similarity=F) {
+Random <- function(msa, s) {
   # Computes the multiple alignment using progressive method.
   #
   # Args:
@@ -45,22 +45,12 @@ Random <- function(msa, s, similarity=F) {
     score.new <- msa.tmp$score
 
     # Refine the alignment score.
-    if (similarity) {
-      if (score.new > msa$score) {
-        count <- count + 1
-        msa <- msa.new
-        score <- score.new
-      } else {
-        i <- i + 1
-      }
+    if (score.new < msa$score) {
+      count <- count + 1
+      msa <- msa.new
+      score <- score.new
     } else {
-      if (score.new < msa$score) {
-        count <- count + 1
-        msa <- msa.new
-        score <- score.new
-      } else {
-        i <- i + 1
-      }
+      i <- i + 1
     }
 
   }

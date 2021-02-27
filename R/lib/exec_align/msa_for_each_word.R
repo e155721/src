@@ -3,7 +3,7 @@ source("lib/load_verif_lib.R")
 source("lib/msa/ProgressiveAlignment.R")
 source("lib/msa/BestFirst.R")
 
-MSAforEachWord <- function(word_list, s, similarity=F) {
+MSAforEachWord <- function(word_list, s) {
   # Compute the MSA for each word.
   # Args:
   #   ansrate.file: The path of the matching rate file.
@@ -14,14 +14,14 @@ MSAforEachWord <- function(word_list, s, similarity=F) {
   #   The list of MSA for each word.
 
   msa_list <- foreach(seq_list = word_list) %dopar% {
-    ProgressiveAlignment(seq_list, s, similarity)
+    ProgressiveAlignment(seq_list, s)
   }
 
-  msa_list <- lapply(msa_list, (function(msa_init, s, similarity){
+  msa_list <- lapply(msa_list, (function(msa_init, s){
     # Computes the MSA using the BestFirst method.
-    msa <- BestFirst(msa_init, s, similarity)
+    msa <- BestFirst(msa_init, s)
     return(msa)
-  }), s, similarity)
+  }), s)
 
   return(msa_list)
 }
