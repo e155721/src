@@ -43,7 +43,7 @@ make_psa_dist <- function(psa, s) {
 
 plot_tree <- function(phylo, tree_type, out_file) {
   # Plot the tre
-  pdf(out_file, width = 25, height = 25)
+  pdf(out_file, width = 25, height = 25, family = "Japan1")
   plot.phylo(phylo, type = tree_type, lab4ut = "axial")
   dev.off()
 }
