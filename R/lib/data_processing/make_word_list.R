@@ -13,7 +13,7 @@ make_word_list <- function(file) {
     concept      <- unique(csv[idx, 25])
 
     word_list[[i]] <- strsplit(csv[idx, 11], split = "_")
-    region_list    <- as.list(csv[idx, 19])
+    region_list    <- as.list(csv[idx, 23])
     N <- length(word_list[[i]])
     for (j in 1:N) {
       word_list[[i]][[j]] <- matrix(c(region_list[[j]], word_list[[i]][[j]]), nrow = 1)
