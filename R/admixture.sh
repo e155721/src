@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 #dir="admixture"
 #dir="../../Alignment/202103181617/msa_ld/"
