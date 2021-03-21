@@ -55,7 +55,8 @@ for (i in 1:N) {
 labels <- NULL
 for (idx in 1:N) {
 
-  x1 <- read.csv(file_list[[idx]]["input"], stringsAsFactors = F, fileEncoding = "UTF-8", colClasses = "character")
+  # An error is gotten if the file encoding is specified when calling this script from the web page.
+  x1 <- read.csv(file_list[[idx]]["input"], stringsAsFactors = F, colClasses = "character")
   labels <- unique(c(labels, x1[, 1]))
 
   x2 <- x1[, -1]
