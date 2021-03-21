@@ -6,9 +6,10 @@ source("parallel_config.R")
 
 
 method     <- commandArgs(trailingOnly = TRUE)[1]
-output_dir <- commandArgs(trailingOnly = TRUE)[2]
-cv_sep     <- commandArgs(trailingOnly = TRUE)[3]
-ext_name   <- commandArgs(trailingOnly = TRUE)[4]
+input_dir  <- commandArgs(trailingOnly = TRUE)[2]
+output_dir <- commandArgs(trailingOnly = TRUE)[3]
+cv_sep     <- commandArgs(trailingOnly = TRUE)[4]
+ext_name   <- commandArgs(trailingOnly = TRUE)[5]
 
 if (is.na(ext_name)) {
   ext_name <- NULL
@@ -22,8 +23,8 @@ if (!dir.exists(output_dir))
 
 acc_file <- paste(output_dir, "/", "acc_msa_", method, ext_name, ".txt", sep = "")
 
-word_list      <- make_word_list("../../Alignment/org_data/input.csv")
-word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
+word_list      <- make_word_list(paste(input_dir, "input.csv", sep = "/"))
+word_list_gold <- make_word_list(paste(input_dir, "gold.csv", sep = "/"))
 
 msa_rlt       <- execute_msa(method, word_list, output_dir, cv_sep)
 msa_list_gold <- lapply(word_list_gold, make_gold_msa)
