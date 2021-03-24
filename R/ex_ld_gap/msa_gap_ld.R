@@ -5,10 +5,16 @@ source("lib/load_phylo.R")
 source("parallel_config.R")
 
 
-output_dir_base <- commandArgs(trailingOnly = TRUE)[1]
+method          <- commandArgs(trailingOnly = TRUE)[1]
+input_dir       <- commandArgs(trailingOnly = TRUE)[2]
+output_dir_base <- commandArgs(trailingOnly = TRUE)[3]
+gap_max         <- commandArgs(trailingOnly = TRUE)[4]
 
-method <- "ld"
-p_vec <- 1:5
+if (is.na(gap_max)) {
+  p_vec <- 1:5
+} else {
+  p_vec <- 1:gap_max
+}
 
 for (p in p_vec) {
 
@@ -27,7 +33,11 @@ for (p in p_vec) {
   word_list_gold <- make_word_list("../../Alignment/org_data/gold.csv")
   msa_list_gold <- lapply(word_list_gold, make_gold_msa)
 
-  s <- MakeEditDistance(Inf, p)
+  if (method == "ld2") {
+    s <- MakeEditDistance2(Inf)  # using features
+  } else {
+    s <- MakeEditDistance(Inf)
+  }
   msa_list <- MSAforEachWord(word_list, s)
 
   output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
