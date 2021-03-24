@@ -25,7 +25,7 @@ msa_pmi <- function(fun, word_list, output_dir, cv_sep) {
 
   # Create an itnitial scoring matrix and a list of PSAs.
   s        <- MakeEditDistance(Inf)
-  psa_list <- PSAforEachWord(word_list, s, dist = T)
+  psa_list <- PSAforEachWord(word_list, s)
 
   # Update the scoring matrix using the PMI.
   s        <- PairwisePMI(psa_list, word_list, s, fun, cv_sep)$s
@@ -42,7 +42,7 @@ msa_pf_pmi0 <- function(fun, word_list, output_dir, cv_sep) {
 
   # Create an itnitial scoring matrix and a list of PSAs.
   s        <- MakeEditDistance(Inf)
-  psa_list <- PSAforEachWord(word_list, s, dist = T)
+  psa_list <- PSAforEachWord(word_list, s)
 
   # Update the scoring matrix using the PMI.
   s        <- PairwisePFPMI(psa_list, word_list, s, fun, cv_sep)$s
@@ -64,7 +64,7 @@ msa_pf_pmi <- function(fun, word_list, output_dir, cv_sep, method) {
 
   # Create an itnitial scoring matrix and a list of PSAs.
   s        <- MakeEditDistance(Inf)
-  psa_list <- PSAforEachWord(word_list, s, dist = T)
+  psa_list <- PSAforEachWord(word_list, s)
 
   # Update the scoring matrix using the PMI.
   s        <- PairwisePMI(psa_list, word_list, s, fun, cv_sep)$s

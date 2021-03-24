@@ -2,7 +2,7 @@ library(doMC)
 
 source("lib/load_verif_lib.R")
 
-PSAforEachWord <- function(word_list, s, dist = F) {
+PSAforEachWord <- function(word_list, s) {
   # Compute the PSA for each word.
   # Args:
   #   s: The scoring matrix.

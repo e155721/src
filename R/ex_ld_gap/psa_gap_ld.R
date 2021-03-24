@@ -28,7 +28,7 @@ for (p in p_vec) {
   psa_list_gold <- lapply(word_list_gold, make_gold_psa)
 
   s <- MakeEditDistance(Inf, p)
-  psa_list <- PSAforEachWord(word_list, s, dist = T)
+  psa_list <- PSAforEachWord(word_list, s)
 
   output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
 
