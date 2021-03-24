@@ -19,7 +19,7 @@ for (p in p_vec) {
 
   output_dir <- paste(output_dir_base, "/", "psa_", method, ext_name, "/", sep = "")
   if (!dir.exists(output_dir))
-    dir.create(output_dir)
+    dir.create(output_dir, recursive = T)
 
   acc_file <- paste(output_dir, "/", "acc_psa_", method, ext_name, ".txt", sep = "")
 
