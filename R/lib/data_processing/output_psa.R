@@ -68,9 +68,7 @@ output_psa <- function(psa_list, output_dir, ext, excel=F) {
                       eol = "\n", na = "NA")
     } else {
       write.csv(psa_mat, file = paste(output_dir, gsub("\\..*$", "", word), ext, sep = ""),
-                append = F, quote = T, sep = " ",
-                eol = "\n", na = "NA", dec = ".", row.names = F,
-                col.names = T, qmethod = "double", fileEncoding = "UTF-8")
+                quote = T, eol = "\n", na = "NA", row.names = F, fileEncoding = "UTF-8")
     }
   }
   # END OF LOOP
