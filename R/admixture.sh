@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#dir="admixture"
-#dir="../../Alignment/202103181617/msa_ld/"
 dir=$1
 
 Rscript admixture/admixture.R "$dir"
