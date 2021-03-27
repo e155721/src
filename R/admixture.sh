@@ -15,3 +15,13 @@ cd "$dir"
 snp-sites -v 0_all_site_jp.fas > 0_all_site_jp.vcf
 vcftools --vcf 0_all_site_jp.vcf --plink --out 0_all_site_jp
 plink --file 0_all_site_jp --recode12 -out 0_all_site_jp
+
+rm *.fas
+rm *.log
+rm *.nosex
+rm *.vcf
+rm -r cons_fas vowe_fas infile_fol
+
+mkdir admixture_input
+mv *.ped admixture_input
+mv *.map admixture_input
