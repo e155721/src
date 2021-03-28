@@ -20,3 +20,7 @@ ex/bul: ブルガリア諸語における検証実験 ('master'に'lang/bulgaria
 ex/ryukyu1: 琉球諸語における検証実験1 ('master'に'lang/ryukyuan'をマージ)
 ex/ryukyu2: 琉球諸語における検証実験2 ('master'に'lang/ryukyuan'，'pf-pmi/features'をマージ)
 ex/ryukyu3: 琉球諸語における検証実験3 ('master'に'lang/ryukyuan'，'pf-pmi/features'，'pf-pmi/normalizing'をマージ)
+
+# Webアプリケーションのためのブランチ
+web-app/base: Webアプリケーションのために整理したブランチ (検証実験のためのスクリプトを削除，Webアプリケーション向けのスクリプトを追加)
+web-app/ryukyu-lang: 'web-app/base'に'lang/ryukyuan'，'pf-pmi/features'，'pf-pmi/normalization'をマージ
