@@ -8,28 +8,6 @@ output_dir="../data/${dir_name}"
 
 cd r
 
-# PSA
-echo "PSA LD"
-Rscript execution/execution_psa.R "ld" "$input_file" "$output_dir" "T" >/dev/null
-echo
-
-echo "PSA PMI"
-Rscript execution/execution_psa.R "pmi" "$input_file" "$output_dir" "T" >/dev/null
-echo
-
-echo "PSA PF-PMI1"
-Rscript execution/execution_psa.R "pf-pmi1" "$input_file" "$output_dir" "T" >/dev/null
-echo
-
-echo "PSA PF-PMI2"
-Rscript execution/execution_psa.R "pf-pmi2" "$input_file" "$output_dir" "T" >/dev/null
-echo
-
-echo "PSA PF-PMI3"
-Rscript execution/execution_psa.R "pf-pmi3" "$input_file" "$output_dir" "T" >/dev/null
-echo
-
-
 # MSA
 echo "MSA LD"
 Rscript execution/execution_msa.R "ld" "$input_file" "$output_dir" "T" >/dev/null
