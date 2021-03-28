@@ -33,3 +33,21 @@
                      dist_mat.nexus:   距離行列
                      nj_rooted.pdf:    NJ法による有根系統樹
                      nj_unrooted.pdf:  NJ法による無根系統樹
+
+# ADMIXTURE入力ファイルの生成について
+ADMIXTUREへの入力ファイルは，'admixture.sh'によって生成されます．
+このスクリプトは'ryukyu.sh'内で呼び出されます．
+
+# ブランチについて
+web-app/base: 'master'にある検証実験用のスクリプトを削除
+              Webアプリケーション用のRスクリプトを追加 ('execution/')
+              上記のRスクリプトを実行するためのシェルスクリプトを追加（'ryukyu.sh'）
+
+web-app/ryukyu-lang: 'web-app/base'に以下3つのブランチをマージ
+                     lang/ryukyuan: 琉球諸語を扱うために，制約条件として子音と母音の間へのギャップ挿入を禁止する
+                     pf-pmi/features: PF-PMI1，PF-PMI2，PF-PMI3において，「音なし」については音素素性の種類を考慮しない
+                     pf-pmi/normalizing: PF-PMI1，PF-PMI2，PF-PMI3において，子音と母音の素性PMIの正規化を分けずに行う
+
+'execution/'に含まれるRスクリプト，及び'ryukyu.sh'以外のスクリプトに関わる変更は，
+'master'から作成したブランチで行い，'master'にマージする．その後，'web-app/base'を'master'にrebaseする．
+
