@@ -20,6 +20,7 @@ rm *.fas
 rm *.log
 rm *.nosex
 rm *.vcf
+rm SpList.txt
 rm -r cons_fas vowe_fas infile_fol
 
 mkdir admixture_input
