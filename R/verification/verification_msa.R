@@ -56,7 +56,7 @@ save(msa_list_gold, file = paste(output_dir_aln, "msa_", method, "_lg.RData", se
 
 # Plot the phylogenetic trees and the networks.
 psa_list <- ChangeListMSA2PSA(msa_list, s)
-Plot(psa_list, output_dir, method, s)
+phylo_each_word(psa_list, output_dir, method, s)
 
 # Calculate the regional distance matrix.
 make_region_dist(word_list, method, s, output_dir)

@@ -55,7 +55,7 @@ save(psa_list, file = paste(output_dir_aln, "psa_", method, ".RData", sep = ""))
 save(psa_list_gold, file = paste(output_dir_aln, "psa_", method, "_lg.RData", sep = ""))
 
 # Plot the phylogenetic trees and the networks.
-Plot(psa_list, output_dir, method, s)
+phylo_each_word(psa_list, output_dir, method, s)
 
 # Calculate the regional distance matrix.
 make_region_dist(word_list, method, s, output_dir)

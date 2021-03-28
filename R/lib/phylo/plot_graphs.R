@@ -49,7 +49,7 @@ plot_tree <- function(phylo, tree_type, out_file) {
 }
 
 
-Plot <- function(psa_list, output_dir, method, s) {
+phylo_each_word <- function(psa_list, output_dir, method, s) {
 
   output_dir  <- paste(output_dir, "graph1", sep = "/")
   if (!dir.exists(output_dir)) dir.create(output_dir)
