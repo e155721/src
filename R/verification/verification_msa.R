@@ -59,4 +59,4 @@ psa_list <- ChangeListMSA2PSA(msa_list, s)
 phylo_each_word(psa_list, output_dir, method, s)
 
 # Calculate the regional distance matrix.
-make_region_dist(word_list, method, s, output_dir)
+phylo_all_word(word_list, method, s, output_dir)

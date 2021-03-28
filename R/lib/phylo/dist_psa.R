@@ -32,7 +32,7 @@ del_na <- function(x) {
 }
 
 
-make_region_dist <- function(word_list, method, s, output_dir) {
+phylo_all_word <- function(word_list, method, s, output_dir) {
   # Make
   word_vec <- NULL
   for (word in word_list) {
