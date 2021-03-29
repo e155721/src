@@ -29,6 +29,31 @@ add_attr <- function(x, attr) {
 }
 
 
+zero2gap <- function(feat_mat) {
+
+  sound <- attributes(feat_mat)$sound
+
+  if (sound == "C") {
+    X <- "C0"
+    mat.X.feat <- feat_mat
+  }
+  else if (sound == "V") {
+    X <- "V0"
+    mat.X.feat <- feat_mat
+  }
+  else if (sound == "CV") {
+    X <- "CV0"
+    mat.X.feat <- feat_mat
+  } else {
+    stop("The 'sound' argument of the 'zero2gap' is NULL.")
+  }
+
+  idx <- grep(X, mat.X.feat)
+  mat.X.feat[idx] <- paste("0", X, sep = "")
+  return(mat.X.feat)
+}
+
+
 get_phone_info <- function(cons_file, vowel_file) {
 
   # Consonant features
@@ -48,12 +73,14 @@ get_phone_info <- function(cons_file, vowel_file) {
     mat.C.feat[, j] <- paste(j, "C", mat.C.feat[, j], sep = "")
   }
   mat.C.feat <- add_attr(mat.C.feat, list(sound = "C"))
+  mat.C.feat <- zero2gap(mat.C.feat)
 
   N.vowel <- dim(mat.V.feat)[2]
   for (j in 1:N.vowel) {
     mat.V.feat[, j] <- paste(j, "V", mat.V.feat[, j], sep = "")
   }
   mat.V.feat <- add_attr(mat.V.feat, list(sound = "V"))
+  mat.V.feat <- zero2gap(mat.V.feat)
 
   if (N.cons == N.vowel) {
 
@@ -64,6 +91,7 @@ get_phone_info <- function(cons_file, vowel_file) {
       mat.CV.feat[, j] <- paste(j, "CV", mat.CV.feat[, j], sep = "")
     }
     mat.CV.feat <- add_attr(mat.CV.feat, list(sound = "CV"))
+    mat.CV.feat <- zero2gap(mat.CV.feat)
 
     assign(x = "CV", value = CV, envir = .GlobalEnv)
     assign(x = "mat.CV.feat", value = mat.CV.feat, envir = .GlobalEnv)
