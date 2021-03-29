@@ -35,9 +35,16 @@
                      nj_rooted.pdf:    NJ法による有根系統樹
                      nj_unrooted.pdf:  NJ法による無根系統樹
 
-# ADMIXTURE入力ファイルの生成について
-ADMIXTUREへの入力ファイルは，'admixture.sh'によって生成されます．
-このスクリプトは'ryukyu.sh'内で呼び出されます．
+# シェルスクリプトについて
+ryukyu.sh: 6つのメソッドそれぞれで，アラインメント，系統樹，距離行列の算出を行います．
+ryukyu_ld: Levenshtein距離によるアラインメントと，系統樹，距離行列の算出を行います．
+ryukyu_ld2: 音素素性による重み付けを用いたLevenshtein距離によるアラインメントと，系統樹，距離行列の算出を行います．
+ryukyu_pmi: PMIによるアラインメントと，系統樹，距離行列の算出を行います．
+ryukyu_pf-pmi1: PF-PMI1によるアラインメントと，系統樹，距離行列の算出を行います．
+ryukyu_pf-pmi2: PF-PMI2によるアラインメントと，系統樹，距離行列の算出を行います．
+ryukyu_pf-pmi3: PF-PMI3によるアラインメントと，系統樹，距離行列の算出を行います．
+
+admixture.sh: ADMIXTUREへの入力ファイルを生成します．このスクリプトは'ryukyu.sh'，'ryukyu_*.sh'内で呼び出されます．
 
 # ブランチについて
 web-app/base: 'master'にある検証実験用のスクリプトを削除
@@ -51,4 +58,3 @@ web-app/ryukyu-lang: 'web-app/base'に以下3つのブランチをマージ
 
 'execution/'に含まれるRスクリプト，及び'ryukyu.sh'以外のスクリプトに関わる変更は，
 'master'から作成したブランチで行い，'master'にマージする．その後，'web-app/base'を'master'にrebaseする．
-
