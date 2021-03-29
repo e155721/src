@@ -16,6 +16,11 @@ Rscript execution/execution_msa.R "ld" "$input_file" "$output_dir" "T" >/dev/nul
 echo
 ./admixture.sh "${output_dir}/msa_ld"
 
+echo "MSA LD2"
+Rscript execution/execution_msa.R "ld2" "$input_file" "$output_dir" "T" >/dev/null
+echo
+./admixture.sh "${output_dir}/msa_ld2"
+
 echo "MSA PMI"
 Rscript execution/execution_msa.R "pmi" "$input_file" "$output_dir" "T" >/dev/null
 echo
