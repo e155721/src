@@ -55,13 +55,12 @@ PairwisePMI <- function(psa_list, list_words, s, method, cv_sep=F) {
       attributes(pmi_list_cons)  <- list(sound = "C")
       attributes(pmi_list_vowel) <- list(sound = "V")
 
-      s <- conv_pmi(pmi_list_cons, s)
-      s <- conv_pmi(pmi_list_vowel, s)
+      pmi_list <- c(pmi_list_cons, pmi_list_vowel)
+      s <- conv_pmi(pmi_list, s)
 
       s[C, V] <- Inf
       s[V, C] <- Inf
 
-      pmi_list <- c(pmi_list_cons, pmi_list_vowel)
       rm(pmi_list_cons)
       rm(pmi_list_vowel)
       gc()
