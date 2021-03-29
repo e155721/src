@@ -9,8 +9,9 @@
   msa_アラインメントメソッド
 
   アラインメントメソッドには以下の6つがあります．
-  ld:     Levenshtein距離
-  pmi:    PMI
+  ld:      Levenshtein距離
+  ld2:     音素素性による重み付けを用いたLevenshtein距離
+  pmi:     PMI
   pf-pmi1: 素性PMI1
   pf-pmi2: 素性PMI2
   pf-pmi3: 素性PMI3
