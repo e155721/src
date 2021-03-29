@@ -1,6 +1,7 @@
 make_word_list <- function(file) {
 
-  csv <- read.csv(file, fileEncoding = "UTF-8", stringsAsFactors = F)
+  ## CSV files are not read correctly on a container if the 'fileEncoding' is specified.
+  csv <- read.csv(file, stringsAsFactors = F)
 
   word_id <- sort(unique(csv[, 2]))
   word_list <- list()
