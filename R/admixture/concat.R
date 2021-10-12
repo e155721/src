@@ -21,6 +21,7 @@ concat_seq <- function(input_dir, output_file) {
       seqs <- grep(">", x[, 1], invert = T)
 
       y1 <- gsub(pattern = ">", replacement = "", x[labels, ])
+      y1 <- unique(y1)  # delete labels repeated
       y2 <- x[seqs, ]
       len_seq <- length(unlist(strsplit(y2[1], split = "")))
 
