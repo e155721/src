@@ -78,9 +78,8 @@ phylo_each_word <- function(psa_list, output_dir, method, s) {
 
   rlt <- foreach(i = 1:M) %dopar% {
 
-    word <- attributes(psa_list[[i]])$word
-    word <- unlist(strsplit(word, split = "_"))
-    word <- paste(word[c(1, 3)], collapse = "_")  # combine the word ID and the assumed form.
+    # Get the assumed form.
+    word <- attributes(msa_list[[i]])$word
 
     psa        <- psa_list[[i]]
     psa_dist   <- make_psa_dist(psa, s)

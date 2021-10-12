@@ -1,27 +1,27 @@
 make_word_list <- function(file) {
-
+  
   ## CSV files are not read correctly on a container if the 'fileEncoding' is specified.
   csv <- read.csv(file, stringsAsFactors = F)
-
-  word_id <- sort(unique(csv[, 2]))
+  
+  word_id <- sort(unique(csv[, 6]))
   word_list <- list()
   M <- length(word_id)
-
+  
   for (i in 1:M) {
-
-    idx <- csv[, 2] == word_id[i]
+    
+    idx <- csv[, 6] == word_id[i]
     assumed_form <- unique(csv[idx, 6])
     concept      <- unique(csv[idx, 25])
-
+    
     word_list[[i]] <- strsplit(csv[idx, 11], split = "_")
     region_list    <- as.list(csv[idx, 23])
     N <- length(word_list[[i]])
     for (j in 1:N) {
       word_list[[i]][[j]] <- matrix(c(region_list[[j]], word_list[[i]][[j]]), nrow = 1)
     }
-    attributes(word_list[[i]]) <- list(word = paste(word_id[i], "_", concept, "_", assumed_form, sep = ""))
-
+    attributes(word_list[[i]]) <- list(word = paste(assumed_form, sep = ""))
+    
   }
-
+  
   return(word_list)
 }
