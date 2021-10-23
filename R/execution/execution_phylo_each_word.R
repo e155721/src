@@ -5,10 +5,12 @@ method     <- commandArgs(trailingOnly = TRUE)[1]
 input_dir  <- commandArgs(trailingOnly = TRUE)[2]
 
 # 出力ディレクトリを設定
-output_dir <- input_dir
+output_dir <- paste(input_dir, "/", "msa_", method, "/", sep = "")
+
 # 入力ディレクトリを，指定されたメソッドのアラインメント結果が
 # 保存されているディレクトリに再設定
-input_dir  <- paste(input_dir, "/", "msa_", method, "/", "alignment", "/", sep = "")
+input_dir  <- paste(output_dir, "/", "alignment", "/", sep = "")
+
 # 入力ファイルを指定
 input_file <- paste(input_dir, "msa_rlt.RData", sep = "")
 
