@@ -39,13 +39,9 @@ output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
 # MSAを出力する
 output_msa(msa_list, output_dir_aln, ext = ".csv", excel = T)
 
-# MSAをPSAに分解する
-psa_list <- ChangeListMSA2PSA(msa_list, s)
-# 単語ごとの系統樹，距離行列を出力する
-phylo_each_word(psa_list, output_dir, method, s)
-
-# 全ての単語による系統樹，距離行列を出力する
-phylo_all_word(word_list, method, s, output_dir)
+# 発音記号列、MSAをRDataファイルに保存する
+save(word_list, file = paste(output_dir, "/alignment/", "word_list.RData", sep = ""))
+save(msa_rlt, file = paste(output_dir, "/alignment/", "msa_rlt.RData", sep = ""))
 
 # Output the README.txt
 read_me <- ("
