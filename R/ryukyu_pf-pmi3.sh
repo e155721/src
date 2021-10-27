@@ -13,4 +13,7 @@ cd ${base}/r
 # MSA
 echo "MSA PF-PMI3"
 Rscript execution/execution_msa.R "pf-pmi3" "$input_file" "$output_dir" "T" >/dev/null
+Rscript execution/execution_phylo_each_word.R "pf-pmi3" "$output_dir"
+Rscript execution/execution_phylo_all_word.R "pf-pmi3" "$output_dir"
 ./admixture.sh "${output_dir}/msa_pf-pmi3"
+echo

@@ -13,5 +13,7 @@ cd ${base}/r
 # MSA
 echo "MSA LD2"
 Rscript execution/execution_msa.R "ld2" "$input_file" "$output_dir" "T" >/dev/null
-echo
+Rscript execution/execution_phylo_each_word.R "ld2" "$output_dir"
+Rscript execution/execution_phylo_all_word.R "ld2" "$output_dir"
 ./admixture.sh "${output_dir}/msa_ld2"
+echo
