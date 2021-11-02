@@ -19,7 +19,7 @@ make_word_list <- function(file) {
     for (j in 1:N) {
       word_list[[i]][[j]] <- matrix(c(region_list[[j]], word_list[[i]][[j]]), nrow = 1)
     }
-    attributes(word_list[[i]]) <- list(word = paste(assumed_form, sep = ""))
+    attributes(word_list[[i]]) <- list(word = paste(assumed_form, "_", concept, sep = ""))
     
   }
   

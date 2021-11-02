@@ -37,7 +37,7 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
   # Make
   word_vec <- NULL
   for (word in word_list) {
-    word_vec <- c(word_vec, gsub("\\(.*\\)", "", attributes(word)$word))
+    word_vec <- c(word_vec, strsplit(attributes(word)$word, split = "_")[[1]][2])
   }
   word_vec2 <- unique(word_vec)
 
@@ -143,10 +143,10 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
   output_dir <- paste(output_dir, "/", "graph2", sep = "")
   if (!dir.exists(output_dir)) dir.create(output_dir)
 
-  save(L, file = paste(output_dir, "/", "aln_list_", method, ".RData", sep = ""))
+  #save(L, file = paste(output_dir, "/", "aln_list_", method, ".RData", sep = ""))
   ldnd_mat <- del_na(ldnd_mat)
   diag(ldnd_mat) <- 0
-  save(ldnd_mat, file = paste(output_dir, "/", "dist_mat_", method, ".RData", sep = ""))
+  #save(ldnd_mat, file = paste(output_dir, "/", "dist_mat_", method, ".RData", sep = ""))
 
   write.nexus.dist(ldnd_mat, file = paste(output_dir, "/", "dist_mat_", method, ".nexus", sep = ""))
 
