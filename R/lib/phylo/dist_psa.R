@@ -3,9 +3,10 @@ source("lib/load_nwunsch.R")
 source("parallel_config.R")
 
 del_na <- function(x) {
-
+  
   N <- dim(x)[1]
-
+  
+  # Get indices for each column which all elements are 'NA'.
   na_idx1 <- NULL
   k <- 1
   for (i in 1:N) {
@@ -15,7 +16,8 @@ del_na <- function(x) {
       k <- k + 1
     }
   }
-
+  
+  # Get indices for each row which all elements are 'NA'.
   na_idx2 <- NULL
   k <- 1
   for (j in 1:N) {
@@ -25,13 +27,13 @@ del_na <- function(x) {
       k <- k + 1
     }
   }
-
-  if (!is.null(na_idx1)) x <- x[-na_idx1, ]
-  if (!is.null(na_idx2)) x <- x[, -na_idx2]
-
+  
+  na_idx <- c(na_idx1, na_idx2)
+  
+  if (!is.null(na_idx)) x <- x[-na_idx, -na_idx]
+  
   return(x)
 }
-
 
 phylo_all_word <- function(word_list, method, s, output_dir) {
   # Make
