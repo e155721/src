@@ -40,7 +40,7 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
   # Make the meaning vector.
   word_vec <- NULL
   for (word in word_list) {
-    word_vec <- c(word_vec, strsplit(attributes(word)$word, split = "_")[[1]][2])
+    word_vec <- c(word_vec, strsplit(attributes(word)$word, split = "_")[[1]][1])
   }
   word_vec2 <- unique(word_vec)
   
@@ -55,23 +55,14 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
   }
   all_reg <- unique(all_reg)
 
-  # Aggregate the sequences for each meaning.
-  word_list2 <- list()
+  # Remake the 'word_list' in which each element has all regions.
   N <- length(word_vec2)
   for (i in 1:N) {
-    word_list2[[i]] <- unlist(word_list[word_vec2[i] == word_vec], recursive = F)
-    attributes(word_list2[[i]]) <- list(word = word_vec2[i])
-  }
-
-  # Remake the 'word_list' in which each element has all regions.
-  word_list3 <- list()
-  for (i in 1:N) {
     reg_vec <- NULL
-    for (seq in word_list2[[i]]) {
+    for (seq in word_list[[i]]) {
       reg_vec <- c(reg_vec, seq[1])
     }
-    word_list3[[i]] <- word_list2[[i]][!duplicated(reg_vec)]
-    attributes(word_list3[[i]]) <- list(word = word_vec2[i], reg = unique(reg_vec))
+    attributes(word_list[[i]]) <- list(word = word_vec2[i], reg = unique(reg_vec))
   }
 
   M <- length(all_reg)
@@ -83,13 +74,13 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
 
   for (i in 1:N) {
 
-    word <- attributes(word_list3[[i]])$word
-    reg_vec <- attributes(word_list3[[i]])$reg
+    word <- attributes(word_list[[i]])$word
+    reg_vec <- attributes(word_list[[i]])$reg
 
     for (reg in reg_vec) {
       idx <- which(reg == all_reg)
       j <- which(word == word_vec2)
-      L[[idx]][[j]] <- word_list3[[i]][[which(reg == reg_vec)]]
+      L[[idx]][[j]] <- word_list[[i]][[which(reg == reg_vec)]]
       attributes(L[[idx]]) <- list(reg = reg)
     }
 
