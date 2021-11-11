@@ -36,13 +36,15 @@ del_na <- function(x) {
 }
 
 phylo_all_word <- function(word_list, method, s, output_dir) {
-  # Make
+
+  # Make the meaning vector.
   word_vec <- NULL
   for (word in word_list) {
     word_vec <- c(word_vec, strsplit(attributes(word)$word, split = "_")[[1]][2])
   }
   word_vec2 <- unique(word_vec)
-
+  
+  # Make the region list.
   all_reg <- NULL
   i <- 1
   for (seq_list in word_list) {
@@ -53,6 +55,7 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
   }
   all_reg <- unique(all_reg)
 
+  # Aggregate the sequences for each meaning.
   word_list2 <- list()
   N <- length(word_vec2)
   for (i in 1:N) {
@@ -60,6 +63,7 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
     attributes(word_list2[[i]]) <- list(word = word_vec2[i])
   }
 
+  # Remake the 'word_list' in which each element has all regions.
   word_list3 <- list()
   for (i in 1:N) {
     reg_vec <- NULL
