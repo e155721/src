@@ -122,7 +122,8 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
       }
     }
 
-    diag_vec <- diag(ldn_mat)
+    ldn_mat <- del_na(ldn_mat)
+    diag_vec <- diag(as.matrix(ldn_mat))
     diag_vec <- diag_vec[!is.na(diag_vec)]
     non_diag <- c(ldn_mat[upper.tri(ldn_mat, diag = F)], ldn_mat[lower.tri(ldn_mat, diag = F)])
     non_diag <- non_diag[!is.na(non_diag)]
@@ -150,7 +151,6 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
   if (!dir.exists(output_dir)) dir.create(output_dir)
 
   #save(L, file = paste(output_dir, "/", "aln_list_", method, ".RData", sep = ""))
-  ldnd_mat <- del_na(ldnd_mat)
   diag(ldnd_mat) <- 0
   #save(ldnd_mat, file = paste(output_dir, "/", "dist_mat_", method, ".RData", sep = ""))
 
