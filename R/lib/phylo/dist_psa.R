@@ -130,6 +130,7 @@ phylo_all_word <- function(word_list, method, s, output_dir) {
 
     D1 <- sum(diag_vec) / length(diag_vec)
     G  <- sum(non_diag) / length(non_diag)
+    if (G == 0) G <- 1
     D2 <- D1 / G
 
     attributes(D2) <- list(i = i, j = j)
