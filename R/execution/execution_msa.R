@@ -39,13 +39,9 @@ output_dir_aln <- paste(output_dir, "/alignment/", sep = "")
 # MSAを出力する
 output_msa(msa_list, output_dir_aln, ext = ".csv", excel = T)
 
-# MSAをPSAに分解する
-psa_list <- ChangeListMSA2PSA(msa_list, s)
-# 単語ごとの系統樹，距離行列を出力する
-phylo_each_word(psa_list, output_dir, method, s)
-
-# 全ての単語による系統樹，距離行列を出力する
-phylo_all_word(word_list, method, s, output_dir)
+# 発音記号列、MSAをRDataファイルに保存する
+save(word_list, file = paste(output_dir, "/alignment/", "word_list.RData", sep = ""))
+save(msa_rlt, file = paste(output_dir, "/alignment/", "msa_rlt.RData", sep = ""))
 
 # Output the README.txt
 read_me <- ("
@@ -65,17 +61,17 @@ read_me <- ("
 
   各ディレクトリの構成，及びファイル名は以下の通りです．
 
-  |-alignment:       アラインメント結果が格納されます．（ファイル名：語彙ID_想定形.csv）
+  |-alignment:       アラインメント結果が格納されます．
+  |                  ファイルは3種類あります．
+  |                  想定形.csv:      アラインメント結果CSVファイル
+  |                  word_list.RData: 系統樹，系統樹ネットワークの作成に必要なファイル
+  |                  msa_rlt.RData:   系統樹，系統樹ネットワークの作成に必要なファイル
   |-admixture_input: ADMIXTUREへの入力ファイルが格納されます．
   |-graph1:          単語ごとの系統樹，距離行列が格納されるディレクトリです．
   | |-tree:          単語ごとの系統樹が格納されます．
-  | | |-ave:         UPGMAによる系統樹が格納されます（NJ法による系統樹が作成できなかった場合）．
-  | | | |-rooted:    単語ごとの有根系統樹が格納されます．（ファイル名：語彙ID_想定形_ave_rooted.pdf）
-  | | | |-unrooted:  単語ごとの無根系統樹が格納されます．（ファイル名：語彙ID_想定形_ave_unrooted.pdf）
-  | | |-nj:　　　　  NJ法による系統樹が格納されます．
-  | | | |-rooted:    単語ごとの有根系統樹が格納されます．（ファイル名：語彙ID_想定形_nj_rooted.pdf）
-  | | | |-unrooted:  単語ごとの無根系統樹が格納されます．（ファイル名：語彙ID_想定形_nj_unrooted.pdf）
-  | |-dist_mat:      単語ごとの距離行列が格納されます．（ファイル名：語彙ID_想定形_dist_mat.nexus）
+  | | |-rooted:      NJ法による有根系統樹が格納されます．（ファイル名：想定形_nj_rooted.pdf）
+  | | |-unrooted:    NJ法による無根系統樹が格納されます．（ファイル名：想定形_nj_unrooted.pdf）
+  | |-dist_mat:      単語ごとの距離行列が格納されます．（ファイル名：想定形_dist_mat.nexus）
   |-graph2:          全ての単語による系統樹，距離行列が格納されます．
                      ファイルは全部で3つあります．
                      dist_mat.nexus:   距離行列
