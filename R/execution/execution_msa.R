@@ -12,6 +12,7 @@ output_dir <- commandArgs(trailingOnly = TRUE)[3]
 cv_sep     <- commandArgs(trailingOnly = TRUE)[4]
 
 read_me_path <- paste(output_dir, "/", "README.txt",  sep = "")
+error_file_path <- paste(output_dir, "/", "error_symbols.txt",  sep = "")
 
 output_dir <- paste(output_dir, "/", "msa_", method, "/", sep = "")
 if (!dir.exists(output_dir))
@@ -19,6 +20,7 @@ if (!dir.exists(output_dir))
 
 # MSAを実行する
 word_list <- make_word_list(input_file)
+find_error_symbols(word_list, error_file_path)
 msa_rlt   <- execute_msa(method, word_list, output_dir, cv_sep)
 
 if ((method == "ld") || (method == "ld2")) {
